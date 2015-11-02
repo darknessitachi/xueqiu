@@ -163,9 +163,14 @@ public class Main {
 			while((line = br.readLine()) !=null){
 				//如果number为0的话，读取查询日期。否则的话，加载个股信息
 				if(number == 0){
-					String[] keys = line.split(",");
-					for(String key : keys){
-						req.mapKey.add(key);
+					//如果当前行以#开头，则读取当前日期
+					if(line.startsWith("#")){
+						req.mapKey.add(DateUtil.formatDate(new Date(), "yyyy-MM-dd"));
+					}else{
+						String[] keys = line.split(",");
+						for(String key : keys){
+							req.mapKey.add(key);
+						}
 					}
 				}else{
 					//如果当前行不为空，或者不以#开头，则读取
