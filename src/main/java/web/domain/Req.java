@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Req {
 	
+	public String reqPath;
+	
 	public List<Stock> list = new ArrayList<Stock>();
 	
 	//要查询的日期
