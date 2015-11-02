@@ -104,7 +104,7 @@ public class Main {
 			long time = (Long) entity.get("created_at");
 			String timeStr = DateUtil.formatDate(new Date(time), "yyyy-MM-dd");
 			//如果timeStr属于mapKey中的一个，就在对应的key上+1，否则的话就退出
-			int resultCode = matchMapKeyInt(timeStr);
+			int resultCode = matchMapKey(timeStr);
 			if(resultCode == 1){
 				Integer num = stock.map.get(timeStr);
 				num = num == null ? 0 : num;
@@ -123,7 +123,7 @@ public class Main {
 	 * @return
 	 */
 	
-	private static int matchMapKeyInt(String timeStr) {
+	private static int matchMapKey(String timeStr) {
 		String maxKey = req.mapKey.get(0);
 		String minKey = req.mapKey.get(req.mapKey.size()-1);
 		
