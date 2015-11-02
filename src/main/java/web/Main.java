@@ -25,8 +25,7 @@ import web.util.HttpUtil;
 
 public class Main {
 	
-	private static String reqPath = "D:\\workspace\\web\\src\\web\\req.txt";
-	
+	private static String reqPath;
 	
 	private static Req req;
 
