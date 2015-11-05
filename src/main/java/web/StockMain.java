@@ -11,9 +11,7 @@ public class StockMain {
 		StockCommand c = new StockCommand();
 		c.initReq();
 		c.sendReq();
-		//合计
-		c.combine();
-		c.printReq();
+		c.finish();
 		
 		long end = new Date().getTime();
 		System.out.println("用时："+(end-start)/1000+"秒");

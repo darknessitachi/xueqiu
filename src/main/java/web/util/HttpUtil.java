@@ -8,7 +8,15 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import web.domain.Stock;
+
 public class HttpUtil {
+	
+	
+	public static String getReqUrl(Stock stock, int page) {
+		String href = "http://xueqiu.com/statuses/search.json?count=15&comment=0&symbol="+stock.code+"&hl=0&source=all&sort=time&page="+page+"&_=1445444564351";
+		return href;
+	}
 
 	public static String getResult(String url,String cookie){ 
 		String result = null;
