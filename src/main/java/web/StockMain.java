@@ -11,6 +11,8 @@ public class StockMain {
 		StockCommand c = new StockCommand();
 		c.initReq();
 		c.sendReq();
+		//ºÏ¼Æ
+		c.combine();
 		c.printReq();
 		
 		long end = new Date().getTime();

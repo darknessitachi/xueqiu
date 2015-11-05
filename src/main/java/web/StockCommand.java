@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -27,18 +28,22 @@ public class StockCommand {
 	
 	private Req req;
 	
+	private String reqPath;
+	
+	private String cookie;
+	
 	public void initReq() throws IOException {
 		req = new Req();
-		//设置请求path的路径
 		String sourcePath = StockCommand.class.getClassLoader().getResource("").getPath()+"web/source";
-		req.reqPath = sourcePath+"/req.txt";
+		
+		//设置请求path的路径
+		this.reqPath = sourcePath+"/"+Req.REQ_SEARCH_NAME;
 		//初始化cookie
-		String cookie = FileUtil.read(sourcePath+"/cookie.txt").trim();
-		req.cookie = cookie;
+		this.cookie = FileUtil.read(sourcePath+"/"+Req.REQ_COOKIE_NAME).trim();
 		//设置请求的股票代码
 		BufferedReader br = null;
 		try {
-			FileReader fr = new FileReader(new File(req.reqPath));
+			FileReader fr = new FileReader(new File(this.reqPath));
 			br = new BufferedReader(fr);
 			String line = null;
 			int number = 0;
@@ -77,7 +82,7 @@ public class StockCommand {
 			int page = 1;
 			while(true){
 				String url = getReqUrl(stock,page);
-				String result = HttpUtil.getResult(url,req.cookie);
+				String result = HttpUtil.getResult(url,this.cookie);
 				//对于返回的结果进行加工
 				boolean isFinish = calculate(result,stock);
 				if(isFinish){
@@ -88,17 +93,33 @@ public class StockCommand {
 		}
 	}
 	
+	
+	public void combine() {
+		String combineName = req.mapKey.size()+"天内";
+		req.mapKey.add(combineName);
+		//遍历股票，计算每一只股票所有周期的合计
+		for(Stock stock : req.list){
+			Set<String> keys = stock.map.keySet();
+			int total = 0;
+			for(String key : keys){
+				total = total + stock.map.get(key);
+			}
+			stock.map.put(combineName, total);
+		}
+	}
+	
+	
 	/**
 	 * 按每天为单位进行打印
 	 * @throws IOException 
 	 */
 	public void printReq() throws IOException {
-		for(String searchDate : req.mapKey){
-			System.out.println("——————"+searchDate+" 个股热度——————");
+		for(String key : req.mapKey){
+			System.out.println("——————"+key+" 个股热度——————");
 			List<Entity> sortList = new ArrayList<Entity>();
 			//把结果封装在Entity，然后根据number排序
 			for(Stock stock : req.list){
-				sortList.add(new Entity(stock.name,stock.map.get(searchDate)==null?0:stock.map.get(searchDate)));
+				sortList.add(new Entity(stock.name,stock.map.get(key)==null?0:stock.map.get(key)));
 			}
 			//排序
 			ComparatorEntity comparator=new ComparatorEntity();
@@ -108,7 +129,7 @@ public class StockCommand {
 			if(!folder.exists()){
 				folder.mkdir();
 			}
-			File f = new File(Constants.outPath+"/"+searchDate+"个股热度.txt");
+			File f = new File(Constants.outPath+"/"+key+"个股热度.txt");
 			
 			BufferedWriter bw = new BufferedWriter(new FileWriter(f));
 			for(Entity e : sortList){
@@ -176,5 +197,7 @@ public class StockCommand {
 		}
 		return 2;
 	}
+
+	
 
 }
