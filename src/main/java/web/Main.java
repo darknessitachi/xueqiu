@@ -3,7 +3,7 @@ package web;
 import java.io.IOException;
 import java.util.Date;
 
-public class StockMain {
+public class Main {
 
 	public static void main(String[] args) throws IOException {
 		long start = new Date().getTime();
