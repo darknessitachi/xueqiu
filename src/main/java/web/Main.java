@@ -9,7 +9,7 @@ public class Main {
 		long start = new Date().getTime();
 		
 		StockCommand c = new StockCommand();
-		c.initReq();
+		c.init();
 		c.sendReq();
 		c.finish();
 		

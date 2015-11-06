@@ -9,10 +9,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import web.domain.Entity;
 import web.domain.Req;
@@ -23,43 +25,43 @@ import web.util.DateUtil;
 import web.util.FileUtil;
 
 public class StockCommand {
+	
+	public static AtomicBoolean isError = new AtomicBoolean(false); 
 
 	ExecutorService pool = Executors.newFixedThreadPool(4);
+	
+	private String classpath;
 
 	private Req req;
 
-	private String reqPath;
+	public void init() throws IOException {
 
-	private String cookie;
+		this.classpath = StockCommand.class.getClassLoader().getResource("").getPath();
 
-	private boolean combine = false;
+		initReq();
+		initCookie();
+	}
 
-	public void initReq() throws IOException {
+	private void initReq() throws IOException {
 		req = new Req();
-		String sourcePath = StockCommand.class.getClassLoader().getResource("")
-				.getPath()
-				+ "web/source";
-
 		// 设置请求path的路径
-		this.reqPath = sourcePath + "/" + Req.REQ_SEARCH_NAME;
-		// 初始化cookie
-		this.cookie = FileUtil.read(sourcePath + "/" + Req.REQ_COOKIE_NAME)
-				.trim();
+		String reqPath = this.classpath + "web/source/" + Constants.REQ_SEARCH_NAME;
+
 		// 设置请求的股票代码
 		BufferedReader br = null;
 		try {
-			FileReader fr = new FileReader(new File(this.reqPath));
+			FileReader fr = new FileReader(new File(reqPath));
 			br = new BufferedReader(fr);
 			String line = null;
 			int number = 0;
 			while ((line = br.readLine()) != null) {
 				// 如果number为0的话，读取查询日期。否则的话，加载个股信息
 				if (number == 0) {
-					initMapKey(line);
-				} else if(number == 1){
-					initCombine(line);
-				}else{
-					initStock(line);
+					initReqMapKey(line);
+				} else if (number == 1) {
+					initReqCombine(line);
+				} else {
+					initReqStock(line);
 				}
 				number++;
 			}
@@ -69,31 +71,39 @@ public class StockCommand {
 		} finally {
 			br.close();
 		}
+
+	}
+	
+	private void initReqMapKey(String line) {
+		int day = Integer.parseInt(line.split("=")[1]);
+		for (int i = 0; i < day; i++) {
+			String d = DateUtil.minus(i);
+			req.mapKey.add(d);
+		}
+	}
+	
+	private void initReqCombine(String line) {
+		req.combine = new Boolean(line.trim());
 	}
 
-	private void initCombine(String line) {
-		this.combine = new Boolean(line.trim());
-	}
-
-	private void initStock(String line) {
+	private void initReqStock(String line) {
 		// 如果当前行不为空，或者不以#开头，则读取
 		if (line.trim().length() > 0 && !line.startsWith("#")) {
 			String[] array = line.split(",");
 			req.list.add(new Stock(array[0], array[1]));
 		}
 	}
+	
 
-	private void initMapKey(String line) {
-		int day = Integer.parseInt(line.split("=")[1]);
-		for(int i=0;i<day;i++){
-			String d = DateUtil.minus(i);
-			req.mapKey.add(d);
-		}
+	private void initCookie() {
+		// 初始化cookie
+		req.cookie = FileUtil.read(this.classpath + "web/source/" + Constants.REQ_COOKIE_NAME).trim();
 	}
 
 	public void sendReq() {
 		for (Stock stock : req.list) {
-			pool.execute(new Worker(stock, this.cookie, this.req,"http://xueqiu.com/S/"+stock.code));
+			pool.execute(new Worker(stock, this.req, "http://xueqiu.com/S/"
+					+ stock.code));
 		}
 	}
 
@@ -110,16 +120,40 @@ public class StockCommand {
 			stock.map.put(combineName, total);
 		}
 	}
+	
+	public void finish() throws IOException {
+		pool.shutdown();
+		while (true) {
+			if (pool.isTerminated()) {
+				if(!isError.get()){
+					if (req.combine) {
+						this.combine();
+					}
+					this.printReq();
+				}
+				break;
+			}
+		}
+	}
 
 	/**
 	 * 按每天为单位进行打印
 	 * 
 	 * @throws IOException
 	 */
-	public void printReq() throws IOException {
+	private void printReq() throws IOException {
+		// 打印结果，写入文件中
+		File folder = new File(Constants.outPath);
+		if (!folder.exists()) {
+			folder.mkdir();
+		}
+		String nowDate = DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd_HHmmss2);
+		File f = new File(Constants.outPath + "/"  + nowDate + " "+(req.mapKey.size()-1)+"天内个股热度.txt");
+		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
 
 		for (String key : req.mapKey) {
 			System.out.println("——————" + key + " 个股热度——————");
+			bw.write("——————" + key + " 个股热度——————" + "\n");
 			List<Entity> sortList = new ArrayList<Entity>();
 			// 把结果封装在Entity，然后根据number排序
 			for (Stock stock : req.list) {
@@ -129,40 +163,16 @@ public class StockCommand {
 			// 排序
 			ComparatorEntity comparator = new ComparatorEntity();
 			Collections.sort(sortList, comparator);
-			// 打印结果，写入文件中
-			File folder = new File(Constants.outPath);
-			if (!folder.exists()) {
-				folder.mkdir();
-			}
-			File f = new File(Constants.outPath + "/" + key + "个股热度.txt");
-
-			BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+			
 			for (Entity e : sortList) {
 				bw.write(e.toString() + "\n");
 				System.out.println(e);
 			}
-			bw.close();
+			
 			System.out.println();
+			bw.write("\n");
 		}
-	}
-
-	public void finish() throws IOException {
-		pool.shutdown();
-		while (true) {
-			if (pool.isTerminated()) {
-				// 合计
-				if(this.combine){
-					this.combine();
-				}
-				this.printReq();
-				break;
-			}
-		}
-	}
-
-	public void setCombine(boolean b) {
-		this.combine = b;
-		
+		bw.close();
 	}
 
 }

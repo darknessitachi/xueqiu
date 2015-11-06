@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import web.StockCommand;
 import web.domain.Stock;
 
 public class HttpUtil {
@@ -42,7 +43,9 @@ public class HttpUtil {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			StockCommand.isError.set(true);
+			System.err.println("您的请求过于频繁，请稍后再试。"+HttpUtil.class.getName());
 		}  
         return result;
     }

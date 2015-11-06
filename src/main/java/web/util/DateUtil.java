@@ -7,7 +7,10 @@ import java.util.Date;
 
 public class DateUtil {
 	
-	//yyyy-MM-dd HH:mm:ss
+	public static final String yyyyMMdd_HHmmss = "yyyy-MM-dd HH:mm:ss";
+	
+	public static final String yyyyMMdd_HHmmss2 = "yyyy-MM-dd HH.mm.ss";
+	
 	public static String formatDate(Date reqDate, String format) {
 		SimpleDateFormat sdf=new SimpleDateFormat(format);
 		return sdf.format(reqDate);
