@@ -1,5 +1,5 @@
-day=1
-true
+day=2
+combine=true
 
 SZ002722,金轮股份
 SZ002166,莱茵生物

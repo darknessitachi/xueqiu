@@ -83,7 +83,8 @@ public class StockCommand {
 	}
 	
 	private void initReqCombine(String line) {
-		req.combine = new Boolean(line.trim());
+		String combine = line.trim().split("=")[1];
+		req.combine = new Boolean(combine);
 	}
 
 	private void initReqStock(String line) {
