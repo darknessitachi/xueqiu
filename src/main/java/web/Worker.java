@@ -14,18 +14,20 @@ public class Worker implements Runnable{
 	private Stock stock;
 	private String cookie;
 	private Req req;
+	private String referer;
 
-	public Worker(Stock stock, String cookie, Req req) {
+	public Worker(Stock stock, String cookie, Req req, String referer) {
 		this.stock = stock;
 		this.cookie = cookie;
 		this.req = req;
+		this.referer = referer;
 	}
 
 	public void run() {
 		int page = 1;
 		while(true){
 			String url = HttpUtil.getReqUrl(stock,page);
-			String result = HttpUtil.getResult(url,this.cookie);
+			String result = HttpUtil.getResult(url,this.cookie,this.referer);
 			//对于返回的结果进行加工
 			boolean isFinish = calculate(result,stock);
 			if(isFinish){

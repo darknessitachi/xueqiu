@@ -93,7 +93,7 @@ public class StockCommand {
 
 	public void sendReq() {
 		for (Stock stock : req.list) {
-			pool.execute(new Worker(stock, this.cookie, this.req));
+			pool.execute(new Worker(stock, this.cookie, this.req,"http://xueqiu.com/S/"+stock.code));
 		}
 	}
 

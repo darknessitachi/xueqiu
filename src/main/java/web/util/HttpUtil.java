@@ -18,7 +18,7 @@ public class HttpUtil {
 		return href;
 	}
 
-	public static String getResult(String url,String cookie){ 
+	public static String getResult(String url,String cookie, String referer){ 
 		String result = null;
 		try {
 			BufferedReader reader = null;  
@@ -27,6 +27,7 @@ public class HttpUtil {
 			conn.setRequestProperty("Accept-Charset", "utf-8");
 			conn.setRequestProperty("contentType", "utf-8");
 			conn.setRequestProperty("Cookie",cookie);  
+			conn.setRequestProperty("Referer",referer);
 			reader = new BufferedReader(new InputStreamReader(conn.getInputStream(),"utf-8"));  
 			String line = "";  
 			StringBuffer resultBuffer = new StringBuffer();  
@@ -44,6 +45,7 @@ public class HttpUtil {
 			e.printStackTrace();
 		}  
         return result;
-    } 
+    }
+
 
 }
