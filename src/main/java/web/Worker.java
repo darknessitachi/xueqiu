@@ -6,6 +6,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import web.domain.Req;
 import web.domain.Stock;
+import web.util.Constants;
 import web.util.DateUtil;
 import web.util.HttpUtil;
 
@@ -13,19 +14,17 @@ public class Worker implements Runnable{
 
 	private Stock stock;
 	private Req req;
-	private String referer;
 
-	public Worker(Stock stock, Req req, String referer) {
+	public Worker(Stock stock, Req req) {
 		this.stock = stock;
 		this.req = req;
-		this.referer = referer;
 	}
 
 	public void run() {
 		int page = 1;
 		while(true){
 			String url = HttpUtil.getReqUrl(stock,page);
-			String result = HttpUtil.getResult(url,req.cookie,this.referer);
+			String result = HttpUtil.getResult(url,req.cookie,Constants.referer_prefix+stock.code);
 			//对于返回的结果进行加工
 			if(result != null){
 				boolean isFinish = calculate(result,stock);

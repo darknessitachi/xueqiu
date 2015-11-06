@@ -43,9 +43,9 @@ public class HttpUtil {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			//e.printStackTrace();
 			StockCommand.isError.set(true);
 			System.err.println("您的请求过于频繁，请稍后再试。"+HttpUtil.class.getName());
+			//e.printStackTrace();
 		}  
         return result;
     }
