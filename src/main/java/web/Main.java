@@ -10,7 +10,7 @@ public class Main {
 		
 		StockCommand c = new StockCommand();
 		c.init();
-		c.sendReq();
+		c.send();
 		c.finish();
 		
 		long end = new Date().getTime();

@@ -100,14 +100,16 @@ public class StockCommand {
 		// 初始化cookie
 		req.cookie = FileUtil.read(this.classpath + "web/source/" + Constants.REQ_COOKIE_NAME).trim();
 	}
-
-	public void sendReq() {
+	/**
+	 * 一只股票启动一个线程，是一个比较好的线程分配策略
+	 */
+	public void send() {
 		for (Stock stock : req.list) {
 			pool.execute(new Worker(stock, this.req));
 		}
 	}
 
-	public void combine() {
+	private void combine() {
 		String combineName = req.mapKey.size() + "天内";
 		req.mapKey.add(combineName);
 		// 遍历股票，计算每一只股票所有周期的合计
