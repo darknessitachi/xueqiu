@@ -55,6 +55,7 @@ public class StockCommand {
 			String line = null;
 			int number = 0;
 			while ((line = br.readLine()) != null) {
+				line = line.trim();
 				// 如果number为0的话，读取查询日期。否则的话，加载个股信息
 				if (number == 0) {
 					initReqMapKey(line);
@@ -83,13 +84,13 @@ public class StockCommand {
 	}
 	
 	private void initReqCombine(String line) {
-		String combine = line.trim().split("=")[1];
+		String combine = line.split("=")[1];
 		req.combine = new Boolean(combine);
 	}
 
 	private void initReqStock(String line) {
 		// 如果当前行不为空，或者不以#开头，则读取
-		if (line.trim().length() > 0 && !line.startsWith("#")) {
+		if (line.length() > 0 && !line.startsWith("#")) {
 			String[] array = line.split(",");
 			req.list.add(new Stock(array[0], array[1]));
 		}
