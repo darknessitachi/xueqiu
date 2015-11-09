@@ -53,14 +53,14 @@ public class Worker implements Runnable{
 			JSONObject entity = (JSONObject) array.get(i);
 			//评论时间
 			long time = (Long) entity.get("created_at");
-			String timeStr = DateUtil.formatDate(new Date(time), "yyyy-MM-dd");
-			String timeStr_all = DateUtil.formatDate(new Date(time), DateUtil.yyyyMMdd_HHmmss);
+			String createDate = DateUtil.formatDate(new Date(time), "yyyy-MM-dd");
+			String createDate_all = DateUtil.formatDate(new Date(time), DateUtil.yyyyMMdd_HHmmss);
 			//如果timeStr属于mapKey中的一个，就在对应的key上+1，否则的话就退出
-			int resultCode = matchMapKey(timeStr,timeStr_all);
+			int resultCode = matchMapKey(createDate,createDate_all);
 			if(resultCode == 1){
-				Integer num = stock.map.get(timeStr);
+				Integer num = stock.map.get(createDate);
 				num = num == null ? 0 : num;
-				stock.map.put(timeStr, num+1);
+				stock.map.put(createDate, num+1);
 			}else if(resultCode == 3){
 				return true;
 			}
@@ -73,10 +73,11 @@ public class Worker implements Runnable{
 	
 	
 	/**
-	 * 如果评论时间在mapKey内，返回1(+1)
-	 * 如股评论时间比mapKey中最大的还要大（评论时间在mapKey最大和最小之间），返回2(继续遍历)
-	 * 如果评论时间比mapKey中最小的还有小，返回3（跳出循环）
-	 * 如果评论时间比req中的maxDate还要大的话，返回2（继续遍历）
+	 * 首先判断：如果评论时间比req.maxDate还要大的话，返回2（继续遍历）
+	 * 然后判断：
+	 * 		如果评论时间在mapKey内，返回1(+1)
+	 * 		如股评论时间比mapKey中最大的还要大（评论时间在mapKey最大和最小之间），返回2(继续遍历)
+	 * 		如果评论时间比mapKey中最小的还有小，返回3（跳出循环）
 	 * @param timeStr
 	 * @param timeStr_all 
 	 * @return

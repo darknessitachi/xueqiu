@@ -90,8 +90,10 @@ public class StockCommand {
 	 * @param line
 	 */
 	private void initReqMapKey(String line) {
-		Date beginDate = new Date();
-		if(!StringUtil.isEmpty(req.maxDate)){
+		Date beginDate = null;
+		if(StringUtil.isEmpty(req.maxDate)){
+			beginDate = new Date();
+		}else{
 			beginDate = DateUtil.parse(req.maxDate, DateUtil.yyyyMMdd_HHmmss);
 		}
 		int day = Integer.parseInt(line.split("=")[1]);
