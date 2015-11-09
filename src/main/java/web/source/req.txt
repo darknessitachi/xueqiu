@@ -1,3 +1,4 @@
+#maxdate=2015-11-08 07:00:00
 day=1
 combine=true
 

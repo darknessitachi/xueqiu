@@ -23,6 +23,7 @@ import web.util.ComparatorEntity;
 import web.util.Constants;
 import web.util.DateUtil;
 import web.util.FileUtil;
+import web.util.StringUtil;
 
 public class StockCommand {
 	
@@ -58,10 +59,12 @@ public class StockCommand {
 				line = line.trim();
 				// 如果number为0的话，读取查询日期。否则的话，加载个股信息
 				if (number == 0) {
-					initReqMapKey(line);
+					initReqMaxDate(line);
 				} else if (number == 1) {
+					initReqMapKey(line);
+				} else if (number == 2) {
 					initReqCombine(line);
-				} else {
+				}else {
 					initReqStock(line);
 				}
 				number++;
@@ -75,10 +78,25 @@ public class StockCommand {
 
 	}
 	
+	private void initReqMaxDate(String line) {
+		// 如果当前行不为空，或者不以#开头，则读取
+		if (line.length() > 0 && !line.startsWith("#")) {
+			String[] array = line.split("=");
+			req.maxDate = array[1];
+		}
+	}
+	/**
+	 * 如果maxDate不为空的话，从maxDate向前推N天
+	 * @param line
+	 */
 	private void initReqMapKey(String line) {
+		Date beginDate = new Date();
+		if(!StringUtil.isEmpty(req.maxDate)){
+			beginDate = DateUtil.parse(req.maxDate, DateUtil.yyyyMMdd_HHmmss);
+		}
 		int day = Integer.parseInt(line.split("=")[1]);
 		for (int i = 0; i < day; i++) {
-			String d = DateUtil.minus(i);
+			String d = DateUtil.minus(beginDate,i);
 			req.mapKey.add(d);
 		}
 	}
@@ -150,7 +168,12 @@ public class StockCommand {
 		if (!folder.exists()) {
 			folder.mkdir();
 		}
-		String nowDate = DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd_HHmmss2);
+		String nowDate = null;
+		if(StringUtil.isEmpty(req.maxDate)){
+			nowDate = DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd_HHmmss2);
+		}else{
+			nowDate = req.maxDate.replace(":", ".");
+		}
 		File f = new File(Constants.outPath + "/"  + nowDate + " "+(req.mapKey.size()-1)+"天内个股热度.txt");
 		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
 

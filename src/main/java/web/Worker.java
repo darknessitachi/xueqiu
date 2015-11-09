@@ -9,6 +9,7 @@ import web.domain.Stock;
 import web.util.Constants;
 import web.util.DateUtil;
 import web.util.HttpUtil;
+import web.util.StringUtil;
 
 public class Worker implements Runnable{
 
@@ -53,8 +54,9 @@ public class Worker implements Runnable{
 			//评论时间
 			long time = (Long) entity.get("created_at");
 			String timeStr = DateUtil.formatDate(new Date(time), "yyyy-MM-dd");
+			String timeStr_all = DateUtil.formatDate(new Date(time), DateUtil.yyyyMMdd_HHmmss);
 			//如果timeStr属于mapKey中的一个，就在对应的key上+1，否则的话就退出
-			int resultCode = matchMapKey(timeStr);
+			int resultCode = matchMapKey(timeStr,timeStr_all);
 			if(resultCode == 1){
 				Integer num = stock.map.get(timeStr);
 				num = num == null ? 0 : num;
@@ -74,13 +76,18 @@ public class Worker implements Runnable{
 	 * 如果评论时间在mapKey内，返回1(+1)
 	 * 如股评论时间比mapKey中最大的还要大（评论时间在mapKey最大和最小之间），返回2(继续遍历)
 	 * 如果评论时间比mapKey中最小的还有小，返回3（跳出循环）
+	 * 如果评论时间比req中的maxDate还要大的话，返回2（继续遍历）
 	 * @param timeStr
+	 * @param timeStr_all 
 	 * @return
 	 */
-	
-	private int matchMapKey(String timeStr) {
+	private int matchMapKey(String timeStr, String timeStr_all) {
 		String maxKey = req.mapKey.get(0);
 		String minKey = req.mapKey.get(req.mapKey.size()-1);
+		
+		if(!StringUtil.isEmpty(req.maxDate) && timeStr_all.compareTo(req.maxDate)>0){
+			return 2;
+		}
 		
 		if(req.mapKey.contains(timeStr)){
 			return 1;
