@@ -1,5 +1,7 @@
 package web.domain;
 
+import web.util.StringUtil;
+
 public class Entity {
 	
 	
@@ -14,7 +16,7 @@ public class Entity {
 	
 	@Override
 	public String toString() {
-		return name+" : "+number;
+		return StringUtil.formatStockName(name)+" : "+number;
 	}
 
 }

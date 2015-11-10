@@ -37,5 +37,16 @@ public class StringUtil {
 		}
 		return result;
 	}
+	/**
+	 * 如果股票名字是3个字，后面加两个空格
+	 * @param name
+	 * @return
+	 */
+	public static String formatStockName(String name) {
+		if(name.length() == 3){
+			return name+"  ";
+		}
+		return name;
+	}
 
 }
