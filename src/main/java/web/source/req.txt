@@ -1,4 +1,4 @@
-#maxdate=2015-11-08 07:00:00
+#nowDate=2015-11-09 16:14:31
 day=1
 combine=true
 

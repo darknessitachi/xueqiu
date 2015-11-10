@@ -172,11 +172,13 @@ public class StockCommand {
 		}
 		String nowDate = null;
 		if(StringUtil.isEmpty(req.maxDate)){
-			nowDate = DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd_HHmmss2);
+			nowDate = DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd_HHmmss);
 		}else{
-			nowDate = req.maxDate.replace(":", ".");
+			nowDate = req.maxDate;
 		}
-		File f = new File(Constants.outPath + "/"  + nowDate + " "+(req.mapKey.size()-1)+"天内个股热度.txt");
+		nowDate = nowDate.replace(":", "：");
+		
+		File f = new File(Constants.outPath + "/"  + nowDate + " "+ StringUtil.number2word((req.mapKey.size()-1))+"天个股热度.txt");
 		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
 
 		for (String key : req.mapKey) {
