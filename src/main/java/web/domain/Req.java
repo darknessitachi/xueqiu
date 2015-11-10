@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Req {
 	
-	public boolean combine = false;
-	
 	public String maxDate;
+	
+	public boolean combine = false;
 	
 	public String cookie;
 	
@@ -15,7 +15,6 @@ public class Req {
 	
 	//要查询的日期
 	public List<String> mapKey = new ArrayList<String>();
-
 	
 
 }

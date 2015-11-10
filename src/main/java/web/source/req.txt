@@ -1,5 +1,5 @@
 #nowDate=2015-11-09 16:14:31
-day=3
+day=1
 combine=true
 
 SZ002722,½ğÂÖ¹É·İ

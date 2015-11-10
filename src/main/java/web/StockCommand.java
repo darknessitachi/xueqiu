@@ -153,6 +153,8 @@ public class StockCommand {
 						this.combine();
 					}
 					this.printReq();
+				}else{
+					System.err.println("如果连续多次请求失败，请更新cookie文件。");
 				}
 				break;
 			}
