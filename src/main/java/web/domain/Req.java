@@ -16,5 +16,8 @@ public class Req {
 	//要查询的日期
 	public List<String> mapKey = new ArrayList<String>();
 	
+	//每个线程在请求一页数据后，睡眠的毫秒数
+	public int sleep;
+	
 
 }

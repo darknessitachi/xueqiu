@@ -59,12 +59,14 @@ public class StockCommand {
 				line = line.trim();
 				// 如果number为0的话，读取查询日期。否则的话，加载个股信息
 				if (number == 0) {
-					initReqMaxDate(line);
+					initReqNowDate(line);
 				} else if (number == 1) {
-					initReqMapKey(line);
+					initReqKey(line);
 				} else if (number == 2) {
 					initReqCombine(line);
-				}else {
+				}else if (number == 3) {
+					initReqSleep(line);
+				} else {
 					initReqStock(line);
 				}
 				number++;
@@ -78,7 +80,7 @@ public class StockCommand {
 
 	}
 	
-	private void initReqMaxDate(String line) {
+	private void initReqNowDate(String line) {
 		// 如果当前行不为空，或者不以#开头，则读取
 		if (line.length() > 0 && !line.startsWith("#")) {
 			String[] array = line.split("=");
@@ -89,7 +91,7 @@ public class StockCommand {
 	 * 如果maxDate不为空的话，从maxDate向前推N天
 	 * @param line
 	 */
-	private void initReqMapKey(String line) {
+	private void initReqKey(String line) {
 		Date beginDate = null;
 		if(StringUtil.isEmpty(req.maxDate)){
 			beginDate = new Date();
@@ -106,6 +108,13 @@ public class StockCommand {
 	private void initReqCombine(String line) {
 		String combine = line.split("=")[1];
 		req.combine = new Boolean(combine);
+	}
+	
+	private void initReqSleep(String line) {
+		if (line.length() > 0 && !line.startsWith("#")) {
+			String[] array = line.split("=");
+			req.sleep = Integer.parseInt(array[1]);
+		}
 	}
 
 	private void initReqStock(String line) {

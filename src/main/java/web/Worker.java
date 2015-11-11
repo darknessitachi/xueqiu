@@ -1,5 +1,6 @@
 package web;
 
+import java.io.IOException;
 import java.util.Date;
 
 import net.sf.json.JSONArray;
@@ -25,17 +26,33 @@ public class Worker implements Runnable{
 		int page = 1;
 		while(true){
 			String url = HttpUtil.getReqUrl(stock,page);
-			String result = HttpUtil.getResult(url,req.cookie,Constants.referer_prefix+stock.code);
+			String result = null;
+			try {
+				result = HttpUtil.getResult(url,req.cookie,Constants.referer_prefix+stock.code);
+			} catch (IOException e1) {
+				StockCommand.isError.set(true);
+				System.err.println("您的请求过于频繁，请稍后再试。您正在请求【"+stock.name+"】第【"+page+"】页");
+			}
 			//对于返回的结果进行加工
 			if(result != null){
 				boolean isFinish = calculate(result,stock);
 				if(isFinish){
+					System.out.println("【"+stock.name+"】已完成请求。");
 					break;
 				}
 				page++;
 			}else{
 				break;
 			}
+			//每次请求完开始下一次请求的时候，睡眠一段时间
+			if(req.sleep != 0){
+				try {
+					Thread.sleep(req.sleep);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			
 		}
 	}
 	
@@ -67,10 +84,6 @@ public class Worker implements Runnable{
 		}
 		return false;
 	}
-	
-	
-
-	
 	
 	/**
 	 * 首先判断：如果评论时间比req.maxDate还要大的话，返回2（继续遍历）

@@ -19,7 +19,7 @@ public class HttpUtil {
 		return href;
 	}
 
-	public static String getResult(String url,String cookie, String referer){ 
+	public static String getResult(String url,String cookie, String referer) throws IOException{ 
 		String result = null;
 		try {
 			BufferedReader reader = null;  
@@ -42,11 +42,7 @@ public class HttpUtil {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			StockCommand.isError.set(true);
-			System.err.println("您的请求过于频繁，请稍后再试。"+HttpUtil.class.getName());
-			//e.printStackTrace();
-		}  
+		}
         return result;
     }
 
