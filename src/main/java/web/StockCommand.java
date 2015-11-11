@@ -57,17 +57,18 @@ public class StockCommand {
 			int number = 0;
 			while ((line = br.readLine()) != null) {
 				line = line.trim();
-				// 如果number为0的话，读取查询日期。否则的话，加载个股信息
-				if (number == 0) {
-					initReqNowDate(line);
-				} else if (number == 1) {
-					initReqKey(line);
-				} else if (number == 2) {
-					initReqCombine(line);
-				}else if (number == 3) {
-					initReqSleep(line);
-				} else {
-					initReqStock(line);
+				if (line.length() > 0 && !line.startsWith("#")) {
+					if (number == 0) {
+						initReqNowDate(line);
+					} else if (number == 1) {
+						initReqKey(line);
+					} else if (number == 2) {
+						initReqCombine(line);
+					}else if (number == 3) {
+						initReqSleep(line);
+					} else {
+						initReqStock(line);
+					}
 				}
 				number++;
 			}
@@ -82,10 +83,8 @@ public class StockCommand {
 	
 	private void initReqNowDate(String line) {
 		// 如果当前行不为空，或者不以#开头，则读取
-		if (line.length() > 0 && !line.startsWith("#")) {
-			String[] array = line.split("=");
-			req.maxDate = array[1];
-		}
+		String[] array = line.split("=");
+		req.maxDate = array[1];
 	}
 	/**
 	 * 如果maxDate不为空的话，从maxDate向前推N天
@@ -111,18 +110,14 @@ public class StockCommand {
 	}
 	
 	private void initReqSleep(String line) {
-		if (line.length() > 0 && !line.startsWith("#")) {
-			String[] array = line.split("=");
-			req.sleep = Integer.parseInt(array[1]);
-		}
+		String[] array = line.split("=");
+		req.sleep = Integer.parseInt(array[1]);
 	}
 
 	private void initReqStock(String line) {
 		// 如果当前行不为空，或者不以#开头，则读取
-		if (line.length() > 0 && !line.startsWith("#")) {
-			String[] array = line.split(",");
-			req.list.add(new Stock(array[0], array[1]));
-		}
+		String[] array = line.split(",");
+		req.list.add(new Stock(array[0], array[1]));
 	}
 	
 
