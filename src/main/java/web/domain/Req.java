@@ -9,15 +9,16 @@ public class Req {
 	
 	public boolean combine = false;
 	
-	public String cookie;
+	//每个线程在请求一页数据后，睡眠的毫秒数
+	public int sleep = 0;
+
+	public Boolean filterNotice = true;
 	
-	public List<Stock> list = new ArrayList<Stock>();
+	public String cookie;
 	
 	//要查询的日期
 	public List<String> mapKey = new ArrayList<String>();
 	
-	//每个线程在请求一页数据后，睡眠的毫秒数
-	public int sleep = 0;
+	public List<Stock> list = new ArrayList<Stock>();
 	
-
 }

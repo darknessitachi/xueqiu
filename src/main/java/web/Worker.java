@@ -31,7 +31,7 @@ public class Worker implements Runnable{
 				result = HttpUtil.getResult(url,req.cookie,Constants.referer_prefix+stock.code);
 			} catch (IOException e1) {
 				StockCommand.isError.set(true);
-				System.err.println("您的请求过于频繁，请稍后再试。您正在请求【"+stock.name+"】第【"+page+"】页");
+				System.err.println("您的请求过于频繁，请稍后再试。当前正在请求【"+stock.name+"】第【"+page+"】页");
 			}
 			//对于返回的结果进行加工
 			if(result != null){
@@ -72,19 +72,35 @@ public class Worker implements Runnable{
 			long time = (Long) entity.get("created_at");
 			String createDate = DateUtil.formatDate(new Date(time), "yyyy-MM-dd");
 			String createDate_all = DateUtil.formatDate(new Date(time), DateUtil.yyyyMMdd_HHmmss);
-			//如果timeStr属于mapKey中的一个，就在对应的key上+1，否则的话就退出
 			int resultCode = matchMapKey(createDate,createDate_all);
 			if(resultCode == 1){
-				Integer num = stock.map.get(createDate);
-				num = num == null ? 0 : num;
-				stock.map.put(createDate, num+1);
+				boolean isNotice = isNotice(entity);
+				if(isNotice && req.filterNotice){
+					continue;
+				}else{
+					Integer srcNum = stock.map.get(createDate);
+					srcNum = srcNum == null ? 0 : srcNum;
+					stock.map.put(createDate, srcNum+1);
+				}
 			}else if(resultCode == 3){
 				return true;
 			}
 		}
 		return false;
 	}
-	
+	/**
+	 * 判断当前评论是否公告
+	 * @param entity
+	 * @return
+	 */
+	private boolean isNotice(JSONObject entity) {
+		String source = (String) entity.get("source");
+		if("公告".equals(source)){
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * 首先判断：如果评论时间比req.maxDate还要大的话，返回2（继续遍历）
 	 * 然后判断：

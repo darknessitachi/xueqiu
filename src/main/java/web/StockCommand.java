@@ -66,6 +66,8 @@ public class StockCommand {
 						initReqCombine(line);
 					}else if (number == 3) {
 						initReqSleep(line);
+					}else if (number == 4) {
+						initReqFilterNotice(line);
 					} else {
 						initReqStock(line);
 					}
@@ -81,8 +83,12 @@ public class StockCommand {
 
 	}
 	
+	private void initReqFilterNotice(String line) {
+		String[] array = line.split("=");
+		req.filterNotice = new Boolean(array[1]);
+	}
+
 	private void initReqNowDate(String line) {
-		// 如果当前行不为空，或者不以#开头，则读取
 		String[] array = line.split("=");
 		req.maxDate = array[1];
 	}
