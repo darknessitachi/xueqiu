@@ -8,7 +8,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import web.StockCommand;
 import web.domain.Stock;
 
 public class HttpUtil {
