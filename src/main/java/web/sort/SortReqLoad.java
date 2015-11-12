@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 import web.common.ReqLoad;
 import web.common.StockCommand;
@@ -149,6 +150,8 @@ public class SortReqLoad implements ReqLoad {
 		
 		File f = new File(Constants.outPath + "/"  + nowDate + " "+ StringUtil.number2word((req.mapKey.size()-1))+"天个股热度.txt");
 		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+		
+		Stack<String> stack = new Stack<String>();
 
 		for (String key : req.mapKey) {
 			System.out.println("——————" + key + " 个股热度——————");
@@ -166,14 +169,24 @@ public class SortReqLoad implements ReqLoad {
 			for (Entity e : sortList) {
 				bw.write(e.toString() + "\n");
 				System.out.println(e);
+				stack.push(e.number+"");
 			}
 			
 			System.out.println();
 			bw.write("\n");
 		}
 		bw.close();
+		
+		testPrintStack(stack);
 	}
 	
+	private void testPrintStack(Stack<String> stack) {
+		System.out.println();
+		while (!stack.empty()) { 
+            System.out.print(stack.pop()+","); 
+		} 
+	}
+
 	private void combine() {
 		String combineName = req.mapKey.size() + "天内";
 		req.mapKey.add(combineName);

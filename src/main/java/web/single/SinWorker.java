@@ -30,6 +30,7 @@ public class SinWorker implements Runnable{
 			String result = null;
 			try {
 				result = HttpUtil.getResult(url,req.cookie,Constants.referer_prefix+stock.code);
+				System.out.println("已请求【"+stock.name+"】第【"+page+"】页");
 			} catch (IOException e1) {
 				StockCommand.isError.set(true);
 				System.err.println("您的请求过于频繁，请稍后再试。当前正在请求【"+stock.name+"】第【"+page+"】页");
@@ -82,6 +83,7 @@ public class SinWorker implements Runnable{
 					Integer srcNum = stock.map.get(createDate);
 					srcNum = srcNum == null ? 0 : srcNum;
 					stock.map.put(createDate, srcNum+1);
+					System.out.println("+1");
 				}
 			}else if(resultCode == 3){
 				return true;

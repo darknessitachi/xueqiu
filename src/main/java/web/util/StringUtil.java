@@ -34,6 +34,7 @@ public class StringUtil {
 		
 		if(result == null){
 			System.err.println("查询天数没有对应的中文汉字。");
+			result = i+"";
 		}
 		return result;
 	}
