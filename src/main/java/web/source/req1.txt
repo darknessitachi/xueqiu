@@ -1,7 +1,7 @@
 #nowDate=2015-10-21 23:59:59
-day=3
+day=4
 combine=true
-sleep=2000
+sleep=3000
 filterNotice=true
 
 SZ002668,°ÂÂíµçÆ÷
