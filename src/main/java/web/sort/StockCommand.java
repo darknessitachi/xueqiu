@@ -1,4 +1,4 @@
-package web;
+package web.sort;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
