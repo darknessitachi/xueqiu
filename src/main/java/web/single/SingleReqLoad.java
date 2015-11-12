@@ -37,7 +37,6 @@ public class SingleReqLoad implements ReqLoad {
 	
 	
 	private void initReq() throws IOException {
-		req = new Req();
 		// 设置请求path的路径
 		String reqFilePath = this.classpath + "web/source/" + Constants.REQ_SINGLE_NAME;
 
@@ -118,9 +117,8 @@ public class SingleReqLoad implements ReqLoad {
 			for(String key : stock.selfMapKey){
 				sb.append(stock.map.get(key)).append(",");
 			}
-			System.out.println(sb.toString());
+			System.out.println(sb.toString().substring(0, sb.toString().length()-1));
 		}
-		
 	}
 
 }
