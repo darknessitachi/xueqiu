@@ -9,6 +9,8 @@ public class DateUtil {
 	
 	public static final String yyyyMMdd_HHmmss = "yyyy-MM-dd HH:mm:ss";
 	
+	public static final String yyyyMMdd = "yyyy-MM-dd";
+	
 	public static final String yyyyMMdd_HHmmss2 = "yyyy-MM-dd HH：mm：ss";
 	
 	public static String formatDate(Date reqDate, String format) {
@@ -54,6 +56,25 @@ public class DateUtil {
 		return formatDate(endDate,"yyyy-MM-dd");
 	}
 	
+	
+	/**
+	 * 根据传入时间，加i天
+	 * @param i
+	 * @return
+	 */
+	public static String add(Date beginDate,int i) {
+		SimpleDateFormat dft = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar date = Calendar.getInstance();
+		date.setTime(beginDate);
+		date.set(Calendar.DATE, date.get(Calendar.DATE) + i);
+		Date endDate = null;
+		try {
+			endDate = dft.parse(dft.format(date.getTime()));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return formatDate(endDate,"yyyy-MM-dd");
+	}
 	
 	 /** 
      * 使用参数Format将字符串转为Date 

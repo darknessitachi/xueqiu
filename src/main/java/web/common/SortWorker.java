@@ -1,4 +1,4 @@
-package web.sort;
+package web.common;
 
 import java.io.IOException;
 import java.util.Date;
@@ -12,12 +12,12 @@ import web.util.DateUtil;
 import web.util.HttpUtil;
 import web.util.StringUtil;
 
-public class Worker implements Runnable{
+public class SortWorker implements Runnable{
 
 	private Stock stock;
 	private Req req;
 
-	public Worker(Stock stock, Req req) {
+	public SortWorker(Stock stock, Req req) {
 		this.stock = stock;
 		this.req = req;
 	}

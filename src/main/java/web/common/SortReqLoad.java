@@ -1,4 +1,4 @@
-package web.sort;
+package web.common;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,9 +12,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import web.domain.Entity;
 import web.domain.Req;
@@ -25,28 +22,28 @@ import web.util.DateUtil;
 import web.util.FileUtil;
 import web.util.StringUtil;
 
-public class StockCommand {
-	
-	public static AtomicBoolean isError = new AtomicBoolean(false); 
-
-	ExecutorService pool = Executors.newFixedThreadPool(4);
-	
-	private String classpath;
+public class SortReqLoad implements ReqLoad {
 
 	private Req req;
-
-	public void init() throws IOException {
-
-		this.classpath = StockCommand.class.getClassLoader().getResource("").getPath();
-
-		initReq();
-		initCookie();
+	private String classpath = StockCommand.class.getClassLoader().getResource("").getPath();
+	
+	public SortReqLoad(Req req) {
+		this.req = req;
 	}
 
+	public void init() {
+		
+		try {
+			initReq();
+			initCookie();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void initReq() throws IOException {
-		req = new Req();
 		// 设置请求path的路径
-		String reqPath = this.classpath + "web/source/" + Constants.REQ_SEARCH_NAME;
+		String reqPath = this.classpath + "web/source/" + Constants.REQ_SORT_NAME;
 
 		// 设置请求的股票代码
 		BufferedReader br = null;
@@ -121,62 +118,20 @@ public class StockCommand {
 	}
 
 	private void initReqStock(String line) {
-		// 如果当前行不为空，或者不以#开头，则读取
 		String[] array = line.split(",");
 		req.list.add(new Stock(array[0], array[1]));
 	}
 	
 
 	private void initCookie() {
-		// 初始化cookie
 		req.cookie = FileUtil.read(this.classpath + "web/source/" + Constants.REQ_COOKIE_NAME).trim();
 	}
-	/**
-	 * 一只股票启动一个线程，是一个比较好的线程分配策略
-	 */
-	public void send() {
-		for (Stock stock : req.list) {
-			pool.execute(new Worker(stock, this.req));
-		}
-	}
-
-	private void combine() {
-		String combineName = req.mapKey.size() + "天内";
-		req.mapKey.add(combineName);
-		// 遍历股票，计算每一只股票所有周期的合计
-		for (Stock stock : req.list) {
-			Set<String> keys = stock.map.keySet();
-			int total = 0;
-			for (String key : keys) {
-				total = total + stock.map.get(key);
-			}
-			stock.map.put(combineName, total);
-		}
-	}
 	
-	public void finish() throws IOException {
-		pool.shutdown();
-		while (true) {
-			if (pool.isTerminated()) {
-				if(!isError.get()){
-					if (req.combine) {
-						this.combine();
-					}
-					this.printReq();
-				}else{
-					System.err.println("如果连续多次请求失败，请更新cookie文件。");
-				}
-				break;
-			}
+	
+	public void print() throws IOException {
+		if (req.combine) {
+			this.combine();
 		}
-	}
-
-	/**
-	 * 按每天为单位进行打印
-	 * 
-	 * @throws IOException
-	 */
-	private void printReq() throws IOException {
 		// 打印结果，写入文件中
 		File folder = new File(Constants.outPath);
 		if (!folder.exists()) {
@@ -216,5 +171,20 @@ public class StockCommand {
 		}
 		bw.close();
 	}
+	
+	private void combine() {
+		String combineName = req.mapKey.size() + "天内";
+		req.mapKey.add(combineName);
+		// 遍历股票，计算每一只股票所有周期的合计
+		for (Stock stock : req.list) {
+			Set<String> keys = stock.map.keySet();
+			int total = 0;
+			for (String key : keys) {
+				total = total + stock.map.get(key);
+			}
+			stock.map.put(combineName, total);
+		}
+	}
+
 
 }
