@@ -16,12 +16,12 @@ import web.util.Constants;
 import web.util.DateUtil;
 import web.util.FileUtil;
 
-public class SingleReqLoad implements ReqLoad {
+public class SinReqLoad implements ReqLoad {
 	
 	private Req req;
 	private String classpath = StockCommand.class.getClassLoader().getResource("").getPath();
 
-	public SingleReqLoad(Req req) {
+	public SinReqLoad(Req req) {
 		this.req = req;
 	}
 

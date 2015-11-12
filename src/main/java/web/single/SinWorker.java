@@ -13,12 +13,12 @@ import web.util.DateUtil;
 import web.util.HttpUtil;
 import web.util.StringUtil;
 
-public class SingleWorker implements Runnable{
+public class SinWorker implements Runnable{
 
 	private Stock stock;
 	private Req req;
 
-	public SingleWorker(Stock stock, Req req) {
+	public SinWorker(Stock stock, Req req) {
 		this.stock = stock;
 		this.req = req;
 	}

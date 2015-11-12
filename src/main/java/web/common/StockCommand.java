@@ -7,8 +7,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import web.domain.Req;
 import web.domain.Stock;
-import web.single.SingleReqLoad;
-import web.single.SingleWorker;
+import web.single.SinReqLoad;
+import web.single.SinWorker;
 import web.sort.SortReqLoad;
 import web.sort.SortWorker;
 import web.util.Constants;
@@ -39,7 +39,7 @@ public class StockCommand {
 				load = new SortReqLoad(req);
 				break;
 			case Constants.business_single:
-				load = new SingleReqLoad(req);
+				load = new SinReqLoad(req);
 				break;
 			default:
 				break;
@@ -60,7 +60,7 @@ public class StockCommand {
 					pool.execute(new SortWorker(stock, this.req));
 					break;
 				case Constants.business_single:
-					pool.execute(new SingleWorker(stock, this.req));
+					pool.execute(new SinWorker(stock, this.req));
 					break;
 				default:
 					break;
