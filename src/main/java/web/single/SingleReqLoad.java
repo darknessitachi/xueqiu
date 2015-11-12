@@ -1,4 +1,4 @@
-package web.common;
+package web.single;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
 
+import web.common.ReqLoad;
+import web.common.StockCommand;
 import web.domain.Req;
 import web.domain.Stock;
 import web.util.CollectionUtil;
@@ -17,19 +19,20 @@ import web.util.FileUtil;
 public class SingleReqLoad implements ReqLoad {
 	
 	private Req req;
-	private String classpath;
+	private String classpath = StockCommand.class.getClassLoader().getResource("").getPath();
+
+	public SingleReqLoad(Req req) {
+		this.req = req;
+	}
+
 
 	public void init() {
-		
-		this.classpath = StockCommand.class.getClassLoader().getResource("").getPath();
-		
 		try {
 			initReq();
 			initCookie();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	
@@ -98,15 +101,25 @@ public class SingleReqLoad implements ReqLoad {
 		req.cookie = FileUtil.read(this.classpath + "web/source/" + Constants.REQ_COOKIE_NAME).trim();
 	}
 	
-	
-
-	public void setReq(Req req) {
-		this.req = req;
-	}
-
 
 	public void print() {
-		// TODO Auto-generated method stub
+		// 打印结果，写入文件中
+		File folder = new File(Constants.outPath);
+		if (!folder.exists()) {
+			folder.mkdir();
+		}
+		String nowDate = DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd_HHmmss);
+		nowDate = nowDate.replace(":", "：");
+		
+		for(Stock stock:req.list){
+			StringBuffer sb = new StringBuffer();
+			sb.append(stock.name);
+			stock.selfMapKey = CollectionUtil.reverse(stock.selfMapKey);
+			for(String key : stock.selfMapKey){
+				sb.append(stock.map.get(key)).append(",");
+			}
+			System.out.println(sb.toString());
+		}
 		
 	}
 

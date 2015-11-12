@@ -1,4 +1,4 @@
-package web.common;
+package web.sort;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import web.common.ReqLoad;
+import web.common.StockCommand;
 import web.domain.Entity;
 import web.domain.Req;
 import web.domain.Stock;
