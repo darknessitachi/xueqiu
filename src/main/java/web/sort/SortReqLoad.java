@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.Stack;
 
 import web.common.ReqLoad;
-import web.common.StockCommand;
 import web.domain.Entity;
 import web.domain.Req;
 import web.domain.Stock;
@@ -28,7 +27,6 @@ import web.util.StringUtil;
 public class SortReqLoad implements ReqLoad {
 
 	private Req req;
-	private String classpath = StockCommand.class.getClassLoader().getResource("").getPath();
 	
 	public SortReqLoad(Req req) {
 		this.req = req;
@@ -46,7 +44,7 @@ public class SortReqLoad implements ReqLoad {
 	
 	private void initReq() throws IOException {
 		// 设置请求path的路径
-		String reqPath = this.classpath + "web/source/" + Constants.REQ_SORT_NAME;
+		String reqPath = Constants.classpath + "web/source/" + Constants.REQ_SORT_NAME;
 
 		// 设置请求的股票代码
 		BufferedReader br = null;
@@ -127,7 +125,7 @@ public class SortReqLoad implements ReqLoad {
 	
 
 	private void initCookie() {
-		req.cookie = FileUtil.read(this.classpath + "web/source/" + Constants.REQ_COOKIE_NAME).trim();
+		req.cookie = FileUtil.read(Constants.classpath + "web/source/" + Constants.REQ_COOKIE_NAME).trim();
 	}
 	
 	
@@ -181,10 +179,10 @@ public class SortReqLoad implements ReqLoad {
 	}
 	
 	private void testPrintStack(Stack<String> stack) {
-		System.out.println();
+		/*System.out.println();
 		while (!stack.empty()) { 
             System.out.print(stack.pop()+","); 
-		} 
+		} */
 	}
 
 	private void combine() {

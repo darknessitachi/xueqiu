@@ -19,16 +19,27 @@ public class HttpUtil {
 	}
 
 	public static String getResult(String url,String cookie, String referer) throws IOException{ 
+        return getResult(url,cookie,referer,"utf-8");
+    }
+
+	public static String getResult(String httpReqUrl, String cookie,
+			String referer, String code) throws IOException {
 		String result = null;
 		try {
 			BufferedReader reader = null;  
-			HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();  
+			HttpURLConnection conn = (HttpURLConnection) new URL(httpReqUrl).openConnection();  
 			
 			conn.setRequestProperty("Accept-Charset", "utf-8");
 			conn.setRequestProperty("contentType", "utf-8");
-			conn.setRequestProperty("Cookie",cookie);  
-			conn.setRequestProperty("Referer",referer);
-			reader = new BufferedReader(new InputStreamReader(conn.getInputStream(),"utf-8"));  
+			if(cookie!=null){
+				conn.setRequestProperty("Cookie",cookie);  
+			}
+			if(referer!=null){
+				conn.setRequestProperty("Referer",referer);
+			}
+			
+			
+			reader = new BufferedReader(new InputStreamReader(conn.getInputStream(),code));  
 			String line = "";  
 			StringBuffer resultBuffer = new StringBuffer();  
 			while((line = reader.readLine()) != null){  
@@ -43,7 +54,7 @@ public class HttpUtil {
 			e.printStackTrace();
 		}
         return result;
-    }
+	}
 
 
 }

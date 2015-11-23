@@ -1,5 +1,6 @@
 package web.util;
 
+
 public class Constants {
 	
 	public static final String outPath = "D:/—©«Ú»»∂»";
@@ -14,5 +15,9 @@ public class Constants {
 	
 	public static final int business_sort = 1;
 	public static final int business_single = 2;
+	
+	public static final String classpath = Constants.class.getClassLoader().getResource("").getPath();
+	
+	public static final String inter_url = "http://hq.sinajs.cn/list=";
 
 }
