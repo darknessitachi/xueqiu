@@ -31,7 +31,7 @@ public class StockCommand {
 	}
 
 
-	public void init() throws IOException {
+	private void init() throws IOException {
 		req = new Req();
 		
 		switch (businessCode) {
@@ -53,7 +53,7 @@ public class StockCommand {
 	/**
 	 * 一只股票启动一个线程，是一个比较好的线程分配策略
 	 */
-	public void send() {
+	private void send() {
 		for (Stock stock : req.list) {
 			switch (businessCode) {
 				case Constants.business_sort:
@@ -68,7 +68,7 @@ public class StockCommand {
 		}
 	}
 
-	public void finish() throws IOException {
+	private void finish() throws IOException {
 		pool.shutdown();
 		while (true) {
 			if (pool.isTerminated()) {
@@ -80,6 +80,13 @@ public class StockCommand {
 				break;
 			}
 		}
+	}
+
+
+	public void start() throws IOException {
+		this.init();
+		this.send();
+		this.finish();
 	}
 
 }

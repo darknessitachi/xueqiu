@@ -12,9 +12,7 @@ public class SinMain {
 		long start = new Date().getTime();
 		
 		StockCommand c = new StockCommand(Constants.business_single);
-		c.init();
-		c.send();
-		c.finish();
+		c.start();
 		
 		long end = new Date().getTime();
 		System.out.println("”√ ±£∫"+(end-start)/1000+"√Î");
