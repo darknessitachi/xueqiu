@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.Stack;
 
 import web.common.ReqLoad;
 import web.domain.Entity;
@@ -24,11 +23,11 @@ import web.util.DateUtil;
 import web.util.FileUtil;
 import web.util.StringUtil;
 
-public class SortReqLoad implements ReqLoad {
+public class LoadAndPrint implements ReqLoad {
 
 	private Req req;
 	
-	public SortReqLoad(Req req) {
+	public LoadAndPrint(Req req) {
 		this.req = req;
 	}
 
@@ -130,6 +129,7 @@ public class SortReqLoad implements ReqLoad {
 	
 	
 	public void print() throws IOException {
+		
 		if (req.combine) {
 			this.combine();
 		}
@@ -138,6 +138,63 @@ public class SortReqLoad implements ReqLoad {
 		if (!folder.exists()) {
 			folder.mkdir();
 		}
+		String fileName = getFileName();
+		
+		File f = new File(fileName);
+		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+		
+		System.out.println();
+		//打印请求错误的股票名
+		outMsg(getErrorMsg(),bw);
+		
+		//遍历打印
+		for (String title : req.mapKey) {
+			
+			outMsg("——————" + title + " 个股热度——————",bw);
+			
+			List<Entity> sortList = getSortListByKey(title);
+			for (Entity e : sortList) {
+				if(!e.stock.isError){
+					outMsg(e.toString(),bw);
+				}
+			}
+			outMsg("",bw);
+		}
+		bw.close();
+		
+	}
+	/**
+	 * 请求错误的股票名
+	 * @return
+	 */
+	private String getErrorMsg() {
+		StringBuilder sb = new StringBuilder();
+		for(Stock s : req.list){
+			if(s.isError){
+				sb.append("【").append(s.name).append("】");
+			}
+		}
+		return sb.toString().length()>0 ? sb.toString()+"请求失败（如果连续多次请求失败，请增加请求间隔睡眠时间，或更新cookie文件）" : "";
+	}
+
+	private List<Entity> getSortListByKey(String key) {
+		//把结果封装在Entity，然后根据number排序
+		List<Entity> sortList = new ArrayList<Entity>();
+		for (Stock stock : req.list) {
+			sortList.add(new Entity(stock.name,stock.map.get(key) == null ? 0 : stock.map.get(key),stock));
+		}
+		//排序
+		ComparatorEntity comparator = new ComparatorEntity();
+		Collections.sort(sortList, comparator);
+		return sortList;
+	}
+
+	private void outMsg(String msg, BufferedWriter bw) throws IOException {
+		System.out.println(msg);
+		bw.write(msg + "\n");
+	}
+
+	private String getFileName() {
 		String nowDate = null;
 		if(StringUtil.isEmpty(req.maxDate)){
 			nowDate = DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd_HHmmss);
@@ -146,43 +203,7 @@ public class SortReqLoad implements ReqLoad {
 		}
 		nowDate = nowDate.replace(":", "：");
 		
-		File f = new File(Constants.outPath + "/"  + nowDate + " "+ StringUtil.number2word((req.mapKey.size()-1))+"天个股热度.txt");
-		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-		
-		Stack<String> stack = new Stack<String>();
-
-		for (String key : req.mapKey) {
-			System.out.println("——————" + key + " 个股热度——————");
-			bw.write("——————" + key + " 个股热度——————" + "\n");
-			List<Entity> sortList = new ArrayList<Entity>();
-			// 把结果封装在Entity，然后根据number排序
-			for (Stock stock : req.list) {
-				sortList.add(new Entity(stock.name,
-						stock.map.get(key) == null ? 0 : stock.map.get(key)));
-			}
-			// 排序
-			ComparatorEntity comparator = new ComparatorEntity();
-			Collections.sort(sortList, comparator);
-			
-			for (Entity e : sortList) {
-				bw.write(e.toString() + "\n");
-				System.out.println(e);
-				stack.push(e.number+"");
-			}
-			
-			System.out.println();
-			bw.write("\n");
-		}
-		bw.close();
-		
-		testPrintStack(stack);
-	}
-	
-	private void testPrintStack(Stack<String> stack) {
-		/*System.out.println();
-		while (!stack.empty()) { 
-            System.out.print(stack.pop()+","); 
-		} */
+		return Constants.outPath + "/"  + nowDate + " "+ StringUtil.number2word((req.mapKey.size()-1))+"天个股热度.txt";
 	}
 
 	private void combine() {

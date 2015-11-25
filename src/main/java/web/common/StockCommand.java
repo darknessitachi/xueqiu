@@ -9,8 +9,8 @@ import web.domain.Req;
 import web.domain.Stock;
 import web.single.SinReqLoad;
 import web.single.SinWorker;
-import web.sort.SortReqLoad;
-import web.sort.SortWorker;
+import web.sort.LoadAndPrint;
+import web.sort.Worker;
 import web.util.Constants;
 
 public class StockCommand {
@@ -36,7 +36,7 @@ public class StockCommand {
 		
 		switch (businessCode) {
 			case Constants.business_sort:
-				load = new SortReqLoad(req);
+				load = new LoadAndPrint(req);
 				break;
 			case Constants.business_single:
 				load = new SinReqLoad(req);
@@ -57,7 +57,7 @@ public class StockCommand {
 		for (Stock stock : req.list) {
 			switch (businessCode) {
 				case Constants.business_sort:
-					pool.execute(new SortWorker(stock, this.req));
+					pool.execute(new Worker(stock, this.req));
 					break;
 				case Constants.business_single:
 					pool.execute(new SinWorker(stock, this.req));
@@ -72,11 +72,12 @@ public class StockCommand {
 		pool.shutdown();
 		while (true) {
 			if (pool.isTerminated()) {
-				if(!isError.get()){
+				/*if(!isError.get()){
 					load.print();
 				}else{
 					System.err.println("如果连续多次请求失败，请更新cookie文件。");
-				}
+				}*/
+				load.print();
 				break;
 			}
 		}

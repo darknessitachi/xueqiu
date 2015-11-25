@@ -13,12 +13,12 @@ import web.util.DateUtil;
 import web.util.HttpUtil;
 import web.util.StringUtil;
 
-public class SortWorker implements Runnable{
+public class Worker implements Runnable{
 
 	private Stock stock;
 	private Req req;
 
-	public SortWorker(Stock stock, Req req) {
+	public Worker(Stock stock, Req req) {
 		this.stock = stock;
 		this.req = req;
 	}
@@ -31,6 +31,7 @@ public class SortWorker implements Runnable{
 			try {
 				result = HttpUtil.getResult(url,req.cookie,Constants.referer_prefix+stock.code);
 			} catch (IOException e1) {
+				stock.isError = true;
 				StockCommand.isError.set(true);
 				System.err.println("您的请求过于频繁，请稍后再试。当前正在请求【"+stock.name+"】第【"+page+"】页");
 			}

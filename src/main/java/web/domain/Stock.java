@@ -17,6 +17,9 @@ public class Stock {
 	
 	//2015-10-20=20,2015-10-21=12
 	public Map<String,Integer> map = new HashMap<String, Integer>();
+	
+	//ÇëÇóÊÇ·ñ³ö´í
+	public boolean isError = false;
 
 	public Stock(String code, String name) {
 		super();
