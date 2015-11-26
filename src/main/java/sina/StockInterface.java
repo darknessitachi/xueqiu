@@ -11,7 +11,7 @@ import java.io.IOException;
 import web.util.Constants;
 import web.util.HttpUtil;
 
-public class StockInter {
+public class StockInterface {
 	
 	private static final String[] stockIndex = new String[]{"1999999","0399005","0399006","0399001"};
 

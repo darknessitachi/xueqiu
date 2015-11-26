@@ -133,11 +133,9 @@ public class LoadAndPrint implements ReqLoad {
 		if (req.combine) {
 			this.combine();
 		}
-		// 打印结果，写入文件中
-		File folder = new File(Constants.outPath);
-		if (!folder.exists()) {
-			folder.mkdir();
-		}
+		//创建文件夹
+		createFolder();
+		
 		String fileName = getFileName();
 		
 		File f = new File(fileName);
@@ -163,6 +161,14 @@ public class LoadAndPrint implements ReqLoad {
 		bw.close();
 		
 	}
+	private void createFolder() {
+		// 打印结果，写入文件中
+		File folder = new File(Constants.outPath);
+		if (!folder.exists()) {
+			folder.mkdir();
+		}
+	}
+
 	/**
 	 * 请求错误的股票名
 	 * @return
