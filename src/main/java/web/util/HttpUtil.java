@@ -56,5 +56,9 @@ public class HttpUtil {
         return result;
 	}
 
+	public static String getResult(String httpReqUrl, String code) throws IOException {
+		return getResult(httpReqUrl,null,null,code);
+	}
+
 
 }

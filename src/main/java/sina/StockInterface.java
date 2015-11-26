@@ -65,7 +65,7 @@ public class StockInterface {
 
 	private  String getNameByCode(String completeCode) throws IOException {
 		String httpReqUrl = Constants.inter_url+completeCode;
-		String result = HttpUtil.getResult(httpReqUrl, null, null,"GBK");
+		String result = HttpUtil.getResult(httpReqUrl,"GBK");
 		//先通过=分割字符串
 		String content = result.split("=")[1];
 		//再通过，分割字符串
