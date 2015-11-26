@@ -7,8 +7,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 
 import web.util.Constants;
+import web.util.DateUtil;
 import web.util.HttpUtil;
 
 public class StockInterface {
@@ -19,7 +21,8 @@ public class StockInterface {
 		StringBuilder sb = new StringBuilder();
 		
 		String readPath = Constants.classpath  + "sina/" + file;
-		String writePath = Constants.outPath  + "/" + file+".txt";
+		String nowDate = getNowDate(); 
+		String writePath = Constants.outPath  + "/EBK-" + nowDate+".txt";
 		//先读取文件
 		BufferedReader br = null;
 		try {
@@ -43,6 +46,11 @@ public class StockInterface {
 		}
 		//写入文件
 		writeResult(writePath,sb.toString().toUpperCase());
+	}
+
+	private String getNowDate() {
+		String nowDate = DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd_HHmmss);;
+		return nowDate.replace(":", "：");
 	}
 
 	private  void writeResult(String writePath, String result) throws IOException {

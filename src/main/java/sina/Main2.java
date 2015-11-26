@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class Main2 {
 	
-	private static String file = "2015-11-20.EBK";
+	private static String file = "code.EBK";
 
 	public static void main(String[] args) throws IOException {
 		StockInterface sm = new StockInterface();
