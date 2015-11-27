@@ -43,7 +43,7 @@ public class LoadAndPrint implements ReqLoad {
 	
 	private void initReq() throws IOException {
 		// 设置请求path的路径
-		String reqPath = Constants.classpath + "web/source/" + Constants.REQ_SORT_NAME;
+		String reqPath = Constants.classpath + Constants.REQ_SORT_NAME;
 
 		// 设置请求的股票代码
 		BufferedReader br = null;
@@ -124,7 +124,7 @@ public class LoadAndPrint implements ReqLoad {
 	
 
 	private void initCookie() {
-		req.cookie = FileUtil.read(Constants.classpath + "web/source/" + Constants.REQ_COOKIE_NAME).trim();
+		req.cookie = FileUtil.read(Constants.classpath + Constants.REQ_COOKIE_NAME).trim();
 	}
 	
 	
