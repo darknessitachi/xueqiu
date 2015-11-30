@@ -5,10 +5,10 @@ import java.util.Date;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import web.Constants;
 import web.common.StockCommand;
 import web.domain.Req;
 import web.domain.Stock;
-import web.util.Constants;
 import web.util.DateUtil;
 import web.util.HttpUtil;
 import web.util.StringUtil;

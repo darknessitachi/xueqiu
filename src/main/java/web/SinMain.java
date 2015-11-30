@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Date;
 
 import web.common.StockCommand;
-import web.util.Constants;
 
 public class SinMain {
 

@@ -9,7 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
-import web.util.Constants;
+import web.Constants;
 import web.util.DateUtil;
 import web.util.HttpUtil;
 
@@ -20,7 +20,7 @@ public class StockInterface {
 	public  void readSource(String file) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		
-		String readPath = Constants.classpath  + "sina/" + file;
+		String readPath = Constants.classpath + file;
 		String nowDate = getNowDate(); 
 		String writePath = Constants.outPath  + "/EBK-" + nowDate+".txt";
 		//先读取文件
