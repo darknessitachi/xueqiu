@@ -5,7 +5,7 @@ public class Constants {
 	
 	public static final String CONFIG_PATH = "config/";
 	
-	public static final String ZXG_FILE_NAME = Constants.CONFIG_PATH + "×ÔÑ¡¹É.EBK";
+	public static final String ZXG_FILE_NAME = Constants.CONFIG_PATH + "xxx.EBK";
 	
 	public static final String REQ_HEAD_NAME = Constants.CONFIG_PATH + "request_head.txt";
 	
