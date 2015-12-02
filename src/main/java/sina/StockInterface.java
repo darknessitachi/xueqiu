@@ -9,7 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
-import web.Constants;
+import config.Constants;
 import web.util.DateUtil;
 import web.util.HttpUtil;
 
@@ -54,8 +54,8 @@ public class StockInterface {
 	}
 
 	private  void writeResult(String writePath, String result) throws IOException {
-		System.out.println("写入文件："+writePath);
-		System.out.println("写入内容：\n"+result);
+		//System.out.println("写入文件："+writePath);
+		System.out.println(result);
 		File f = new File(writePath);
 		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
 		bw.write(result);

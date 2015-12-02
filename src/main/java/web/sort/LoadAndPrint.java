@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import web.Constants;
+import config.Constants;
 import web.common.ReqLoad;
 import web.domain.Entity;
 import web.domain.Req;

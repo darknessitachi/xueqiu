@@ -1,16 +1,15 @@
-package web;
+package config;
 
 
 public class Constants {
 	
-	public static final String outPath = "D:/雪球热度";
+	public static final String ZXG_FILE_NAME = "config/自选股.EBK";
 	
 	public static final String REQ_SORT_NAME = "config/req1.txt";
 	
 	public static final String REQ_COOKIE_NAME = "config/cookie.txt";
 	
-	public static final String REQ_SINGLE_NAME = "req2.txt";
-	
+	public static final String outPath = "D:/雪球热度";
 	
 	public static final String referer_prefix = "http://xueqiu.com/S/";
 	
