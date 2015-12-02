@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import config.Constants;
 
-public class Main2 {
+public class MainFirst {
 	
 	public static void main(String[] args) throws IOException {
 		StockInterface sm = new StockInterface();
