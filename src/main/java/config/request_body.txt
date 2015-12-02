@@ -1,9 +1,3 @@
-#nowDate=2015-10-21 23:59:59
-day=2
-combine=true
-sleep=1000
-filterNotice=true
-
 SZ300467,迅游科技
 SZ002558,世纪游轮
 SZ000025,特  力Ａ

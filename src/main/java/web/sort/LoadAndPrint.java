@@ -34,16 +34,19 @@ public class LoadAndPrint implements ReqLoad {
 	public void init() {
 		
 		try {
-			initReq();
+			initHead();
+			initBody();
 			initCookie();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void initReq() throws IOException {
+	
+
+	private void initHead() throws IOException {
 		// 设置请求path的路径
-		String reqPath = Constants.classpath + Constants.REQ_SORT_NAME;
+		String reqPath = Constants.classpath + Constants.REQ_HEAD_NAME;
 
 		// 设置请求的股票代码
 		BufferedReader br = null;
@@ -65,8 +68,6 @@ public class LoadAndPrint implements ReqLoad {
 						initReqSleep(line);
 					}else if (number == 4) {
 						initReqFilterNotice(line);
-					} else {
-						initReqStock(line);
 					}
 				}
 				number++;
@@ -78,6 +79,30 @@ public class LoadAndPrint implements ReqLoad {
 			br.close();
 		}
 
+	}
+	
+	private void initBody() throws IOException {
+		// 设置请求path的路径
+		String reqPath = Constants.classpath + Constants.REQ_BODY_NAME;
+
+		BufferedReader br = null;
+		try {
+			FileReader fr = new FileReader(new File(reqPath));
+			br = new BufferedReader(fr);
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				line = line.trim();
+				if (line.length() > 0 && !line.startsWith("#")) {
+					initReqStock(line);
+				}
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			br.close();
+		}
+		
 	}
 	
 	private void initReqFilterNotice(String line) {

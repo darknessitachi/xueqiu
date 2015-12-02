@@ -5,12 +5,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import config.Constants;
 import web.domain.Req;
 import web.domain.Stock;
-import web.sort.DirReqLoad;
 import web.sort.LoadAndPrint;
 import web.sort.Worker;
+import config.Constants;
 
 public class StockCommand {
 	
@@ -38,7 +37,6 @@ public class StockCommand {
 				load = new LoadAndPrint(req);
 				break;
 			case Constants.business_direct:
-				load = new DirReqLoad(req);
 				break;
 			default:
 				break;
