@@ -5,10 +5,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import web.business.LoadAndPrint;
+import web.business.Worker;
 import web.domain.Req;
 import web.domain.Stock;
-import web.sort.LoadAndPrint;
-import web.sort.Worker;
 import config.Constants;
 
 public class StockCommand {
