@@ -3,11 +3,14 @@ package config;
 
 public class Constants {
 	
-	public static final String ZXG_FILE_NAME = "config/自选股.EBK";
+	public static final String CONFIG_PATH = "config/";
 	
-	public static final String REQ_SORT_NAME = "config/req1.txt";
+	public static final String ZXG_FILE_NAME = Constants.CONFIG_PATH + "自选股.EBK";
 	
-	public static final String REQ_COOKIE_NAME = "config/cookie.txt";
+	public static final String REQ_SORT_NAME = Constants.CONFIG_PATH + "req1.txt";
+	
+	public static final String REQ_COOKIE_NAME = Constants.CONFIG_PATH + "cookie.txt";
+	
 	
 	public static final String outPath = "D:/雪球热度";
 	
