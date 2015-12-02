@@ -7,7 +7,7 @@ public class Constants {
 	
 	public static final String ZXG_FILE_NAME = Constants.CONFIG_PATH + "×ÔÑ¡¹É.EBK";
 	
-	public static final String REQ_SORT_NAME = Constants.CONFIG_PATH + "req1.txt";
+	public static final String REQ_SORT_NAME = Constants.CONFIG_PATH + "request.txt";
 	
 	public static final String REQ_COOKIE_NAME = Constants.CONFIG_PATH + "cookie.txt";
 	
