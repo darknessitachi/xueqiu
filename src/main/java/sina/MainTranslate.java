@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import config.Constants;
 
-public class MainFirst {
+public class MainTranslate {
 	
 	public static void main(String[] args) throws IOException {
 		StockInterface sm = new StockInterface();
