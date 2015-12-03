@@ -60,5 +60,8 @@ public class HttpUtil {
 		return getResult(httpReqUrl,null,null,code);
 	}
 
+	public static String getResult(String httpReqUrl) throws IOException {
+		return getResult(httpReqUrl,"utf-8");
+	}
 
 }
