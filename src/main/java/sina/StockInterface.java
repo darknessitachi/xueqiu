@@ -21,8 +21,7 @@ public class StockInterface {
 		StringBuilder sb = new StringBuilder();
 		
 		String readPath = Constants.classpath + file;
-		String nowDate = getNowDate(); 
-		String writePath = Constants.outPath  + "/EBK-" + nowDate+".txt";
+		String writePath = getWritePath(file);
 		//先读取文件
 		BufferedReader br = null;
 		try {
@@ -46,6 +45,13 @@ public class StockInterface {
 		}
 		//写入文件
 		writeResult(writePath,sb.toString().toUpperCase());
+	}
+
+	private String getWritePath(String file) {
+		String nowDate = getNowDate(); 
+		String fileName = (file.split("/")[1]).split("\\.")[0];
+		String writePath = Constants.outPath  + "/EBK_" + nowDate + "_" + fileName + ".txt";
+		return writePath;
 	}
 
 	private String getNowDate() {
