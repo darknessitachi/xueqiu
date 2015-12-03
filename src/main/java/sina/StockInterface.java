@@ -15,8 +15,6 @@ import web.util.HttpUtil;
 
 public class StockInterface {
 	
-	private static final String[] stockIndex = new String[]{"1999999","0399005","0399006","0399001"};
-
 	public  void readSource(String file) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		
@@ -85,7 +83,7 @@ public class StockInterface {
 	 */
 	private  String completeTdxCode(String code) {
 		//¹ýÂËµôÖ¸Êý
-		for(String s:stockIndex){
+		for(String s:Constants.stockIndex){
 			if(s.equals(code)){
 				return null;
 			}

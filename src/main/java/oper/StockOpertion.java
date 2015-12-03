@@ -68,7 +68,7 @@ public class StockOpertion {
 		
 		List<String> list = this.queryAll();
 		
-		//从request_body.txt中获取股票代码，然后添加
+		//从request_body.txt中获取股票代码（request_body中的股票代码已经过滤指数代码），然后添加
 		String reqPath = Constants.classpath + Constants.REQ_BODY_NAME;
 
 		BufferedReader br = null;
@@ -80,7 +80,7 @@ public class StockOpertion {
 				line = line.trim();
 				if (line.length() > 0 && !line.startsWith("#")) {
 					String code = line.split(",")[0];
-					//如果不在自选股中，则添加
+					//如果不在自选股中，并且不是指数，则添加
 					if(!list.contains(code)){
 						addStock(code);
 						Thread.sleep(sleep);
@@ -96,4 +96,5 @@ public class StockOpertion {
 		
 		System.out.println("添加股票完成。");
 	}
+
 }
