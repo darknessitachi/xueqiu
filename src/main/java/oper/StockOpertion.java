@@ -65,6 +65,9 @@ public class StockOpertion {
 	}
 
 	public void addAll() throws IOException, InterruptedException {
+		
+		List<String> list = this.queryAll();
+		
 		//从request_body.txt中获取股票代码，然后添加
 		String reqPath = Constants.classpath + Constants.REQ_BODY_NAME;
 
@@ -77,8 +80,11 @@ public class StockOpertion {
 				line = line.trim();
 				if (line.length() > 0 && !line.startsWith("#")) {
 					String code = line.split(",")[0];
-					addStock(code);
-					Thread.sleep(sleep);
+					//如果不在自选股中，则添加
+					if(!list.contains(code)){
+						addStock(code);
+						Thread.sleep(sleep);
+					}
 				}
 			}
 
