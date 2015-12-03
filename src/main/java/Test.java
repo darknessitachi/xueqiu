@@ -1,10 +1,15 @@
+import java.util.Date;
+
 
 
 public class Test {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		System.out.println(("code/name.EBK".split("/")[1]).split("\\.")[0]);
+		
+		String str = "yangrui1";
+		System.out.println(str.substring(0, str.length()-1));
+		
+		System.out.println(new Date().getTime());
 
 	}
 
