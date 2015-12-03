@@ -29,7 +29,7 @@ public class StockOpertion {
 		params.put("code", code);
 		params.put("_", new Date().getTime());
 		HttpUtil.get("http://xueqiu.com/stock/portfolio/delstock.json",params,cookie ,"http://xueqiu.com/S/"+code);
-		System.out.println("删除【"+code+"】完成");
+		System.out.println("删除【"+code+"】完成。");
 	}
 
 	private void addStock(String code) throws IOException {
@@ -37,17 +37,9 @@ public class StockOpertion {
 		params.put("code", code);
 		params.put("isnotice", 1);
 		HttpUtil.post("http://xueqiu.com/stock/portfolio/addstock.json",params,cookie,"http://xueqiu.com/S/"+code);
-		System.out.println("添加【"+code+"】完成");
+		System.out.println("添加【"+code+"】完成。");
 	}
 
-	public void delAll() throws IOException, InterruptedException {
-		List<String> stocks = this.queryAll();
-		for(String code:stocks){
-			delStock(code);
-			Thread.sleep(sleep);
-		}
-		System.out.println("股票清理完成。");
-	}
 
 	private List<String> queryAll() throws IOException {
 		String result = HttpUtil.getResult("http://xueqiu.com/v4/stock/portfolio/stocks.json?size=1000&tuid=9631865301&pid=-1&category=2&type=5",cookie,"http://xueqiu.com/9631865301","utf-8");
@@ -60,6 +52,16 @@ public class StockOpertion {
 			list.add(code);
 		}
 		return list;
+	}
+	
+	
+	public void delAll() throws IOException, InterruptedException {
+		List<String> stocks = this.queryAll();
+		for(String code:stocks){
+			delStock(code);
+			Thread.sleep(sleep);
+		}
+		System.out.println("股票清理完成。");
 	}
 
 	public void addAll() throws IOException, InterruptedException {
