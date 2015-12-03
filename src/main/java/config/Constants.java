@@ -5,8 +5,8 @@ public class Constants {
 	
 	
 	public static final String CODE_PATH = "code/";
-	// 自选股    down  up
-	public static final String ZXG_FILE_NAME = Constants.CODE_PATH + "down.EBK";
+	// 自选股    down  up  chongZu  xxx
+	public static final String ZXG_FILE_NAME = Constants.CODE_PATH + "xxx.EBK";
 	
 	
 	public static final String CONFIG_PATH = "config/";
