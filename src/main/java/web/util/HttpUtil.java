@@ -13,7 +13,7 @@ import web.domain.Stock;
 public class HttpUtil {
 	
 	
-	public static String getReqUrl(Stock stock, int page) {
+	public static String getSearchUrl(Stock stock, int page) {
 		String href = "http://xueqiu.com/statuses/search.json?count=15&comment=0&symbol="+stock.code+"&hl=0&source=all&sort=time&page="+page+"&_=1445444564351";
 		return href;
 	}

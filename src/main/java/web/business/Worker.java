@@ -26,7 +26,7 @@ public class Worker implements Runnable{
 	public void run() {
 		int page = 1;
 		while(true){
-			String url = HttpUtil.getReqUrl(stock,page);
+			String url = HttpUtil.getSearchUrl(stock,page);
 			String result = null;
 			try {
 				result = HttpUtil.getResult(url,req.cookie,Constants.referer_prefix+stock.code);
