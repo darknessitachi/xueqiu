@@ -29,7 +29,7 @@ public class StockInterface {
 			while ((line = br.readLine()) != null) {
 				line = line.trim();
 				if (line.length() > 0 ) {
-					String completeCode = completeTdxCode(line);
+					String completeCode = completeCode(line);
 					if(completeCode!=null){
 						String name = getNameByCode(completeCode);
 						sb.append(completeCode).append(",").append(name).append("\n");
@@ -42,7 +42,7 @@ public class StockInterface {
 			br.close();
 		}
 		//写入文件
-		writeResult(writePath,sb.toString().toUpperCase());
+		write(writePath,sb.toString().toUpperCase());
 	}
 
 	private String getWritePath(String file) {
@@ -57,7 +57,7 @@ public class StockInterface {
 		return nowDate.replace(":", "：");
 	}
 
-	private  void writeResult(String writePath, String result) throws IOException {
+	private  void write(String writePath, String result) throws IOException {
 		//System.out.println("写入文件："+writePath);
 		System.out.println(result);
 		File f = new File(writePath);
@@ -81,7 +81,7 @@ public class StockInterface {
 	 * @param code
 	 * @return
 	 */
-	private  String completeTdxCode(String code) {
+	private  String completeCode(String code) {
 		//过滤掉指数
 		for(String s:Constants.stockIndex){
 			if(s.equals(code)){
