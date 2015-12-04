@@ -61,7 +61,7 @@ public class StockOpertion {
 			delStock(code);
 			Thread.sleep(sleep);
 		}
-		System.out.println("股票清理完成。");
+		System.out.println("股票清理完成，一共清理【"+stocks.size()+"】只股票。");
 	}
 
 	public void addAll() throws IOException, InterruptedException {
@@ -72,6 +72,7 @@ public class StockOpertion {
 		String reqPath = Constants.classpath + Constants.REQ_BODY_NAME;
 
 		BufferedReader br = null;
+		int num = 0;
 		try {
 			FileReader fr = new FileReader(new File(reqPath));
 			br = new BufferedReader(fr);
@@ -80,10 +81,11 @@ public class StockOpertion {
 				line = line.trim();
 				if (line.length() > 0 && !line.startsWith("#")) {
 					String code = line.split(",")[0];
-					//如果不在自选股中，并且不是指数，则添加
+					//如果不在自选股中，则添加
 					if(!list.contains(code)){
 						addStock(code);
 						Thread.sleep(sleep);
+						num++;
 					}
 				}
 			}
@@ -94,7 +96,7 @@ public class StockOpertion {
 			br.close();
 		}
 		
-		System.out.println("添加股票完成。");
+		System.out.println("添加股票完成，一共添加了【"+num+"】只股票。");
 	}
 
 }
