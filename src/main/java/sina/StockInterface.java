@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.util.Date;
 
 import config.Constants;
-import web.util.DateUtil;
-import web.util.HttpUtil;
+import util.DateUtil;
+import util.HttpUtil;
 
 public class StockInterface {
 	

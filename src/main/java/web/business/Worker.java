@@ -6,12 +6,12 @@ import java.util.Date;
 import config.Constants;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import util.DateUtil;
+import util.HttpUtil;
+import util.StringUtil;
 import web.common.StockCommand;
 import web.domain.Req;
 import web.domain.Stock;
-import web.util.DateUtil;
-import web.util.HttpUtil;
-import web.util.StringUtil;
 
 public class Worker implements Runnable{
 

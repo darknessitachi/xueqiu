@@ -1,6 +1,6 @@
 package web.domain;
 
-import web.util.StringUtil;
+import util.StringUtil;
 
 public class Entity {
 	

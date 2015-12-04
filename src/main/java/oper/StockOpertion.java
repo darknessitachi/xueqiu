@@ -13,8 +13,8 @@ import java.util.Map;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import web.util.FileUtil;
-import web.util.HttpUtil;
+import util.FileUtil;
+import util.HttpUtil;
 import config.Constants;
 
 public class StockOpertion {
