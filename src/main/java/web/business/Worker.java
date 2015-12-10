@@ -22,13 +22,13 @@ public class Worker implements Runnable{
 		this.stock = stock;
 		this.req = req;
 	}
-
 	public void run() {
 		int page = 1;
 		while(true){
 			String url = HttpUtil.getSearchUrl(stock,page);
 			String result = null;
 			try {
+				//System.out.println("开始请求【"+stock.name+"】第【"+page+"】页。");
 				result = HttpUtil.getResult(url,req.cookie,Constants.referer_prefix+stock.code);
 			} catch (IOException e1) {
 				stock.isError = true;
@@ -39,6 +39,7 @@ public class Worker implements Runnable{
 			if(result != null){
 				boolean isFinish = calculate(result,stock);
 				if(isFinish){
+					//int num = StockCommand.number.incrementAndGet();
 					System.out.println("【"+stock.name+"】已完成请求。");
 					break;
 				}

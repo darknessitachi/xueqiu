@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import config.Constants;
 import util.ComparatorEntity;
 import util.DateUtil;
 import util.FileUtil;
@@ -22,9 +21,10 @@ import web.common.ReqLoad;
 import web.domain.Entity;
 import web.domain.Req;
 import web.domain.Stock;
+import config.Constants;
 
 public class LoadAndPrint implements ReqLoad {
-
+	
 	private Req req;
 	
 	public LoadAndPrint(Req req) {
@@ -158,8 +158,9 @@ public class LoadAndPrint implements ReqLoad {
 		if (req.combine) {
 			this.combine();
 		}
+		
 		//创建文件夹
-		createFolder();
+		FileUtil.createFolder(Constants.outPath);
 		
 		String fileName = getFileName();
 		
@@ -185,13 +186,6 @@ public class LoadAndPrint implements ReqLoad {
 		}
 		bw.close();
 		
-	}
-	private void createFolder() {
-		// 打印结果，写入文件中
-		File folder = new File(Constants.outPath);
-		if (!folder.exists()) {
-			folder.mkdir();
-		}
 	}
 
 	/**

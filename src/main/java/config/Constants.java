@@ -5,9 +5,8 @@ public class Constants {
 	
 	
 	public static final String CODE_PATH = "code/";
-	// 自选股    down  up  chongZu  xxx
+	// 自选股    down  up  chongZu  xxx A股
 	public static final String ZXG_FILE_NAME = Constants.CODE_PATH + "自选股.EBK";
-	
 	
 	public static final String CONFIG_PATH = "config/";
 	
@@ -21,6 +20,8 @@ public class Constants {
 	
 	
 	public static final String outPath = "D:/雪球热度";
+	
+	public static final String ebkPath = "D:/EBK";
 	
 	public static final String referer_prefix = "http://xueqiu.com/S/";
 	

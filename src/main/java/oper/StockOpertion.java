@@ -22,7 +22,7 @@ public class StockOpertion {
 
 	private String cookie = FileUtil.read(Constants.classpath + Constants.REQ_COOKIE_NAME).trim();
 	
-	private long sleep = 1000;
+	private long sleep = 100;
 
 	private void delStock(String code) throws IOException {
 		Map<String,Object> params = new HashMap<String,Object>();

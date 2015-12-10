@@ -31,4 +31,11 @@ public class FileUtil {
 		}
 		return result.toString();
 	}
+
+	public static void createFolder(String outpath) {
+		File folder = new File(outpath);
+		if (!folder.exists()) {
+			folder.mkdir();
+		}
+	}
 }

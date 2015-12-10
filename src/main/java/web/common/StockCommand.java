@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import web.business.LoadAndPrint;
 import web.business.Worker;
@@ -14,7 +15,9 @@ import config.Constants;
 public class StockCommand {
 	
 	public static AtomicBoolean isError = new AtomicBoolean(false); 
-
+	
+	public static AtomicInteger number = new AtomicInteger();
+	
 	private ExecutorService pool = Executors.newFixedThreadPool(4);
 	
 	private ReqLoad load = null;
@@ -66,6 +69,7 @@ public class StockCommand {
 	}
 
 	private void finish() throws IOException {
+	//	System.out.println("Ö´ÐÐ"+StockCommand.class.getName()+" finish ·½·¨¡£");
 		pool.shutdown();
 		while (true) {
 			if (pool.isTerminated()) {

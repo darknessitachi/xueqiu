@@ -9,11 +9,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
-import config.Constants;
 import util.DateUtil;
+import util.FileUtil;
 import util.HttpUtil;
+import config.Constants;
 
 public class StockInterface {
+	
+	public boolean useLog = false;
 	
 	public  void readSource(String file) throws IOException {
 		StringBuilder sb = new StringBuilder();
@@ -26,13 +29,19 @@ public class StockInterface {
 			FileReader fr = new FileReader(new File(readPath));
 			br = new BufferedReader(fr);
 			String line = null;
+			int num = 0;
 			while ((line = br.readLine()) != null) {
 				line = line.trim();
 				if (line.length() > 0 ) {
 					String completeCode = completeCode(line);
 					if(completeCode!=null){
 						String name = getNameByCode(completeCode);
-						sb.append(completeCode).append(",").append(name).append("\n");
+						if(isValidName(name)){
+							sb.append(completeCode).append(",").append(name).append("\n");
+							if(useLog){
+								System.out.println(++num);
+							}
+						}
 					}
 				}
 			}
@@ -45,10 +54,15 @@ public class StockInterface {
 		write(writePath,sb.toString().toUpperCase());
 	}
 
+	private boolean isValidName(String name) {
+		return !"\";".equals(name);
+	}
+
 	private String getWritePath(String file) {
 		String nowDate = getNowDate(); 
 		String fileName = (file.split("/")[1]).split("\\.")[0];
-		String writePath = Constants.outPath  + "/EBK_" + nowDate + "_" + fileName + ".txt";
+		String writePath = Constants.ebkPath  + "/" + nowDate + " " + fileName + ".txt";
+		FileUtil.createFolder(Constants.ebkPath);
 		return writePath;
 	}
 
