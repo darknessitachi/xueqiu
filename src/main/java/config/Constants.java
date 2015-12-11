@@ -3,7 +3,6 @@ package config;
 
 public class Constants {
 	
-	public static final String CODE_PATH = "code/";
 	
 	public static final String[] group = new String[]{
 		"充电桩","锂电池",
@@ -15,7 +14,9 @@ public class Constants {
 		//"石墨烯"
 	};
 	// 自选股 
-	public static final String ZXG_FILE_NAME = Constants.CODE_PATH + "锂电池.EBK";
+	public static final String ZXG_FILE_NAME = Constants.CODE_PATH + "自选股.EBK";
+	
+	public static final String CODE_PATH = "code/";
 	
 	public static final String CONFIG_PATH = "config/";
 	
@@ -26,6 +27,8 @@ public class Constants {
 	public static final String REQ_COOKIE_NAME = Constants.CONFIG_PATH + "cookie.txt";
 	
 	public static final String[] stockIndex = new String[]{"1999999","0399005","0399006","0399001"};
+	
+	public static final long XUEQIU_SLEEP = 100;
 	
 	//家里的路径
 	//public static final String REQ_BODY_SRC_PATH = "D:/Documents/GitHub/xueqiu/src/main/java/config/request_body.txt";;

@@ -1,4 +1,4 @@
-package oper;
+package xueqiu;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,8 +22,6 @@ public class StockOpertion {
 
 	private String cookie = FileUtil.read(Constants.classpath + Constants.REQ_COOKIE_NAME).trim();
 	
-	private long sleep = 100;
-
 	private void delStock(String code) throws IOException {
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("code", code);
@@ -59,7 +57,7 @@ public class StockOpertion {
 		List<String> stocks = this.queryAll();
 		for(String code:stocks){
 			delStock(code);
-			Thread.sleep(sleep);
+			Thread.sleep(Constants.XUEQIU_SLEEP);
 		}
 		System.out.println("股票清理完成，一共清理【"+stocks.size()+"】只股票。");
 	}
@@ -79,12 +77,12 @@ public class StockOpertion {
 			String line = null;
 			while ((line = br.readLine()) != null) {
 				line = line.trim();
-				if (line.length() > 0 && !line.startsWith("#")) {
+				if (line.length() > 0 && !line.startsWith("#") &&line.contains(",")) {
 					String code = line.split(",")[0];
 					//如果不在自选股中，则添加
 					if(!list.contains(code)){
 						addStock(code);
-						Thread.sleep(sleep);
+						Thread.sleep(Constants.XUEQIU_SLEEP);
 						num++;
 					}
 				}
