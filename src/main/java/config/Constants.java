@@ -5,8 +5,9 @@ public class Constants {
 	
 	
 	public static final String[] group = new String[]{
-		"充电桩","锂电池",
+		//"充电桩","锂电池",
 		"互联网金融","国产软件","信息安全","云计算",
+		//"稀缺资源","稀土永磁",
 		//"次新股",
 		//"电子支付",
 		//"虚拟现实",
