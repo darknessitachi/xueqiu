@@ -6,10 +6,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import web.business.LoadAndPrint;
-import web.business.Worker;
 import web.domain.Req;
 import web.domain.Stock;
+import web.impl.ReqLoadImpl;
+import web.impl.Worker;
 import config.Constants;
 
 public class StockCommand {
@@ -37,7 +37,7 @@ public class StockCommand {
 		
 		switch (businessCode) {
 			case Constants.business_sort:
-				load = new LoadAndPrint(req);
+				load = new ReqLoadImpl(req);
 				break;
 			case Constants.business_direct:
 				break;

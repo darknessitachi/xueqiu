@@ -1,4 +1,4 @@
-package web.business;
+package web.impl;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -23,11 +23,11 @@ import web.domain.Req;
 import web.domain.Stock;
 import config.Constants;
 
-public class LoadAndPrint implements ReqLoad {
+public class ReqLoadImpl implements ReqLoad {
 	
 	private Req req;
 	
-	public LoadAndPrint(Req req) {
+	public ReqLoadImpl(Req req) {
 		this.req = req;
 	}
 
@@ -90,11 +90,17 @@ public class LoadAndPrint implements ReqLoad {
 			FileReader fr = new FileReader(new File(reqPath));
 			br = new BufferedReader(fr);
 			String line = null;
+			int number = 0;
 			while ((line = br.readLine()) != null) {
 				line = line.trim();
 				if (line.length() > 0 && !line.startsWith("#")) {
-					initReqStock(line);
+					if (number == 0) {
+						initBodyName(line);
+					} else {
+						initReqStock(line);
+					}
 				}
+				number++;
 			}
 
 		} catch (FileNotFoundException e) {
@@ -105,6 +111,15 @@ public class LoadAndPrint implements ReqLoad {
 		
 	}
 	
+	private void initBodyName(String line) {
+		if(line.contains(",")){
+			System.err.println("request_body文件第一行没有要查询的板块名称。");
+			initReqStock(line);
+		}else{
+			req.bodyName = line;
+		}
+	}
+
 	private void initReqFilterNotice(String line) {
 		String[] array = line.split("=");
 		req.filterNotice = new Boolean(array[1]);
@@ -158,7 +173,6 @@ public class LoadAndPrint implements ReqLoad {
 		if (req.combine) {
 			this.combine();
 		}
-		
 		//创建文件夹
 		FileUtil.createFolder(Constants.outPath);
 		
@@ -228,7 +242,7 @@ public class LoadAndPrint implements ReqLoad {
 		}
 		nowDate = nowDate.replace(":", "：");
 		
-		return Constants.outPath + "/"  + nowDate + " "+ StringUtil.number2word((req.mapKey.size()-1))+"天个股热度.txt";
+		return Constants.outPath + "/"  + nowDate + " "+ StringUtil.number2word((req.mapKey.size()-1))+"天个股热度（"+req.bodyName+"）.txt";
 	}
 
 	private void combine() {

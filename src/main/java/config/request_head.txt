@@ -1,5 +1,5 @@
 #nowDate=2015-10-21 23:59:59
-day=1
+day=2
 combine=true
 sleep=1000
 filterNotice=true

@@ -1,4 +1,4 @@
-package sina;
+package translate;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -18,11 +18,17 @@ public class StockInterface {
 	
 	public boolean useLog = false;
 	
-	public  void readSource(String file) throws IOException {
+	//要读取的原始文件路径
+	private String file;
+	
+	public  void translate(String file) throws IOException {
+		
+		this.file = file;
+		
 		StringBuilder sb = new StringBuilder();
 		
 		String readPath = Constants.classpath + file;
-		String writePath = getWritePath(file);
+		String writePath = getWritePath();
 		//先读取文件
 		BufferedReader br = null;
 		try {
@@ -50,20 +56,46 @@ public class StockInterface {
 		} finally {
 			br.close();
 		}
+		
+		String result = sb.toString().toUpperCase();
+		//写入文件的时候，在文件第一行加入当前板块的名词
+		String fileName = getFileName(file);
+		result = fileName + "\n" + result;
+		
+		System.out.println(result);
 		//写入文件
-		write(writePath,sb.toString().toUpperCase());
+		write(writePath,result);
+		//写入request_body中
+		writeRequestBody(result);
+		System.out.println("写入完成！\n");
+	}
+
+	private void writeRequestBody(String result) throws IOException {
+		write(Constants.REQ_BODY_SRC_PATH,result);
+		
+		String reqBodyTargetPath = Constants.classpath + Constants.REQ_BODY_NAME;
+		write(reqBodyTargetPath,result);
 	}
 
 	private boolean isValidName(String name) {
 		return !"\";".equals(name);
 	}
 
-	private String getWritePath(String file) {
+	private String getWritePath() {
 		String nowDate = getNowDate(); 
-		String fileName = (file.split("/")[1]).split("\\.")[0];
+		String fileName = getFileName(file);
 		String writePath = Constants.ebkPath  + "/" + nowDate + " " + fileName + ".txt";
 		FileUtil.createFolder(Constants.ebkPath);
 		return writePath;
+	}
+	
+	/**
+	 * 返回要翻译的板块名称
+	 * @param file
+	 * @return
+	 */
+	private String getFileName(String file) {
+		return (file.split("/")[1]).split("\\.")[0];
 	}
 
 	private String getNowDate() {
@@ -73,12 +105,10 @@ public class StockInterface {
 
 	private  void write(String writePath, String result) throws IOException {
 		//System.out.println("写入文件："+writePath);
-		System.out.println(result);
 		File f = new File(writePath);
 		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
 		bw.write(result);
 		bw.close();
-		System.out.println("写入完成！");
 	}
 
 	private  String getNameByCode(String completeCode) throws IOException {

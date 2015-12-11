@@ -21,4 +21,7 @@ public class Req {
 	
 	public List<Stock> list = new ArrayList<Stock>();
 	
+	//要查询的板块名称
+	public String bodyName = "未定义";
+	
 }

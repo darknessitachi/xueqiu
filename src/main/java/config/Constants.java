@@ -3,10 +3,19 @@ package config;
 
 public class Constants {
 	
-	
 	public static final String CODE_PATH = "code/";
-	// 自选股    down  up  chongZu  xxx A股
-	public static final String ZXG_FILE_NAME = Constants.CODE_PATH + "自选股.EBK";
+	
+	public static final String[] group = new String[]{
+		"充电桩","锂电池",
+		"互联网金融","国产软件","信息安全","云计算",
+		//"次新股",
+		//"电子支付",
+		//"虚拟现实",
+		//"上海自贸",
+		//"石墨烯"
+	};
+	// 自选股 
+	public static final String ZXG_FILE_NAME = Constants.CODE_PATH + "锂电池.EBK";
 	
 	public static final String CONFIG_PATH = "config/";
 	
@@ -18,6 +27,11 @@ public class Constants {
 	
 	public static final String[] stockIndex = new String[]{"1999999","0399005","0399006","0399001"};
 	
+	//家里的路径
+	//public static final String REQ_BODY_SRC_PATH = "D:/Documents/GitHub/xueqiu/src/main/java/config/request_body.txt";;
+	
+	//公司的路径
+	public static final String REQ_BODY_SRC_PATH = "C:/Users/yangrui/Documents/GitHub/xueqiu/src/main/java/config/request_body.txt";;
 	
 	public static final String outPath = "D:/雪球热度";
 	
