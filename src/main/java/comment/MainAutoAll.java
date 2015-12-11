@@ -1,4 +1,4 @@
-package web;
+package comment;
 
 import java.io.IOException;
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.Date;
 import config.Constants;
 
 /**
- * Ö»ĞèÒª°ÑÔ­Ê¼ÎÄ¼ş·ÅÈëcodeÖĞ£¬¾Í¿ÉÒÔÖ´ĞĞ¸Ã·½·¨ÁË
+ * åªéœ€è¦æŠŠåŸå§‹æ–‡ä»¶æ”¾å…¥codeä¸­ï¼Œå°±å¯ä»¥æ‰§è¡Œè¯¥æ–¹æ³•äº†
  * @author Administrator
  *
  */
@@ -19,7 +19,7 @@ public class MainAutoAll {
 			MainAutoOne.autoOne(fileName);
 		}
 		long end = new Date().getTime();
-		System.out.println("AutoAll×Ü¹²ÓÃÊ±£º"+(end-start)/1000+"Ãë");
+		System.out.println("AutoAllç”¨æ—¶ï¼š"+(end-start)/1000+"ç§’");
 	}
 
 }

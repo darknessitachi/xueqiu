@@ -1,10 +1,10 @@
-package web;
+package comment;
 
 import java.io.IOException;
 import java.util.Date;
 
 import config.Constants;
-import web.common.StockCommand;
+import comment.common.StockCommand;
 
 public class Main {
 

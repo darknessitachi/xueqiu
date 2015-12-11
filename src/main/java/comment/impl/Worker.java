@@ -1,17 +1,19 @@
-package web.impl;
+package comment.impl;
 
 import java.io.IOException;
 import java.util.Date;
 
-import config.Constants;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import util.DateUtil;
 import util.HttpUtil;
 import util.StringUtil;
-import web.common.StockCommand;
-import web.domain.Req;
-import web.domain.Stock;
+
+import comment.common.StockCommand;
+import comment.domain.Req;
+import comment.domain.Stock;
+
+import config.Constants;
 
 public class Worker implements Runnable{
 

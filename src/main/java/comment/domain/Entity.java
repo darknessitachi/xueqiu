@@ -1,4 +1,4 @@
-package web.domain;
+package comment.domain;
 
 import util.StringUtil;
 

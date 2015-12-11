@@ -1,11 +1,11 @@
-package web;
+package comment;
 
 import java.io.IOException;
 import java.util.Date;
 
 import translate.MainTrans;
 import translate.StockInterface;
-import web.common.StockCommand;
+import comment.common.StockCommand;
 import config.Constants;
 
 /**

@@ -1,4 +1,4 @@
-package web.common;
+package comment.common;
 
 import java.io.IOException;
 
