@@ -16,6 +16,13 @@ public class Constants {
 	// 自选股 
 	public static final String ZXG_FILE_NAME = Constants.CODE_PATH + "自选股.EBK";
 	
+	//家里的路径
+	//public static final String REQ_BODY_SRC_PATH = "D:/Documents/GitHub/xueqiu/src/main/java/config/request_body.txt";;
+	
+	//公司的路径
+	public static final String REQ_BODY_SRC_PATH = "C:/Users/yangrui/Documents/GitHub/xueqiu/src/main/java/config/request_body.txt";;
+	
+	
 	public static final String CODE_PATH = "code/";
 	
 	public static final String CONFIG_PATH = "config/";
@@ -29,12 +36,6 @@ public class Constants {
 	public static final String[] stockIndex = new String[]{"1999999","0399005","0399006","0399001"};
 	
 	public static final long XUEQIU_SLEEP = 100;
-	
-	//家里的路径
-	//public static final String REQ_BODY_SRC_PATH = "D:/Documents/GitHub/xueqiu/src/main/java/config/request_body.txt";;
-	
-	//公司的路径
-	public static final String REQ_BODY_SRC_PATH = "C:/Users/yangrui/Documents/GitHub/xueqiu/src/main/java/config/request_body.txt";;
 	
 	public static final String outPath = "D:/雪球热度";
 	
