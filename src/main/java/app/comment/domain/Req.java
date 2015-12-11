@@ -1,4 +1,4 @@
-package comment.domain;
+package app.comment.domain;
 
 import java.util.ArrayList;
 import java.util.List;

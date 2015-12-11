@@ -1,4 +1,4 @@
-package comment.domain;
+package app.comment.domain;
 
 import util.StringUtil;
 

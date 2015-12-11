@@ -1,15 +1,10 @@
-package comment;
+package app.comment;
 
 import java.io.IOException;
 import java.util.Date;
 
 import config.Constants;
 
-/**
- * 只需要把原始文件放入code中，就可以执行该方法了
- * @author Administrator
- *
- */
 public class MainAutoAll {
 
 	public static void main(String[] args) throws IOException {
@@ -19,7 +14,7 @@ public class MainAutoAll {
 			MainAutoOne.autoOne(fileName);
 		}
 		long end = new Date().getTime();
-		System.out.println("AutoAll用时："+(end-start)/1000+"秒");
+		System.out.println("用时："+(end-start)/1000+"秒");
 	}
 
 }

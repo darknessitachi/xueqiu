@@ -1,11 +1,11 @@
-package comment;
+package app.comment;
 
 import java.io.IOException;
 import java.util.Date;
 
-import translate.MainTrans;
-import translate.StockInterface;
-import comment.common.StockCommand;
+import app.comment.common.StockCommand;
+import app.translate.MainTrans;
+import app.translate.StockInterface;
 import config.Constants;
 
 /**

@@ -1,4 +1,4 @@
-package xueqiu;
+package app.xueqiu;
 
 import java.io.BufferedReader;
 import java.io.File;
