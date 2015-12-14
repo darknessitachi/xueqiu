@@ -15,7 +15,7 @@ public class Main {
 		c.start();
 		
 		long end = new Date().getTime();
-		System.out.println("ÓÃÊ±£º"+(end-start)/1000+"Ãë");
+		System.out.println("ç”¨æ—¶ï¼š"+(end-start)/1000+"ç§’");
 	}
 
 }

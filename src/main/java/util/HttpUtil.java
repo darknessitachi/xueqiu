@@ -83,21 +83,21 @@ public class HttpUtil {
 			conn.setRequestProperty("Referer", referer);
 		}
 		
-		//Á¬½Ó³¬Ê± µ¥Î»ºÁÃë
+		//è¿æ¥è¶…æ—¶ å•ä½æ¯«ç§’
 		// conn.setConnectTimeout(10000);
-		//¶ÁÈ¡³¬Ê± µ¥Î»ºÁÃë
+		//è¯»å–è¶…æ—¶ å•ä½æ¯«ç§’
 		// conn.setReadTimeout(2000);
 		
-		// ÊÇ·ñÊäÈë²ÎÊı
+		// æ˜¯å¦è¾“å…¥å‚æ•°
 		conn.setDoOutput(true);
 
 		StringBuffer sb = new StringBuffer();
-		// ±íµ¥²ÎÊıÓëgetĞÎÊ½Ò»Ñù
+		// è¡¨å•å‚æ•°ä¸getå½¢å¼ä¸€æ ·
 		for(String key:param.keySet()){
 			sb.append(key).append("=").append(param.get(key)).append("&");
 		}
 		byte[] bypes = sb.toString().substring(0, sb.toString().length()-1).getBytes();
-		// ÊäÈë²ÎÊı
+		// è¾“å…¥å‚æ•°
 		conn.getOutputStream().write(bypes);
 		InputStream is = conn.getInputStream();
 		

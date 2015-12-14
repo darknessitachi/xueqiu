@@ -11,35 +11,47 @@ public class StringUtil {
 		
 		switch (i) {
 		case 1:
-			result = "Ò»";
+			result = "ä¸€";
 			break;
 		case 2:
-			result = "Á½";
+			result = "ä¸¤";
 			break;
 		case 3:
-			result = "Èı";
+			result = "ä¸‰";
 			break;
 		case 4:
-			result = "ËÄ";
+			result = "å››";
 			break;
 		case 5:
-			result = "Îå";
+			result = "äº”";
 			break;
 		case 6:
-			result = "Áù";
+			result = "å…­";
+			break;
+		case 7:
+			result = "ä¸ƒ";
+			break;
+		case 8:
+			result = "å…«";
+			break;
+		case 9:
+			result = "ä¹";
+			break;
+		case 10:
+			result = "å";
 			break;
 		default:
 			break;
 		}
 		
 		if(result == null){
-			System.err.println("²éÑ¯ÌìÊıÃ»ÓĞ¶ÔÓ¦µÄÖĞÎÄºº×Ö¡£");
+			System.err.println("æŸ¥è¯¢å¤©æ•°æ²¡æœ‰å¯¹åº”çš„ä¸­æ–‡æ±‰å­—ã€‚");
 			result = i+"";
 		}
 		return result;
 	}
 	/**
-	 * Èç¹û¹ÉÆ±Ãû×ÖÊÇ3¸ö×Ö£¬ºóÃæ¼ÓÁ½¸ö¿Õ¸ñ
+	 * å¦‚æœè‚¡ç¥¨åå­—æ˜¯3ä¸ªå­—ï¼Œåé¢åŠ ä¸¤ä¸ªç©ºæ ¼
 	 * @param name
 	 * @return
 	 */

@@ -11,14 +11,14 @@ public class DateUtil {
 	
 	public static final String yyyyMMdd = "yyyy-MM-dd";
 	
-	public static final String yyyyMMdd_HHmmss2 = "yyyy-MM-dd HH£ºmm£ºss";
+	public static final String yyyyMMdd_HHmmss2 = "yyyy-MM-dd HHï¼šmmï¼šss";
 	
 	public static String formatDate(Date reqDate, String format) {
 		SimpleDateFormat sdf=new SimpleDateFormat(format);
 		return sdf.format(reqDate);
 	}
 	/**
-	 * µ±Ç°Ê±¼ä¼õiÌì
+	 * å½“å‰æ—¶é—´å‡iå¤©
 	 * @param i
 	 * @return
 	 */
@@ -38,7 +38,7 @@ public class DateUtil {
 	}
 	
 	/**
-	 * ¸ù¾İ´«ÈëÊ±¼ä£¬¼õiÌì
+	 * æ ¹æ®ä¼ å…¥æ—¶é—´ï¼Œå‡iå¤©
 	 * @param i
 	 * @return
 	 */
@@ -58,7 +58,7 @@ public class DateUtil {
 	
 	
 	/**
-	 * ¸ù¾İ´«ÈëÊ±¼ä£¬¼ÓiÌì
+	 * æ ¹æ®ä¼ å…¥æ—¶é—´ï¼ŒåŠ iå¤©
 	 * @param i
 	 * @return
 	 */
@@ -77,7 +77,7 @@ public class DateUtil {
 	}
 	
 	 /** 
-     * Ê¹ÓÃ²ÎÊıFormat½«×Ö·û´®×ªÎªDate 
+     * ä½¿ç”¨å‚æ•°Formatå°†å­—ç¬¦ä¸²è½¬ä¸ºDate 
      */  
     public static Date parse(String strDate, String pattern)
     {  

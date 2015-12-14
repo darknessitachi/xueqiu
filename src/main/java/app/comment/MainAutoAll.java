@@ -11,10 +11,10 @@ public class MainAutoAll {
 		long start = new Date().getTime();
 		for(String name : Constants.group){
 			String fileName = Constants.CODE_PATH + name + ".EBK";
-			MainAutoOne.autoOne(fileName);
+			MainAutoCurrent.autoOne(fileName);
 		}
 		long end = new Date().getTime();
-		System.out.println("ç”¨æ—¶ï¼š"+(end-start)/1000+"ç§’");
+		System.out.println("×Ü¹²ÓÃÊ±£º"+(end-start)/1000+"Ãë");
 	}
 
 }

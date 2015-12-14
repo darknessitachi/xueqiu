@@ -9,19 +9,19 @@ public class Req {
 	
 	public boolean combine = false;
 	
-	//Ã¿¸öÏß³ÌÔÚÇëÇóÒ»Ò³Êı¾İºó£¬Ë¯ÃßµÄºÁÃëÊı
+	//æ¯ä¸ªçº¿ç¨‹åœ¨è¯·æ±‚ä¸€é¡µæ•°æ®åï¼Œç¡çœ çš„æ¯«ç§’æ•°
 	public int sleep = 0;
 
 	public Boolean filterNotice = true;
 	
 	public String cookie;
 	
-	//Òª²éÑ¯µÄÈÕÆÚ£¬Ä¬ÈÏÈÕÆÚ£¬´Ó´óµ½Ğ¡ÅÅĞò
+	//è¦æŸ¥è¯¢çš„æ—¥æœŸï¼Œé»˜è®¤æ—¥æœŸï¼Œä»å¤§åˆ°å°æ’åº
 	public List<String> mapKey = new ArrayList<String>();
 	
 	public List<Stock> list = new ArrayList<Stock>();
 	
-	//Òª²éÑ¯µÄ°å¿éÃû³Æ
-	public String bodyName = "Î´¶¨Òå";
+	//è¦æŸ¥è¯¢çš„æ¿å—åç§°
+	public String bodyName = "æœªå®šä¹‰";
 	
 }

@@ -50,9 +50,6 @@ public class StockCommand {
 	}
 
 	
-	/**
-	 * 一只股票启动一个线程，是一个比较好的线程分配策略
-	 */
 	private void send() {
 		for (Stock stock : req.list) {
 			switch (businessCode) {
@@ -69,15 +66,9 @@ public class StockCommand {
 	}
 
 	private void finish() throws IOException {
-	//	System.out.println("执行"+StockCommand.class.getName()+" finish 方法。");
 		pool.shutdown();
 		while (true) {
 			if (pool.isTerminated()) {
-				/*if(!isError.get()){
-					load.print();
-				}else{
-					System.err.println("如果连续多次请求失败，请更新cookie文件。");
-				}*/
 				load.print();
 				break;
 			}

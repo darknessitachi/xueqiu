@@ -30,26 +30,26 @@ public class Worker implements Runnable{
 			String url = HttpUtil.getSearchUrl(stock,page);
 			String result = null;
 			try {
-				//System.out.println("¿ªÊ¼ÇëÇó¡¾"+stock.name+"¡¿µÚ¡¾"+page+"¡¿Ò³¡£");
+				//System.out.println("å¼€å§‹è¯·æ±‚ã€"+stock.name+"ã€‘ç¬¬ã€"+page+"ã€‘é¡µã€‚");
 				result = HttpUtil.getResult(url,req.cookie,Constants.referer_prefix+stock.code);
 			} catch (IOException e1) {
 				stock.isError = true;
 				StockCommand.isError.set(true);
-				System.err.println("¡¾"+stock.name+"¡¿£¬ÇëÇó¹ıÓÚÆµ·±ÕıÔÚÇëÇóµÚ¡¾"+page+"¡¿Ò³¡£");
+				System.err.println("ã€"+stock.name+"ã€‘ï¼Œè¯·æ±‚è¿‡äºé¢‘ç¹æ­£åœ¨è¯·æ±‚ç¬¬ã€"+page+"ã€‘é¡µã€‚");
 			}
-			//¶ÔÓÚ·µ»ØµÄ½á¹û½øĞĞ¼Ó¹¤
+			//å¯¹äºè¿”å›çš„ç»“æœè¿›è¡ŒåŠ å·¥
 			if(result != null){
 				boolean isFinish = calculate(result,stock);
 				if(isFinish){
 					//int num = StockCommand.number.incrementAndGet();
-					System.out.println("¡¾"+stock.name+"¡¿ÒÑÍê³ÉÇëÇó¡£");
+					System.out.println("ã€"+stock.name+"ã€‘å·²å®Œæˆè¯·æ±‚ã€‚");
 					break;
 				}
 				page++;
 			}else{
 				break;
 			}
-			//Ã¿´ÎÇëÇóÍê¿ªÊ¼ÏÂÒ»´ÎÇëÇóµÄÊ±ºò£¬Ë¯ÃßÒ»¶ÎÊ±¼ä
+			//æ¯æ¬¡è¯·æ±‚å®Œå¼€å§‹ä¸‹ä¸€æ¬¡è¯·æ±‚çš„æ—¶å€™ï¼Œç¡çœ ä¸€æ®µæ—¶é—´
 			if(req.sleep != 0){
 				try {
 					Thread.sleep(req.sleep);
@@ -63,7 +63,7 @@ public class Worker implements Runnable{
 	
 	
 	/**
-	 * ·µ»Øtrue±êÊ¶½áÊøÑ­»·ÇëÇó
+	 * è¿”å›trueæ ‡è¯†ç»“æŸå¾ªç¯è¯·æ±‚
 	 * @param result
 	 * @param stock
 	 * @return
@@ -73,7 +73,7 @@ public class Worker implements Runnable{
 		JSONArray array = (JSONArray) json.get("list");
 		for(int i=0;i<array.size();i++){
 			JSONObject entity = (JSONObject) array.get(i);
-			//ÆÀÂÛÊ±¼ä
+			//è¯„è®ºæ—¶é—´
 			long time = (Long) entity.get("created_at");
 			String createDate = DateUtil.formatDate(new Date(time), "yyyy-MM-dd");
 			String createDate_all = DateUtil.formatDate(new Date(time), DateUtil.yyyyMMdd_HHmmss);
@@ -94,24 +94,24 @@ public class Worker implements Runnable{
 		return false;
 	}
 	/**
-	 * ÅĞ¶Ïµ±Ç°ÆÀÂÛÊÇ·ñ¹«¸æ
+	 * åˆ¤æ–­å½“å‰è¯„è®ºæ˜¯å¦å…¬å‘Š
 	 * @param entity
 	 * @return
 	 */
 	private boolean isNotice(JSONObject entity) {
 		String source = (String) entity.get("source");
-		if("¹«¸æ".equals(source)){
+		if("å…¬å‘Š".equals(source)){
 			return true;
 		}
 		return false;
 	}
 
 	/**
-	 * Ê×ÏÈÅĞ¶Ï£ºÈç¹ûÆÀÂÛÊ±¼ä±Èreq.maxDate»¹Òª´óµÄ»°£¬·µ»Ø2£¨¼ÌĞø±éÀú£©
-	 * È»ºóÅĞ¶Ï£º
-	 * 		Èç¹ûÆÀÂÛÊ±¼äÔÚmapKeyÄÚ£¬·µ»Ø1(+1)
-	 * 		Èç¹ÉÆÀÂÛÊ±¼ä±ÈmapKeyÖĞ×î´óµÄ»¹Òª´ó£¨ÆÀÂÛÊ±¼äÔÚmapKey×î´óºÍ×îĞ¡Ö®¼ä£©£¬·µ»Ø2(¼ÌĞø±éÀú)
-	 * 		Èç¹ûÆÀÂÛÊ±¼ä±ÈmapKeyÖĞ×îĞ¡µÄ»¹ÓĞĞ¡£¬·µ»Ø3£¨Ìø³öÑ­»·£©
+	 * é¦–å…ˆåˆ¤æ–­ï¼šå¦‚æœè¯„è®ºæ—¶é—´æ¯”req.maxDateè¿˜è¦å¤§çš„è¯ï¼Œè¿”å›2ï¼ˆç»§ç»­éå†ï¼‰
+	 * ç„¶ååˆ¤æ–­ï¼š
+	 * 		å¦‚æœè¯„è®ºæ—¶é—´åœ¨mapKeyå†…ï¼Œè¿”å›1(+1)
+	 * 		å¦‚è‚¡è¯„è®ºæ—¶é—´æ¯”mapKeyä¸­æœ€å¤§çš„è¿˜è¦å¤§ï¼ˆè¯„è®ºæ—¶é—´åœ¨mapKeyæœ€å¤§å’Œæœ€å°ä¹‹é—´ï¼‰ï¼Œè¿”å›2(ç»§ç»­éå†)
+	 * 		å¦‚æœè¯„è®ºæ—¶é—´æ¯”mapKeyä¸­æœ€å°çš„è¿˜æœ‰å°ï¼Œè¿”å›3ï¼ˆè·³å‡ºå¾ªç¯ï¼‰
 	 * @param timeStr
 	 * @param timeStr_all 
 	 * @return

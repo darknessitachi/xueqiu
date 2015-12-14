@@ -12,13 +12,13 @@ public class Stock {
 	public String name;
 	
 	
-	//要查询的日期
+	//瑕佹煡璇㈢殑鏃ユ湡
 	public List<String> selfMapKey = new ArrayList<String>();
 	
 	//2015-10-20=20,2015-10-21=12
 	public Map<String,Integer> map = new HashMap<String, Integer>();
 	
-	//请求是否出错
+	//璇锋眰鏄惁鍑洪敊
 	public boolean isError = false;
 
 	public Stock(String code, String name) {

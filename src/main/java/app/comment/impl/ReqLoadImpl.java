@@ -45,10 +45,10 @@ public class ReqLoadImpl implements ReqLoad {
 	
 
 	private void initHead() throws IOException {
-		// ÉèÖÃÇëÇópathµÄÂ·¾¶
+		// è®¾ç½®è¯·æ±‚pathçš„è·¯å¾„
 		String reqPath = Constants.classpath + Constants.REQ_HEAD_NAME;
 
-		// ÉèÖÃÇëÇóµÄ¹ÉÆ±´úÂë
+		// è®¾ç½®è¯·æ±‚çš„è‚¡ç¥¨ä»£ç 
 		BufferedReader br = null;
 		try {
 			FileReader fr = new FileReader(new File(reqPath));
@@ -82,7 +82,7 @@ public class ReqLoadImpl implements ReqLoad {
 	}
 	
 	private void initBody() throws IOException {
-		// ÉèÖÃÇëÇópathµÄÂ·¾¶
+		// è®¾ç½®è¯·æ±‚pathçš„è·¯å¾„
 		String reqPath = Constants.classpath + Constants.REQ_BODY_NAME;
 
 		BufferedReader br = null;
@@ -113,7 +113,7 @@ public class ReqLoadImpl implements ReqLoad {
 	
 	private void initBodyName(String line) {
 		if(line.contains(",")){
-			System.err.println("request_bodyÎÄ¼şµÚÒ»ĞĞÃ»ÓĞÒª²éÑ¯µÄ°å¿éÃû³Æ¡£");
+			System.err.println("request_bodyæ–‡ä»¶ç¬¬ä¸€è¡Œæ²¡æœ‰è¦æŸ¥è¯¢çš„æ¿å—åç§°ã€‚");
 			initReqStock(line);
 		}else{
 			req.bodyName = line;
@@ -130,7 +130,7 @@ public class ReqLoadImpl implements ReqLoad {
 		req.maxDate = array[1];
 	}
 	/**
-	 * Èç¹ûmaxDate²»Îª¿ÕµÄ»°£¬´ÓmaxDateÏòÇ°ÍÆNÌì
+	 * å¦‚æœmaxDateä¸ä¸ºç©ºçš„è¯ï¼Œä»maxDateå‘å‰æ¨Nå¤©
 	 * @param line
 	 */
 	private void initReqKey(String line) {
@@ -173,7 +173,7 @@ public class ReqLoadImpl implements ReqLoad {
 		if (req.combine) {
 			this.combine();
 		}
-		//´´½¨ÎÄ¼ş¼Ğ
+		//åˆ›å»ºæ–‡ä»¶å¤¹
 		FileUtil.createFolder(Constants.outPath);
 		
 		String fileName = getFileName();
@@ -182,13 +182,13 @@ public class ReqLoadImpl implements ReqLoad {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
 		
 		System.out.println();
-		//´òÓ¡ÇëÇó´íÎóµÄ¹ÉÆ±Ãû
+		//æ‰“å°è¯·æ±‚é”™è¯¯çš„è‚¡ç¥¨å
 		outMsg(getErrorMsg(),bw);
 		
-		//±éÀú´òÓ¡
+		//éå†æ‰“å°
 		for (String title : req.mapKey) {
 			
-			outMsg("¡ª¡ª¡ª¡ª¡ª¡ª" + title + " ¸ö¹ÉÈÈ¶È¡ª¡ª¡ª¡ª¡ª¡ª",bw);
+			outMsg("â€”â€”â€”â€”â€”â€”" + title + " ä¸ªè‚¡çƒ­åº¦â€”â€”â€”â€”â€”â€”",bw);
 			
 			List<Entity> sortList = getSortListByKey(title);
 			for (Entity e : sortList) {
@@ -203,26 +203,26 @@ public class ReqLoadImpl implements ReqLoad {
 	}
 
 	/**
-	 * ÇëÇó´íÎóµÄ¹ÉÆ±Ãû
+	 * è¯·æ±‚é”™è¯¯çš„è‚¡ç¥¨å
 	 * @return
 	 */
 	private String getErrorMsg() {
 		StringBuilder sb = new StringBuilder();
 		for(Stock s : req.list){
 			if(s.isError){
-				sb.append("¡¾").append(s.name).append("¡¿");
+				sb.append("ã€").append(s.name).append("ã€‘");
 			}
 		}
-		return sb.toString().length()>0 ? sb.toString()+"ÇëÇóÊ§°Ü£¨Èç¹ûÁ¬Ğø¶à´ÎÇëÇóÊ§°Ü£¬ÇëÔö¼ÓÇëÇó¼ä¸ôË¯ÃßÊ±¼ä£¬»ò¸üĞÂcookieÎÄ¼ş£©" : "";
+		return sb.toString().length()>0 ? sb.toString()+"è¯·æ±‚å¤±è´¥ï¼ˆå¦‚æœè¿ç»­å¤šæ¬¡è¯·æ±‚å¤±è´¥ï¼Œè¯·å¢åŠ è¯·æ±‚é—´éš”ç¡çœ æ—¶é—´ï¼Œæˆ–æ›´æ–°cookieæ–‡ä»¶ï¼‰" : "";
 	}
 
 	private List<Entity> getSortListByKey(String key) {
-		//°Ñ½á¹û·â×°ÔÚEntity£¬È»ºó¸ù¾İnumberÅÅĞò
+		//æŠŠç»“æœå°è£…åœ¨Entityï¼Œç„¶åæ ¹æ®numberæ’åº
 		List<Entity> sortList = new ArrayList<Entity>();
 		for (Stock stock : req.list) {
 			sortList.add(new Entity(stock.name,stock.map.get(key) == null ? 0 : stock.map.get(key),stock));
 		}
-		//ÅÅĞò
+		//æ’åº
 		ComparatorEntity comparator = new ComparatorEntity();
 		Collections.sort(sortList, comparator);
 		return sortList;
@@ -240,15 +240,15 @@ public class ReqLoadImpl implements ReqLoad {
 		}else{
 			nowDate = req.maxDate;
 		}
-		nowDate = nowDate.replace(":", "£º");
+		nowDate = nowDate.replace(":", "ï¼š");
 		
-		return Constants.outPath + "/"  + nowDate + " "+ StringUtil.number2word((req.mapKey.size()-1))+"Ìì¸ö¹ÉÈÈ¶È£¨"+req.bodyName+"£©.txt";
+		return Constants.outPath + "/"  + nowDate + " "+ StringUtil.number2word((req.mapKey.size()-1))+"å¤©ä¸ªè‚¡çƒ­åº¦ï¼ˆ"+req.bodyName+"ï¼‰.txt";
 	}
 
 	private void combine() {
-		String combineName = req.mapKey.size() + "ÌìÄÚ";
+		String combineName = req.mapKey.size() + "å¤©å†…";
 		req.mapKey.add(combineName);
-		// ±éÀú¹ÉÆ±£¬¼ÆËãÃ¿Ò»Ö»¹ÉÆ±ËùÓĞÖÜÆÚµÄºÏ¼Æ
+		// éå†è‚¡ç¥¨ï¼Œè®¡ç®—æ¯ä¸€åªè‚¡ç¥¨æ‰€æœ‰å‘¨æœŸçš„åˆè®¡
 		for (Stock stock : req.list) {
 			Set<String> keys = stock.map.keySet();
 			int total = 0;

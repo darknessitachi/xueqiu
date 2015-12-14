@@ -5,23 +5,27 @@ public class Constants {
 	
 	
 	public static final String[] group = new String[]{
-		//"³äµç×®","ï®µç³Ø",
-		"»¥ÁªÍø½ğÈÚ","¹ú²úÈí¼ş","ĞÅÏ¢°²È«","ÔÆ¼ÆËã",
-		//"Ï¡È±×ÊÔ´","Ï¡ÍÁÓÀ´Å",
-		//"´ÎĞÂ¹É",
-		//"µç×ÓÖ§¸¶",
-		//"ĞéÄâÏÖÊµ",
-		//"ÉÏº£×ÔÃ³",
-		//"Ê¯Ä«Ï©"
+		//"å……ç”µæ¡©","é”‚ç”µæ± ",
+		//"äº’è”ç½‘é‡‘è","å›½äº§è½¯ä»¶","ä¿¡æ¯å®‰å…¨","äº‘è®¡ç®—",
+		//"æ±½è½¦ç”µå­",
+		//"ç¨€ç¼ºèµ„æº","ç¨€åœŸæ°¸ç£",
+		//"æ¬¡æ–°è‚¡",
+		//"ç”µå­æ”¯ä»˜",
+		//"è™šæ‹Ÿç°å®",
+		//"ä¸Šæµ·è‡ªè´¸",
+		//"çŸ³å¢¨çƒ¯"
+		//"è‡ªé€‰è‚¡"
+		"01å¼ºåŠ¿è‚¡"
 	};
-	// ×ÔÑ¡¹É 
-	public static final String ZXG_FILE_NAME = Constants.CODE_PATH + "×ÔÑ¡¹É.EBK";
+	// è‡ªé€‰è‚¡ 
+	public static final String ZXG_FILE_NAME = "è‡ªé€‰è‚¡.EBK";
 	
-	//¼ÒÀïµÄÂ·¾¶
-	//public static final String REQ_BODY_SRC_PATH = "D:/Documents/GitHub/xueqiu/src/main/java/config/request_body.txt";;
 	
-	//¹«Ë¾µÄÂ·¾¶
-	public static final String REQ_BODY_SRC_PATH = "C:/Users/yangrui/Documents/GitHub/xueqiu/src/main/java/config/request_body.txt";;
+	//request_bodyçš„srcè·¯å¾„é›†åˆ
+	public static final String[] request_body_src_path = new String[]{
+		"D:/Documents/GitHub/xueqiu/src/main/java/config/request_body.txt",	//å®¶é‡Œçš„è·¯å¾„
+		"C:/Users/yangrui/Documents/GitHub/xueqiu/src/main/java/config/request_body.txt",	//å…¬å¸çš„è·¯å¾„
+	};
 	
 	
 	public static final String CODE_PATH = "code/";
@@ -38,7 +42,7 @@ public class Constants {
 	
 	public static final long XUEQIU_SLEEP = 100;
 	
-	public static final String outPath = "D:/Ñ©ÇòÈÈ¶È";
+	public static final String outPath = "D:/é›ªçƒçƒ­åº¦";
 	
 	public static final String ebkPath = "D:/EBK";
 	

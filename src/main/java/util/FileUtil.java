@@ -1,9 +1,11 @@
 package util;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class FileUtil {
@@ -37,5 +39,13 @@ public class FileUtil {
 		if (!folder.exists()) {
 			folder.mkdir();
 		}
+	}
+
+	public static void write(String writePath, String result) throws IOException {
+		//System.out.println("写入文件："+writePath);
+		File f = new File(writePath);
+		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+		bw.write(result);
+		bw.close();
 	}
 }

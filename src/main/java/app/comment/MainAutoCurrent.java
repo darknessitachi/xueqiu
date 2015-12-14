@@ -5,15 +5,14 @@ import java.util.Date;
 
 import app.comment.common.StockCommand;
 import app.translate.MainTrans;
-import app.translate.StockInterface;
 import config.Constants;
 
 /**
- * Ö»ĞèÒª°ÑÔ­Ê¼ÎÄ¼ş·ÅÈëcodeÖĞ£¬¾Í¿ÉÒÔÖ´ĞĞ¸Ã·½·¨ÁË
+ * åªéœ€è¦æŠŠåŸå§‹æ–‡ä»¶æ”¾å…¥codeä¸­ï¼Œå°±å¯ä»¥æ‰§è¡Œè¯¥æ–¹æ³•äº†
  * @author Administrator
  *
  */
-public class MainAutoOne {
+public class MainAutoCurrent {
 	
 
 	public static void main(String[] args) throws IOException {
@@ -21,17 +20,15 @@ public class MainAutoOne {
 	}
 
 	public static void autoOne(String fileName) throws IOException {
-		//ÏÈ·­Òë£¬°Ñ·­ÒëµÄÎÄ¼şĞ´Èërequest_bodyÖĞ
-		StockInterface sm = new StockInterface();
-		sm.useLog = MainTrans.useLog ;
-		sm.translate(fileName);
+		//å…ˆç¿»è¯‘ï¼ŒæŠŠç¿»è¯‘çš„æ–‡ä»¶å†™å…¥request_bodyä¸­
+		MainTrans.translate(fileName);
 		
-		//ÔÙÖ´ĞĞ²éÑ¯ÈÈ¶È·½·¨
+		//å†æ‰§è¡ŒæŸ¥è¯¢çƒ­åº¦æ–¹æ³•
 		long start = new Date().getTime();
 		StockCommand c = new StockCommand(Constants.business_sort);
 		c.start();
 		long end = new Date().getTime();
-		System.out.println("ÓÃÊ±£º"+(end-start)/1000+"Ãë");
+		System.out.println("ç”¨æ—¶ï¼š"+(end-start)/1000+"ç§’");
 	}
 
 }

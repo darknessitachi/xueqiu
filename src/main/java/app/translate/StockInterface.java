@@ -1,11 +1,9 @@
 package app.translate;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
@@ -18,7 +16,7 @@ public class StockInterface {
 	
 	public boolean useLog = false;
 	
-	//Òª¶ÁÈ¡µÄÔ­Ê¼ÎÄ¼şÂ·¾¶
+	//è¦è¯»å–çš„åŸå§‹æ–‡ä»¶è·¯å¾„
 	private String file;
 	
 	public  void translate(String file) throws IOException {
@@ -27,9 +25,9 @@ public class StockInterface {
 		
 		StringBuilder sb = new StringBuilder();
 		
-		String readPath = Constants.classpath + file;
-		String writePath = getWritePath();
-		//ÏÈ¶ÁÈ¡ÎÄ¼ş
+		String readPath = Constants.classpath + Constants.CODE_PATH + file;
+		String ebk_path = getWritePath();
+		//å…ˆè¯»å–æ–‡ä»¶
 		BufferedReader br = null;
 		try {
 			FileReader fr = new FileReader(new File(readPath));
@@ -58,23 +56,38 @@ public class StockInterface {
 		}
 		
 		String result = sb.toString().toUpperCase();
-		//Ğ´ÈëÎÄ¼şµÄÊ±ºò£¬ÔÚÎÄ¼şµÚÒ»ĞĞ¼ÓÈëµ±Ç°°å¿éµÄÃû´Ê
+		//å†™å…¥æ–‡ä»¶çš„æ—¶å€™ï¼Œåœ¨æ–‡ä»¶ç¬¬ä¸€è¡ŒåŠ å…¥å½“å‰æ¿å—çš„åè¯
 		String fileName = getFileName(file);
 		result = fileName + "\n" + result;
 		
 		System.out.println(result);
-		//Ğ´ÈëÎÄ¼ş
-		write(writePath,result);
-		//Ğ´Èërequest_bodyÖĞ
+		//å†™å…¥æ–‡ä»¶åˆ°EBKç›®å½•
+		FileUtil.write(ebk_path,result);
+		//å†™å…¥request_bodyä¸­
 		writeRequestBody(result);
-		System.out.println("Ğ´ÈëÍê³É£¡\n");
+		System.out.println("å†™å…¥å®Œæˆï¼\n");
 	}
 
 	private void writeRequestBody(String result) throws IOException {
-		write(Constants.REQ_BODY_SRC_PATH,result);
 		
-		String reqBodyTargetPath = Constants.classpath + Constants.REQ_BODY_NAME;
-		write(reqBodyTargetPath,result);
+		//å†™request_bodyçš„srcè·¯å¾„
+		boolean isWrite = false;
+		for(int i=0;i<Constants.request_body_src_path.length;i++){
+			String src_path = Constants.request_body_src_path[i];
+			try {
+				FileUtil.write(src_path,result);
+				isWrite = true;
+			} catch (java.io.FileNotFoundException e) {
+				continue;
+			}
+		}
+		if(!isWrite){
+			System.err.println("request_bodyåœ¨srcè·¯å¾„çš„æ–‡ä»¶æ²¡æœ‰å†™å…¥ã€‚");
+		}
+		
+		//å†™request_bodyçš„classè·¯å¾„
+		String request_body_target_path = Constants.classpath + Constants.REQ_BODY_NAME;
+		FileUtil.write(request_body_target_path,result);
 	}
 
 	private boolean isValidName(String name) {
@@ -90,43 +103,35 @@ public class StockInterface {
 	}
 	
 	/**
-	 * ·µ»ØÒª·­ÒëµÄ°å¿éÃû³Æ
+	 * è¿”å›è¦ç¿»è¯‘çš„æ¿å—åç§°
 	 * @param file
 	 * @return
 	 */
 	private String getFileName(String file) {
-		return (file.split("/")[1]).split("\\.")[0];
+		return file.split("\\.")[0];
 	}
 
 	private String getNowDate() {
 		String nowDate = DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd_HHmmss);;
-		return nowDate.replace(":", "£º");
-	}
-
-	private  void write(String writePath, String result) throws IOException {
-		//System.out.println("Ğ´ÈëÎÄ¼ş£º"+writePath);
-		File f = new File(writePath);
-		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-		bw.write(result);
-		bw.close();
+		return nowDate.replace(":", "ï¼š");
 	}
 
 	private  String getNameByCode(String completeCode) throws IOException {
 		String httpReqUrl = Constants.inter_url+completeCode;
 		String result = HttpUtil.getResult(httpReqUrl,"GBK");
-		//ÏÈÍ¨¹ı=·Ö¸î×Ö·û´®
+		//å…ˆé€šè¿‡=åˆ†å‰²å­—ç¬¦ä¸²
 		String content = result.split("=")[1];
-		//ÔÙÍ¨¹ı£¬·Ö¸î×Ö·û´®
+		//å†é€šè¿‡ï¼Œåˆ†å‰²å­—ç¬¦ä¸²
 		String name = content.split(",")[0];
 		return name.substring(1);
 	}
 	/**
-	 * Í¨´ïĞÅµ¼³ö×ÔÑ¡¹É±àÂë£¬0¿ªÍ·µÄÊÇsz£¬1¿ªÍ·µÄÊÇsh
+	 * é€šè¾¾ä¿¡å¯¼å‡ºè‡ªé€‰è‚¡ç¼–ç ï¼Œ0å¼€å¤´çš„æ˜¯szï¼Œ1å¼€å¤´çš„æ˜¯sh
 	 * @param code
 	 * @return
 	 */
 	private  String completeCode(String code) {
-		//¹ıÂËµôÖ¸Êı
+		//è¿‡æ»¤æ‰æŒ‡æ•°
 		for(String s:Constants.stockIndex){
 			if(s.equals(code)){
 				return null;

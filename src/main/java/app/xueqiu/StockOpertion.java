@@ -27,7 +27,7 @@ public class StockOpertion {
 		params.put("code", code);
 		params.put("_", new Date().getTime());
 		HttpUtil.get("http://xueqiu.com/stock/portfolio/delstock.json",params,cookie ,"http://xueqiu.com/S/"+code);
-		System.out.println("É¾³ı¡¾"+code+"¡¿Íê³É¡£");
+		System.out.println("åˆ é™¤ã€"+code+"ã€‘å®Œæˆã€‚");
 	}
 
 	private void addStock(String code) throws IOException {
@@ -35,7 +35,7 @@ public class StockOpertion {
 		params.put("code", code);
 		params.put("isnotice", 1);
 		HttpUtil.post("http://xueqiu.com/stock/portfolio/addstock.json",params,cookie,"http://xueqiu.com/S/"+code);
-		System.out.println("Ìí¼Ó¡¾"+code+"¡¿Íê³É¡£");
+		System.out.println("æ·»åŠ ã€"+code+"ã€‘å®Œæˆã€‚");
 	}
 
 
@@ -59,14 +59,14 @@ public class StockOpertion {
 			delStock(code);
 			Thread.sleep(Constants.XUEQIU_SLEEP);
 		}
-		System.out.println("¹ÉÆ±ÇåÀíÍê³É£¬Ò»¹²ÇåÀí¡¾"+stocks.size()+"¡¿Ö»¹ÉÆ±¡£");
+		System.out.println("è‚¡ç¥¨æ¸…ç†å®Œæˆï¼Œä¸€å…±æ¸…ç†ã€"+stocks.size()+"ã€‘åªè‚¡ç¥¨ã€‚");
 	}
 
 	public void addAll() throws IOException, InterruptedException {
 		
 		List<String> list = this.queryAll();
 		
-		//´Órequest_body.txtÖĞ»ñÈ¡¹ÉÆ±´úÂë£¨request_bodyÖĞµÄ¹ÉÆ±´úÂëÒÑ¾­¹ıÂËÖ¸Êı´úÂë£©£¬È»ºóÌí¼Ó
+		//ä»request_body.txtä¸­è·å–è‚¡ç¥¨ä»£ç ï¼ˆrequest_bodyä¸­çš„è‚¡ç¥¨ä»£ç å·²ç»è¿‡æ»¤æŒ‡æ•°ä»£ç ï¼‰ï¼Œç„¶åæ·»åŠ 
 		String reqPath = Constants.classpath + Constants.REQ_BODY_NAME;
 
 		BufferedReader br = null;
@@ -79,7 +79,7 @@ public class StockOpertion {
 				line = line.trim();
 				if (line.length() > 0 && !line.startsWith("#") &&line.contains(",")) {
 					String code = line.split(",")[0];
-					//Èç¹û²»ÔÚ×ÔÑ¡¹ÉÖĞ£¬ÔòÌí¼Ó
+					//å¦‚æœä¸åœ¨è‡ªé€‰è‚¡ä¸­ï¼Œåˆ™æ·»åŠ 
 					if(!list.contains(code)){
 						addStock(code);
 						Thread.sleep(Constants.XUEQIU_SLEEP);
@@ -94,7 +94,7 @@ public class StockOpertion {
 			br.close();
 		}
 		
-		System.out.println("Ìí¼Ó¹ÉÆ±Íê³É£¬Ò»¹²Ìí¼ÓÁË¡¾"+num+"¡¿Ö»¹ÉÆ±¡£");
+		System.out.println("æ·»åŠ è‚¡ç¥¨å®Œæˆï¼Œä¸€å…±æ·»åŠ äº†ã€"+num+"ã€‘åªè‚¡ç¥¨ã€‚");
 	}
 
 }
