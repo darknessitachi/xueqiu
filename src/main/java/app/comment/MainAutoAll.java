@@ -10,11 +10,10 @@ public class MainAutoAll {
 	public static void main(String[] args) throws IOException {
 		long start = new Date().getTime();
 		for(String name : Constants.group){
-			String fileName = Constants.CODE_PATH + name + ".EBK";
-			MainAutoCurrent.autoOne(fileName);
+			MainAutoCurrent.autoOne(name+".EBK");
 		}
 		long end = new Date().getTime();
-		System.out.println("×Ü¹²ÓÃÊ±£º"+(end-start)/1000+"Ãë");
+		System.out.println("æ€»å…±ç”¨æ—¶ï¼š"+(end-start)/1000+"ç§’");
 	}
 
 }

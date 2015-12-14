@@ -8,14 +8,18 @@ public class Constants {
 		//"充电桩","锂电池",
 		//"互联网金融","国产软件","信息安全","云计算",
 		//"汽车电子",
-		//"稀缺资源","稀土永磁",
+		//"稀缺资源",
+		//"稀土永磁",
 		//"次新股",
 		//"电子支付",
 		//"虚拟现实",
 		//"上海自贸",
 		//"石墨烯"
+		//"黄金概念",
+		//"央企改革",
 		//"自选股"
-		"01强势股"
+		"证券",
+		//"01强势股"
 	};
 	// 自选股 
 	public static final String ZXG_FILE_NAME = "自选股.EBK";
@@ -42,7 +46,7 @@ public class Constants {
 	
 	public static final long XUEQIU_SLEEP = 100;
 	
-	public static final String outPath = "D:/雪球热度";
+	public static final String outPath = "D:/xueqiu";
 	
 	public static final String ebkPath = "D:/EBK";
 	
