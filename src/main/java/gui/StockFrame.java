@@ -51,6 +51,7 @@ public class StockFrame extends JFrame implements ActionListener{
 	private void initWindow() {
 		
 		super.setSize(400, 500);
+		initWindowLocation();
 		super.setLayout(new GridLayout(0, 3));
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -80,6 +81,10 @@ public class StockFrame extends JFrame implements ActionListener{
 
 
 	
+	private void initWindowLocation() {
+		super.setLocation(450, 120);
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
