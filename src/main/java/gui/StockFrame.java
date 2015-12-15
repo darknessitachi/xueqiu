@@ -3,6 +3,7 @@ package gui;
 import gui.worker.ImportWorker;
 import gui.worker.StatisWorker;
 
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,19 +14,28 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import util.FileUtil;
 import config.Constants;
 
 public class StockFrame extends JFrame implements ActionListener{
+	
+	
 
 	private static final long serialVersionUID = 1L;
 	
 	public boolean isSelectAll = false;
+	
+	public JPanel jp1 = new JPanel();
+	public JPanel jp2 = new JPanel();
+	public JPanel jp3 = new JPanel();
+	
 
 	public JButton JbuttonOk = new JButton("统计");
 	public JButton JbuttonImport = new JButton("导入雪球");
@@ -40,6 +50,9 @@ public class StockFrame extends JFrame implements ActionListener{
 	
 	private List<String> groupContent;
 
+	private int window_width = 400;
+	private int window_height = 500;
+
 	StockFrame(String title) throws ClassNotFoundException {
 		
 		super(title);
@@ -50,22 +63,22 @@ public class StockFrame extends JFrame implements ActionListener{
 	
 	private void initWindow() {
 		
-		super.setSize(400, 500);
+		super.setSize(window_width , window_height);
 		initWindowLocation();
-		super.setLayout(new GridLayout(0, 3));
+		super.setLayout(new BorderLayout(10,10));
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				System.exit(0);
 			}
 		});
 		
-		super.add(JbuttonOk);
-		super.add(JbuttonImport);
-		super.add(JbuttonSelectAll);
+		jp1.add(JbuttonOk);
+		jp1.add(JbuttonImport);
+		jp1.add(JbuttonSelectAll);
 		
-		super.add(field1);
-		super.add(field2);
-		super.add(displayLabel);
+		jp2.add(field1);
+		jp2.add(field2);
+		jp2.add(displayLabel);
 		
 		JbuttonOk.addActionListener(this);
 		JbuttonImport.addActionListener(this);
@@ -75,6 +88,18 @@ public class StockFrame extends JFrame implements ActionListener{
 		field2.setText("1000");
 		displayLabel.setEditable(false);
 		displayLabel.setText("请选择。");
+		
+		jp1.setBorder(BorderFactory.createTitledBorder("按钮"));
+		jp2.setBorder(BorderFactory.createTitledBorder("输入参数"));
+		jp3.setBorder(BorderFactory.createTitledBorder("板块"));
+		
+		jp1.setSize(window_width, 100);
+		jp2.setSize(window_width, 100);
+		jp3.setSize(window_width, 250);
+		
+		super.add(jp1,BorderLayout.NORTH);
+		super.add(jp2,BorderLayout.CENTER);
+		super.add(jp3,BorderLayout.SOUTH);
 		
 		initGroup();
 	}
@@ -180,11 +205,12 @@ public class StockFrame extends JFrame implements ActionListener{
 	}
 
 	private void initGroup() {
+		jp3.setLayout(new GridLayout(0, 3));
 		initGroupContent();
 		for(String name : groupContent){
 			JCheckBox cb = new JCheckBox(name);
 			group.add(cb);
-			add(cb);
+			jp3.add(cb);
 		}
 	}
 
