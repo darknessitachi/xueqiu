@@ -12,11 +12,11 @@ import config.Constants;
  * @author Administrator
  *
  */
-public class MainAutoCurrent {
+public class MainAutoOne {
 	
 
 	public static void main(String[] args) throws IOException {
-		autoOne(Constants.ZXG_FILE_NAME);
+		autoOne(Constants.CODE_PATH + "custom" + Constants.ZXG_FILE_NAME);
 	}
 
 	public static void autoOne(String fileName) throws IOException {

@@ -17,15 +17,15 @@ public class StockInterface {
 	public boolean useLog = false;
 	
 	//要读取的原始文件路径
-	private String file;
+	private String afterClasspath_filePath;
 	
-	public  void translate(String file) throws IOException {
+	public  void translate(String afterClasspath_filePath) throws IOException {
 		
-		this.file = file;
+		this.afterClasspath_filePath = afterClasspath_filePath;
 		
 		StringBuilder sb = new StringBuilder();
 		
-		String readPath = Constants.classpath + Constants.CODE_PATH + file;
+		String readPath = Constants.classpath + afterClasspath_filePath;
 		String ebk_path = getWritePath();
 		//先读取文件
 		BufferedReader br = null;
@@ -57,7 +57,7 @@ public class StockInterface {
 		
 		String result = sb.toString().toUpperCase();
 		//写入文件的时候，在文件第一行加入当前板块的名词
-		String fileName = getFileName(file);
+		String fileName = getFileName();
 		result = fileName + "\n" + result;
 		
 		System.out.println(result);
@@ -96,7 +96,7 @@ public class StockInterface {
 
 	private String getWritePath() {
 		String nowDate = getNowDate(); 
-		String fileName = getFileName(file);
+		String fileName = getFileName();
 		String writePath = Constants.ebkPath  + "/" + nowDate + " " + fileName + ".txt";
 		FileUtil.createFolder(Constants.ebkPath);
 		return writePath;
@@ -107,8 +107,8 @@ public class StockInterface {
 	 * @param file
 	 * @return
 	 */
-	private String getFileName(String file) {
-		return file.split("\\.")[0];
+	private String getFileName() {
+		return afterClasspath_filePath.split("/")[2].split("\\.")[0];
 	}
 
 	private String getNowDate() {

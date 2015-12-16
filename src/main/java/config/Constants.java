@@ -3,31 +3,13 @@ package config;
 
 public class Constants {
 	
-	
-	public static final String[] group = new String[]{
-		//"充电桩","锂电池",
-		//"互联网金融","国产软件","信息安全","云计算",
-		//"汽车电子",
-		//"稀缺资源",
-		//"稀土永磁",
-		//"次新股",
-		//"电子支付",
-		//"虚拟现实",
-		//"上海自贸",
-		//"石墨烯"
-		//"黄金概念",
-		//"央企改革",
-		//"自选股"
-		"证券",
-		//"01强势股"
-	};
 	// 自选股 
 	public static final String ZXG_FILE_NAME = "自选股.EBK";
-	
 	
 	//request_body的src路径集合
 	public static final String[] request_body_src_path = new String[]{
 		"D:/Documents/GitHub/xueqiu/src/main/java/config/request_body.txt",	//家里的路径
+		"D:/projects/xq2/xueqiu-master/src/main/java/config/request_body.txt",
 		"C:/Users/yangrui/Documents/GitHub/xueqiu/src/main/java/config/request_body.txt",	//公司的路径
 	};
 	
@@ -60,7 +42,8 @@ public class Constants {
 	
 	public static final String inter_url = "http://hq.sinajs.cn/list=";
 	
-	
-	
+	public static final String custom_path = classpath + CODE_PATH + "custom";
+	public static final String concept_path = classpath + CODE_PATH + "concept";
+	public static final String industry_path = classpath + CODE_PATH + "industry";
 
 }

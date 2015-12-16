@@ -25,7 +25,7 @@ public class ImportWorker implements Runnable {
 			oper.delAll();
 			for(String name : names){
 				try {
-					MainTrans.translate(name+".EBK");
+					MainTrans.translate(name);
 					oper.addAll();
 				} catch (IOException e1) {
 					e1.printStackTrace();

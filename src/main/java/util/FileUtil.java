@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileUtil {
 
@@ -47,5 +49,18 @@ public class FileUtil {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
 		bw.write(result);
 		bw.close();
+	}
+
+	public static List<String> getFileFromFolder(String path) {
+		List<String> result = new ArrayList<String>();
+		File file = new File(path);
+		File[] tempList = file.listFiles();
+		for (int i = 0; i < tempList.length; i++) {
+			if (tempList[i].isFile()) {
+				String name = tempList[i].getName().split("\\.")[0];
+				result.add(name);
+			}
+		}
+		return result;
 	}
 }

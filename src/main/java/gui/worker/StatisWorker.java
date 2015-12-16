@@ -5,7 +5,7 @@ import gui.StockFrame;
 import java.io.IOException;
 import java.util.List;
 
-import app.comment.MainAutoCurrent;
+import app.comment.MainAutoOne;
 
 public class StatisWorker implements Runnable {
 
@@ -22,7 +22,7 @@ public class StatisWorker implements Runnable {
 		for(String name : names){
 			//获取每个板块的路径
 			try {
-				MainAutoCurrent.autoOne(name+".EBK");
+				MainAutoOne.autoOne(name);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
