@@ -22,11 +22,11 @@ public class ImportWorker implements Runnable {
 	public void run() {
 		try {
 			StockOpertion oper = new StockOpertion();
-			try {
+			/*try {
 				oper.delAll();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
+			}*/
 			for(String name : names){
 				try {
 					MainTrans.translate(name);
