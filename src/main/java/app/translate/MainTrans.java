@@ -17,5 +17,4 @@ public class MainTrans {
 		sm.translate(fileName);
 	}
 
-
 }

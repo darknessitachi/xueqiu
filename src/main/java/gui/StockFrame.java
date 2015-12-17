@@ -1,5 +1,6 @@
 package gui;
 
+import gui.worker.ExportWorker;
 import gui.worker.ImportWorker;
 import gui.worker.StatisWorker;
 
@@ -39,6 +40,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	public JButton JbuttonOk = new JButton("统计");
 	public JButton JbuttonImport = new JButton("导入雪球");
+	public JButton JbuttonEmport = new JButton("导出雪球");
 	public JButton JbuttonSelectAll = new JButton("全选");
 	public JButton JbuttonTrans = new JButton("trans");
 	public JButton JbuttonBody = new JButton("reqBody");
@@ -87,6 +89,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.setBorder(BorderFactory.createTitledBorder("按钮"));
 		jp1.add(JbuttonOk);
 		jp1.add(JbuttonImport);
+		jp1.add(JbuttonEmport);
 		jp1.add(JbuttonSelectAll);
 		jp1.add(JbuttonTrans);
 		jp1.add(JbuttonBody);
@@ -94,6 +97,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 		JbuttonOk.addActionListener(this);
 		JbuttonImport.addActionListener(this);
+		JbuttonEmport.addActionListener(this);
 		JbuttonSelectAll.addActionListener(this);
 		JbuttonBody.addActionListener(this);
 		JbuttonTrans.addActionListener(this);
@@ -210,9 +214,15 @@ public class StockFrame extends JFrame implements ActionListener {
 			performTrans();
 		}
 		
+		if (e.getSource() == JbuttonEmport) {
+			performExport();
+		}
 		
-		
-		
+	}
+
+	private void performExport() {
+		displayLabel.setText("正在执行导出……");
+		new Thread(new ExportWorker(this)).start();
 	}
 
 	private void performTrans() {

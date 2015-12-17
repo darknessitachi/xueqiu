@@ -61,5 +61,14 @@ public class StringUtil {
 		}
 		return name;
 	}
+	/**
+	 * 通达信导出自选股编码，0开头的是sz，1开头的是sh
+	 * @param code
+	 * @return
+	 */
+	public static String xq2Tdx(String code) {
+		
+		return null;
+	}
 
 }

@@ -15,6 +15,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import util.FileUtil;
 import util.HttpUtil;
+import util.StringUtil;
 import config.Constants;
 
 public class StockOpertion {
@@ -96,5 +97,15 @@ public class StockOpertion {
 		
 		System.out.println("添加股票完成，一共添加了【"+num+"】只股票。");
 	}
+	
+	public void export() throws IOException{
+		List<String> list = this.queryAll();
+		StringBuilder sb = new StringBuilder();
+		for(String code : list){
+			String tdxCode = StringUtil.xq2Tdx(code);
+			sb.append(tdxCode).append("\n");
+		}
+	}
+
 
 }

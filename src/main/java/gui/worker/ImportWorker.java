@@ -22,7 +22,7 @@ public class ImportWorker implements Runnable {
 	public void run() {
 		try {
 			StockOpertion oper = new StockOpertion();
-			oper.delAll();
+			//oper.delAll();
 			for(String name : names){
 				try {
 					MainTrans.translate(name);
@@ -31,8 +31,6 @@ public class ImportWorker implements Runnable {
 					e1.printStackTrace();
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
