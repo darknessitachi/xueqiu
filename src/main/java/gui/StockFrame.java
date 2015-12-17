@@ -43,8 +43,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	public JButton JbuttonTrans = new JButton("trans");
 	public JButton JbuttonBody = new JButton("reqBody");
 
-	public JTextField field1 = new JTextField(20);
-	public JTextField field2 = new JTextField(20);
+	public JTextField field1 = new JTextField(5);
+	public JTextField field2 = new JTextField(5);
 	public JTextField displayLabel = new JTextField(20);
 
 	List<JCheckBox> group = new ArrayList<JCheckBox>();
@@ -53,7 +53,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private List<String> conceptContent;
 
 	private int window_width = 600;
-	private int window_height = 500;
+	private int window_height = 550;
 
 	private List<String> industryContent;
 

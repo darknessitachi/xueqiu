@@ -12,6 +12,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import util.ComparatorEntity;
 import util.DateUtil;
@@ -175,16 +177,22 @@ public class ReqLoadImpl implements ReqLoad {
 		}
 		//创建文件夹
 		FileUtil.createFolder(Constants.outPath);
+		//创建子文件夹
+		String subFolder = Constants.outPath+"/" + DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd);
+		FileUtil.createFolder(subFolder);
 		
-		String fileName = getFileName();
 		
-		File f = new File(fileName);
+		String errorMsg = getErrorMsg();
+		String filepath = getWriteFilePath(subFolder,errorMsg);
+		
+		File f = new File(filepath);
 		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
 		
 		System.out.println();
 		//打印请求错误的股票名
-		outMsg(getErrorMsg(),bw);
+		outMsg(errorMsg+"\n",bw);
 		
+		outMsg("【"+getConceptName(req.bodyName)+"】板块的股票总数为【"+req.list.size()+"】个 \n",bw);
 		//遍历打印
 		for (String title : req.mapKey) {
 			
@@ -200,6 +208,17 @@ public class ReqLoadImpl implements ReqLoad {
 		}
 		bw.close();
 		
+	}
+
+	private String getConceptName(String bodyName) {
+		//如果第一个字母是26个英文字母，则截取前两位，否则不截取
+		Pattern pattern = Pattern.compile("[a-zA-Z]");  
+        Matcher matcher = pattern.matcher(bodyName.subSequence(0, 1));  
+        System.out.println();  
+        if(matcher.matches()){
+        	return bodyName.substring(2);
+        }
+        return bodyName;
 	}
 
 	/**
@@ -233,7 +252,9 @@ public class ReqLoadImpl implements ReqLoad {
 		bw.write(msg + "\n");
 	}
 
-	private String getFileName() {
+	private String getWriteFilePath(String subFolder, String errorMsg) {
+		String prefix = StringUtil.isEmpty(errorMsg)?"":"？";
+		
 		String nowDate = null;
 		if(StringUtil.isEmpty(req.maxDate)){
 			nowDate = DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd_HHmmss);
@@ -241,8 +262,8 @@ public class ReqLoadImpl implements ReqLoad {
 			nowDate = req.maxDate;
 		}
 		nowDate = nowDate.replace(":", "：");
-		
-		return Constants.outPath + "/"  + nowDate + " "+ StringUtil.number2word((req.mapKey.size()-1))+"天个股热度（"+req.bodyName+"）.txt";
+		String fileName = nowDate + StringUtil.number2word((req.mapKey.size()-1))+"天个股热度（"+getConceptName(req.bodyName)+prefix+"）.txt";
+		return subFolder + "/"  + fileName ;
 	}
 
 	private void combine() {
