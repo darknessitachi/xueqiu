@@ -31,12 +31,12 @@ public class StockOpertion {
 		System.out.println("删除【"+code+"】完成。");
 	}
 
-	private void addStock(String code) throws IOException {
+	private void addStock(String code, String name) throws IOException {
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("code", code);
 		params.put("isnotice", 1);
 		HttpUtil.post("http://xueqiu.com/stock/portfolio/addstock.json",params,cookie,"http://xueqiu.com/S/"+code);
-		System.out.println("添加【"+code+"】完成。");
+		System.out.println("添加【"+code+","+name+"】完成。");
 	}
 
 
@@ -80,9 +80,10 @@ public class StockOpertion {
 				line = line.trim();
 				if (line.length() > 0 && !line.startsWith("#") &&line.contains(",")) {
 					String code = line.split(",")[0];
+					String name = line.split(",")[1];
 					//如果不在自选股中，则添加
 					if(!list.contains(code)){
-						addStock(code);
+						addStock(code,name);
 						Thread.sleep(Constants.XUEQIU_SLEEP);
 						num++;
 					}

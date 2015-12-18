@@ -39,12 +39,17 @@ public class StockInterface {
 				if (line.length() > 0 ) {
 					String completeCode = completeCode(line);
 					if(completeCode!=null){
-						String name = getNameByCode(completeCode);
-						if(isValidName(name)){
-							sb.append(completeCode).append(",").append(name).append("\n");
-							if(useLog){
-								System.out.println(++num);
+						try {
+							String name = getNameByCode(completeCode);
+							if(isValidName(name)){
+								sb.append(completeCode).append(",").append(name).append("\n");
+								if(useLog){
+									System.out.println(++num);
+								}
 							}
+						} catch (java.net.ConnectException e) {
+							System.err.println("翻译【"+completeCode+"】请求异常。");
+							continue;
 						}
 					}
 				}
