@@ -57,11 +57,12 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private List<String> customContent;
 	private List<String> conceptContent;
+	private List<String> industryContent;
 
 	private int window_width = 600;
 	private int window_height = 550;
 
-	private List<String> industryContent;
+	
 
 	StockFrame(String title) throws ClassNotFoundException {
 		super(title);
@@ -97,7 +98,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.add(JbuttonChoose);
 		jp1.add(JbuttonSelectAll);
 		//jp1.add(JbuttonTrans);
-	//	jp1.add(JbuttonBody);
+    	//jp1.add(JbuttonBody);
 		
 
 		JbuttonOk.addActionListener(this);
@@ -181,20 +182,6 @@ public class StockFrame extends JFrame implements ActionListener {
 				cb.setSelected(true);
 			}
 		}
-			
-		
-		/*else{
-			for (String element : content) {
-				JCheckBox cb = new JCheckBox(element);
-				cb.setName(element);
-				jpanel.add(cb);
-				group.add(cb);
-				//如果是自选股，默认选中
-				if(element.equals("自选股")){
-					cb.setSelected(true);
-				}
-			}
-		}*/
 	}
 
 	@Override
@@ -245,7 +232,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 		JFileChooser fc = new JFileChooser(path);  
         //是否可多选  
-        fc.setMultiSelectionEnabled(false);  
+        fc.setMultiSelectionEnabled(true);  
         //选择模式，可选择文件和文件夹  
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);  
         //设置是否显示隐藏文件  
@@ -257,11 +244,11 @@ public class StockFrame extends JFrame implements ActionListener {
         int returnValue = fc.showOpenDialog(null);  
         if (returnValue == JFileChooser.APPROVE_OPTION)  
         {  
-            File file = fc.getSelectedFile();
-            FileUtil.copy(Constants.custom_path +"/"+file.getName(),file);
+            File[] files = fc.getSelectedFiles();
+            for(File file : files){
+            	FileUtil.copy(Constants.custom_path +"/"+file.getName(),file);
+            }
         }  
-		
-		
 	}
 
 	private void performExport() {
