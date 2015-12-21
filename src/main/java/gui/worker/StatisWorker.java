@@ -5,6 +5,7 @@ import gui.StockFrame;
 import java.io.IOException;
 import java.util.List;
 
+import config.Constants;
 import app.comment.MainAutoOne;
 
 public class StatisWorker implements Runnable {
@@ -27,7 +28,7 @@ public class StatisWorker implements Runnable {
 				e1.printStackTrace();
 			}
 		}
-		frameFirst.displayLabel.setText("统计完成。");
+		frameFirst.displayLabel.setText("统计完成，输出目录【"+Constants.outPath+"】");
 	}
 
 }

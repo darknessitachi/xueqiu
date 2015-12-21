@@ -147,40 +147,43 @@ public class StockFrame extends JFrame implements ActionListener {
 		jpanel.setBorder(BorderFactory.createTitledBorder(name));
 		jpanel.setLayout(new GridLayout(0,GridLayoutColumn));
 		
-		if(name.equals("概念")){
-			
-			int i = 0;
-			String currentGroup = null;
-			for (String element : content) {
-				String elementGroup = element.substring(0,1);
-				//System.out.println("开始添加【"+elementGroup+"】组的【"+element+"】");
-				JCheckBox cb = new JCheckBox(element.substring(2,element.length()));
-				cb.setName(element);
-				if(currentGroup == null || elementGroup.equals(currentGroup)){
-					//	System.out.println("因为【"+element+"】和上一个是同一组，所以直接添加。");
-					currentGroup = elementGroup;
-					jpanel.add(cb);
-					i++;
-				}
-				//如果elementGroup不等于currentGroup，说明开始了另外一组，把当前组后面的留白补充完整
-				if(!elementGroup.equals(currentGroup)){
-					//计算要补几个空缺
-					int blankNum = (GridLayoutColumn -  i % GridLayoutColumn) ;
-					if(blankNum == GridLayoutColumn){
-						blankNum = 0;
-					}
-					//System.out.println("因为【"+element+"】和上一组不同，所以需要把之前的空白补全，空白数【"+blankNum+"】。");
-					for(int k=0;k<blankNum;k++){
-						jpanel.add(new JLabel());
-					}
-					i = 1;
-					jpanel.add(cb);
-					currentGroup = elementGroup;
-				}
-				group.add(cb);
+		int i = 0;
+		String currentGroup = null;
+		for (String element : content) {
+			String elementGroup = element.substring(0,1);
+			//System.out.println("开始添加【"+elementGroup+"】组的【"+element+"】");
+			JCheckBox cb = new JCheckBox(element.substring(2,element.length()));
+			cb.setName(element);
+			if(currentGroup == null || elementGroup.equals(currentGroup)){
+				//	System.out.println("因为【"+element+"】和上一个是同一组，所以直接添加。");
+				currentGroup = elementGroup;
+				jpanel.add(cb);
+				i++;
 			}
+			//如果elementGroup不等于currentGroup，说明开始了另外一组，把当前组后面的留白补充完整
+			if(!elementGroup.equals(currentGroup)){
+				//计算要补几个空缺
+				int blankNum = (GridLayoutColumn -  i % GridLayoutColumn) ;
+				if(blankNum == GridLayoutColumn){
+					blankNum = 0;
+				}
+				//System.out.println("因为【"+element+"】和上一组不同，所以需要把之前的空白补全，空白数【"+blankNum+"】。");
+				for(int k=0;k<blankNum;k++){
+					jpanel.add(new JLabel());
+				}
+				i = 1;
+				jpanel.add(cb);
+				currentGroup = elementGroup;
+			}
+			group.add(cb);
+			//如果是自选股，默认选中
+			if(element.equals("A1自选股")){
+				cb.setSelected(true);
+			}
+		}
 			
-		}else{
+		
+		/*else{
 			for (String element : content) {
 				JCheckBox cb = new JCheckBox(element);
 				cb.setName(element);
@@ -191,7 +194,7 @@ public class StockFrame extends JFrame implements ActionListener {
 					cb.setSelected(true);
 				}
 			}
-		}
+		}*/
 	}
 
 	@Override

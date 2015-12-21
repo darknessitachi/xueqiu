@@ -192,7 +192,7 @@ public class ReqLoadImpl implements ReqLoad {
 		//打印请求错误的股票名
 		outMsg(errorMsg+"\n",bw);
 		
-		outMsg("【"+getConceptName(req.bodyName)+"】板块的股票总数为【"+req.list.size()+"】个 \n",bw);
+		outMsg("【"+getCodeShowName(req.bodyName)+"】板块的股票总数为【"+req.list.size()+"】个 \n",bw);
 		//遍历打印
 		for (String title : req.mapKey) {
 			
@@ -210,7 +210,7 @@ public class ReqLoadImpl implements ReqLoad {
 		
 	}
 
-	private String getConceptName(String bodyName) {
+	private String getCodeShowName(String bodyName) {
 		//如果第一个字母是26个英文字母，则截取前两位，否则不截取
 		Pattern pattern = Pattern.compile("[a-zA-Z]");  
         Matcher matcher = pattern.matcher(bodyName.subSequence(0, 1));  
@@ -262,7 +262,7 @@ public class ReqLoadImpl implements ReqLoad {
 			nowDate = req.maxDate;
 		}
 		nowDate = nowDate.replace(":", "：");
-		String fileName = nowDate + StringUtil.number2word((req.mapKey.size()-1))+"天个股热度（"+getConceptName(req.bodyName)+prefix+"）.txt";
+		String fileName = nowDate + StringUtil.number2word((req.mapKey.size()-1))+"天个股热度（"+getCodeShowName(req.bodyName)+prefix+"）.txt";
 		return subFolder + "/"  + fileName ;
 	}
 
