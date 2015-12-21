@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +17,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -39,8 +41,9 @@ public class StockFrame extends JFrame implements ActionListener {
 	public JPanel jp3 = new JPanel();
 
 	public JButton JbuttonOk = new JButton("统计");
-	public JButton JbuttonImport = new JButton("导入雪球");
-	public JButton JbuttonEmport = new JButton("导出雪球");
+	public JButton JbuttonImport = new JButton("上传雪球");
+	public JButton JbuttonEmport = new JButton("下载雪球");
+	public JButton JbuttonChoose = new JButton("导入EBK");
 	public JButton JbuttonSelectAll = new JButton("全选");
 	public JButton JbuttonTrans = new JButton("trans");
 	public JButton JbuttonBody = new JButton("reqBody");
@@ -90,6 +93,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.add(JbuttonOk);
 		jp1.add(JbuttonImport);
 		jp1.add(JbuttonEmport);
+		jp1.add(JbuttonChoose);
 		jp1.add(JbuttonSelectAll);
 		//jp1.add(JbuttonTrans);
 	//	jp1.add(JbuttonBody);
@@ -101,6 +105,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		JbuttonSelectAll.addActionListener(this);
 		JbuttonBody.addActionListener(this);
 		JbuttonTrans.addActionListener(this);
+		JbuttonChoose.addActionListener(this);
 	}
 	
 	private void initJPanel2() {
@@ -222,6 +227,34 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == JbuttonEmport) {
 			performExport();
 		}
+		
+		if (e.getSource() == JbuttonChoose) {
+			performChoose();
+		}
+		
+		
+	}
+
+	private void performChoose() {
+
+		JFileChooser fc = new JFileChooser("C:\\Users\\yangrui\\Desktop");  
+        //是否可多选  
+        fc.setMultiSelectionEnabled(false);  
+        //选择模式，可选择文件和文件夹  
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);  
+        //设置是否显示隐藏文件  
+        fc.setFileHidingEnabled(true);  
+        fc.setAcceptAllFileFilterUsed(false);  
+        //设置文件筛选器  
+        fc.setFileFilter(new MyFilter("EBK"));  
+          
+        int returnValue = fc.showOpenDialog(null);  
+        if (returnValue == JFileChooser.APPROVE_OPTION)  
+        {  
+            File file = fc.getSelectedFile();
+            FileUtil.copy(Constants.custom_path +"/"+file.getName(),file);
+        }  
+		
 		
 	}
 

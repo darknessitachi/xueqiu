@@ -3,10 +3,13 @@ package util;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,14 +22,14 @@ public class FileUtil {
 			FileReader fr = new FileReader(new File(path));
 			br = new BufferedReader(fr);
 			String line = null;
-			while((line = br.readLine()) !=null){
+			while ((line = br.readLine()) != null) {
 				result.append(line);
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			try {
 				br.close();
 			} catch (IOException e) {
@@ -43,8 +46,9 @@ public class FileUtil {
 		}
 	}
 
-	public static void write(String writePath, String result) throws IOException {
-		//System.out.println("写入文件："+writePath);
+	public static void write(String writePath, String result)
+			throws IOException {
+		// System.out.println("写入文件："+writePath);
 		File f = new File(writePath);
 		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
 		bw.write(result);
@@ -62,5 +66,33 @@ public class FileUtil {
 			}
 		}
 		return result;
+	}
+
+	public static void copy(String newPath, File oldfile) {
+		
+		System.out.println("拷贝文件到【"+newPath+"】");
+
+		int byteread = 0;
+		FileOutputStream fs = null;
+		try {
+			if (oldfile.exists()) {
+				InputStream inStream = new FileInputStream(oldfile);
+				fs = new FileOutputStream(newPath);
+				byte[] buffer = new byte[1444];
+				while ((byteread = inStream.read(buffer)) != -1) {
+					fs.write(buffer, 0, byteread);
+				}
+				inStream.close();
+			}
+		} catch (Exception e) {
+			System.err.println("error");
+			e.printStackTrace();
+		} finally {
+			try {
+				fs.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
