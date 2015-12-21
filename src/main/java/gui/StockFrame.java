@@ -73,7 +73,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		super.setLayout(new BorderLayout());
 		super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		initContent();
+		initContentData();
 
 		initJPanel1();
 		initJPanel2();
@@ -137,6 +137,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private void initContentJPanel(JPanel jpanel,
 			List<String> content, String name) {
+		
 		jpanel.setBorder(BorderFactory.createTitledBorder(name));
 		jpanel.setLayout(new GridLayout(0,GridLayoutColumn));
 		
@@ -179,6 +180,10 @@ public class StockFrame extends JFrame implements ActionListener {
 				cb.setName(element);
 				jpanel.add(cb);
 				group.add(cb);
+				//如果是自选股，默认选中
+				if(element.equals("自选股")){
+					cb.setSelected(true);
+				}
 			}
 		}
 	}
@@ -347,7 +352,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		return result;
 	}
 
-	private void initContent() {
+	private void initContentData() {
 		// 加载custom
 		this.customContent = FileUtil.getFileFromFolder(Constants.custom_path);
 		// 加载concept
