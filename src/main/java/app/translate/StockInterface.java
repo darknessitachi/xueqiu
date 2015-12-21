@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import util.DateUtil;
 import util.FileUtil;
 import util.HttpUtil;
 import config.Constants;
@@ -25,7 +24,7 @@ public class StockInterface {
 		StringBuilder sb = new StringBuilder();
 		
 		String readPath = Constants.classpath + afterClasspath_filePath;
-		String ebk_path = getWritePath();
+		
 		//先读取文件
 		BufferedReader br = null;
 		try {
@@ -65,8 +64,12 @@ public class StockInterface {
 		result = fileName + "\n" + result;
 		
 		System.out.println(result);
+		
+		/*
 		//写入文件到EBK目录
-		FileUtil.write(ebk_path,result);
+		String ebk_path = getWritePath();
+		FileUtil.write(ebk_path,result);*/
+		
 		//写入request_body中
 		writeRequestBody(result);
 		System.out.println("写入完成！\n");
@@ -98,13 +101,13 @@ public class StockInterface {
 		return !"\";".equals(name);
 	}
 
-	private String getWritePath() {
+	/*private String getWritePath() {
 		String nowDate = DateUtil.getNowDate();
 		String fileName = getFileName();
 		String writePath = Constants.ebkPath  + "/" + nowDate + " " + fileName + ".txt";
 		FileUtil.createFolder(Constants.ebkPath);
 		return writePath;
-	}
+	}*/
 	
 	/**
 	 * 返回要翻译的板块名称

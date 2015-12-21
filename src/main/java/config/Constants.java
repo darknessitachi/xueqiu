@@ -32,7 +32,7 @@ public class Constants {
 	
 	public static final String outPath = "D:/xueqiu";
 	
-	public static final String ebkPath = "D:/EBK";
+	public static final String ebkPath = "D:/ebk";
 	
 	public static final String export = StringUtil.getComputerHomeDir();
 	
