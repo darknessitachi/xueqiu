@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import util.FileUtil;
+import util.StringUtil;
 import app.comment.common.StockCommand;
 import app.translate.MainTrans;
 import config.Constants;
@@ -236,8 +237,10 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	private void performChoose() {
-
-		JFileChooser fc = new JFileChooser("C:\\Users\\yangrui\\Desktop");  
+		
+		String path = StringUtil.getComputerHomeDir();
+		
+		JFileChooser fc = new JFileChooser(path);  
         //是否可多选  
         fc.setMultiSelectionEnabled(false);  
         //选择模式，可选择文件和文件夹  

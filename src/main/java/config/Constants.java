@@ -1,5 +1,7 @@
 package config;
 
+import util.StringUtil;
+
 
 public class Constants {
 	
@@ -32,7 +34,7 @@ public class Constants {
 	
 	public static final String ebkPath = "D:/EBK";
 	
-	public static final String export = "D:/export";
+	public static final String export = StringUtil.getComputerHomeDir();
 	
 	public static final String referer_prefix = "http://xueqiu.com/S/";
 	

@@ -70,8 +70,6 @@ public class FileUtil {
 
 	public static void copy(String newPath, File oldfile) {
 		
-		System.out.println("拷贝文件到【"+newPath+"】");
-
 		int byteread = 0;
 		FileOutputStream fs = null;
 		try {
@@ -83,6 +81,7 @@ public class FileUtil {
 					fs.write(buffer, 0, byteread);
 				}
 				inStream.close();
+				System.out.println("拷贝文件到【"+newPath+"】");
 			}
 		} catch (Exception e) {
 			System.err.println("error");
