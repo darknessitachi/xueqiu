@@ -57,7 +57,9 @@ public class StockFrame extends JFrame implements ActionListener {
 	public JTextField field2 = new JTextField(5);
 	public JTextField displayLabel = new JTextField(20);
 
-	List<JCheckBox> group = new ArrayList<JCheckBox>();
+	//List<JCheckBox> group = new ArrayList<JCheckBox>();
+	
+	Map<String,JCheckBox> group = new HashMap<String,JCheckBox>();
 
 	private List<String> customContent;
 	private List<String> conceptContent;
@@ -197,7 +199,7 @@ public class StockFrame extends JFrame implements ActionListener {
 				jpanel.add(cb);
 				currentGroup = elementGroup;
 			}
-			group.add(cb);
+			group.put(realName, cb);
 			//如果是自选股，默认选中
 			if(element.equals("A1自选股")){
 				cb.setSelected(true);
@@ -257,33 +259,10 @@ public class StockFrame extends JFrame implements ActionListener {
 			for(String name : names){
 				FileUtil.delete(Constants.classpath+name);
 			}
-			
-			Container con = this.getContentPane();
-			con.invalidate(); 
-			jp_custom.removeAll();
-			con.validate();
-			
-			con.invalidate(); 
-			// 加载custom
-			this.customContent = FileUtil.getFileFromFolder(Constants.custom_path);
-			initContentJPanel(jp_custom,this.customContent,"自选");
-			con.validate();
-			
-			
+			refreshCustomPanel();
 		} else {
 			displayLabel.setText("请选择1个或多个板块。");
 		}
-		
-		/*Container con = this.getContentPane();
-		
-		con.invalidate(); 
-		jp_custom.removeAll();
-		con.validate();
-		
-		con.invalidate(); 
-		jp_custom.add(new JCheckBox("xxx"));
-		con.validate();
-		initContentJPanel(jp_custom,this.customContent,"自选");*/
 	}
 
 	private void performChoose() {
@@ -318,13 +297,20 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 		con.invalidate(); 
 		jp_custom.removeAll();
+		delCustom();
 		con.validate();
 		
 		con.invalidate(); 
-		// 加载custom
 		this.customContent = FileUtil.getFileFromFolder(Constants.custom_path);
 		initContentJPanel(jp_custom,this.customContent,"自选");
 		con.validate();
+	}
+
+	private void delCustom() {
+		for(String str : customContent){
+			JCheckBox jb = group.remove(str.substring(2));
+			System.out.println("删除key:"+jb);
+		}
 	}
 
 	private String addPrefix(String name) {
@@ -422,13 +408,13 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private void performSelectAll() {
 		if (!isSelectAll) {
-			for (JCheckBox jb : group) {
-				jb.setSelected(true);
+			for(String key:group.keySet()){
+				group.get(key).setSelected(true);
 			}
 			isSelectAll = true;
 		} else {
-			for (JCheckBox jb : group) {
-				jb.setSelected(false);
+			for(String key:group.keySet()){
+				group.get(key).setSelected(false);
 			}
 			isSelectAll = false;
 		}
@@ -454,7 +440,8 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private List<String> getSelectNames() {
 		List<String> result = new ArrayList<String>();
-		for (JCheckBox jb : group) {
+		for(String key:group.keySet()){
+			JCheckBox jb = group.get(key);
 			if (jb.isSelected()) {
 				String parentName = jb.getParent().getName();
 				String path = Constants.CODE_PATH + parentName + "/" + jb.getName()+".EBK";
