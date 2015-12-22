@@ -258,7 +258,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 		boolean justCustom = justCustom(names);
 		if(!justCustom){
-			displayLabel.setText("只能删除自选板块。");
+			displayLabel.setText("只能删除【自选】板块。");
 			return;
 		}
 		
@@ -268,7 +268,7 @@ public class StockFrame extends JFrame implements ActionListener {
 			}
 			refreshCustomPanel();
 		} else {
-			displayLabel.setText("请选择1个或多个板块。");
+			displayLabel.setText("请选择要删除的板块。");
 		}
 	}
 
@@ -337,14 +337,14 @@ public class StockFrame extends JFrame implements ActionListener {
 		String realName = name.split("\\.")[0];
 		String prefix = prefixMap.get(realName);
 		if(prefix == null){
-			System.err.println("导入文件查询到的前缀为空。");
+			System.out.println("导入的EBK文件没有对应的序号，增加默认序号【Z9】。");
 			prefix = "Z9";
 		}
 		return prefix + name;
 	}
 
 	private void performExport() {
-		displayLabel.setText("正在执行导出……");
+		displayLabel.setText("正在执行下载……");
 		new Thread(new ExportWorker(this)).start();
 	}
 
@@ -407,7 +407,7 @@ public class StockFrame extends JFrame implements ActionListener {
 			writeRequestHead();
 			new Thread(new StatisWorker(names, this)).start();
 		} else {
-			displayLabel.setText("请选择1个或多个板块。");
+			displayLabel.setText("请选择要统计的板块。");
 		}
 	}
 
@@ -419,10 +419,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		// 获取选中的板块
 		List<String> names = getSelectNames();
 		if (names.size() > 0) {
-			displayLabel.setText("正在执行导入……");
+			displayLabel.setText("正在执行上传……");
 			new Thread(new ImportWorker(names, this)).start();
 		} else {
-			displayLabel.setText("请选择1个或多个板块。");
+			displayLabel.setText("请选择要上传的板块。");
 		}
 	}
 

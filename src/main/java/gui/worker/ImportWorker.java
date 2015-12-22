@@ -38,7 +38,7 @@ public class ImportWorker implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		frame.displayLabel.setText("导入完成。");
+		frame.displayLabel.setText("上传雪球完成。");
 	}
 
 }
