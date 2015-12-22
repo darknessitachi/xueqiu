@@ -5,6 +5,7 @@ import gui.worker.ImportWorker;
 import gui.worker.StatisWorker;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,6 +48,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	public JButton JbuttonImport = new JButton("上传雪球");
 	public JButton JbuttonEmport = new JButton("下载雪球");
 	public JButton JbuttonChoose = new JButton("导入EBK");
+	public JButton JbuttonRefresh = new JButton("刷新");
 	public JButton JbuttonSelectAll = new JButton("全选");
 	public JButton JbuttonTrans = new JButton("trans");
 	public JButton JbuttonBody = new JButton("reqBody");
@@ -65,6 +67,12 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private int window_width = 600;
 	private int window_height = 550;
+
+	private JPanel jp_custom;
+
+	private JPanel jp_concept;
+
+	private JPanel jp_industry;
 
 	
 
@@ -101,6 +109,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.add(JbuttonImport);
 		jp1.add(JbuttonEmport);
 		jp1.add(JbuttonChoose);
+		jp1.add(JbuttonRefresh);
+		
 		jp1.add(JbuttonSelectAll);
 		//jp1.add(JbuttonTrans);
     	//jp1.add(JbuttonBody);
@@ -113,6 +123,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		JbuttonBody.addActionListener(this);
 		JbuttonTrans.addActionListener(this);
 		JbuttonChoose.addActionListener(this);
+		JbuttonRefresh.addActionListener(this);
 	}
 	
 	private void initJPanel2() {
@@ -131,11 +142,11 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void initJPanel3() {
 		jp3.setLayout(new BorderLayout());
 
-		JPanel jp_custom = new JPanel();
+		jp_custom = new JPanel();
 		jp_custom.setName("custom");
-		JPanel jp_concept = new JPanel();
+		jp_concept = new JPanel();
 		jp_concept.setName("concept");
-		JPanel jp_industry = new JPanel();
+		jp_industry = new JPanel();
 		jp_industry.setName("industry");
 
 		initContentJPanel(jp_custom,this.customContent,"自选");
@@ -160,7 +171,7 @@ public class StockFrame extends JFrame implements ActionListener {
 			String prefix = element.substring(0,2);
 			String realName = element.substring(2,element.length());
 			//设置前缀映射
-			System.out.println("设置映射【"+realName+"】【"+prefix+"】");
+			//System.out.println("设置映射【"+realName+"】【"+prefix+"】");
 			prefixMap.put(realName, prefix);
 			//System.out.println("开始添加【"+elementGroup+"】组的【"+element+"】");
 			JCheckBox cb = new JCheckBox(realName);
@@ -232,8 +243,24 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == JbuttonChoose) {
 			performChoose();
 		}
+		if (e.getSource() == JbuttonRefresh) {
+			performRefresh();
+		}
 		
 		
+	}
+
+	private void performRefresh() {
+		Container con = this.getContentPane();
+		
+		con.invalidate(); 
+		jp_custom.removeAll();
+		con.validate();
+		
+		con.invalidate(); 
+		jp_custom.add(new JCheckBox("xxx"));
+		con.validate();
+		//initContentJPanel(jp_custom,this.customContent,"自选");
 	}
 
 	private void performChoose() {
