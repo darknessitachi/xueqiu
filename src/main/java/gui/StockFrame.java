@@ -175,6 +175,7 @@ public class StockFrame extends JFrame implements ActionListener {
 			//设置前缀映射
 			//System.out.println("设置映射【"+realName+"】【"+prefix+"】");
 			prefixMap.put(realName, prefix);
+			setDefaultPrefixMap();
 			//System.out.println("开始添加【"+elementGroup+"】组的【"+element+"】");
 			JCheckBox cb = new JCheckBox(realName);
 			cb.setName(element);
@@ -205,6 +206,13 @@ public class StockFrame extends JFrame implements ActionListener {
 				cb.setSelected(true);
 			}
 		}
+	}
+
+	private void setDefaultPrefixMap() {
+		this.prefixMap.put("自选股", "A1");
+		this.prefixMap.put("垃圾回收站", "A2");
+		this.prefixMap.put("强势股", "A3");
+		this.prefixMap.put("新股", "A4");
 	}
 
 	@Override
