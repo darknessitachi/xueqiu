@@ -12,7 +12,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -58,6 +60,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	private List<String> customContent;
 	private List<String> conceptContent;
 	private List<String> industryContent;
+	
+	private Map<String,String> prefixMap;
 
 	private int window_width = 600;
 	private int window_height = 550;
@@ -66,6 +70,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	StockFrame(String title) throws ClassNotFoundException {
 		super(title);
+		prefixMap = new HashMap<String, String>();
 		initWindow();
 		// 显示窗口
 		this.setVisible(true);
@@ -152,8 +157,13 @@ public class StockFrame extends JFrame implements ActionListener {
 		String currentGroup = null;
 		for (String element : content) {
 			String elementGroup = element.substring(0,1);
+			String prefix = element.substring(0,2);
+			String realName = element.substring(2,element.length());
+			//设置前缀映射
+			System.out.println("设置映射【"+realName+"】【"+prefix+"】");
+			prefixMap.put(realName, prefix);
 			//System.out.println("开始添加【"+elementGroup+"】组的【"+element+"】");
-			JCheckBox cb = new JCheckBox(element.substring(2,element.length()));
+			JCheckBox cb = new JCheckBox(realName);
 			cb.setName(element);
 			if(currentGroup == null || elementGroup.equals(currentGroup)){
 				//	System.out.println("因为【"+element+"】和上一个是同一组，所以直接添加。");
@@ -246,9 +256,20 @@ public class StockFrame extends JFrame implements ActionListener {
         {  
             File[] files = fc.getSelectedFiles();
             for(File file : files){
-            	FileUtil.copy(Constants.custom_path +"/"+file.getName(),file);
+            	String fileName = addPrefix(file.getName());
+            	FileUtil.copy(Constants.custom_path +"/"+fileName,file);
             }
         }  
+	}
+
+	private String addPrefix(String name) {
+		String realName = name.split("\\.")[0];
+		String prefix = prefixMap.get(realName);
+		if(prefix == null){
+			System.err.println("导入文件查询到的前缀为空。");
+			prefix = "Z9";
+		}
+		return prefix + name;
 	}
 
 	private void performExport() {
@@ -319,24 +340,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	private void writeRequestHead() throws IOException {
-
-		String day = field1.getText();
-		String sleep = field2.getText();
-
-		String request_head_path = Constants.classpath
-				+ Constants.REQ_HEAD_NAME;
-
-		StringBuilder sb = new StringBuilder();
-		sb.append("#").append("\n");
-		sb.append("day=" + day).append("\n");
-		sb.append("combine=true").append("\n");
-		sb.append("sleep=" + sleep).append("\n");
-		sb.append("filterNotice=true").append("\n");
-
-		FileUtil.write(request_head_path, sb.toString());
-	}
-
 	/**
 	 * 执行导入
 	 */
@@ -364,6 +367,24 @@ public class StockFrame extends JFrame implements ActionListener {
 			}
 			isSelectAll = false;
 		}
+	}
+	
+	private void writeRequestHead() throws IOException {
+
+		String day = field1.getText();
+		String sleep = field2.getText();
+
+		String request_head_path = Constants.classpath
+				+ Constants.REQ_HEAD_NAME;
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("#").append("\n");
+		sb.append("day=" + day).append("\n");
+		sb.append("combine=true").append("\n");
+		sb.append("sleep=" + sleep).append("\n");
+		sb.append("filterNotice=true").append("\n");
+
+		FileUtil.write(request_head_path, sb.toString());
 	}
 
 	private List<String> getSelectNames() {
