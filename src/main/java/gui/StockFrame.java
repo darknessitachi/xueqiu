@@ -71,11 +71,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	private int window_height = 550;
 
 	private JPanel jp_custom;
-
 	private JPanel jp_concept;
-
 	private JPanel jp_industry;
-
 	
 
 	StockFrame(String title) throws ClassNotFoundException {
@@ -145,15 +142,12 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp3.setLayout(new BorderLayout());
 
 		jp_custom = new JPanel();
-		jp_custom.setName("custom");
 		jp_concept = new JPanel();
-		jp_concept.setName("concept");
 		jp_industry = new JPanel();
-		jp_industry.setName("industry");
 
-		initContentJPanel(jp_custom,this.customContent,"自选");
-		initContentJPanel(jp_concept,this.conceptContent,"概念");
-		initContentJPanel(jp_industry,this.industryContent,"行业");
+		initContentJPanel(jp_custom,this.customContent,"自选","custom");
+		initContentJPanel(jp_concept,this.conceptContent,"概念","concept");
+		initContentJPanel(jp_industry,this.industryContent,"行业","industry");
 
 		jp3.add(jp_custom, BorderLayout.NORTH);
 		jp3.add(jp_concept, BorderLayout.CENTER);
@@ -161,9 +155,10 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 	
 	private void initContentJPanel(JPanel jpanel,
-			List<String> content, String name) {
+			List<String> content, String showName, String name) {
 		
-		jpanel.setBorder(BorderFactory.createTitledBorder(name));
+		jpanel.setName(name);
+		jpanel.setBorder(BorderFactory.createTitledBorder(showName));
 		jpanel.setLayout(new GridLayout(0,GridLayoutColumn));
 		
 		int i = 0;
@@ -171,12 +166,11 @@ public class StockFrame extends JFrame implements ActionListener {
 		for (String element : content) {
 			String elementGroup = element.substring(0,1);
 			String prefix = element.substring(0,2);
+			//realName没有前缀（A1）和后缀（.EBK）
 			String realName = element.substring(2,element.length());
 			//设置前缀映射
-			//System.out.println("设置映射【"+realName+"】【"+prefix+"】");
 			prefixMap.put(realName, prefix);
 			setDefaultPrefixMap();
-			//System.out.println("开始添加【"+elementGroup+"】组的【"+element+"】");
 			JCheckBox cb = new JCheckBox(realName);
 			cb.setName(element);
 			if(currentGroup == null || elementGroup.equals(currentGroup)){
@@ -324,7 +318,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 		con.invalidate(); 
 		this.customContent = FileUtil.getFileFromFolder(Constants.custom_path);
-		initContentJPanel(jp_custom,this.customContent,"自选");
+		initContentJPanel(jp_custom,this.customContent,"自选","custom");
 		con.validate();
 	}
 
@@ -334,7 +328,11 @@ public class StockFrame extends JFrame implements ActionListener {
 			//System.out.println("删除key:"+jb);
 		}
 	}
-
+	/**
+	 * 参数name的格式是：自选股.EBK
+	 * @param name
+	 * @return
+	 */
 	private String addPrefix(String name) {
 		String realName = name.split("\\.")[0];
 		String prefix = prefixMap.get(realName);
@@ -459,7 +457,10 @@ public class StockFrame extends JFrame implements ActionListener {
 
 		FileUtil.write(request_head_path, sb.toString());
 	}
-
+	/**
+	 * 返回的数据格式带完整路径的：["code/custom/A1自选股.EBK","code/custom/A2垃圾回收站.EBK"]
+	 * @return
+	 */
 	private List<String> getSelectNames() {
 		List<String> result = new ArrayList<String>();
 		for(String key:group.keySet()){
@@ -472,13 +473,12 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 		return result;
 	}
-
+	/**
+	 * content的内容格式是：["A1自选股","A4新股"]，有前缀，没有后缀
+	 */
 	private void initContentData() {
-		// 加载custom
 		this.customContent = FileUtil.getFileFromFolder(Constants.custom_path);
-		// 加载concept
 		this.conceptContent = FileUtil.getFileFromFolder(Constants.concept_path);
-		// 加载industry
 		this.industryContent = FileUtil.getFileFromFolder(Constants.industry_path);
 	}
 
