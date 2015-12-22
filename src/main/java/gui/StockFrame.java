@@ -248,13 +248,18 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == JbuttonDel) {
 			performDel();
 		}
-		
-		
 	}
 
 	private void performDel() {
 		// 获取选中的板块
 		List<String> names = getSelectNames();
+		
+		boolean justCustom = justCustom(names);
+		if(!justCustom){
+			displayLabel.setText("只能删除自选板块。");
+			return;
+		}
+		
 		if (names.size() > 0) {
 			for(String name : names){
 				FileUtil.delete(Constants.classpath+name);
@@ -263,6 +268,15 @@ public class StockFrame extends JFrame implements ActionListener {
 		} else {
 			displayLabel.setText("请选择1个或多个板块。");
 		}
+	}
+
+	private boolean justCustom(List<String> names) {
+		for(String str : names){
+			if(!str.contains("custom")){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private void performChoose() {
@@ -297,7 +311,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 		con.invalidate(); 
 		jp_custom.removeAll();
-		delCustom();
+		delCustomGroup();
 		con.validate();
 		
 		con.invalidate(); 
@@ -306,10 +320,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		con.validate();
 	}
 
-	private void delCustom() {
+	private void delCustomGroup() {
 		for(String str : customContent){
-			JCheckBox jb = group.remove(str.substring(2));
-			System.out.println("删除key:"+jb);
+			group.remove(str.substring(2));
+			//System.out.println("删除key:"+jb);
 		}
 	}
 
