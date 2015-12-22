@@ -48,7 +48,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	public JButton JbuttonImport = new JButton("上传雪球");
 	public JButton JbuttonEmport = new JButton("下载雪球");
 	public JButton JbuttonChoose = new JButton("导入EBK");
-	public JButton JbuttonRefresh = new JButton("刷新");
+	public JButton JbuttonDel = new JButton("删除EBK");
 	public JButton JbuttonSelectAll = new JButton("全选");
 	public JButton JbuttonTrans = new JButton("trans");
 	public JButton JbuttonBody = new JButton("reqBody");
@@ -109,7 +109,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.add(JbuttonImport);
 		jp1.add(JbuttonEmport);
 		jp1.add(JbuttonChoose);
-		jp1.add(JbuttonRefresh);
+		jp1.add(JbuttonDel);
 		
 		jp1.add(JbuttonSelectAll);
 		//jp1.add(JbuttonTrans);
@@ -123,7 +123,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		JbuttonBody.addActionListener(this);
 		JbuttonTrans.addActionListener(this);
 		JbuttonChoose.addActionListener(this);
-		JbuttonRefresh.addActionListener(this);
+		JbuttonDel.addActionListener(this);
 	}
 	
 	private void initJPanel2() {
@@ -243,15 +243,38 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == JbuttonChoose) {
 			performChoose();
 		}
-		if (e.getSource() == JbuttonRefresh) {
-			performRefresh();
+		if (e.getSource() == JbuttonDel) {
+			performDel();
 		}
 		
 		
 	}
 
-	private void performRefresh() {
-		Container con = this.getContentPane();
+	private void performDel() {
+		// 获取选中的板块
+		List<String> names = getSelectNames();
+		if (names.size() > 0) {
+			for(String name : names){
+				FileUtil.delete(Constants.classpath+name);
+			}
+			
+			Container con = this.getContentPane();
+			con.invalidate(); 
+			jp_custom.removeAll();
+			con.validate();
+			
+			con.invalidate(); 
+			// 加载custom
+			this.customContent = FileUtil.getFileFromFolder(Constants.custom_path);
+			initContentJPanel(jp_custom,this.customContent,"自选");
+			con.validate();
+			
+			
+		} else {
+			displayLabel.setText("请选择1个或多个板块。");
+		}
+		
+		/*Container con = this.getContentPane();
 		
 		con.invalidate(); 
 		jp_custom.removeAll();
@@ -260,7 +283,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		con.invalidate(); 
 		jp_custom.add(new JCheckBox("xxx"));
 		con.validate();
-		//initContentJPanel(jp_custom,this.customContent,"自选");
+		initContentJPanel(jp_custom,this.customContent,"自选");*/
 	}
 
 	private void performChoose() {
@@ -286,7 +309,22 @@ public class StockFrame extends JFrame implements ActionListener {
             	String fileName = addPrefix(file.getName());
             	FileUtil.copy(Constants.custom_path +"/"+fileName,file);
             }
+            refreshCustomPanel();
         }  
+	}
+
+	private void refreshCustomPanel() {
+		Container con = this.getContentPane();
+		
+		con.invalidate(); 
+		jp_custom.removeAll();
+		con.validate();
+		
+		con.invalidate(); 
+		// 加载custom
+		this.customContent = FileUtil.getFileFromFolder(Constants.custom_path);
+		initContentJPanel(jp_custom,this.customContent,"自选");
+		con.validate();
 	}
 
 	private String addPrefix(String name) {

@@ -94,4 +94,15 @@ public class FileUtil {
 			}
 		}
 	}
+
+	public static boolean delete(String filepath) {
+		boolean flag = false;  
+	    File file = new File(filepath);  
+	    // 路径为文件且不为空则进行删除  
+	    if (file.isFile() && file.exists()) {  
+	        file.delete();  
+	        flag = true;  
+	    }  
+	    return flag;  
+	}
 }
