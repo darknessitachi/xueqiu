@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +28,6 @@ import javax.swing.JTextField;
 
 import util.FileUtil;
 import util.StringUtil;
-import app.comment.common.StockCommand;
-import app.translate.MainTrans;
 import config.Constants;
 
 public class StockFrame extends JFrame implements ActionListener {
@@ -40,6 +37,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	private static final int GridLayoutColumn = 4;
 
 	public boolean isSelectAll = false;
+	
+	private static final String groupName = "My";
 
 	public JPanel jp1 = new JPanel();
 	public JPanel jp2 = new JPanel();
@@ -52,12 +51,10 @@ public class StockFrame extends JFrame implements ActionListener {
 	public JButton JbuttonChoose = new JButton("导入EBK");
 	public JButton JbuttonDel = new JButton("删除EBK");
 	public JButton JbuttonSelectAll = new JButton("全选");
-	public JButton JbuttonTrans = new JButton("trans");
-	public JButton JbuttonBody = new JButton("reqBody");
 
-	public JTextField field1 = new JTextField(5);
-	public JTextField field2 = new JTextField(5);
-	public JTextField fieldGroupName = new JTextField(10);
+	public JTextField fieldDay = new JTextField(5);
+	public JTextField fieldSleep = new JTextField(5);
+	public JTextField fieldGroupName = new JTextField(5);
 	public JTextField displayLabel = new JTextField(20);
 
 	//List<JCheckBox> group = new ArrayList<JCheckBox>();
@@ -109,8 +106,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.setBorder(BorderFactory.createTitledBorder("按钮"));
 		jp1.add(JbuttonOk);
 		jp1.add(JbuttonImport);
-		jp1.add(JbuttonImportGroup);
 		jp1.add(JbuttonEmport);
+		jp1.add(JbuttonImportGroup);
 		jp1.add(JbuttonChoose);
 		jp1.add(JbuttonDel);
 		
@@ -124,26 +121,23 @@ public class StockFrame extends JFrame implements ActionListener {
 		JbuttonImportGroup.addActionListener(this);
 		JbuttonEmport.addActionListener(this);
 		JbuttonSelectAll.addActionListener(this);
-		JbuttonBody.addActionListener(this);
-		JbuttonTrans.addActionListener(this);
 		JbuttonChoose.addActionListener(this);
 		JbuttonDel.addActionListener(this);
 	}
 	
 	private void initJPanel2() {
 		jp2.setBorder(BorderFactory.createTitledBorder("输入参数"));
-		jp2.add(field1);
-		jp2.add(field2);
+		jp2.add(fieldDay);
+		jp2.add(fieldSleep);
 		jp2.add(fieldGroupName);
 		jp2.add(displayLabel);
 
-		field1.setText("1");
-		field2.setText("1000");
-		fieldGroupName.setText("当前龙头");
+		fieldDay.setText("1");
+		fieldSleep.setText("1000");
+		fieldGroupName.setText(groupName);
 		displayLabel.setEditable(false);
 		displayLabel.setText("请选择。");
 		
-
 	}
 	
 	private void initJPanel3() {
@@ -238,18 +232,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 		if (e.getSource() == JbuttonSelectAll) {
 			performSelectAll();
-		}
-		
-		if (e.getSource() == JbuttonBody) {
-			try {
-				performReqBody();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
-		
-		if (e.getSource() == JbuttonTrans) {
-			performTrans();
 		}
 		
 		if (e.getSource() == JbuttonEmport) {
@@ -373,52 +355,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		new Thread(new ExportWorker(this)).start();
 	}
 
-	private void performTrans() {
-		// 获取选中的板块
-		final List<String> names = getSelectNames();
-		if (names.size() > 0 && names.size() < 2) {
-			displayLabel.setText("正在执行翻译……");
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						MainTrans.translate(names.get(0));
-						displayLabel.setText("翻译完成。");
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}).start();
-		} else {
-			displayLabel.setText("请选择1个板块进行翻译。");
-		}
-	}
-
-	private void performReqBody() throws IOException {
-		displayLabel.setText("正在统计body内容……");
-		writeRequestHead();
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				
-				long start = new Date().getTime();
-				
-				StockCommand c = new StockCommand(Constants.business_sort);
-				try {
-					c.start();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-				long end = new Date().getTime();
-				
-				System.out.println("用时："+(end-start)/1000+"秒");
-				displayLabel.setText("统计body完成。");
-			}
-		}).start();
-		
-	}
-
 	/**
 	 * 执行统计
 	 * 
@@ -466,8 +402,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private void writeRequestHead() throws IOException {
 
-		String day = field1.getText();
-		String sleep = field2.getText();
+		String day = fieldDay.getText();
+		String sleep = fieldSleep.getText();
 
 		String request_head_path = Constants.classpath
 				+ Constants.REQ_HEAD_NAME;
