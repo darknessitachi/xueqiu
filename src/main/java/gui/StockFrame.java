@@ -106,10 +106,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.add(JbuttonImport);
 		jp1.add(JbuttonEmport);
 		jp1.add(JbuttonImportGroup);
-		jp1.add(JbuttonChoose);
-		jp1.add(JbuttonDel);
-		
-		jp1.add(JbuttonSelectAll);
 		//jp1.add(JbuttonTrans);
     	//jp1.add(JbuttonBody);
 		
@@ -140,20 +136,33 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private void initJPanel3() {
 		jp3.setLayout(new BorderLayout());
-
+		
+		JPanel jp3_btn = new JPanel();
+		//jp3_btn.setLayout(new FlowLayout(FlowLayout.LEFT));
+		jp3_btn.add(JbuttonChoose);
+		jp3_btn.add(JbuttonDel);
+		jp3_btn.add(JbuttonSelectAll);
+		
+		JPanel jp3_content = new JPanel();
+		jp3_content.setLayout(new BorderLayout());
+		
 		jp_custom = new JPanel();
 		jp_concept = new JPanel();
 		jp_industry = new JPanel();
-
 		initContentJPanel(jp_custom,this.customContent,"自选","custom");
 		initContentJPanel(jp_concept,this.conceptContent,"概念","concept");
 		initContentJPanel(jp_industry,this.industryContent,"行业","industry");
 		
 		setDefaultPrefixMap();
 
-		jp3.add(jp_custom, BorderLayout.NORTH);
-		jp3.add(jp_concept, BorderLayout.CENTER);
-		jp3.add(jp_industry, BorderLayout.SOUTH);
+		jp3_content.add(jp_custom, BorderLayout.NORTH);
+		jp3_content.add(jp_concept, BorderLayout.CENTER);
+		jp3_content.add(jp_industry, BorderLayout.SOUTH);
+		
+		
+		jp3.add(jp3_btn, BorderLayout.NORTH);
+		jp3.add(jp3_content, BorderLayout.CENTER);
+		
 	}
 	
 	private void initContentJPanel(JPanel jpanel,
