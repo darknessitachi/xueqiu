@@ -17,6 +17,11 @@ public class StockInterface {
 	//要读取的原始文件路径
 	private String afterClasspath_filePath;
 	
+	/**
+	 * 把原始ebk文件翻译完成后，写入body文件
+	 * @param afterClasspath_filePath
+	 * @throws IOException
+	 */
 	public  void translate(String afterClasspath_filePath) throws IOException {
 		
 		this.afterClasspath_filePath = afterClasspath_filePath;

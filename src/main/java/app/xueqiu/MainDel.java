@@ -6,8 +6,7 @@ public class MainDel {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		
-		StockOpertion oper = new StockOpertion();
-		oper.delAll();
+	//	oper.updateStockGroup("my","SZ300431");
 		
 	}
 

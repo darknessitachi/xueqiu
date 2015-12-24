@@ -2,6 +2,7 @@ package gui;
 
 import gui.worker.ExportWorker;
 import gui.worker.ImportWorker;
+import gui.worker.ImportWorkerGroup;
 import gui.worker.StatisWorker;
 
 import java.awt.BorderLayout;
@@ -46,6 +47,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	public JButton JbuttonOk = new JButton("统计");
 	public JButton JbuttonImport = new JButton("上传雪球");
+	public JButton JbuttonImportGroup = new JButton("上传分组");
 	public JButton JbuttonEmport = new JButton("下载雪球");
 	public JButton JbuttonChoose = new JButton("导入EBK");
 	public JButton JbuttonDel = new JButton("删除EBK");
@@ -55,6 +57,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	public JTextField field1 = new JTextField(5);
 	public JTextField field2 = new JTextField(5);
+	public JTextField fieldGroupName = new JTextField(10);
 	public JTextField displayLabel = new JTextField(20);
 
 	//List<JCheckBox> group = new ArrayList<JCheckBox>();
@@ -67,7 +70,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private Map<String,String> prefixMap;
 
-	private int window_width = 600;
+	private int window_width = 650;
 	private int window_height = 550;
 
 	private JPanel jp_custom;
@@ -106,6 +109,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.setBorder(BorderFactory.createTitledBorder("按钮"));
 		jp1.add(JbuttonOk);
 		jp1.add(JbuttonImport);
+		jp1.add(JbuttonImportGroup);
 		jp1.add(JbuttonEmport);
 		jp1.add(JbuttonChoose);
 		jp1.add(JbuttonDel);
@@ -117,6 +121,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 		JbuttonOk.addActionListener(this);
 		JbuttonImport.addActionListener(this);
+		JbuttonImportGroup.addActionListener(this);
 		JbuttonEmport.addActionListener(this);
 		JbuttonSelectAll.addActionListener(this);
 		JbuttonBody.addActionListener(this);
@@ -129,12 +134,15 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp2.setBorder(BorderFactory.createTitledBorder("输入参数"));
 		jp2.add(field1);
 		jp2.add(field2);
+		jp2.add(fieldGroupName);
 		jp2.add(displayLabel);
 
 		field1.setText("1");
 		field2.setText("1000");
+		fieldGroupName.setText("当前龙头");
 		displayLabel.setEditable(false);
 		displayLabel.setText("请选择。");
+		
 
 	}
 	
@@ -223,7 +231,11 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == JbuttonImport) {
 			performImport();
 		}
-
+		
+		if (e.getSource() == JbuttonImportGroup) {
+			performImportGroup();
+		}
+		
 		if (e.getSource() == JbuttonSelectAll) {
 			performSelectAll();
 		}
@@ -249,6 +261,19 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 		if (e.getSource() == JbuttonDel) {
 			performDel();
+		}
+	}
+
+	private void performImportGroup() {
+		// 获取选中的板块
+		List<String> names = getSelectNames();
+		if (names.size() > 0) {
+			displayLabel.setText("正在执行上传……");
+			
+			String groupName = fieldGroupName.getText();
+			new Thread(new ImportWorkerGroup(names,groupName, this)).start();
+		} else {
+			displayLabel.setText("请选择要上传的板块。");
 		}
 	}
 
@@ -415,7 +440,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * 执行导入
 	 */
 	private void performImport() {
-
 		// 获取选中的板块
 		List<String> names = getSelectNames();
 		if (names.size() > 0) {
