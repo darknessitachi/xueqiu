@@ -81,6 +81,7 @@ public class StockOpertion {
 			updateStockGroup(groupName, code);
 			Thread.sleep(Constants.XUEQIU_SLEEP);
 		}
+		System.out.println("添加分组完成，分组【"+groupName+"】一共添加了【"+bodyList.size()+"】只股票。");
 	}
 	
 	public void export() throws IOException{

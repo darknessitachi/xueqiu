@@ -33,7 +33,7 @@ public class ImportWorkerGroup implements Runnable {
 				e.printStackTrace();
 			}
 		}
-		frame.displayLabel.setText("上传雪球分组完成。");
+		frame.displayLabel.setText("上传分组完成。");
 	}
 
 }

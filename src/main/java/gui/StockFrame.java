@@ -250,7 +250,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		// 获取选中的板块
 		List<String> names = getSelectNames();
 		if (names.size() > 0) {
-			displayLabel.setText("正在执行上传……");
+			displayLabel.setText("正在执行上传分组……");
 			
 			String groupName = fieldGroupName.getText();
 			new Thread(new ImportWorkerGroup(names,groupName, this)).start();
