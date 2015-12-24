@@ -38,7 +38,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	public boolean isSelectAll = false;
 	
-	private static final String groupName = "My";
+	private static final String groupName = "top";
 
 	public JPanel jp1 = new JPanel();
 	public JPanel jp2 = new JPanel();
@@ -57,8 +57,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	public JTextField fieldGroupName = new JTextField(5);
 	public JTextField displayLabel = new JTextField(20);
 
-	//List<JCheckBox> group = new ArrayList<JCheckBox>();
-	
 	Map<String,JCheckBox> group = new HashMap<String,JCheckBox>();
 
 	private List<String> customContent;
@@ -150,6 +148,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		initContentJPanel(jp_custom,this.customContent,"自选","custom");
 		initContentJPanel(jp_concept,this.conceptContent,"概念","concept");
 		initContentJPanel(jp_industry,this.industryContent,"行业","industry");
+		
+		setDefaultPrefixMap();
 
 		jp3.add(jp_custom, BorderLayout.NORTH);
 		jp3.add(jp_concept, BorderLayout.CENTER);
@@ -172,7 +172,7 @@ public class StockFrame extends JFrame implements ActionListener {
 			String realName = element.substring(2,element.length());
 			//设置前缀映射
 			prefixMap.put(realName, prefix);
-			setDefaultPrefixMap();
+			
 			JCheckBox cb = new JCheckBox(realName);
 			cb.setName(element);
 			if(currentGroup == null || elementGroup.equals(currentGroup)){
