@@ -12,21 +12,25 @@ public class ImportWorker implements Runnable {
 
 	private List<String> names;
 	private StockFrame frame;
+	private boolean del = false;
 
-	public ImportWorker(List<String> names, StockFrame frame) {
+	public ImportWorker(List<String> names, boolean del, StockFrame frame) {
 		this.names = names;
 		this.frame = frame;
+		this.del  = del;
 	}
 
 	@Override
 	public void run() {
 		try {
 			StockOpertion oper = new StockOpertion();
-			/*try {
-				oper.delAll();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}*/
+			if(del){
+				try {
+					oper.delAll();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 			for(String name : names){
 				try {
 					MainTrans.translate(name);

@@ -45,6 +45,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	public JPanel jp3 = new JPanel();
 
 	public JButton JbuttonOk = new JButton("统计");
+	public JButton JbuttonDelImport = new JButton("删除上传");
 	public JButton JbuttonImport = new JButton("上传雪球");
 	public JButton JbuttonImportGroup = new JButton("上传分组");
 	public JButton JbuttonEmport = new JButton("下载雪球");
@@ -103,6 +104,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void initJPanel1() {
 		jp1.setBorder(BorderFactory.createTitledBorder("按钮"));
 		jp1.add(JbuttonOk);
+		jp1.add(JbuttonDelImport);
 		jp1.add(JbuttonImport);
 		jp1.add(JbuttonEmport);
 		jp1.add(JbuttonImportGroup);
@@ -116,6 +118,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		JbuttonEmport.addActionListener(this);
 		JbuttonSelectAll.addActionListener(this);
 		JbuttonChoose.addActionListener(this);
+		JbuttonDelImport.addActionListener(this);
 		JbuttonDel.addActionListener(this);
 	}
 	
@@ -232,7 +235,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == JbuttonImport) {
-			performImport();
+			performImport(false);
 		}
 		
 		if (e.getSource() == JbuttonImportGroup) {
@@ -253,6 +256,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == JbuttonDel) {
 			performDel();
 		}
+		if (e.getSource() == JbuttonDelImport) {
+			performImport(true);
+		}
+		
 	}
 
 	private void performImportGroup() {
@@ -383,13 +390,14 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	/**
 	 * 执行导入
+	 * @param del 
 	 */
-	private void performImport() {
+	private void performImport(boolean del) {
 		// 获取选中的板块
 		List<String> names = getSelectNames();
 		if (names.size() > 0) {
 			displayLabel.setText("正在执行上传……");
-			new Thread(new ImportWorker(names, this)).start();
+			new Thread(new ImportWorker(names,del, this)).start();
 		} else {
 			displayLabel.setText("请选择要上传的板块。");
 		}
