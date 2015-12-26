@@ -32,11 +32,11 @@ public class StockInterface {
 		
 		//先读取文件
 		BufferedReader br = null;
+		int num = 0;
 		try {
 			FileReader fr = new FileReader(new File(readPath));
 			br = new BufferedReader(fr);
 			String line = null;
-			int num = 0;
 			while ((line = br.readLine()) != null) {
 				line = line.trim();
 				if (line.length() > 0 ) {
@@ -46,8 +46,9 @@ public class StockInterface {
 							String name = getNameByCode(completeCode);
 							if(isValidName(name)){
 								sb.append(completeCode).append(",").append(name).append("\n");
+								num++;
 								if(useLog){
-									System.out.println(++num);
+									System.out.println(num);
 								}
 							}
 						} catch (java.net.ConnectException e) {
@@ -77,7 +78,7 @@ public class StockInterface {
 		
 		//写入request_body中
 		writeRequestBody(result);
-		System.out.println("写入完成！\n");
+		System.out.println("写入完成，一共写入【"+num+"】只股票！\n");
 	}
 
 	private void writeRequestBody(String result) throws IOException {

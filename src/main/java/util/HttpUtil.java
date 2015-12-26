@@ -13,6 +13,9 @@ import java.util.Map;
 import app.comment.domain.Stock;
 
 public class HttpUtil {
+	
+	//超时秒数
+	private static final int timeout = 30;
 
 	public static String getSearchUrl(Stock stock, int page) {
 		String href = "http://xueqiu.com/statuses/search.json?count=15&comment=0&symbol="+ stock.code+ "&hl=0&source=all&sort=time&page="
@@ -30,6 +33,9 @@ public class HttpUtil {
 		String result = null;
 		try {
 			HttpURLConnection conn = (HttpURLConnection) new URL(httpReqUrl).openConnection();
+			
+			conn.setConnectTimeout(timeout*1000);
+			conn.setReadTimeout(timeout*1000);
 
 			conn.setRequestProperty("Accept-Charset", "utf-8");
 			conn.setRequestProperty("contentType", "utf-8");

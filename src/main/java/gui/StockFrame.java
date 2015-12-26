@@ -35,6 +35,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	private static final int GridLayoutColumn = 4;
+	
+	private static final String lastCustomPrefix = "A9";
 
 	public boolean isSelectAll = false;
 	
@@ -360,8 +362,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		String realName = name.split("\\.")[0];
 		String prefix = prefixMap.get(realName);
 		if(prefix == null){
-			System.out.println("导入的EBK文件没有对应的序号，增加默认序号【Z9】。");
-			prefix = "Z9";
+			System.out.println("导入的EBK文件没有对应的序号，增加默认序号【"+lastCustomPrefix+"】。");
+			prefix = lastCustomPrefix;
 		}
 		return prefix + name;
 	}
