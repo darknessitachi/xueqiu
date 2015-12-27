@@ -8,6 +8,7 @@ import gui.worker.StatisWorker;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -31,8 +32,11 @@ import util.StringUtil;
 import config.Constants;
 
 public class StockFrame extends JFrame implements ActionListener {
-
+	
 	private static final long serialVersionUID = 1L;
+	
+	private int window_width = 600;
+	private int window_height = 600;
 
 	private static final int GridLayoutColumn = 4;
 	
@@ -68,9 +72,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private Map<String,String> prefixMap;
 
-	private int window_width = 650;
-	private int window_height = 550;
-
 	private JPanel jp_custom;
 	private JPanel jp_concept;
 	private JPanel jp_industry;
@@ -87,7 +88,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void initWindow() {
 
 		super.setSize(window_width, window_height);
-		super.setLocation(450, 120);
+		this.setCenterLocation();
 		super.setLayout(new BorderLayout());
 		super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -101,6 +102,12 @@ public class StockFrame extends JFrame implements ActionListener {
 		super.add(jp2, BorderLayout.CENTER);
 		super.add(jp3, BorderLayout.SOUTH);
 
+	}
+
+	private void setCenterLocation() {
+		int width = Toolkit.getDefaultToolkit().getScreenSize().width;
+		int height = Toolkit.getDefaultToolkit().getScreenSize().height;
+		this.setLocation((width-window_width) /2, (height-window_height)/2 );
 	}
 
 	private void initJPanel1() {
