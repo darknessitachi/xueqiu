@@ -78,13 +78,13 @@ public class StockInterface {
 		
 		//写入request_body中
 		writeRequestBody(result);
-		System.out.println("写入完成，一共写入【"+num+"】只股票！\n");
+		System.out.println("写入body完成，一共写入【"+num+"】只股票！\n");
 	}
 
 	private void writeRequestBody(String result) throws IOException {
 		
 		//写request_body的src路径
-		boolean isWrite = false;
+		/*boolean isWrite = false;
 		for(int i=0;i<Constants.request_body_src_path.length;i++){
 			String src_path = Constants.request_body_src_path[i];
 			try {
@@ -96,7 +96,7 @@ public class StockInterface {
 		}
 		if(!isWrite){
 			System.err.println("request_body在src路径的文件没有写入。");
-		}
+		}*/
 		
 		//写request_body的class路径
 		String request_body_target_path = Constants.classpath + Constants.REQ_BODY_NAME;

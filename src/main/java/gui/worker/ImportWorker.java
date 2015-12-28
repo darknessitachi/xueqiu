@@ -34,7 +34,7 @@ public class ImportWorker implements Runnable {
 			for(String name : names){
 				try {
 					MainTrans.translate(name);
-					oper.addAll();
+					oper.addAllBody();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}

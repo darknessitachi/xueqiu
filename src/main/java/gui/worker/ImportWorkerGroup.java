@@ -23,6 +23,7 @@ public class ImportWorkerGroup implements Runnable {
 	@Override
 	public void run() {
 		StockOpertion oper = new StockOpertion();
+		oper.cancelGroupAll();
 		for(String name : names){
 			try {
 				MainTrans.translate(name);
