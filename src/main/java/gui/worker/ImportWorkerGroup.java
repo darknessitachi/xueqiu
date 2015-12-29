@@ -1,6 +1,6 @@
 package gui.worker;
 
-import gui.StockFrame;
+import gui.core.StockFrame;
 
 import java.io.IOException;
 import java.util.List;

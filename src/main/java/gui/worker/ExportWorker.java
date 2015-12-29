@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import config.Constants;
 import func.xueqiu.StockOpertion;
-import gui.StockFrame;
+import gui.core.StockFrame;
 
 public class ExportWorker implements Runnable {
 

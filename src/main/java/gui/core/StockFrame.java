@@ -1,4 +1,4 @@
-package gui;
+package gui.core;
 
 import gui.worker.ExportWorker;
 import gui.worker.ImportWorker;
@@ -81,7 +81,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JPanel jp_industry;
 	
 
-	StockFrame(String title) throws ClassNotFoundException {
+	public StockFrame(String title) throws ClassNotFoundException {
 		super(title);
 		prefixMap = new HashMap<String, String>();
 		initWindow();

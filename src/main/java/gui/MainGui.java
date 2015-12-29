@@ -1,5 +1,7 @@
 package gui;
 
+import gui.core.StockFrame;
+
 
 public class MainGui {
 
