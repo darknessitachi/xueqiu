@@ -13,7 +13,7 @@ public class MainDelAndAdd {
 		
 		StockOpertion oper = new StockOpertion();
 		oper.delAll();
-		oper.addAllBody();
+		oper.uploadBody();
 		
 	}
 

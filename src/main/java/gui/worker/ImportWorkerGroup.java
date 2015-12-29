@@ -23,11 +23,11 @@ public class ImportWorkerGroup implements Runnable {
 	@Override
 	public void run() {
 		StockOpertion oper = new StockOpertion();
-		oper.cancelGroupAll();
+		oper.cancelAllGroup();
 		for(String name : names){
 			try {
 				MainTrans.translate(name);
-				oper.updateGroup(groupName);
+				oper.uploadBodyToGroup(groupName);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			} catch (InterruptedException e) {

@@ -43,7 +43,7 @@ public class StockOpertion {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	public void addAllBody() throws  IOException, InterruptedException {
+	public void uploadBody() throws  IOException, InterruptedException {
 		
 		setXueqiuList();
 		setBodyList();
@@ -61,13 +61,31 @@ public class StockOpertion {
 		}
 		System.out.println("添加股票完成，一共添加了【"+num+"】只股票。");
 	}
+	
+	/**
+	 * 把当前body中的股票导入雪球自选股的分组中
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	public void uploadBodyToGroup(String groupName) throws IOException, InterruptedException {
+		//先添加股票
+		uploadBody();
+		//添加股票到分组
+		for(String str : bodyList){
+			String code = str.split(",")[0];
+			updateStockGroup(groupName, code);
+			Thread.sleep(Constants.XUEQIU_SLEEP);
+		}
+		System.out.println("添加分组完成，分组【"+groupName+"】一共添加了【"+bodyList.size()+"】只股票。");
+	}
+	
 		
 	/**
 	 * 取消所有股票的分组
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	public void cancelGroupAll() {
+	public void cancelAllGroup() {
 		try {
 			setXueqiuList();
 		} catch (IOException e) {
@@ -86,22 +104,6 @@ public class StockOpertion {
 		}
 	}
 	
-	/**
-	 * 把当前body中的股票导入雪球自选股的分组中
-	 * @throws IOException
-	 * @throws InterruptedException
-	 */
-	public void updateGroup(String groupName) throws IOException, InterruptedException {
-		//先添加股票
-		addAllBody();
-		//添加股票到分组
-		for(String str : bodyList){
-			String code = str.split(",")[0];
-			updateStockGroup(groupName, code);
-			Thread.sleep(Constants.XUEQIU_SLEEP);
-		}
-		System.out.println("添加分组完成，分组【"+groupName+"】一共添加了【"+bodyList.size()+"】只股票。");
-	}
 	
 	public void export() throws IOException{
 		List<String> list = this.queryAll();

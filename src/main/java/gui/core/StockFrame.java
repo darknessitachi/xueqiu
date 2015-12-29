@@ -39,7 +39,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private int window_width = 610;
 	private int window_height = 600;
 	
-	private int scroll_width = 610;
+	private int scroll_width = window_width;
 	private int scroll_height = 370;
 
 	private static final int GridLayoutColumn = 5;
@@ -74,7 +74,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private List<String> conceptContent;
 	private List<String> industryContent;
 	
-	private Map<String,String> prefixMap;
+	private Map<String,String> prefixMap = new HashMap<String, String>();
 
 	private JPanel jp_custom;
 	private JPanel jp_concept;
@@ -88,9 +88,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		super.setLayout(new BorderLayout());
 		super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		prefixMap = new HashMap<String, String>();
 		initWindow();
-		
 		this.setVisible(true);
 	}
 
@@ -149,18 +147,17 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private void initJPanel3() {
 		jp3.setLayout(new BorderLayout());
-		ScrollPane scrollPane = new ScrollPane();
-		scrollPane.setSize(scroll_width, scroll_height);
-		//scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
-		JPanel jp3_btn = new JPanel();
-		//jp3_btn.setLayout(new FlowLayout(FlowLayout.LEFT));
-		jp3_btn.add(JbuttonChoose);
-		jp3_btn.add(JbuttonDel);
-		jp3_btn.add(JbuttonSelectAll);
+		JPanel jp3_btn = get_jp3_btn();
+		ScrollPane jp3_content = get_jp3_content();
 		
-		JPanel jp3_content = new JPanel();
-		jp3_content.setLayout(new BorderLayout());
+		jp3.add(jp3_btn, BorderLayout.NORTH);
+		jp3.add(jp3_content, BorderLayout.CENTER);
+	}
+	
+	private ScrollPane get_jp3_content() {
+		JPanel jp3_content_temp = new JPanel();
+		jp3_content_temp.setLayout(new BorderLayout());
 		
 		jp_custom = new JPanel();
 		jp_concept = new JPanel();
@@ -168,20 +165,29 @@ public class StockFrame extends JFrame implements ActionListener {
 		initContentJPanel(jp_custom,this.customContent,"自选","custom");
 		initContentJPanel(jp_concept,this.conceptContent,"概念","concept");
 		initContentJPanel(jp_industry,this.industryContent,"行业","industry");
-		
+
 		setDefaultPrefixMap();
 
-		jp3_content.add(jp_custom, BorderLayout.NORTH);
-		jp3_content.add(jp_concept, BorderLayout.CENTER);
-		jp3_content.add(jp_industry, BorderLayout.SOUTH);
+		jp3_content_temp.add(jp_custom, BorderLayout.NORTH);
+		jp3_content_temp.add(jp_concept, BorderLayout.CENTER);
+		jp3_content_temp.add(jp_industry, BorderLayout.SOUTH);
 		
-		scrollPane.add(jp3_content);
+		ScrollPane jp3_content = new ScrollPane();
+		jp3_content.setSize(scroll_width, scroll_height);
+		jp3_content.add(jp3_content_temp);
 		
-		jp3.add(jp3_btn, BorderLayout.NORTH);
-		jp3.add(scrollPane, BorderLayout.CENTER);
-		
+		return jp3_content;
 	}
-	
+
+	private JPanel get_jp3_btn() {
+		JPanel jp3_btn = new JPanel();
+		//jp3_btn.setLayout(new FlowLayout(FlowLayout.LEFT));
+		jp3_btn.add(JbuttonChoose);
+		jp3_btn.add(JbuttonDel);
+		jp3_btn.add(JbuttonSelectAll);
+		return jp3_btn;
+	}
+
 	private void initContentJPanel(JPanel jpanel,
 			List<String> content, String showName, String name) {
 		

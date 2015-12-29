@@ -12,7 +12,7 @@ public class MainAddJust {
 		MainTrans.translate(Constants.ZXG_FILE_NAME);
 		
 		StockOpertion oper = new StockOpertion();
-		oper.addAllBody();
+		oper.uploadBody();
 		
 	}
 
