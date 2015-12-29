@@ -53,7 +53,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	public JPanel jp1 = new JPanel();
 	public JPanel jp2 = new JPanel();
 	public JPanel jp3 = new JPanel();
-	public ScrollPane scrollPane = new ScrollPane();
 
 	public JButton JbuttonOk = new JButton("统计");
 	public JButton JbuttonDelImport = new JButton("删除上传");
@@ -105,7 +104,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 		super.add(jp1, BorderLayout.NORTH);
 		super.add(jp2, BorderLayout.CENTER);
-		super.add(scrollPane, BorderLayout.SOUTH);
+		super.add(jp3, BorderLayout.SOUTH);
 
 	}
 
@@ -149,9 +148,9 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 	
 	private void initJPanel3() {
-		scrollPane.setSize(scroll_width, scroll_height);
 		jp3.setLayout(new BorderLayout());
-		
+		ScrollPane scrollPane = new ScrollPane();
+		scrollPane.setSize(scroll_width, scroll_height);
 		//scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
 		JPanel jp3_btn = new JPanel();
@@ -176,9 +175,11 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp3_content.add(jp_concept, BorderLayout.CENTER);
 		jp3_content.add(jp_industry, BorderLayout.SOUTH);
 		
+		scrollPane.add(jp3_content);
+		
 		jp3.add(jp3_btn, BorderLayout.NORTH);
-		jp3.add(jp3_content, BorderLayout.CENTER);
-		scrollPane.add(jp3);
+		jp3.add(scrollPane, BorderLayout.CENTER);
+		
 	}
 	
 	private void initContentJPanel(JPanel jpanel,
