@@ -36,7 +36,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private int window_width = 610;
+	private int window_width = 650;
 	private int window_height = 600;
 	
 	private int scroll_width = window_width;
@@ -198,6 +198,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		int i = 0;
 		String currentGroup = null;
 		for (String element : content) {
+			//element 有前缀，没后缀，如：A1自选股
 			String elementGroup = element.substring(0,1);
 			String prefix = element.substring(0,2);
 			//realName没有前缀（A1）和后缀（.EBK）
@@ -205,7 +206,8 @@ public class StockFrame extends JFrame implements ActionListener {
 			//设置前缀映射
 			prefixMap.put(realName, prefix);
 			
-			JCheckBox cb = new JCheckBox(realName);
+			String realNameWithNum = addSuffixWithNum(name,element);
+			JCheckBox cb = new JCheckBox(realNameWithNum);
 			cb.setName(element);
 			if(currentGroup == null || elementGroup.equals(currentGroup)){
 				//	System.out.println("因为【"+element+"】和上一个是同一组，所以直接添加。");
@@ -236,6 +238,16 @@ public class StockFrame extends JFrame implements ActionListener {
 				cb.setSelected(true);
 			}
 		}
+	}
+
+	private String addSuffixWithNum(String name, String element) {
+		String path = Constants.classpath + Constants.CODE_PATH + name + "/" + element + ".EBK";
+		int num = FileUtil.readValidLineNum(path);
+		String realName = element.substring(2,element.length());
+		if(realName.equals("自选股")){
+			num = num - 4;
+		}
+		return  realName + "("+num+")";
 	}
 
 	private void setDefaultPrefixMap() {

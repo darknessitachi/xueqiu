@@ -105,4 +105,30 @@ public class FileUtil {
 	    }  
 	    return flag;  
 	}
+
+	public static int readValidLineNum(String path) {
+		int num = 0;
+		BufferedReader br = null;
+		try {
+			FileReader fr = new FileReader(new File(path));
+			br = new BufferedReader(fr);
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				if(!StringUtil.isEmpty(line)){
+					num++;
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return num;
+	}
 }
