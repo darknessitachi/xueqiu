@@ -35,10 +35,10 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private int window_width = 600;
+	private int window_width = 610;
 	private int window_height = 600;
 
-	private static final int GridLayoutColumn = 4;
+	private static final int GridLayoutColumn = 5;
 	
 	private static final String lastCustomPrefix = "A9";
 
@@ -210,6 +210,8 @@ public class StockFrame extends JFrame implements ActionListener {
 					blankNum = 0;
 				}
 				//System.out.println("因为【"+element+"】和上一组不同，所以需要把之前的空白补全，空白数【"+blankNum+"】。");
+				//补完空白之后还需要再换一行
+				blankNum = blankNum + GridLayoutColumn;
 				for(int k=0;k<blankNum;k++){
 					jpanel.add(new JLabel());
 				}
