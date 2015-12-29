@@ -8,6 +8,7 @@ import gui.worker.StatisWorker;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
+import java.awt.ScrollPane;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,7 +26,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import util.FileUtil;
@@ -152,8 +152,9 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private void initJPanel3() {
 		jp3.setLayout(new BorderLayout());
-		JScrollPane scrollPane = new JScrollPane();
+		ScrollPane scrollPane = new ScrollPane();
 		scrollPane.setSize(scroll_width, scroll_height);
+		//scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
 		JPanel jp3_btn = new JPanel();
 		//jp3_btn.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -177,7 +178,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp3_content.add(jp_concept, BorderLayout.CENTER);
 		jp3_content.add(jp_industry, BorderLayout.SOUTH);
 		
-		scrollPane.setViewportView(jp3_content);
+		scrollPane.add(jp3_content);
 		
 		jp3.add(jp3_btn, BorderLayout.NORTH);
 		jp3.add(scrollPane, BorderLayout.CENTER);
