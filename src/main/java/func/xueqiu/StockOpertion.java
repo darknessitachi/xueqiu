@@ -218,7 +218,6 @@ public class StockOpertion {
 	private String getWritePath() {
 		String nowDate = DateUtil.getNowDate();
 		String writePath = Constants.export  + "/" + nowDate + ".EBK";
-		FileUtil.createFolder(Constants.export);
 		return writePath;
 	}
 

@@ -175,11 +175,9 @@ public class ReqLoadImpl implements ReqLoad {
 		if (req.combine) {
 			this.combine();
 		}
-		//创建文件夹
-		FileUtil.createFolder(Constants.outPath);
 		//创建子文件夹
 		String subFolder = Constants.outPath+"/" + DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd);
-		FileUtil.createFolder(subFolder);
+		FileUtil.createFolde(subFolder);
 		
 		
 		String errorMsg = getErrorMsg();

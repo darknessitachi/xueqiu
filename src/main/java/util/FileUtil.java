@@ -15,6 +15,12 @@ import java.util.List;
 
 public class FileUtil {
 
+	/**
+	 * 读取文件的所有内容，没有换行
+	 * 
+	 * @param path
+	 * @return
+	 */
 	public static String read(String path) {
 		StringBuffer result = new StringBuffer();
 		BufferedReader br = null;
@@ -23,7 +29,9 @@ public class FileUtil {
 			br = new BufferedReader(fr);
 			String line = null;
 			while ((line = br.readLine()) != null) {
-				result.append(line);
+				if (!StringUtil.isEmpty(line)) {
+					result.append(line);
+				}
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -38,13 +46,17 @@ public class FileUtil {
 		}
 		return result.toString();
 	}
-
-	public static void createFolder(String outpath) {
+	/**
+	 * 循环创建文件夹，使用mkdirs，而不是mkdir
+	 * @param outpath
+	 */
+	public static void createFolde(String outpath) {
 		File folder = new File(outpath);
 		if (!folder.exists()) {
-			folder.mkdir();
+			folder.mkdirs();
 		}
 	}
+	
 
 	public static void write(String writePath, String result)
 			throws IOException {
@@ -69,7 +81,7 @@ public class FileUtil {
 	}
 
 	public static void copy(String newPath, File oldfile) {
-		
+
 		int byteread = 0;
 		FileOutputStream fs = null;
 		try {
@@ -81,7 +93,7 @@ public class FileUtil {
 					fs.write(buffer, 0, byteread);
 				}
 				inStream.close();
-				System.out.println("拷贝文件到【"+newPath+"】");
+				System.out.println("拷贝文件到【" + newPath + "】");
 			}
 		} catch (Exception e) {
 			System.err.println("error");
@@ -96,14 +108,14 @@ public class FileUtil {
 	}
 
 	public static boolean delete(String filepath) {
-		boolean flag = false;  
-	    File file = new File(filepath);  
-	    // 路径为文件且不为空则进行删除  
-	    if (file.isFile() && file.exists()) {  
-	        file.delete();  
-	        flag = true;  
-	    }  
-	    return flag;  
+		boolean flag = false;
+		File file = new File(filepath);
+		// 路径为文件且不为空则进行删除
+		if (file.isFile() && file.exists()) {
+			file.delete();
+			flag = true;
+		}
+		return flag;
 	}
 
 	public static int readValidLineNum(String path) {
@@ -114,7 +126,7 @@ public class FileUtil {
 			br = new BufferedReader(fr);
 			String line = null;
 			while ((line = br.readLine()) != null) {
-				if(!StringUtil.isEmpty(line)){
+				if (!StringUtil.isEmpty(line)) {
 					num++;
 				}
 			}
