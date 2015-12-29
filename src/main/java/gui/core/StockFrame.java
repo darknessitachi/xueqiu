@@ -83,19 +83,19 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	public StockFrame(String title) throws ClassNotFoundException {
 		super(title);
-		prefixMap = new HashMap<String, String>();
-		initWindow();
-		// 显示窗口
-		this.setVisible(true);
-	}
-
-	private void initWindow() {
-
 		super.setSize(window_width, window_height);
 		this.setCenterLocation();
 		super.setLayout(new BorderLayout());
 		super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		
+		prefixMap = new HashMap<String, String>();
+		initWindow();
+		
+		this.setVisible(true);
+	}
 
+	private void initWindow() {
+		
 		initContentData();
 
 		initJPanel1();
@@ -121,9 +121,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.add(JbuttonImport);
 		jp1.add(JbuttonEmport);
 		jp1.add(JbuttonImportGroup);
-		//jp1.add(JbuttonTrans);
-    	//jp1.add(JbuttonBody);
-		
 
 		JbuttonOk.addActionListener(this);
 		JbuttonImport.addActionListener(this);
