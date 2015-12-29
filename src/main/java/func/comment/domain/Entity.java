@@ -1,4 +1,4 @@
-package app.comment.domain;
+package func.comment.domain;
 
 import util.StringUtil;
 

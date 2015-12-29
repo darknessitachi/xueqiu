@@ -3,7 +3,7 @@ package gui.worker;
 import java.io.IOException;
 
 import config.Constants;
-import app.xueqiu.StockOpertion;
+import func.xueqiu.StockOpertion;
 import gui.StockFrame;
 
 public class ExportWorker implements Runnable {

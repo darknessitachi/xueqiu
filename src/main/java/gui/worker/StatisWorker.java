@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import config.Constants;
-import app.comment.MainAutoOne;
+import func.comment.MainAutoOne;
 
 public class StatisWorker implements Runnable {
 

@@ -10,7 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
-import app.comment.domain.Stock;
+import func.comment.domain.Stock;
 
 public class HttpUtil {
 	

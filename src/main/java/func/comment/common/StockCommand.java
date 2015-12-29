@@ -1,4 +1,4 @@
-package app.comment.common;
+package func.comment.common;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
@@ -6,10 +6,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import app.comment.domain.Req;
-import app.comment.domain.Stock;
-import app.comment.impl.ReqLoadImpl;
-import app.comment.impl.Worker;
+import func.comment.domain.Req;
+import func.comment.domain.Stock;
+import func.comment.impl.ReqLoadImpl;
+import func.comment.impl.Worker;
 import config.Constants;
 
 public class StockCommand {

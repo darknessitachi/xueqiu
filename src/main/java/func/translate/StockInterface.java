@@ -1,4 +1,4 @@
-package app.translate;
+package func.translate;
 
 import java.io.BufferedReader;
 import java.io.File;

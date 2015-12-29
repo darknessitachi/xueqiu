@@ -1,4 +1,4 @@
-package app.comment;
+package func.comment;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -5,8 +5,8 @@ import gui.StockFrame;
 import java.io.IOException;
 import java.util.List;
 
-import app.translate.MainTrans;
-import app.xueqiu.StockOpertion;
+import func.translate.MainTrans;
+import func.xueqiu.StockOpertion;
 
 public class ImportWorkerGroup implements Runnable {
 

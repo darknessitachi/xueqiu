@@ -1,10 +1,10 @@
-package app.comment;
+package func.comment;
 
 import java.io.IOException;
 import java.util.Date;
 
 import config.Constants;
-import app.comment.common.StockCommand;
+import func.comment.common.StockCommand;
 
 public class Main {
 

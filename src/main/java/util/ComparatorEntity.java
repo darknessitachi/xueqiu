@@ -2,7 +2,7 @@ package util;
 
 import java.util.Comparator;
 
-import app.comment.domain.Entity;
+import func.comment.domain.Entity;
 
 public class ComparatorEntity implements Comparator<Object> {
 
