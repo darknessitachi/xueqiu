@@ -36,7 +36,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private int window_width = 650;
+	private int window_width = 680;
 	private int window_height = 600;
 	
 	private int scroll_width = window_width;
@@ -234,7 +234,7 @@ public class StockFrame extends JFrame implements ActionListener {
 			}
 			group.put(realName, cb);
 			//如果是自选股，默认选中
-			if(element.equals("A1自选股")){
+			if(realName.equals("自选股")){
 				cb.setSelected(true);
 			}
 		}
@@ -247,7 +247,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		if(realName.equals("自选股")){
 			num = num - 4;
 		}
-		return  realName + "("+num+")";
+		return  realName + "（"+num+"）";
 	}
 
 	private void setDefaultPrefixMap() {
