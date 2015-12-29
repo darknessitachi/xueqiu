@@ -336,7 +336,7 @@ public class StockFrame extends JFrame implements ActionListener {
         fc.setFileHidingEnabled(true);  
         fc.setAcceptAllFileFilterUsed(false);  
         //设置文件筛选器  
-        fc.setFileFilter(new MyFilter("EBK"));  
+        fc.setFileFilter(new CustomFileFilter("EBK"));  
           
         int returnValue = fc.showOpenDialog(null);  
         if (returnValue == JFileChooser.APPROVE_OPTION)  

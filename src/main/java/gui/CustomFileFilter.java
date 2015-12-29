@@ -4,12 +4,12 @@ import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
 
-public class MyFilter extends FileFilter
+public class CustomFileFilter extends FileFilter
 {
 	
 	private String ext;
 	
-	public MyFilter(String extString)
+	public CustomFileFilter(String extString)
 	{
 		this.ext = extString;
 	}
