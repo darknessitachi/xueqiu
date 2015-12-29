@@ -22,8 +22,9 @@ public class ImportWorker implements Runnable {
 
 	@Override
 	public void run() {
+		int num = 0;
+		StockOpertion oper = new StockOpertion();
 		try {
-			StockOpertion oper = new StockOpertion();
 			if(del){
 				try {
 					oper.delAll();
@@ -34,7 +35,7 @@ public class ImportWorker implements Runnable {
 			for(String name : names){
 				try {
 					MainTrans.translate(name);
-					oper.uploadBody();
+					num = num + oper.uploadBody();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -42,7 +43,7 @@ public class ImportWorker implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		frame.displayLabel.setText("上传雪球完成。");
+		frame.displayLabel.setText("上传雪球完成，添加【"+num+"】只股票，共【"+oper.countXueqiu()+"】只股票。");
 	}
 
 }

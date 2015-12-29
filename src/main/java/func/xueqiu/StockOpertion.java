@@ -29,6 +29,15 @@ public class StockOpertion {
 	//当前雪球list
 	private List<String> list = null;
 	
+	public int countXueqiu(){
+		try {
+			setXueqiuList();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return list.size();
+	};
+	
 	
 	public void delAll() throws IOException, InterruptedException {
 		List<String> stocks = this.queryAll();
@@ -43,7 +52,7 @@ public class StockOpertion {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	public void uploadBody() throws  IOException, InterruptedException {
+	public int uploadBody() throws  IOException, InterruptedException {
 		
 		setXueqiuList();
 		setBodyList();
@@ -60,6 +69,7 @@ public class StockOpertion {
 			Thread.sleep(Constants.XUEQIU_SLEEP);
 		}
 		System.out.println("添加股票完成，一共添加了【"+num+"】只股票。");
+		return num;
 	}
 	
 	/**

@@ -66,7 +66,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	public JTextField fieldDay = new JTextField(5);
 	public JTextField fieldSleep = new JTextField(5);
 	public JTextField fieldGroupName = new JTextField(5);
-	public JTextField displayLabel = new JTextField(20);
+	public JTextField displayLabel = new JTextField(25);
 
 	Map<String,JCheckBox> group = new HashMap<String,JCheckBox>();
 
