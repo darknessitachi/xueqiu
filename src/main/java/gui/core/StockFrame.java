@@ -36,7 +36,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private int window_width = 680;
+	private int window_width = 700;
 	private int window_height = 600;
 	
 	private int scroll_width = window_width;
