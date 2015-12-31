@@ -18,6 +18,7 @@ import util.FileUtil;
 import util.HttpUtil;
 import util.StringUtil;
 import config.Constants;
+import func.translate.MainTrans;
 
 public class StockOpertion {
 	
@@ -229,6 +230,18 @@ public class StockOpertion {
 		String nowDate = DateUtil.getNowDate();
 		String writePath = Constants.export  + "/" + nowDate + ".EBK";
 		return writePath;
+	}
+
+
+	public int uploadFile(String name) throws IOException, InterruptedException {
+		MainTrans.translate(name);
+		return uploadBody();
+	}
+
+
+	public void uploadFileToGroup(String groupName, String name) throws IOException, InterruptedException {
+		MainTrans.translate(name);
+		uploadBodyToGroup(groupName);
 	}
 
 	

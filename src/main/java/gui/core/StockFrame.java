@@ -46,40 +46,39 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private static final String lastCustomPrefix = "A9";
 
-	public boolean isSelectAll = false;
+	private boolean isSelectAll = false;
 	
 	private static final String groupName = "top";
 
-	public JPanel jp1 = new JPanel();
-	public JPanel jp2 = new JPanel();
-	public JPanel jp3 = new JPanel();
+	private JPanel jp1 = new JPanel();
+	private JPanel jp2 = new JPanel();
+	private JPanel jp3 = new JPanel();
+	
+	private JPanel jp_custom = new JPanel();
+	private JPanel jp_concept = new JPanel();
+	private JPanel jp_industry = new JPanel();
 
-	public JButton JbuttonOk = new JButton("统计");
-	public JButton JbuttonDelImport = new JButton("删除上传");
-	public JButton JbuttonImport = new JButton("上传雪球");
-	public JButton JbuttonImportGroup = new JButton("上传分组");
-	public JButton JbuttonEmport = new JButton("下载雪球");
-	public JButton JbuttonChoose = new JButton("导入EBK");
-	public JButton JbuttonDel = new JButton("删除EBK");
-	public JButton JbuttonSelectAll = new JButton("全选");
+	private JButton JbuttonOk = new JButton("统计");
+	private JButton JbuttonDelImport = new JButton("删除上传");
+	private JButton JbuttonImport = new JButton("上传雪球");
+	private JButton JbuttonImportGroup = new JButton("上传分组");
+	private JButton JbuttonEmport = new JButton("下载雪球");
+	private JButton JbuttonChoose = new JButton("导入EBK");
+	private JButton JbuttonDel = new JButton("删除EBK");
+	private JButton JbuttonSelectAll = new JButton("全选");
 
-	public JTextField fieldDay = new JTextField(5);
-	public JTextField fieldSleep = new JTextField(5);
-	public JTextField fieldGroupName = new JTextField(5);
+	private JTextField fieldDay = new JTextField(5);
+	private JTextField fieldSleep = new JTextField(5);
+	private JTextField fieldGroupName = new JTextField(5);
 	public JTextField displayLabel = new JTextField(25);
 
-	Map<String,JCheckBox> group = new HashMap<String,JCheckBox>();
+	private Map<String,JCheckBox> group = new HashMap<String,JCheckBox>();
 
 	private List<String> customContent;
 	private List<String> conceptContent;
 	private List<String> industryContent;
 	
 	private Map<String,String> prefixMap = new HashMap<String, String>();
-
-	private JPanel jp_custom;
-	private JPanel jp_concept;
-	private JPanel jp_industry;
-	
 
 	public StockFrame(String title) throws ClassNotFoundException {
 		super(title);
@@ -159,9 +158,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		JPanel jp3_content_temp = new JPanel();
 		jp3_content_temp.setLayout(new BorderLayout());
 		
-		jp_custom = new JPanel();
-		jp_concept = new JPanel();
-		jp_industry = new JPanel();
 		initContentJPanel(jp_custom,this.customContent,"自选","custom");
 		initContentJPanel(jp_concept,this.conceptContent,"概念","concept");
 		initContentJPanel(jp_industry,this.industryContent,"行业","industry");

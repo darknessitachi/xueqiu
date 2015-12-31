@@ -1,12 +1,10 @@
 package gui.worker;
 
+import func.xueqiu.StockOpertion;
 import gui.core.StockFrame;
 
 import java.io.IOException;
 import java.util.List;
-
-import func.translate.MainTrans;
-import func.xueqiu.StockOpertion;
 
 public class ImportWorker implements Runnable {
 
@@ -34,8 +32,7 @@ public class ImportWorker implements Runnable {
 			}
 			for(String name : names){
 				try {
-					MainTrans.translate(name);
-					num = num + oper.uploadBody();
+					num = num + oper.uploadFile(name);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}

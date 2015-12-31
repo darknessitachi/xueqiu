@@ -1,12 +1,10 @@
 package gui.worker;
 
+import func.xueqiu.StockOpertion;
 import gui.core.StockFrame;
 
 import java.io.IOException;
 import java.util.List;
-
-import func.translate.MainTrans;
-import func.xueqiu.StockOpertion;
 
 public class ImportWorkerGroup implements Runnable {
 
@@ -26,8 +24,7 @@ public class ImportWorkerGroup implements Runnable {
 		oper.cancelAllGroup();
 		for(String name : names){
 			try {
-				MainTrans.translate(name);
-				oper.uploadBodyToGroup(groupName);
+				oper.uploadFileToGroup(groupName,name);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			} catch (InterruptedException e) {
