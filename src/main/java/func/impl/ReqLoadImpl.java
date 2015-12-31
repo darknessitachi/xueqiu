@@ -1,4 +1,4 @@
-package func.comment.impl;
+package func.impl;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,10 +19,10 @@ import util.ComparatorEntity;
 import util.DateUtil;
 import util.FileUtil;
 import util.StringUtil;
-import func.comment.common.ReqLoad;
-import func.comment.domain.Entity;
-import func.comment.domain.Req;
-import func.comment.domain.Stock;
+import func.common.ReqLoad;
+import func.domain.Entity;
+import func.domain.Req;
+import func.domain.Stock;
 import config.Constants;
 
 public class ReqLoadImpl implements ReqLoad {

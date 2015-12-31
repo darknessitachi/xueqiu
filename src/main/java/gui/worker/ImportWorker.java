@@ -1,10 +1,11 @@
 package gui.worker;
 
-import func.util.XueqiuUtil;
 import gui.core.StockFrame;
 
 import java.io.IOException;
 import java.util.List;
+
+import util.core.XueqiuUtil;
 
 public class ImportWorker implements Runnable {
 

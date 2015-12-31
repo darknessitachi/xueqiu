@@ -1,4 +1,4 @@
-package func.comment.common;
+package func.common;
 
 import java.io.IOException;
 

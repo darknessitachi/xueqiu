@@ -1,4 +1,4 @@
-package func.comment.impl;
+package func.impl;
 
 import java.io.IOException;
 import java.util.Date;
@@ -9,9 +9,9 @@ import util.DateUtil;
 import util.HttpUtil;
 import util.StringUtil;
 
-import func.comment.common.StockCommand;
-import func.comment.domain.Req;
-import func.comment.domain.Stock;
+import func.common.StockCommand;
+import func.domain.Req;
+import func.domain.Stock;
 
 import config.Constants;
 

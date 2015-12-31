@@ -1,11 +1,11 @@
-package func.comment;
+package func;
 
 import java.io.IOException;
 import java.util.Date;
 
+import util.core.TranslateUtil;
 import config.Constants;
-import func.comment.common.StockCommand;
-import func.util.TranslateUtil;
+import func.common.StockCommand;
 
 /**
  * 只需要把原始文件放入code中，就可以执行该方法了

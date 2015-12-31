@@ -1,4 +1,4 @@
-package func.comment.domain;
+package func.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;

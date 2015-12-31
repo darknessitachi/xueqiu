@@ -1,12 +1,11 @@
 package gui.worker;
 
-import gui.core.StockFrame;
-
 import java.io.IOException;
 import java.util.List;
 
 import config.Constants;
-import func.comment.MainAutoOne;
+import func.MainAutoOne;
+import gui.core.StockFrame;
 
 public class StatisWorker implements Runnable {
 
