@@ -1,6 +1,6 @@
 package gui.worker;
 
-import func.xueqiu.StockOpertion;
+import func.util.XueqiuUtil;
 import gui.core.StockFrame;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class ImportWorkerGroup implements Runnable {
 
 	@Override
 	public void run() {
-		StockOpertion oper = new StockOpertion();
+		XueqiuUtil oper = new XueqiuUtil();
 		oper.cancelAllGroup();
 		for(String name : names){
 			try {

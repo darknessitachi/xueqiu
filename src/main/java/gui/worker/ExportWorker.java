@@ -3,7 +3,7 @@ package gui.worker;
 import java.io.IOException;
 
 import config.Constants;
-import func.xueqiu.StockOpertion;
+import func.util.XueqiuUtil;
 import gui.core.StockFrame;
 
 public class ExportWorker implements Runnable {
@@ -16,7 +16,7 @@ public class ExportWorker implements Runnable {
 
 	@Override
 	public void run() {
-		StockOpertion so = new StockOpertion();
+		XueqiuUtil so = new XueqiuUtil();
 		try {
 			so.export();
 		} catch (IOException e) {

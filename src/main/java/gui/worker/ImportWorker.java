@@ -1,6 +1,6 @@
 package gui.worker;
 
-import func.xueqiu.StockOpertion;
+import func.util.XueqiuUtil;
 import gui.core.StockFrame;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ public class ImportWorker implements Runnable {
 	@Override
 	public void run() {
 		int num = 0;
-		StockOpertion oper = new StockOpertion();
+		XueqiuUtil oper = new XueqiuUtil();
 		try {
 			if(del){
 				try {

@@ -1,4 +1,4 @@
-package func.xueqiu;
+package func.util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,9 +18,8 @@ import util.FileUtil;
 import util.HttpUtil;
 import util.StringUtil;
 import config.Constants;
-import func.translate.MainTrans;
 
-public class StockOpertion {
+public class XueqiuUtil {
 	
 	private String cookie = FileUtil.read(Constants.classpath + Constants.REQ_COOKIE_NAME).trim();
 	
@@ -48,48 +47,17 @@ public class StockOpertion {
 		}
 		System.out.println("股票清理完成，一共清理【"+stocks.size()+"】只股票。");
 	}
-	/**
-	 * 把当前body中的股票导入雪球自选股中
-	 * @throws IOException
-	 * @throws InterruptedException
-	 */
-	public int uploadBody() throws  IOException, InterruptedException {
-		
-		setXueqiuList();
-		setBodyList();
-		
-		int num = 0;
-		for(String str : bodyList){
-			String code = str.split(",")[0];
-			String name = str.split(",")[1];
-			//如果不在自选股中，则添加
-			if(!list.contains(code)){
-				addStock(code,name);
-				num++;
-			}
-			Thread.sleep(Constants.XUEQIU_SLEEP);
-		}
-		System.out.println("添加股票完成，一共添加了【"+num+"】只股票。");
-		return num;
-	}
 	
-	/**
-	 * 把当前body中的股票导入雪球自选股的分组中
-	 * @throws IOException
-	 * @throws InterruptedException
-	 */
-	public void uploadBodyToGroup(String groupName) throws IOException, InterruptedException {
-		//先添加股票
-		uploadBody();
-		//添加股票到分组
-		for(String str : bodyList){
-			String code = str.split(",")[0];
-			updateStockGroup(groupName, code);
-			Thread.sleep(Constants.XUEQIU_SLEEP);
-		}
-		System.out.println("添加分组完成，分组【"+groupName+"】一共添加了【"+bodyList.size()+"】只股票。");
+	public int uploadFile(String name) throws IOException, InterruptedException {
+		TranslateUtil.translate(name);
+		return uploadBody();
 	}
-	
+
+
+	public void uploadFileToGroup(String groupName, String name) throws IOException, InterruptedException {
+		TranslateUtil.translate(name);
+		uploadBodyToGroup(groupName);
+	}
 		
 	/**
 	 * 取消所有股票的分组
@@ -233,17 +201,49 @@ public class StockOpertion {
 	}
 
 
-	public int uploadFile(String name) throws IOException, InterruptedException {
-		MainTrans.translate(name);
-		return uploadBody();
+	
+
+	/**
+	 * 把当前body中的股票导入雪球自选股中
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private int uploadBody() throws  IOException, InterruptedException {
+		
+		setXueqiuList();
+		setBodyList();
+		
+		int num = 0;
+		for(String str : bodyList){
+			String code = str.split(",")[0];
+			String name = str.split(",")[1];
+			//如果不在自选股中，则添加
+			if(!list.contains(code)){
+				addStock(code,name);
+				num++;
+			}
+			Thread.sleep(Constants.XUEQIU_SLEEP);
+		}
+		System.out.println("添加股票完成，一共添加了【"+num+"】只股票。");
+		return num;
 	}
-
-
-	public void uploadFileToGroup(String groupName, String name) throws IOException, InterruptedException {
-		MainTrans.translate(name);
-		uploadBodyToGroup(groupName);
+	
+	/**
+	 * 把当前body中的股票导入雪球自选股的分组中
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private void uploadBodyToGroup(String groupName) throws IOException, InterruptedException {
+		//先添加股票
+		uploadBody();
+		//添加股票到分组
+		for(String str : bodyList){
+			String code = str.split(",")[0];
+			updateStockGroup(groupName, code);
+			Thread.sleep(Constants.XUEQIU_SLEEP);
+		}
+		System.out.println("添加分组完成，分组【"+groupName+"】一共添加了【"+bodyList.size()+"】只股票。");
 	}
-
 	
 
 

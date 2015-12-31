@@ -3,9 +3,9 @@ package func.comment;
 import java.io.IOException;
 import java.util.Date;
 
-import func.comment.common.StockCommand;
-import func.translate.MainTrans;
 import config.Constants;
+import func.comment.common.StockCommand;
+import func.util.TranslateUtil;
 
 /**
  * 只需要把原始文件放入code中，就可以执行该方法了
@@ -21,7 +21,7 @@ public class MainAutoOne {
 
 	public static void autoOne(String fileName) throws IOException {
 		//先翻译，把翻译的文件写入request_body中
-		MainTrans.translate(fileName);
+		TranslateUtil.translate(fileName);
 		
 		//再执行查询热度方法
 		long start = new Date().getTime();

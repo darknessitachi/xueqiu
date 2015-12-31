@@ -1,4 +1,4 @@
-package func.translate;
+package func.util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,21 +10,15 @@ import util.FileUtil;
 import util.HttpUtil;
 import config.Constants;
 
-public class StockInterface {
+public class TranslateUtil {
 	
-	public boolean useLog = false;
-	
-	//要读取的原始文件路径
-	private String afterClasspath_filePath;
-	
+	public static final boolean useLog = false;
 	/**
 	 * 把原始ebk文件翻译完成后，写入body文件
 	 * @param afterClasspath_filePath
 	 * @throws IOException
 	 */
-	public  void translate(String afterClasspath_filePath) throws IOException {
-		
-		this.afterClasspath_filePath = afterClasspath_filePath;
+	public static void translate(String afterClasspath_filePath) throws IOException {
 		
 		StringBuilder sb = new StringBuilder();
 		
@@ -66,7 +60,7 @@ public class StockInterface {
 		
 		String result = sb.toString().toUpperCase();
 		//写入文件的时候，在文件第一行加入当前板块的名词
-		String fileName = getFileName();
+		String fileName = getFileName(afterClasspath_filePath);
 		result = fileName + "\n" + result;
 		
 		System.out.println(result);
@@ -81,7 +75,7 @@ public class StockInterface {
 		System.out.println("写入body完成，一共写入【"+num+"】只股票！\n");
 	}
 
-	private void writeRequestBody(String result) throws IOException {
+	private static void writeRequestBody(String result) throws IOException {
 		
 		//写request_body的src路径
 		/*boolean isWrite = false;
@@ -103,7 +97,7 @@ public class StockInterface {
 		FileUtil.write(request_body_target_path,result);
 	}
 
-	private boolean isValidName(String name) {
+	private static boolean isValidName(String name) {
 		return !"\";".equals(name);
 	}
 
@@ -120,12 +114,12 @@ public class StockInterface {
 	 * @param file
 	 * @return
 	 */
-	private String getFileName() {
-		return afterClasspath_filePath.split("/")[2].split("\\.")[0];
+	private static String getFileName(String path) {
+		return path.split("/")[2].split("\\.")[0];
 	}
 
 
-	private  String getNameByCode(String completeCode) throws IOException {
+	private static String getNameByCode(String completeCode) throws IOException {
 		String httpReqUrl = Constants.inter_url+completeCode;
 		String result = HttpUtil.getResult(httpReqUrl,"GBK");
 		//先通过=分割字符串
@@ -139,7 +133,7 @@ public class StockInterface {
 	 * @param code
 	 * @return
 	 */
-	private  String completeCode(String code) {
+	private static String completeCode(String code) {
 		//过滤掉指数
 		for(String s:Constants.stockIndex){
 			if(s.equals(code)){
