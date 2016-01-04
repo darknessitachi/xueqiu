@@ -1,4 +1,3 @@
-import java.io.File;
 
 
 
@@ -9,10 +8,7 @@ import java.io.File;
 public class Test {
 
 	public static void main(String[] args) {
-		File folder = new File("d:/x/y/z");
-		if (!folder.exists()) {
-			folder.mkdirs();
-		}
+		System.out.println("0399005".substring(1,4));
 	}
 	
 

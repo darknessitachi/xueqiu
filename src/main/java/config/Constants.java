@@ -26,7 +26,7 @@ public class Constants {
 	
 	public static final String REQ_COOKIE_NAME = Constants.CONFIG_PATH + "cookie.txt";
 	
-	public static final String[] stockIndex = new String[]{"1999999","0399005","0399006","0399001"};
+	public static final String[] stockIndex = new String[]{"999","399"};
 	
 	public static final long XUEQIU_SLEEP = 100;
 	

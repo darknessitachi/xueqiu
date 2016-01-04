@@ -135,16 +135,25 @@ public class TranslateUtil {
 	 */
 	private static String completeCode(String code) {
 		//过滤掉指数
-		for(String s:Constants.stockIndex){
-			if(s.equals(code)){
-				return null;
-			}
-		}
+		if(isStockIndex(code)){
+			return null;
+		};
+		
 		if(code.startsWith("1")){
 			return "sh"+code.substring(1);
 		}else{
 			return "sz"+code.substring(1);
 		}
+	}
+
+	private static boolean isStockIndex(String code) {
+		String prefix = code.substring(1,4);
+		for(String element:Constants.stockIndex){
+			if(element.equals(prefix)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	
