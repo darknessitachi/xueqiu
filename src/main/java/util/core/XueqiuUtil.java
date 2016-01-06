@@ -29,13 +29,32 @@ public class XueqiuUtil {
 	//当前雪球list
 	private List<String> list = null;
 	
-	public int countXueqiu(){
-		try {
-			setXueqiuList();
-		} catch (IOException e) {
-			e.printStackTrace();
+	/**
+	 * 
+	 * @param realTime 实时
+	 * @return
+	 */
+	public int countXueqiu(boolean realTime){
+		if(realTime){
+			try {
+				try {
+					Thread.sleep(Constants.XUEQIU_SLEEP);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				return this.queryAll().size();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}else{
+			try {
+				setXueqiuList();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return list.size();
 		}
-		return list.size();
+		return 0;
 	};
 	
 	

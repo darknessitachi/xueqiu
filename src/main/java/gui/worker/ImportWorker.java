@@ -41,7 +41,7 @@ public class ImportWorker implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		frame.displayLabel.setText("上传雪球完成，添加【"+num+"】只股票，共【"+oper.countXueqiu()+"】只股票。");
+		frame.displayLabel.setText("上传雪球完成，添加【"+num+"】只股票，共【"+oper.countXueqiu(true)+"】只股票。");
 	}
 
 }
