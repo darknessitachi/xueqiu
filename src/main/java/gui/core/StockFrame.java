@@ -230,9 +230,9 @@ public class StockFrame extends JFrame implements ActionListener {
 			}
 			group.put(realName, cb);
 			//如果是自选股，默认选中
-			if(realName.equals("自选股")){
+			/*if(realName.equals("自选股")){
 				cb.setSelected(true);
-			}
+			}*/
 		}
 	}
 
