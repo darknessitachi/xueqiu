@@ -21,7 +21,8 @@ public class Constants {
 	
 	public static final long XUEQIU_SLEEP = 100;
 	
-	public static final String out_path = "D:/xueqiu/result";
+	public static final String out_result_path = "D:/xueqiu/result";
+	public static final String out_config_path = "D:/xueqiu/config";
 	
 	public static final String export_path = StringUtil.getComputerHomeDir();
 	

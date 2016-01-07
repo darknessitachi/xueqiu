@@ -19,10 +19,11 @@ import util.ComparatorEntity;
 import util.DateUtil;
 import util.FileUtil;
 import util.StringUtil;
-import func.common.ReqLoad;
+import util.core.AccessUtil;
 import func.domain.Entity;
 import func.domain.Req;
 import func.domain.Stock;
+import func.inter.ReqLoad;
 import config.Constants;
 
 public class ReqLoadImpl implements ReqLoad {
@@ -44,8 +45,6 @@ public class ReqLoadImpl implements ReqLoad {
 		}
 	}
 	
-	
-
 	private void initHead() throws IOException {
 		// 设置请求path的路径
 		String reqPath = Constants.classpath + Constants.config_path + Constants.req_head_name;
@@ -166,7 +165,7 @@ public class ReqLoadImpl implements ReqLoad {
 	
 
 	private void initCookie() {
-		req.cookie = FileUtil.read(Constants.classpath + Constants.config_path + Constants.req_cookie_name).trim();
+		req.cookie = AccessUtil.readCookie();
 	}
 	
 	
@@ -176,7 +175,7 @@ public class ReqLoadImpl implements ReqLoad {
 			this.combine();
 		}
 		//创建子文件夹
-		String subFolder = Constants.out_path+"/" + DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd);
+		String subFolder = Constants.out_result_path+"/" + DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd);
 		FileUtil.createFolde(subFolder);
 		
 		String errorMsg = getErrorMsg();

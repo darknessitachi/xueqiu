@@ -8,11 +8,9 @@ import net.sf.json.JSONObject;
 import util.DateUtil;
 import util.HttpUtil;
 import util.StringUtil;
-
-import func.common.StockCommand;
 import func.domain.Req;
 import func.domain.Stock;
-
+import func.inter.StockCommand;
 import config.Constants;
 
 public class Worker implements Runnable{

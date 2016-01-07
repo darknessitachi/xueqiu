@@ -1,4 +1,4 @@
-package func.common;
+package func.inter;
 
 import java.io.IOException;
 

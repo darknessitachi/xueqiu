@@ -3,7 +3,7 @@ package util.core;
 import java.io.IOException;
 import java.util.Date;
 
-import func.common.StockCommand;
+import func.inter.StockCommand;
 
 public class StatisticUtil {
 	

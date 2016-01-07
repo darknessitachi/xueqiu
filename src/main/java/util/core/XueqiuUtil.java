@@ -21,7 +21,7 @@ import config.Constants;
 
 public class XueqiuUtil {
 	
-	private String cookie = FileUtil.read(Constants.classpath + Constants.config_path + Constants.req_cookie_name).trim();
+	private String cookie = AccessUtil.readCookie();
 	
 	//格式：code,name
 	private List<String> bodyList = null;

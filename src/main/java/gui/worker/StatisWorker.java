@@ -27,7 +27,7 @@ public class StatisWorker implements Runnable {
 				e1.printStackTrace();
 			}
 		}
-		frameFirst.displayLabel.setText("统计完成，输出目录【"+Constants.out_path+"】");
+		frameFirst.displayLabel.setText("统计完成，输出目录【"+Constants.out_result_path+"】");
 	}
 
 }
