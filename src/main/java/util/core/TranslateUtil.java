@@ -6,9 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import util.FileUtil;
 import util.HttpUtil;
 import config.Constants;
+import func.domain.ReqBody;
+import func.domain.Stock;
 
 public class TranslateUtil {
 	
@@ -18,9 +19,10 @@ public class TranslateUtil {
 	 * @param absolute_path
 	 * @throws IOException
 	 */
-	public static void translate(String absolute_path) throws IOException {
+	public static ReqBody translate(String absolute_path) throws IOException {
 		
-		StringBuilder sb = new StringBuilder();
+		ReqBody body = new ReqBody();
+		body.bodyName = getFileName(absolute_path);
 		
 		//先读取文件
 		BufferedReader br = null;
@@ -37,11 +39,8 @@ public class TranslateUtil {
 						try {
 							String name = getNameByCode(completeCode);
 							if(isValidName(name)){
-								sb.append(completeCode).append(",").append(name).append("\n");
+								body.list.add(new Stock(completeCode.toUpperCase(), name));
 								num++;
-								if(useLog){
-									System.out.println(num);
-								}
 							}
 						} catch (java.net.ConnectException e) {
 							System.err.println("翻译【"+completeCode+"】请求异常。");
@@ -56,28 +55,10 @@ public class TranslateUtil {
 			br.close();
 		}
 		
-		String result = sb.toString().toUpperCase();
-		//写入文件的时候，在文件第一行加入当前板块的名词
-		String fileName = getFileName(absolute_path);
-		result = fileName + "\n" + result;
-		
-		System.out.println(result);
-		
-		/*
-		//写入文件到EBK目录
-		String ebk_path = getWritePath();
-		FileUtil.write(ebk_path,result);*/
-		
-		//写入request_body中
-		writeRequestBody(result);
-		System.out.println("写入body完成，一共写入【"+num+"】只股票！\n");
+		System.out.println("一共写入【"+num+"】只股票！\n");
+		return body;
 	}
 
-	private static void writeRequestBody(String result) throws IOException {
-		//写request_body的class路径
-		String request_body_target_path = Constants.classpath + Constants.config_path + Constants.req_body_name;
-		FileUtil.write(request_body_target_path,result);
-	}
 
 	private static boolean isValidName(String name) {
 		return !"\";".equals(name);
@@ -130,6 +111,5 @@ public class TranslateUtil {
 		}
 		return false;
 	}
-	
 	
 }
