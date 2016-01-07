@@ -7,11 +7,10 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import util.DateUtil;
 import util.HttpUtil;
-import util.StringUtil;
+import config.Constants;
 import func.domain.Req;
 import func.domain.Stock;
 import func.inter.StockCommand;
-import config.Constants;
 
 public class Worker implements Runnable{
 
@@ -48,9 +47,9 @@ public class Worker implements Runnable{
 				break;
 			}
 			//每次请求完开始下一次请求的时候，睡眠一段时间
-			if(req.sleep != 0){
+			if(req.head.sleep != 0){
 				try {
-					Thread.sleep(req.sleep);
+					Thread.sleep(req.head.sleep);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -78,7 +77,7 @@ public class Worker implements Runnable{
 			int resultCode = matchMapKey(createDate,createDate_all);
 			if(resultCode == 1){
 				boolean isNotice = isNotice(entity);
-				if(isNotice && req.filterNotice){
+				if(isNotice && req.head.filterNotice){
 					continue;
 				}else{
 					Integer srcNum = stock.map.get(createDate);
@@ -117,10 +116,6 @@ public class Worker implements Runnable{
 	private int matchMapKey(String timeStr, String timeStr_all) {
 		String maxKey = req.mapKey.get(0);
 		String minKey = req.mapKey.get(req.mapKey.size()-1);
-		
-		if(!StringUtil.isEmpty(req.maxDate) && timeStr_all.compareTo(req.maxDate)>0){
-			return 2;
-		}
 		
 		if(req.mapKey.contains(timeStr)){
 			return 1;

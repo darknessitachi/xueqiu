@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import func.domain.Req;
+import func.domain.ReqHead;
 import func.domain.Stock;
 import func.impl.ReqLoadImpl;
 import func.impl.Worker;
@@ -21,16 +22,15 @@ public class StockCommand {
 	
 	private ReqLoad load = null;
 
-	public StockCommand() {
+	public StockCommand(ReqHead head) {
 		super();
+		load = new ReqLoadImpl(head);
 	}
 
 
 	private void init() throws IOException {
-		load = new ReqLoadImpl();
 		load.init();
 	}
-
 	
 	private void send() {
 		Req req = load.getReq();

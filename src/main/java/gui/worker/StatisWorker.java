@@ -5,16 +5,19 @@ import java.util.List;
 
 import util.core.StatisticUtil;
 import config.Constants;
+import func.domain.ReqHead;
 import gui.core.StockFrame;
 
 public class StatisWorker implements Runnable {
 
 	private List<String> names;
 	private StockFrame frameFirst;
+	private ReqHead head;
 
-	public StatisWorker(List<String> names, StockFrame frameFirst) {
+	public StatisWorker(ReqHead head, List<String> names, StockFrame frameFirst) {
 		this.names = names;
 		this.frameFirst = frameFirst;
+		this.head = head;
 	}
 
 	@Override
@@ -22,7 +25,7 @@ public class StatisWorker implements Runnable {
 		for(String name : names){
 			//获取每个板块的路径
 			try {
-				StatisticUtil.statistic(name);
+				StatisticUtil.statistic(head,name);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

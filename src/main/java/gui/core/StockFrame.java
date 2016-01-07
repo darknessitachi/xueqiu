@@ -1,5 +1,6 @@
 package gui.core;
 
+import func.domain.ReqHead;
 import gui.worker.ExportWorker;
 import gui.worker.ImportWorker;
 import gui.worker.ImportWorkerGroup;
@@ -425,8 +426,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		List<String> names = getSelectNames();
 		if (names.size() > 0) {
 			displayLabel.setText("正在执行统计……");
-			writeRequestHead();
-			new Thread(new StatisWorker(names, this)).start();
+			ReqHead head = writeRequestHead();
+			new Thread(new StatisWorker(head,names, this)).start();
 		} else {
 			displayLabel.setText("请选择要统计的板块。");
 		}
@@ -461,12 +462,12 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 	}
 	
-	private void writeRequestHead() throws IOException {
+	private ReqHead writeRequestHead() throws IOException {
 
 		String day = fieldDay.getText();
 		String sleep = fieldSleep.getText();
 
-		String request_head_path = Constants.classpath + Constants.config_path + Constants.req_head_name;
+		/*String request_head_path = Constants.classpath + Constants.config_path + Constants.req_head_name;
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("#").append("\n");
@@ -475,7 +476,12 @@ public class StockFrame extends JFrame implements ActionListener {
 		sb.append("sleep=" + sleep).append("\n");
 		sb.append("filterNotice=true").append("\n");
 
-		FileUtil.write(request_head_path, sb.toString());
+		FileUtil.write(request_head_path, sb.toString());*/
+		
+		ReqHead head = new ReqHead();
+		head.day = Integer.parseInt(day);
+		head.sleep = Integer.parseInt(sleep);
+		return head;
 	}
 	/**
 	 * 返回绝对路径

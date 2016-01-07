@@ -20,18 +20,20 @@ import util.DateUtil;
 import util.FileUtil;
 import util.StringUtil;
 import util.core.AccessUtil;
+import config.Constants;
 import func.domain.Entity;
 import func.domain.Req;
+import func.domain.ReqHead;
 import func.domain.Stock;
 import func.inter.ReqLoad;
-import config.Constants;
 
 public class ReqLoadImpl implements ReqLoad {
 	
 	public Req req;
 	
-	public ReqLoadImpl() {
+	public ReqLoadImpl(ReqHead head) {
 		req = new Req();
+		req.head = head;
 	}
 
 	public void init() {
@@ -46,40 +48,7 @@ public class ReqLoadImpl implements ReqLoad {
 	}
 	
 	private void initHead() throws IOException {
-		// 设置请求path的路径
-		String reqPath = Constants.classpath + Constants.config_path + Constants.req_head_name;
-
-		// 设置请求的股票代码
-		BufferedReader br = null;
-		try {
-			FileReader fr = new FileReader(new File(reqPath));
-			br = new BufferedReader(fr);
-			String line = null;
-			int number = 0;
-			while ((line = br.readLine()) != null) {
-				line = line.trim();
-				if (line.length() > 0 && !line.startsWith("#")) {
-					if (number == 0) {
-						initReqNowDate(line);
-					} else if (number == 1) {
-						initReqKey(line);
-					} else if (number == 2) {
-						initReqCombine(line);
-					}else if (number == 3) {
-						initReqSleep(line);
-					}else if (number == 4) {
-						initReqFilterNotice(line);
-					}
-				}
-				number++;
-			}
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} finally {
-			br.close();
-		}
-
+		initReqKey(req.head.day);
 	}
 	
 	private void initBody() throws IOException {
@@ -121,43 +90,18 @@ public class ReqLoadImpl implements ReqLoad {
 		}
 	}
 
-	private void initReqFilterNotice(String line) {
-		String[] array = line.split("=");
-		req.filterNotice = new Boolean(array[1]);
-	}
-
-	private void initReqNowDate(String line) {
-		String[] array = line.split("=");
-		req.maxDate = array[1];
-	}
 	/**
 	 * 如果maxDate不为空的话，从maxDate向前推N天
 	 * @param line
 	 */
-	private void initReqKey(String line) {
-		Date beginDate = null;
-		if(StringUtil.isEmpty(req.maxDate)){
-			beginDate = new Date();
-		}else{
-			beginDate = DateUtil.parse(req.maxDate, DateUtil.yyyyMMdd_HHmmss);
-		}
-		int day = Integer.parseInt(line.split("=")[1]);
+	private void initReqKey(int day) {
+		Date beginDate = new Date();
 		for (int i = 0; i < day; i++) {
 			String d = DateUtil.minus(beginDate,i);
 			req.mapKey.add(d);
 		}
 	}
 	
-	private void initReqCombine(String line) {
-		String combine = line.split("=")[1];
-		req.combine = new Boolean(combine);
-	}
-	
-	private void initReqSleep(String line) {
-		String[] array = line.split("=");
-		req.sleep = Integer.parseInt(array[1]);
-	}
-
 	private void initReqStock(String line) {
 		String[] array = line.split(",");
 		req.list.add(new Stock(array[0], array[1]));
@@ -171,7 +115,7 @@ public class ReqLoadImpl implements ReqLoad {
 	
 	public void print() throws IOException {
 		
-		if (req.combine) {
+		if (req.head.combine) {
 			this.combine();
 		}
 		//创建子文件夹
@@ -251,12 +195,7 @@ public class ReqLoadImpl implements ReqLoad {
 	private String getWriteFilePath(String subFolder, String errorMsg) {
 		String prefix = StringUtil.isEmpty(errorMsg)?"":"？";
 		
-		String nowDate = null;
-		if(StringUtil.isEmpty(req.maxDate)){
-			nowDate = DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd_HHmmss);
-		}else{
-			nowDate = req.maxDate;
-		}
+		String nowDate = DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd_HHmmss);
 		nowDate = nowDate.replace(":", "：");
 		String fileName = nowDate + StringUtil.number2word((req.mapKey.size()-1))+"天个股热度（"+getCodeShowName(req.bodyName)+prefix+"）.txt";
 		return subFolder + "/"  + fileName ;

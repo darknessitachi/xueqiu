@@ -5,14 +5,7 @@ import java.util.List;
 
 public class Req {
 	
-	public String maxDate;
-	
-	public boolean combine = false;
-	
-	//每个线程在请求一页数据后，睡眠的毫秒数
-	public int sleep = 0;
-
-	public Boolean filterNotice = true;
+	public ReqHead head;
 	
 	public String cookie;
 	
