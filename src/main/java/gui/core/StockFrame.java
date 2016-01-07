@@ -479,7 +479,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		FileUtil.write(request_head_path, sb.toString());
 	}
 	/**
-	 * 返回的数据格式带完整路径的：["code/custom/A1自选股.EBK","code/custom/A2垃圾回收站.EBK"]
+	 * 返回绝对路径
 	 * @return
 	 */
 	private List<String> getSelectNames() {
@@ -488,11 +488,11 @@ public class StockFrame extends JFrame implements ActionListener {
 			JCheckBox jb = group.get(key);
 			if (jb.isSelected()) {
 				String parentName = jb.getParent().getName();
-				String path = Constants.CODE_PATH + parentName + "/" + jb.getName()+".EBK";
+				String absolutePath = Constants.classpath + Constants.CODE_PATH + parentName + "/" + jb.getName()+".EBK";
 				if(parentName.equals("custom")){
-					path = customPath + "/" + jb.getName()+".EBK";
+					absolutePath = customPath + "/" + jb.getName()+".EBK";
 				}
-				result.add(path);
+				result.add(absolutePath);
 			}
 		}
 		return result;

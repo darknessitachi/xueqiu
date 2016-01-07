@@ -15,20 +15,18 @@ public class TranslateUtil {
 	public static final boolean useLog = false;
 	/**
 	 * 把原始ebk文件翻译完成后，写入body文件
-	 * @param afterClasspath_filePath
+	 * @param absolute_path
 	 * @throws IOException
 	 */
-	public static void translate(String afterClasspath_filePath) throws IOException {
+	public static void translate(String absolute_path) throws IOException {
 		
 		StringBuilder sb = new StringBuilder();
-		
-		String readPath = Constants.classpath + afterClasspath_filePath;
 		
 		//先读取文件
 		BufferedReader br = null;
 		int num = 0;
 		try {
-			FileReader fr = new FileReader(new File(readPath));
+			FileReader fr = new FileReader(new File(absolute_path));
 			br = new BufferedReader(fr);
 			String line = null;
 			while ((line = br.readLine()) != null) {
@@ -60,7 +58,7 @@ public class TranslateUtil {
 		
 		String result = sb.toString().toUpperCase();
 		//写入文件的时候，在文件第一行加入当前板块的名词
-		String fileName = getFileName(afterClasspath_filePath);
+		String fileName = getFileName(absolute_path);
 		result = fileName + "\n" + result;
 		
 		System.out.println(result);
@@ -101,21 +99,14 @@ public class TranslateUtil {
 		return !"\";".equals(name);
 	}
 
-	/*private String getWritePath() {
-		String nowDate = DateUtil.getNowDate();
-		String fileName = getFileName();
-		String writePath = Constants.ebkPath  + "/" + nowDate + " " + fileName + ".txt";
-		FileUtil.createFolder(Constants.ebkPath);
-		return writePath;
-	}*/
-	
 	/**
 	 * 返回要翻译的板块名称
 	 * @param file
 	 * @return
 	 */
 	private static String getFileName(String path) {
-		return path.split("/")[2].split("\\.")[0];
+		int lastIndex = path.lastIndexOf("/");
+		return path.substring(lastIndex+1).split("\\.")[0];
 	}
 
 

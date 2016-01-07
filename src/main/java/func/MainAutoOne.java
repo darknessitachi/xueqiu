@@ -19,9 +19,9 @@ public class MainAutoOne {
 		autoOne(Constants.CODE_PATH + "custom" + Constants.ZXG_FILE_NAME);
 	}
 
-	public static void autoOne(String fileName) throws IOException {
+	public static void autoOne(String absolutePath) throws IOException {
 		//先翻译，把翻译的文件写入request_body中
-		TranslateUtil.translate(fileName);
+		TranslateUtil.translate(absolutePath);
 		
 		//再执行查询热度方法
 		long start = new Date().getTime();
