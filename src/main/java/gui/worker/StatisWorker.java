@@ -3,8 +3,8 @@ package gui.worker;
 import java.io.IOException;
 import java.util.List;
 
+import util.core.StatisticUtil;
 import config.Constants;
-import func.MainAutoOne;
 import gui.core.StockFrame;
 
 public class StatisWorker implements Runnable {
@@ -22,7 +22,7 @@ public class StatisWorker implements Runnable {
 		for(String name : names){
 			//获取每个板块的路径
 			try {
-				MainAutoOne.autoOne(name);
+				StatisticUtil.statistic(name);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

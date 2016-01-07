@@ -27,10 +27,10 @@ import config.Constants;
 
 public class ReqLoadImpl implements ReqLoad {
 	
-	private Req req;
+	public Req req;
 	
-	public ReqLoadImpl(Req req) {
-		this.req = req;
+	public ReqLoadImpl() {
+		req = new Req();
 	}
 
 	public void init() {
@@ -278,5 +278,8 @@ public class ReqLoadImpl implements ReqLoad {
 		}
 	}
 
-
+	@Override
+	public Req getReq() {
+		return req;
+	}
 }

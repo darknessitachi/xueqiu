@@ -10,7 +10,6 @@ import func.domain.Req;
 import func.domain.Stock;
 import func.impl.ReqLoadImpl;
 import func.impl.Worker;
-import config.Constants;
 
 public class StockCommand {
 	
@@ -21,47 +20,22 @@ public class StockCommand {
 	private ExecutorService pool = Executors.newFixedThreadPool(4);
 	
 	private ReqLoad load = null;
-	
-	private Req req;
-	
-	private int businessCode;
 
-	public StockCommand(int businessCode) {
+	public StockCommand() {
 		super();
-		this.businessCode = businessCode;
 	}
 
 
 	private void init() throws IOException {
-		req = new Req();
-		
-		switch (businessCode) {
-			case Constants.business_sort:
-				load = new ReqLoadImpl(req);
-				break;
-			case Constants.business_direct:
-				break;
-			default:
-				break;
-		}
-		
+		load = new ReqLoadImpl();
 		load.init();
-		
 	}
 
 	
 	private void send() {
+		Req req = load.getReq();
 		for (Stock stock : req.list) {
-			switch (businessCode) {
-				case Constants.business_sort:
-					pool.execute(new Worker(stock, this.req));
-					break;
-				case Constants.business_single:
-				//	pool.execute(new SinWorker(stock, this.req));
-					break;
-				default:
-					break;
-			}
+			pool.execute(new Worker(stock, req));
 		}
 	}
 

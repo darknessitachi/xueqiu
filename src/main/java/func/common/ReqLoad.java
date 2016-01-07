@@ -2,7 +2,11 @@ package func.common;
 
 import java.io.IOException;
 
+import func.domain.Req;
+
 public interface ReqLoad {
+	
+	public Req getReq();
 	
 	public void init();
 	
