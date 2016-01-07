@@ -13,6 +13,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +37,10 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
 	
+	private static final String lastCustomPrefix = "A9";
+	private static final String groupName = "top";
+	private static final String customPath = "d:/xueqiu/custom";
+	
 	private int window_width = 700;
 	private int window_height = 600;
 	
@@ -43,12 +48,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	private int scroll_height = 370;
 
 	private static final int GridLayoutColumn = 5;
-	
-	private static final String lastCustomPrefix = "A9";
 
 	private boolean isSelectAll = false;
-	
-	private static final String groupName = "top";
 
 	private JPanel jp1 = new JPanel();
 	private JPanel jp2 = new JPanel();
@@ -236,9 +237,18 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	private String addSuffixWithNum(String name, String element) {
-		String path = Constants.classpath + Constants.CODE_PATH + name + "/" + element + ".EBK";
-		int num = FileUtil.readValidLineNum(path);
+	private String addSuffixWithNum(String subpath, String element) {
+		String path = Constants.classpath + Constants.CODE_PATH + subpath + "/" + element + ".EBK";
+		int num = 0;
+		try {
+			num = FileUtil.readValidLineNum(path);
+		} catch (FileNotFoundException e) {
+			try {
+				num = FileUtil.readValidLineNum(customPath+"/"+element+".EBK");
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
+		}
 		String realName = element.substring(2,element.length());
 		if(realName.equals("自选股")){
 			num = num - 5;
@@ -317,7 +327,11 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 		if (names.size() > 0) {
 			for(String name : names){
-				FileUtil.delete(Constants.classpath+name);
+				if(name.contains("custom")){
+					FileUtil.delete(name);
+				}else{
+					FileUtil.delete(Constants.classpath+name);
+				}
 			}
 			refreshCustomPanel();
 		} else {
@@ -355,7 +369,7 @@ public class StockFrame extends JFrame implements ActionListener {
             File[] files = fc.getSelectedFiles();
             for(File file : files){
             	String fileName = addPrefix(file.getName());
-            	FileUtil.copy(Constants.custom_path +"/"+fileName,file);
+            	FileUtil.copy(customPath +"/"+fileName,file);
             }
             refreshCustomPanel();
         }  
@@ -370,7 +384,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		con.validate();
 		
 		con.invalidate(); 
-		this.customContent = FileUtil.getFileFromFolder(Constants.custom_path);
+		this.customContent = FileUtil.getFileFromFolder(customPath);
 		initContentJPanel(jp_custom,this.customContent,"自选","custom");
 		con.validate();
 	}
@@ -475,6 +489,9 @@ public class StockFrame extends JFrame implements ActionListener {
 			if (jb.isSelected()) {
 				String parentName = jb.getParent().getName();
 				String path = Constants.CODE_PATH + parentName + "/" + jb.getName()+".EBK";
+				if(parentName.equals("custom")){
+					path = customPath + "/" + jb.getName()+".EBK";
+				}
 				result.add(path);
 			}
 		}
@@ -484,7 +501,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * content的内容格式是：["A1自选股","A4新股"]，有前缀，没有后缀
 	 */
 	private void initContentData() {
-		this.customContent = FileUtil.getFileFromFolder(Constants.custom_path);
+		this.customContent = FileUtil.getFileFromFolder(customPath);
 		this.conceptContent = FileUtil.getFileFromFolder(Constants.concept_path);
 		this.industryContent = FileUtil.getFileFromFolder(Constants.industry_path);
 	}
