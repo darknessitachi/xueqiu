@@ -21,7 +21,7 @@ import config.Constants;
 
 public class XueqiuUtil {
 	
-	private String cookie = FileUtil.read(Constants.classpath + Constants.REQ_COOKIE_NAME).trim();
+	private String cookie = FileUtil.read(Constants.classpath + Constants.config_path + Constants.req_cookie_name).trim();
 	
 	//格式：code,name
 	private List<String> bodyList = null;
@@ -139,7 +139,7 @@ public class XueqiuUtil {
 		List<String> result = new ArrayList<String>();
 		
 		//从request_body.txt中获取股票代码（request_body中的股票代码已经过滤指数代码），然后添加
-		String reqPath = Constants.classpath + Constants.REQ_BODY_NAME;
+		String reqPath = Constants.classpath + Constants.config_path + Constants.req_body_name;
 
 		BufferedReader br = null;
 		try {
@@ -215,7 +215,7 @@ public class XueqiuUtil {
 	
 	private String getWritePath() {
 		String nowDate = DateUtil.getNowDate();
-		String writePath = Constants.export  + "/" + nowDate + ".EBK";
+		String writePath = Constants.export_path  + "/" + nowDate + ".EBK";
 		return writePath;
 	}
 

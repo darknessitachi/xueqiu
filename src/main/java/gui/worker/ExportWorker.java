@@ -23,7 +23,7 @@ public class ExportWorker implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		frame.displayLabel.setText("下载完成，目录【"+Constants.export+"】");
+		frame.displayLabel.setText("下载完成，目录【"+Constants.export_path+"】");
 	}
 
 }

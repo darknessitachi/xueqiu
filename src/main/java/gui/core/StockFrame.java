@@ -238,7 +238,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	private String addSuffixWithNum(String subpath, String element) {
-		String path = Constants.classpath + Constants.CODE_PATH + subpath + "/" + element + ".EBK";
+		String path = Constants.classpath + Constants.code_path + subpath + "/" + element + ".EBK";
 		int num = 0;
 		try {
 			num = FileUtil.readValidLineNum(path);
@@ -466,8 +466,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		String day = fieldDay.getText();
 		String sleep = fieldSleep.getText();
 
-		String request_head_path = Constants.classpath
-				+ Constants.REQ_HEAD_NAME;
+		String request_head_path = Constants.classpath + Constants.config_path + Constants.req_head_name;
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("#").append("\n");
@@ -488,7 +487,7 @@ public class StockFrame extends JFrame implements ActionListener {
 			JCheckBox jb = group.get(key);
 			if (jb.isSelected()) {
 				String parentName = jb.getParent().getName();
-				String absolutePath = Constants.classpath + Constants.CODE_PATH + parentName + "/" + jb.getName()+".EBK";
+				String absolutePath = Constants.classpath + Constants.code_path + parentName + "/" + jb.getName()+".EBK";
 				if(parentName.equals("custom")){
 					absolutePath = customPath + "/" + jb.getName()+".EBK";
 				}
@@ -502,8 +501,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	 */
 	private void initContentData() {
 		this.customContent = FileUtil.getFileFromFolder(customPath);
-		this.conceptContent = FileUtil.getFileFromFolder(Constants.concept_path);
-		this.industryContent = FileUtil.getFileFromFolder(Constants.industry_path);
+		this.conceptContent = FileUtil.getFileFromFolder(Constants.concept_absolute_path);
+		this.industryContent = FileUtil.getFileFromFolder(Constants.industry_absolute_path);
 	}
 
 }

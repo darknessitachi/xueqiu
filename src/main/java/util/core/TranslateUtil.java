@@ -74,24 +74,8 @@ public class TranslateUtil {
 	}
 
 	private static void writeRequestBody(String result) throws IOException {
-		
-		//写request_body的src路径
-		/*boolean isWrite = false;
-		for(int i=0;i<Constants.request_body_src_path.length;i++){
-			String src_path = Constants.request_body_src_path[i];
-			try {
-				FileUtil.write(src_path,result);
-				isWrite = true;
-			} catch (java.io.FileNotFoundException e) {
-				continue;
-			}
-		}
-		if(!isWrite){
-			System.err.println("request_body在src路径的文件没有写入。");
-		}*/
-		
 		//写request_body的class路径
-		String request_body_target_path = Constants.classpath + Constants.REQ_BODY_NAME;
+		String request_body_target_path = Constants.classpath + Constants.config_path + Constants.req_body_name;
 		FileUtil.write(request_body_target_path,result);
 	}
 

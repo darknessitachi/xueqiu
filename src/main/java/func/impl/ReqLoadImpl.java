@@ -48,7 +48,7 @@ public class ReqLoadImpl implements ReqLoad {
 
 	private void initHead() throws IOException {
 		// 设置请求path的路径
-		String reqPath = Constants.classpath + Constants.REQ_HEAD_NAME;
+		String reqPath = Constants.classpath + Constants.config_path + Constants.req_head_name;
 
 		// 设置请求的股票代码
 		BufferedReader br = null;
@@ -85,7 +85,7 @@ public class ReqLoadImpl implements ReqLoad {
 	
 	private void initBody() throws IOException {
 		// 设置请求path的路径
-		String reqPath = Constants.classpath + Constants.REQ_BODY_NAME;
+		String reqPath = Constants.classpath + Constants.config_path + Constants.req_body_name;
 
 		BufferedReader br = null;
 		try {
@@ -166,7 +166,7 @@ public class ReqLoadImpl implements ReqLoad {
 	
 
 	private void initCookie() {
-		req.cookie = FileUtil.read(Constants.classpath + Constants.REQ_COOKIE_NAME).trim();
+		req.cookie = FileUtil.read(Constants.classpath + Constants.config_path + Constants.req_cookie_name).trim();
 	}
 	
 	
@@ -176,9 +176,8 @@ public class ReqLoadImpl implements ReqLoad {
 			this.combine();
 		}
 		//创建子文件夹
-		String subFolder = Constants.outPath+"/" + DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd);
+		String subFolder = Constants.out_path+"/" + DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd);
 		FileUtil.createFolde(subFolder);
-		
 		
 		String errorMsg = getErrorMsg();
 		String filepath = getWriteFilePath(subFolder,errorMsg);
