@@ -1,9 +1,5 @@
 package util.core;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,16 +14,15 @@ import util.FileUtil;
 import util.HttpUtil;
 import util.StringUtil;
 import config.Constants;
+import func.domain.ReqBody;
+import func.domain.Stock;
 
 public class XueqiuUtil {
 	
 	private String cookie = AccessUtil.readCookie();
 	
-	//格式：code,name
-	private List<String> bodyList = null;
-	
 	//当前雪球list
-	private List<String> list = null;
+	private List<String> xueqiuList = null;
 	
 	/**
 	 * 
@@ -52,7 +47,7 @@ public class XueqiuUtil {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			return list.size();
+			return xueqiuList.size();
 		}
 		return 0;
 	};
@@ -68,14 +63,14 @@ public class XueqiuUtil {
 	}
 	
 	public int uploadFile(String name) throws IOException, InterruptedException {
-		TranslateUtil.translate(name);
-		return uploadBody();
+		ReqBody body = TranslateUtil.translate1(name);
+		return uploadBody(body);
 	}
 
 
 	public void uploadFileToGroup(String groupName, String name) throws IOException, InterruptedException {
-		TranslateUtil.translate(name);
-		uploadBodyToGroup(groupName);
+		ReqBody body = TranslateUtil.translate1(name);
+		uploadBodyToGroup(body,groupName);
 	}
 		
 	/**
@@ -90,7 +85,7 @@ public class XueqiuUtil {
 			e.printStackTrace();
 		}
 		//把之前的分组的股票取消
-		for(String code : list){
+		for(String code : xueqiuList){
 			try {
 				updateStockGroup("", code);
 				Thread.sleep(Constants.XUEQIU_SLEEP);
@@ -116,54 +111,12 @@ public class XueqiuUtil {
 	}
 	
 	
-	private void setBodyList() throws IOException {
-		if(this.bodyList == null){
-			this.bodyList = this.readBody();
-		}
-	}
 	
 	private void setXueqiuList() throws IOException {
-		if(this.list == null){
-			this.list = this.queryAll();
+		if(this.xueqiuList == null){
+			this.xueqiuList = this.queryAll();
 		}
 	}
-
-	/**
-	 * 1、读取body
-	 * 2、股票格式："code,name"
-	 * @return
-	 * @throws IOException 
-	 */
-	private List<String> readBody() throws IOException{
-		
-		List<String> result = new ArrayList<String>();
-		
-		//从request_body.txt中获取股票代码（request_body中的股票代码已经过滤指数代码），然后添加
-		String reqPath = Constants.classpath + Constants.config_path + Constants.req_body_name;
-
-		BufferedReader br = null;
-		try {
-			FileReader fr = new FileReader(new File(reqPath));
-			br = new BufferedReader(fr);
-			String line = null;
-			while ((line = br.readLine()) != null) {
-				line = line.trim();
-				if (line.length() > 0 && !line.startsWith("#") &&line.contains(",")) {
-					String code = line.split(",")[0];
-					String name = line.split(",")[1];
-					result.add(code+","+name);
-				}
-			}
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} finally {
-			br.close();
-		}
-		
-		return result;
-	}
-	
 	
 	private void delStock(String code) throws IOException {
 		Map<String,Object> params = new HashMap<String,Object>();
@@ -219,25 +172,22 @@ public class XueqiuUtil {
 		return writePath;
 	}
 
-
-	
-
 	/**
 	 * 把当前body中的股票导入雪球自选股中
+	 * @param body 
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private int uploadBody() throws  IOException, InterruptedException {
+	private int uploadBody(ReqBody body) throws  IOException, InterruptedException {
 		
 		setXueqiuList();
-		setBodyList();
 		
 		int num = 0;
-		for(String str : bodyList){
-			String code = str.split(",")[0];
-			String name = str.split(",")[1];
+		for(Stock stock : body.list){
+			String code = stock.code;
+			String name = stock.name;
 			//如果不在自选股中，则添加
-			if(!list.contains(code)){
+			if(!xueqiuList.contains(code)){
 				addStock(code,name);
 				num++;
 			}
@@ -249,21 +199,20 @@ public class XueqiuUtil {
 	
 	/**
 	 * 把当前body中的股票导入雪球自选股的分组中
+	 * @param body 
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private void uploadBodyToGroup(String groupName) throws IOException, InterruptedException {
+	private void uploadBodyToGroup(ReqBody body, String groupName) throws IOException, InterruptedException {
 		//先添加股票
-		uploadBody();
+		uploadBody(body);
 		//添加股票到分组
-		for(String str : bodyList){
-			String code = str.split(",")[0];
+		for(Stock stock : body.list){
+			String code = stock.code;
 			updateStockGroup(groupName, code);
 			Thread.sleep(Constants.XUEQIU_SLEEP);
 		}
-		System.out.println("添加分组完成，分组【"+groupName+"】一共添加了【"+bodyList.size()+"】只股票，总共【"+list.size()+"】只股票。");
+		System.out.println("添加分组完成，分组【"+groupName+"】一共添加了【"+body.list.size()+"】只股票，总共【"+xueqiuList.size()+"】只股票。");
 	}
-	
-
 
 }

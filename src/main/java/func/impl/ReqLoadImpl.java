@@ -1,10 +1,7 @@
 package func.impl;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +20,6 @@ import util.core.AccessUtil;
 import config.Constants;
 import func.domain.Entity;
 import func.domain.Req;
-import func.domain.ReqHead;
 import func.domain.Stock;
 import func.inter.ReqLoad;
 
@@ -31,9 +27,8 @@ public class ReqLoadImpl implements ReqLoad {
 	
 	public Req req;
 	
-	public ReqLoadImpl(ReqHead head) {
-		req = new Req();
-		req.head = head;
+	public ReqLoadImpl(Req req) {
+		this.req = req;
 	}
 
 	public void init() {
@@ -52,33 +47,7 @@ public class ReqLoadImpl implements ReqLoad {
 	}
 	
 	private void initBody() throws IOException {
-		// 设置请求path的路径
-		String reqPath = Constants.classpath + Constants.config_path + Constants.req_body_name;
-
-		BufferedReader br = null;
-		try {
-			FileReader fr = new FileReader(new File(reqPath));
-			br = new BufferedReader(fr);
-			String line = null;
-			int number = 0;
-			while ((line = br.readLine()) != null) {
-				line = line.trim();
-				if (line.length() > 0 && !line.startsWith("#")) {
-					if (number == 0) {
-						initBodyName(line);
-					} else {
-						initReqStock(line);
-					}
-				}
-				number++;
-			}
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} finally {
-			br.close();
-		}
-		
+		initBodyName(req.body.bodyName);
 	}
 	
 	private void initBodyName(String line) {
@@ -86,7 +55,7 @@ public class ReqLoadImpl implements ReqLoad {
 			System.err.println("request_body文件第一行没有要查询的板块名称。");
 			initReqStock(line);
 		}else{
-			req.bodyName = line;
+			req.body.bodyName = line;
 		}
 	}
 
@@ -104,7 +73,7 @@ public class ReqLoadImpl implements ReqLoad {
 	
 	private void initReqStock(String line) {
 		String[] array = line.split(",");
-		req.list.add(new Stock(array[0], array[1]));
+		req.body.list.add(new Stock(array[0], array[1]));
 	}
 	
 
@@ -132,7 +101,7 @@ public class ReqLoadImpl implements ReqLoad {
 		//打印请求错误的股票名
 		outMsg(errorMsg+"\n",bw);
 		
-		outMsg("【"+getCodeShowName(req.bodyName)+"】板块的股票总数为【"+req.list.size()+"】个 \n",bw);
+		outMsg("【"+getCodeShowName(req.body.bodyName)+"】板块的股票总数为【"+req.body.list.size()+"】个 \n",bw);
 		//遍历打印
 		for (String title : req.mapKey) {
 			
@@ -167,7 +136,7 @@ public class ReqLoadImpl implements ReqLoad {
 	 */
 	private String getErrorMsg() {
 		StringBuilder sb = new StringBuilder();
-		for(Stock s : req.list){
+		for(Stock s : req.body.list){
 			if(s.isError){
 				sb.append("【").append(s.name).append("】");
 			}
@@ -178,7 +147,7 @@ public class ReqLoadImpl implements ReqLoad {
 	private List<Entity> getSortListByKey(String key) {
 		//把结果封装在Entity，然后根据number排序
 		List<Entity> sortList = new ArrayList<Entity>();
-		for (Stock stock : req.list) {
+		for (Stock stock : req.body.list) {
 			sortList.add(new Entity(stock.name,stock.map.get(key) == null ? 0 : stock.map.get(key),stock));
 		}
 		//排序
@@ -197,7 +166,7 @@ public class ReqLoadImpl implements ReqLoad {
 		
 		String nowDate = DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd_HHmmss);
 		nowDate = nowDate.replace(":", "：");
-		String fileName = nowDate + StringUtil.number2word((req.mapKey.size()-1))+"天个股热度（"+getCodeShowName(req.bodyName)+prefix+"）.txt";
+		String fileName = nowDate + StringUtil.number2word((req.mapKey.size()-1))+"天个股热度（"+getCodeShowName(req.body.bodyName)+prefix+"）.txt";
 		return subFolder + "/"  + fileName ;
 	}
 
@@ -205,7 +174,7 @@ public class ReqLoadImpl implements ReqLoad {
 		String combineName = req.mapKey.size() + "天内";
 		req.mapKey.add(combineName);
 		// 遍历股票，计算每一只股票所有周期的合计
-		for (Stock stock : req.list) {
+		for (Stock stock : req.body.list) {
 			Set<String> keys = stock.map.keySet();
 			int total = 0;
 			for (String key : keys) {

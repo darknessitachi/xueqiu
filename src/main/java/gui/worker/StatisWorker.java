@@ -1,12 +1,13 @@
 package gui.worker;
 
+import func.domain.ReqHead;
+import gui.core.StockFrame;
+
 import java.io.IOException;
 import java.util.List;
 
 import util.core.StatisticUtil;
 import config.Constants;
-import func.domain.ReqHead;
-import gui.core.StockFrame;
 
 public class StatisWorker implements Runnable {
 

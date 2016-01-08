@@ -7,7 +7,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import func.domain.Req;
-import func.domain.ReqHead;
 import func.domain.Stock;
 import func.impl.ReqLoadImpl;
 import func.impl.Worker;
@@ -22,9 +21,9 @@ public class StockCommand {
 	
 	private ReqLoad load = null;
 
-	public StockCommand(ReqHead head) {
+	public StockCommand(Req req) {
 		super();
-		load = new ReqLoadImpl(head);
+		load = new ReqLoadImpl(req);
 	}
 
 
@@ -34,7 +33,7 @@ public class StockCommand {
 	
 	private void send() {
 		Req req = load.getReq();
-		for (Stock stock : req.list) {
+		for (Stock stock : req.body.list) {
 			pool.execute(new Worker(stock, req));
 		}
 	}
