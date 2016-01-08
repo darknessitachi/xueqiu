@@ -4,18 +4,12 @@ import java.io.IOException;
 import java.util.Date;
 
 import func.domain.Req;
-import func.domain.ReqBody;
-import func.domain.ReqHead;
 import func.inter.StockCommand;
 
 public class StatisticUtil {
 	
 
-	public static void statistic(ReqHead head, String absolutePath) throws IOException {
-		Req req = new Req();
-		ReqBody body = TranslateUtil.translate1(absolutePath);
-		req.body = body;
-		req.head = head;
+	public static void statistic(Req req, String absolutePath) throws IOException {
 		//再执行查询热度方法
 		long start = new Date().getTime();
 		StockCommand c = new StockCommand(req);

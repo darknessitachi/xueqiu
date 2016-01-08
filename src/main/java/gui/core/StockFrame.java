@@ -426,7 +426,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		List<String> names = getSelectNames();
 		if (names.size() > 0) {
 			displayLabel.setText("正在执行统计……");
-			ReqHead head = writeRequestHead();
+			ReqHead head = getReqHead();
 			new Thread(new StatisWorker(head,names, this)).start();
 		} else {
 			displayLabel.setText("请选择要统计的板块。");
@@ -462,25 +462,12 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 	}
 	
-	private ReqHead writeRequestHead() throws IOException {
+	private ReqHead getReqHead() throws IOException {
 
-		String day = fieldDay.getText();
-		String sleep = fieldSleep.getText();
-
-		/*String request_head_path = Constants.classpath + Constants.config_path + Constants.req_head_name;
-
-		StringBuilder sb = new StringBuilder();
-		sb.append("#").append("\n");
-		sb.append("day=" + day).append("\n");
-		sb.append("combine=true").append("\n");
-		sb.append("sleep=" + sleep).append("\n");
-		sb.append("filterNotice=true").append("\n");
-
-		FileUtil.write(request_head_path, sb.toString());*/
-		
 		ReqHead head = new ReqHead();
-		head.day = Integer.parseInt(day);
-		head.sleep = Integer.parseInt(sleep);
+		head.day = Integer.parseInt(fieldDay.getText());
+		head.sleep = Integer.parseInt(fieldSleep.getText());
+		
 		return head;
 	}
 	/**

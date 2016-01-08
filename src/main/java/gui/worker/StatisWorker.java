@@ -1,5 +1,6 @@
 package gui.worker;
 
+import func.domain.Req;
 import func.domain.ReqHead;
 import gui.core.StockFrame;
 
@@ -7,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 import util.core.StatisticUtil;
+import util.core.TranslateUtil;
 import config.Constants;
 
 public class StatisWorker implements Runnable {
@@ -26,7 +28,10 @@ public class StatisWorker implements Runnable {
 		for(String name : names){
 			//获取每个板块的路径
 			try {
-				StatisticUtil.statistic(head,name);
+				Req req = new Req();
+				req.body = TranslateUtil.translate1(name);
+				req.head = this.head;
+				StatisticUtil.statistic(req,name);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
