@@ -19,7 +19,7 @@ public class TranslateUtil {
 	 * @param absolute_path
 	 * @throws IOException
 	 */
-	public static ReqBody translate1(String absolute_path) throws IOException {
+	public static ReqBody translate(String absolute_path) throws IOException {
 		
 		ReqBody body = new ReqBody();
 		body.bodyName = getFileName(absolute_path);

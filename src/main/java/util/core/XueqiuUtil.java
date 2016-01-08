@@ -63,13 +63,13 @@ public class XueqiuUtil {
 	}
 	
 	public int uploadFile(String name) throws IOException, InterruptedException {
-		ReqBody body = TranslateUtil.translate1(name);
+		ReqBody body = TranslateUtil.translate(name);
 		return uploadBody(body);
 	}
 
 
 	public void uploadFileToGroup(String groupName, String name) throws IOException, InterruptedException {
-		ReqBody body = TranslateUtil.translate1(name);
+		ReqBody body = TranslateUtil.translate(name);
 		uploadBodyToGroup(body,groupName);
 	}
 		

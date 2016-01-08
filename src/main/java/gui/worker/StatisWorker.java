@@ -29,7 +29,7 @@ public class StatisWorker implements Runnable {
 			//获取每个板块的路径
 			try {
 				Req req = new Req();
-				req.body = TranslateUtil.translate1(name);
+				req.body = TranslateUtil.translate(name);
 				req.head = this.head;
 				StatisticUtil.statistic(req,name);
 			} catch (IOException e1) {
