@@ -20,24 +20,22 @@ public class FileUtil {
 	 * 
 	 * @param path
 	 * @return
+	 * @throws FileNotFoundException 
 	 */
-	public static String read(String path) {
+	public static String read(String path) throws FileNotFoundException {
 		StringBuffer result = new StringBuffer();
-		BufferedReader br = null;
+		FileReader fr = new FileReader(new File(path));
+		BufferedReader br = new BufferedReader(fr);
+		String line = null;
 		try {
-			FileReader fr = new FileReader(new File(path));
-			br = new BufferedReader(fr);
-			String line = null;
 			while ((line = br.readLine()) != null) {
 				if (!StringUtil.isEmpty(line)) {
 					result.append(line);
 				}
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
+		}finally{
 			try {
 				br.close();
 			} catch (IOException e) {
