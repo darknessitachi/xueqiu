@@ -41,6 +41,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private static final String lastCustomPrefix = "A9";
 	private static final String groupName = "top";
 	private static final String customPath = "d:/xueqiu/custom";
+	private static final int custom_index_count = 4;
 	
 	private int window_width = 700;
 	private int window_height = 600;
@@ -252,7 +253,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 		String realName = element.substring(2,element.length());
 		if(realName.equals("自选股")){
-			num = num - 5;
+			num = num - custom_index_count;
 		}
 		return  realName + "（"+num+"）";
 	}
