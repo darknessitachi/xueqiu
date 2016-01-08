@@ -9,7 +9,7 @@ import func.inter.StockCommand;
 public class StatisticUtil {
 	
 
-	public static void statistic(Req req, String absolutePath) throws IOException {
+	public static void statistic(Req req) throws IOException {
 		//再执行查询热度方法
 		long start = new Date().getTime();
 		StockCommand c = new StockCommand(req);

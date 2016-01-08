@@ -31,7 +31,7 @@ public class StatisWorker implements Runnable {
 				Req req = new Req();
 				req.body = TranslateUtil.translate(name);
 				req.head = this.head;
-				StatisticUtil.statistic(req,name);
+				StatisticUtil.statistic(req);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
