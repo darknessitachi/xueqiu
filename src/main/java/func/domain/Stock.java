@@ -10,7 +10,7 @@ public class Stock {
 	public String name;
 	
 	//2015-10-20=20,2015-10-21=12
-	public Map<String,Integer> map = new HashMap<String, Integer>();
+	public Map<String,Integer> result = new HashMap<String, Integer>();
 	
 	//请求是否出错
 	public boolean isError = false;

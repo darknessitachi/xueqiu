@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import util.Constants;
 import util.HttpUtil;
-import func.domain.ReqBody;
+import func.domain.Req.ReqBody;
 import func.domain.Stock;
 
 public class TranslateUtil {

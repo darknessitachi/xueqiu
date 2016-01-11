@@ -80,9 +80,9 @@ public class Worker implements Runnable{
 				if(isNotice && req.head.filterNotice){
 					continue;
 				}else{
-					Integer srcNum = stock.map.get(createDate);
+					Integer srcNum = stock.result.get(createDate);
 					srcNum = srcNum == null ? 0 : srcNum;
-					stock.map.put(createDate, srcNum+1);
+					stock.result.put(createDate, srcNum+1);
 				}
 			}else if(resultCode == 3){
 				return true;

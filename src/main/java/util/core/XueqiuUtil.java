@@ -15,7 +15,7 @@ import util.FileUtil;
 import util.HttpUtil;
 import util.ProjectUtil;
 import util.StringUtil;
-import func.domain.ReqBody;
+import func.domain.Req.ReqBody;
 import func.domain.Stock;
 
 public class XueqiuUtil {

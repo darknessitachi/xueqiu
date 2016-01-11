@@ -148,7 +148,7 @@ public class ReqLoadImpl implements ReqLoad {
 		//把结果封装在Entity，然后根据number排序
 		List<Entity> sortList = new ArrayList<Entity>();
 		for (Stock stock : req.body.list) {
-			sortList.add(new Entity(stock.name,stock.map.get(key) == null ? 0 : stock.map.get(key),stock));
+			sortList.add(new Entity(stock.name,stock.result.get(key) == null ? 0 : stock.result.get(key),stock));
 		}
 		//排序
 		ComparatorEntity comparator = new ComparatorEntity();
@@ -175,12 +175,12 @@ public class ReqLoadImpl implements ReqLoad {
 		req.mapKey.add(combineName);
 		// 遍历股票，计算每一只股票所有周期的合计
 		for (Stock stock : req.body.list) {
-			Set<String> keys = stock.map.keySet();
+			Set<String> keys = stock.result.keySet();
 			int total = 0;
 			for (String key : keys) {
-				total = total + stock.map.get(key);
+				total = total + stock.result.get(key);
 			}
-			stock.map.put(combineName, total);
+			stock.result.put(combineName, total);
 		}
 	}
 
