@@ -3,9 +3,9 @@ package util.core;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import util.Constants;
 import util.FileUtil;
 import util.ProjectUtil;
-import config.Constants;
 
 
 public class AccessUtil {

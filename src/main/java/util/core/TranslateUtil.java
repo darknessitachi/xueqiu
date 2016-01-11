@@ -6,8 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import util.Constants;
 import util.HttpUtil;
-import config.Constants;
 import func.domain.ReqBody;
 import func.domain.Stock;
 

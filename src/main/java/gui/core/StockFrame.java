@@ -30,9 +30,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import util.Constants;
 import util.FileUtil;
 import util.ProjectUtil;
-import config.Constants;
 
 public class StockFrame extends JFrame implements ActionListener {
 	

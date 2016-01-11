@@ -7,9 +7,9 @@ import gui.core.StockFrame;
 import java.io.IOException;
 import java.util.List;
 
+import util.Constants;
 import util.core.StatisticUtil;
 import util.core.TranslateUtil;
-import config.Constants;
 
 public class StatisWorker implements Runnable {
 
