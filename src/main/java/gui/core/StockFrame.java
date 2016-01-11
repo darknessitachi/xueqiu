@@ -40,7 +40,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private static final String lastCustomPrefix = "A9";
 	private static final String groupName = "top";
-	
 	private static final int custom_index_count = 4;
 	
 	private int window_width = 700;
