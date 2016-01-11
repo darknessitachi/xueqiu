@@ -1,6 +1,5 @@
 package util;
 
-import javax.swing.filechooser.FileSystemView;
 
 public class StringUtil {
 
@@ -74,14 +73,6 @@ public class StringUtil {
 			return "1"+code;
 		}
 		return "0"+code;
-	}
-	/**
-	 * 获取电脑桌面绝对路径
-	 * @return
-	 */
-	public static String getComputerHomeDir() {
-		FileSystemView fsv = FileSystemView.getFileSystemView();
-		return fsv.getHomeDirectory().getAbsolutePath();
 	}
 
 }

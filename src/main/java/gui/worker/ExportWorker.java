@@ -4,8 +4,8 @@ import gui.core.StockFrame;
 
 import java.io.IOException;
 
+import util.ProjectUtil;
 import util.core.XueqiuUtil;
-import config.Constants;
 
 public class ExportWorker implements Runnable {
 
@@ -23,7 +23,7 @@ public class ExportWorker implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		frame.displayLabel.setText("下载完成，目录【"+Constants.export_path+"】");
+		frame.displayLabel.setText("下载完成，目录【"+ProjectUtil.getComputerHomeDir()+"】");
 	}
 
 }

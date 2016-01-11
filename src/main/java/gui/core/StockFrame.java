@@ -31,7 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import util.FileUtil;
-import util.StringUtil;
+import util.ProjectUtil;
 import config.Constants;
 
 public class StockFrame extends JFrame implements ActionListener {
@@ -344,7 +344,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private void performChoose() {
 		
-		String path = StringUtil.getComputerHomeDir();
+		String path = ProjectUtil.getComputerHomeDir();
 		
 		JFileChooser fc = new JFileChooser(path);  
         //是否可多选  

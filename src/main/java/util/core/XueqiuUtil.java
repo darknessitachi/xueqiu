@@ -12,6 +12,7 @@ import net.sf.json.JSONObject;
 import util.DateUtil;
 import util.FileUtil;
 import util.HttpUtil;
+import util.ProjectUtil;
 import util.StringUtil;
 import config.Constants;
 import func.domain.ReqBody;
@@ -168,7 +169,7 @@ public class XueqiuUtil {
 	
 	private String getWritePath() {
 		String nowDate = DateUtil.getNowDate();
-		String writePath = Constants.export_path  + "/" + nowDate + ".EBK";
+		String writePath = ProjectUtil.getComputerHomeDir()  + "/" + nowDate + ".EBK";
 		return writePath;
 	}
 

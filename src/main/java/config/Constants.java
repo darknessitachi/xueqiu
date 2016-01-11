@@ -1,11 +1,10 @@
 package config;
 
-import util.StringUtil;
 
 
 public class Constants {
 	
-	public static final String classpath = Constants.class.getClassLoader().getResource("").getPath();
+	//public static final String classpath = Constants.class.getClassLoader().getResource("").getPath();
 	
 	public static final String code_path = "code/";
 	public static final String config_path = "config/";
@@ -23,7 +22,7 @@ public class Constants {
 	public static final String out_concept_path  =  "d:/xueqiu/code/concept";
 	public static final String out_industry_path =  "d:/xueqiu/code/industry";
 	
-	public static final String export_path = StringUtil.getComputerHomeDir();
+	//public static final String export_path = StringUtil.getComputerHomeDir();
 	
 	public static final String referer_prefix = "http://xueqiu.com/S/";
 	public static final String inter_url = "http://hq.sinajs.cn/list=";
