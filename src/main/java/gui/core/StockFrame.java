@@ -343,7 +343,11 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private void performChoose() {
 		
-		String path = ProjectUtil.getComputerHomeDir();
+		String path = getHistoryPath();
+		System.out.println(path);
+		if(path == null){
+			path = ProjectUtil.getComputerHomeDir();
+		}
 		
 		JFileChooser fc = new JFileChooser(path);  
         //是否可多选  
@@ -362,10 +366,28 @@ public class StockFrame extends JFrame implements ActionListener {
             File[] files = fc.getSelectedFiles();
             for(File file : files){
             	String fileName = addPrefix(file.getName());
+            	//System.out.println(file.getAbsolutePath());
             	FileUtil.copy(Constants.out_custom_path +"/"+fileName,file);
             }
             refreshCustomPanel();
         }  
+	}
+	/**
+	 * 获取最近打开的目录，config/temp.txt
+	 * @return
+	 */
+	private String getHistoryPath() {
+		String temp_path = Constants.out_config_path+"/"+Constants.temp_name;
+		File file = new File(temp_path);
+		System.out.println(file.exists());
+		if(file.exists()){
+			try {
+				return FileUtil.read(temp_path);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 
 	private void refreshCustomPanel() {

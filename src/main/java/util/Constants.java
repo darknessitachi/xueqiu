@@ -8,6 +8,7 @@ public class Constants {
 	public static final String config_path = "config/";
 	
 	public static final String req_cookie_name = "cookie.txt";
+	public static final String temp_name = "temp.txt";
 	
 	public static final String out_path          =  "d:/xueqiu/";
 	public static final String out_result_path   =  "d:/xueqiu/result";
