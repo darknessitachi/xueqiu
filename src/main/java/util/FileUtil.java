@@ -139,4 +139,15 @@ public class FileUtil {
 		}
 		return num;
 	}
+	
+	public static void createNewFile(String file_path) {
+		File f = new File(file_path);
+		if (!f.exists()) {
+			try {
+				f.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

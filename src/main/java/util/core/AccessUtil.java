@@ -16,6 +16,7 @@ public class AccessUtil {
 		} catch (FileNotFoundException e) {
 			//把classpath中的cookie拷贝到out_config_path
 			File oldfile = new File(Constants.classpath + Constants.config_path + Constants.req_cookie_name);
+			FileUtil.createFolde(Constants.out_config_path);
 			FileUtil.copy(cookie_path, oldfile);
 			try {
 				cookie = FileUtil.read(cookie_path).trim();
