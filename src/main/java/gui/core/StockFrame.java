@@ -40,7 +40,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private static final String lastCustomPrefix = "A9";
 	private static final String groupName = "top";
-	private static final String customPath = "d:/xueqiu/custom";
+	
 	private static final int custom_index_count = 4;
 	
 	private int window_width = 700;
@@ -240,16 +240,12 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	private String addSuffixWithNum(String subpath, String element) {
-		String path = Constants.classpath + Constants.code_path + subpath + "/" + element + ".EBK";
+		String path = Constants.out_path + Constants.code_path + subpath + "/" + element + ".EBK";
 		int num = 0;
 		try {
 			num = FileUtil.readValidLineNum(path);
 		} catch (FileNotFoundException e) {
-			try {
-				num = FileUtil.readValidLineNum(customPath+"/"+element+".EBK");
-			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
-			}
+			e.printStackTrace();
 		}
 		String realName = element.substring(2,element.length());
 		if(realName.equals("自选股")){
@@ -329,11 +325,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 		if (names.size() > 0) {
 			for(String name : names){
-				if(name.contains("custom")){
-					FileUtil.delete(name);
-				}else{
-					FileUtil.delete(Constants.classpath+name);
-				}
+				FileUtil.delete(name);
 			}
 			refreshCustomPanel();
 		} else {
@@ -371,7 +363,7 @@ public class StockFrame extends JFrame implements ActionListener {
             File[] files = fc.getSelectedFiles();
             for(File file : files){
             	String fileName = addPrefix(file.getName());
-            	FileUtil.copy(customPath +"/"+fileName,file);
+            	FileUtil.copy(Constants.out_custom_path +"/"+fileName,file);
             }
             refreshCustomPanel();
         }  
@@ -386,7 +378,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		con.validate();
 		
 		con.invalidate(); 
-		this.customContent = FileUtil.getFileFromFolder(customPath);
+		this.customContent = FileUtil.getFileFromFolder(Constants.out_custom_path);
 		initContentJPanel(jp_custom,this.customContent,"自选","custom");
 		con.validate();
 	}
@@ -394,7 +386,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void delCustomGroup() {
 		for(String str : customContent){
 			group.remove(str.substring(2));
-			//System.out.println("删除key:"+jb);
 		}
 	}
 	/**
@@ -481,10 +472,7 @@ public class StockFrame extends JFrame implements ActionListener {
 			JCheckBox jb = group.get(key);
 			if (jb.isSelected()) {
 				String parentName = jb.getParent().getName();
-				String absolutePath = Constants.classpath + Constants.code_path + parentName + "/" + jb.getName()+".EBK";
-				if(parentName.equals("custom")){
-					absolutePath = customPath + "/" + jb.getName()+".EBK";
-				}
+				String absolutePath = Constants.out_path + Constants.code_path + parentName + "/" + jb.getName()+".EBK";
 				result.add(absolutePath);
 			}
 		}
@@ -494,9 +482,9 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * content的内容格式是：["A1自选股","A4新股"]，有前缀，没有后缀
 	 */
 	private void initContentData() {
-		this.customContent = FileUtil.getFileFromFolder(customPath);
-		this.conceptContent = FileUtil.getFileFromFolder(Constants.concept_absolute_path);
-		this.industryContent = FileUtil.getFileFromFolder(Constants.industry_absolute_path);
+		this.customContent = FileUtil.getFileFromFolder(Constants.out_custom_path);
+		this.conceptContent = FileUtil.getFileFromFolder(Constants.out_concept_path);
+		this.industryContent = FileUtil.getFileFromFolder(Constants.out_industry_path);
 	}
 
 }
