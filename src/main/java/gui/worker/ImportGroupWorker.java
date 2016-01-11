@@ -7,13 +7,13 @@ import java.util.List;
 
 import util.core.XueqiuUtil;
 
-public class ImportWorkerGroup implements Runnable {
+public class ImportGroupWorker implements Runnable {
 
 	private List<String> names;
 	private StockFrame frame;
 	private String groupName;
 
-	public ImportWorkerGroup(List<String> names, String groupName, StockFrame frame) {
+	public ImportGroupWorker(List<String> names, String groupName, StockFrame frame) {
 		this.names = names;
 		this.groupName = groupName;
 		this.frame = frame;

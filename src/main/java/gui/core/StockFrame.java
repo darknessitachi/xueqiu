@@ -3,7 +3,7 @@ package gui.core;
 import func.domain.Req.ReqHead;
 import gui.worker.ExportWorker;
 import gui.worker.ImportWorker;
-import gui.worker.ImportWorkerGroup;
+import gui.worker.ImportGroupWorker;
 import gui.worker.StatisWorker;
 
 import java.awt.BorderLayout;
@@ -306,7 +306,7 @@ public class StockFrame extends JFrame implements ActionListener {
 			displayLabel.setText("正在执行上传分组……");
 			
 			String groupName = fieldGroupName.getText();
-			new Thread(new ImportWorkerGroup(names,groupName, this)).start();
+			new Thread(new ImportGroupWorker(names,groupName, this)).start();
 		} else {
 			displayLabel.setText("请选择要上传的板块。");
 		}
