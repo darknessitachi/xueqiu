@@ -344,7 +344,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void performChoose() {
 		
 		String path = getHistoryPath();
-		System.out.println(path);
 		if(path == null){
 			path = ProjectUtil.getComputerHomeDir();
 		}
@@ -379,7 +378,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	private String getHistoryPath() {
 		String temp_path = Constants.out_config_path+"/"+Constants.temp_name;
 		File file = new File(temp_path);
-		System.out.println(file.exists());
 		if(file.exists()){
 			try {
 				return FileUtil.read(temp_path);
