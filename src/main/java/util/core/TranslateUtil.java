@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import util.Constants;
 import util.HttpUtil;
+import util.ProjectUtil;
 import func.domain.Req.ReqBody;
 import func.domain.Stock;
 
@@ -91,7 +92,7 @@ public class TranslateUtil {
 	 */
 	private static String completeCode(String code) {
 		//过滤掉指数
-		if(isStockIndex(code)){
+		if(ProjectUtil.isStockIndex(code)){
 			return null;
 		};
 		
@@ -102,14 +103,5 @@ public class TranslateUtil {
 		}
 	}
 
-	private static boolean isStockIndex(String code) {
-		String prefix = code.substring(1,4);
-		for(String element:Constants.stockIndex){
-			if(element.equals(prefix)){
-				return true;
-			}
-		}
-		return false;
-	}
 	
 }

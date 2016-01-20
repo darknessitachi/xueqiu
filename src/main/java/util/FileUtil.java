@@ -117,7 +117,7 @@ public class FileUtil {
 		return flag;
 	}
 
-	public static int readValidLineNum(String path) throws FileNotFoundException {
+	public static int readValidLineNum(String path, boolean filterIndex) throws FileNotFoundException {
 		int num = 0;
 		FileReader fr = new FileReader(new File(path));
 		BufferedReader br = new BufferedReader(fr);
@@ -125,7 +125,13 @@ public class FileUtil {
 		try {
 			while ((line = br.readLine()) != null) {
 				if (!StringUtil.isEmpty(line)) {
-					num++;
+					if(filterIndex){
+						if(!ProjectUtil.isStockIndex(line)){
+							num++;
+						}
+					}else{
+						num++;
+					}
 				}
 			}
 		} catch (IOException e) {

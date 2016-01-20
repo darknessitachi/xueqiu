@@ -23,5 +23,16 @@ public class ProjectUtil {
 	public static void main(String[] args) {
 		System.out.println(getClasspath());
 	}
+	
+	
+	public static boolean isStockIndex(String code) {
+		String prefix = code.substring(1,4);
+		for(String element:Constants.stockIndex){
+			if(element.equals(prefix)){
+				return true;
+			}
+		}
+		return false;
+	}
 
 }
