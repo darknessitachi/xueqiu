@@ -8,7 +8,7 @@ import net.sf.json.JSONObject;
 import util.Constants;
 import util.DateUtil;
 import util.HttpUtil;
-import util.ProjectUtil;
+import util.core.ProjectUtil;
 import func.domain.Req;
 import func.domain.Stock;
 
@@ -32,7 +32,7 @@ public class Worker implements Runnable{
 			if(result != null){
 				boolean isFinish = calculate(result,stock);
 				if(isFinish){
-					System.out.println("【"+stock.name+"】已完成请求。");
+					System.out.println("【"+stock.name+"】已完成请求，一共请求【"+page+"】页。");
 					break;
 				}
 				page++;
@@ -51,7 +51,7 @@ public class Worker implements Runnable{
 		} catch (IOException e1) {
 			//stock.isError = true;
 			System.err.println("【"+stock.name+"】，正在请求第【"+page+"】页，请求过于频繁。");
-			req.head.errWaitTime = req.head.errWaitTime + 1;
+			req.head.errWaitTime = req.head.errWaitTime + req.head.addTime;
 			try {
 				Thread.sleep(req.head.errWaitTime*1000);
 			} catch (InterruptedException e) {
@@ -68,7 +68,7 @@ public class Worker implements Runnable{
 		//每次请求完开始下一次请求的时候，睡眠一段时间
 		if(req.head.sleep != 0){
 			try {
-				Thread.sleep(req.head.sleep*1000);
+				Thread.sleep(req.head.sleep);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

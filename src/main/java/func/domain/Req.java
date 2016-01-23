@@ -24,6 +24,7 @@ public class Req {
 		public int sleep = 1000;
 		public int threadNum = 1;
 		public int errWaitTime = 38;
+		public int addTime = 5;
 		
 	}
 	public static class ReqBody{

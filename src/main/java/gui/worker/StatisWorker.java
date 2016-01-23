@@ -37,6 +37,7 @@ public class StatisWorker implements Runnable {
 			}
 		}
 		frameFirst.displayLabel.setText("统计完成，输出目录【"+Constants.out_result_path+"】");
+		
 	}
 
 }

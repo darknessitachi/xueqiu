@@ -1,9 +1,10 @@
-package util;
+package util.core;
 
 import java.util.Date;
 
 import javax.swing.filechooser.FileSystemView;
 
+import util.Constants;
 import func.domain.Stock;
 
 

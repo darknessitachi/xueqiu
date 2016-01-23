@@ -33,9 +33,9 @@ import javax.swing.JTextField;
 
 import util.Constants;
 import util.FileUtil;
-import util.ProjectUtil;
 import util.StringUtil;
 import util.core.AccessUtil;
+import util.core.ProjectUtil;
 
 public class StockFrame extends JFrame implements ActionListener {
 
@@ -539,6 +539,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		head.sleep = Integer.parseInt(field_sleep.getText());
 		head.threadNum = Integer.parseInt(field_thread.getText());
 		head.errWaitTime = Integer.parseInt(field_waitTime.getText());
+		head.addTime = Integer.parseInt(field_addTime.getText());
 		
 		return head;
 	}
