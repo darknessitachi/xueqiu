@@ -8,9 +8,9 @@ import net.sf.json.JSONObject;
 import util.Constants;
 import util.DateUtil;
 import util.HttpUtil;
+import util.ProjectUtil;
 import func.domain.Req;
 import func.domain.Stock;
-import func.inter.StockCommand;
 
 public class Worker implements Runnable{
 
@@ -24,21 +24,14 @@ public class Worker implements Runnable{
 	public void run() {
 		int page = 1;
 		while(true){
-			String url = HttpUtil.getSearchUrl(stock,page);
-			String result = null;
-			try {
-				//System.out.println("开始请求【"+stock.name+"】第【"+page+"】页。");
-				result = HttpUtil.getResult(url,req.cookie,Constants.referer_prefix+stock.code);
-			} catch (IOException e1) {
-				stock.isError = true;
-				StockCommand.isError.set(true);
-				System.err.println("【"+stock.name+"】，请求过于频繁正在请求第【"+page+"】页。");
-			}
+			
+			everySleep();
+			String result = getResult(page);
+			
 			//对于返回的结果进行加工
 			if(result != null){
 				boolean isFinish = calculate(result,stock);
 				if(isFinish){
-					//int num = StockCommand.number.incrementAndGet();
 					System.out.println("【"+stock.name+"】已完成请求。");
 					break;
 				}
@@ -46,19 +39,41 @@ public class Worker implements Runnable{
 			}else{
 				break;
 			}
-			//每次请求完开始下一次请求的时候，睡眠一段时间
-			if(req.head.sleep != 0){
-				try {
-					Thread.sleep(req.head.sleep);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			
 		}
 	}
 	
 	
+	private String getResult(int page) {
+		String result = null;
+		String url = ProjectUtil.getSearchUrl(stock,page);
+		try {
+			result = HttpUtil.getResult(url,req.cookie,Constants.referer_prefix+stock.code);
+		} catch (IOException e1) {
+			//stock.isError = true;
+			System.err.println("【"+stock.name+"】，正在请求第【"+page+"】页，请求过于频繁。");
+			req.head.errWaitTime = req.head.errWaitTime + 1;
+			try {
+				Thread.sleep(req.head.errWaitTime*1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.err.println("睡眠了【"+req.head.errWaitTime +"】秒钟，开始重新请求当前页。");
+			return getResult(page);
+		}
+		return result;
+	}
+	
+	
+	private void everySleep() {
+		//每次请求完开始下一次请求的时候，睡眠一段时间
+		if(req.head.sleep != 0){
+			try {
+				Thread.sleep(req.head.sleep*1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	/**
 	 * 返回true标识结束循环请求
 	 * @param result

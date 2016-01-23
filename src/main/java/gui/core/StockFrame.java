@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -33,13 +34,14 @@ import javax.swing.JTextField;
 import util.Constants;
 import util.FileUtil;
 import util.ProjectUtil;
+import util.StringUtil;
+import util.core.AccessUtil;
 
 public class StockFrame extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final String lastCustomPrefix = "A9";
-	private static final String groupName = "top";
 
 	private int window_width = 700;
 	private int window_height = 600;
@@ -68,19 +70,22 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton JbuttonDel = new JButton("删除EBK");
 	private JButton JbuttonSelectAll = new JButton("全选");
 
-	private JTextField fieldDay = new JTextField(5);
-	private JTextField fieldSleep = new JTextField(5);
-	private JTextField fieldGroupName = new JTextField(5);
-	private JTextField threadNum = new JTextField(5);
-	//private JTextField levels = new JTextField(5);
+	private JTextField field_day = new JTextField(5);
+	private JTextField field_sleep = new JTextField(5);
+	private JTextField field_groupName = new JTextField(5);
+	private JTextField field_thread = new JTextField(5);
+	private JTextField field_waitTime = new JTextField(5);
+	private JTextField field_addTime = new JTextField(5);
 	
 	public JTextField displayLabel = new JTextField(25);
 
 	private Map<String, JCheckBox> group = new HashMap<String, JCheckBox>();
 
+	private Properties params;
 	private List<String> customContent;
 	private List<String> conceptContent;
 	private List<String> industryContent;
+	
 
 	private Map<String, String> prefixMap = new HashMap<String, String>();
 
@@ -96,7 +101,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	private void initWindow() {
-
+		initParams();
 		initContentData();
 
 		initJPanel1();
@@ -107,6 +112,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		super.add(jp2, BorderLayout.CENTER);
 		super.add(jp3, BorderLayout.SOUTH);
 
+	}
+
+	private void initParams() {
+		this.params = AccessUtil.readParams();
 	}
 
 	private void setCenterLocation() {
@@ -137,31 +146,74 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void initJPanel2() {
 		jp2.setBorder(BorderFactory.createTitledBorder("输入参数"));
 		jp2.add(new JLabel("day:"));
-		jp2.add(fieldDay);
+		jp2.add(field_day);
 		
 		jp2.add(new JLabel("sleep:"));
-		jp2.add(fieldSleep);
+		jp2.add(field_sleep);
 		
 		jp2.add(new JLabel("组名:"));
-		jp2.add(fieldGroupName);
+		jp2.add(field_groupName);
 		
 		jp2.add(new JLabel("线程数:"));
-		jp2.add(threadNum);
+		jp2.add(field_thread);
 		
-		/*jp2.add(new JLabel("档位:"));
-		jp2.add(levels);*/
+		jp2.add(new JLabel("errWaitTime:"));
+		jp2.add(field_waitTime);
+		
+		jp2.add(new JLabel("addTime:"));
+		jp2.add(field_addTime);
+		
+		initDefaultParams();
 		
 		jp2.add(displayLabel);
-
-		fieldDay.setText("1");
-		fieldSleep.setText("1000");
-		fieldGroupName.setText(groupName);
-		threadNum.setText("1");
-		//levels.setText("3,5,10");
-		
 		displayLabel.setEditable(false);
 		displayLabel.setText("请选择。");
 
+	}
+
+	private void initDefaultParams() {
+		String day = params.getProperty("day");
+		if(StringUtil.isEmpty(day)){
+			field_day.setText("1");
+		}else{
+			field_day.setText(day);
+		}
+		
+		String sleep = params.getProperty("sleep");
+		if(StringUtil.isEmpty(sleep)){
+			field_sleep.setText("1");
+		}else{
+			field_sleep.setText(sleep);
+		}
+		
+		String groupName = params.getProperty("groupName");
+		if(StringUtil.isEmpty(groupName)){
+			field_groupName.setText("top");
+		}else{
+			field_groupName.setText(groupName);
+		}
+		
+		String thread = params.getProperty("thread");
+		if(StringUtil.isEmpty(thread)){
+			field_thread.setText("1");
+		}else{
+			field_thread.setText(thread);
+		}
+		
+		String errWaitTime = params.getProperty("errWaitTime");
+		if(StringUtil.isEmpty(errWaitTime)){
+			field_waitTime.setText("40");
+		}else{
+			field_waitTime.setText(errWaitTime);
+		}
+		
+		String addTime = params.getProperty("addTime");
+		if(StringUtil.isEmpty(addTime)){
+			field_addTime.setText("1");
+		}else{
+			field_addTime.setText(addTime);
+		}
+		
 	}
 
 	private void initJPanel3() {
@@ -326,7 +378,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (names.size() > 0) {
 			displayLabel.setText("正在执行上传分组……");
 
-			String groupName = fieldGroupName.getText();
+			String groupName = field_groupName.getText();
 			new Thread(new ImportGroupWorker(names, groupName, this)).start();
 		} else {
 			displayLabel.setText("请选择要上传的板块。");
@@ -364,10 +416,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private void performChoose() {
 
-		String path = getHistoryPath();
-		if (path == null) {
-			path = ProjectUtil.getComputerHomeDir();
-		}
+		String path = ProjectUtil.getComputerHomeDir();
 
 		JFileChooser fc = new JFileChooser(path);
 		// 是否可多选
@@ -392,24 +441,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	/**
-	 * 获取最近打开的目录，config/temp.txt
-	 * 
-	 * @return
-	 */
-	private String getHistoryPath() {
-		String temp_path = Constants.out_config_path + "/"
-				+ Constants.temp_name;
-		File file = new File(temp_path);
-		if (file.exists()) {
-			try {
-				return FileUtil.read(temp_path);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
 
 	private void refreshCustomPanel() {
 		Container con = this.getContentPane();
@@ -504,16 +535,10 @@ public class StockFrame extends JFrame implements ActionListener {
 	private ReqHead getReqHead() throws IOException {
 
 		ReqHead head = new ReqHead();
-		head.day = Integer.parseInt(fieldDay.getText());
-		head.sleep = Integer.parseInt(fieldSleep.getText());
-		head.threadNum = Integer.parseInt(threadNum.getText());
-		
-		/*if(!StringUtil.isEmpty(levels.getText())){
-			String[] arrs = levels.getText().split(",");
-			for(int i = arrs.length-1 ;i>=0;i--){
-				head.levels.add(Integer.parseInt(arrs[i]));
-			}
-		}*/
+		head.day = Integer.parseInt(field_day.getText());
+		head.sleep = Integer.parseInt(field_sleep.getText());
+		head.threadNum = Integer.parseInt(field_thread.getText());
+		head.errWaitTime = Integer.parseInt(field_waitTime.getText());
 		
 		return head;
 	}

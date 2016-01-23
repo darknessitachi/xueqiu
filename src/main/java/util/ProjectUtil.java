@@ -1,6 +1,10 @@
 package util;
 
+import java.util.Date;
+
 import javax.swing.filechooser.FileSystemView;
+
+import func.domain.Stock;
 
 
 public class ProjectUtil {
@@ -33,6 +37,14 @@ public class ProjectUtil {
 			}
 		}
 		return false;
+	}
+	
+	public static String getSearchUrl(Stock stock, int page) {
+		int count = 20;
+		String href = "http://xueqiu.com/statuses/search.json?count="+count+"&comment=0&symbol="+ stock.code+ "&hl=0&source=all&sort=time&page="
+				+ page+ "&_="+new Date().getTime();
+	//	System.out.println(href);
+		return href;
 	}
 
 }

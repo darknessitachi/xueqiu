@@ -101,7 +101,9 @@ public class ReqLoadImpl implements ReqLoad {
 		//打印请求错误的股票名
 		outMsg(errorMsg+"\n",bw);
 		
-		outMsg("【"+getCodeShowName(req.body.bodyName)+"】板块的股票总数为【"+req.body.list.size()+"】个 \n",bw);
+		req.endDate = new Date().getTime();
+		long useTimes = (req.endDate - req.startDate)/1000;
+		outMsg("【"+getCodeShowName(req.body.bodyName)+"】板块的股票总数为【"+req.body.list.size()+"】个，请求耗时【"+useTimes+"】秒 \n",bw);
 		//遍历打印
 		for (String title : req.mapKey) {
 			
