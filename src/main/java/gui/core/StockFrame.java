@@ -2,8 +2,8 @@ package gui.core;
 
 import func.domain.Req.ReqHead;
 import gui.worker.ExportWorker;
-import gui.worker.ImportWorker;
 import gui.worker.ImportGroupWorker;
+import gui.worker.ImportWorker;
 import gui.worker.StatisWorker;
 
 import java.awt.BorderLayout;
@@ -71,6 +71,9 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JTextField fieldDay = new JTextField(5);
 	private JTextField fieldSleep = new JTextField(5);
 	private JTextField fieldGroupName = new JTextField(5);
+	private JTextField threadNum = new JTextField(5);
+	//private JTextField levels = new JTextField(5);
+	
 	public JTextField displayLabel = new JTextField(25);
 
 	private Map<String, JCheckBox> group = new HashMap<String, JCheckBox>();
@@ -133,14 +136,29 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private void initJPanel2() {
 		jp2.setBorder(BorderFactory.createTitledBorder("输入参数"));
+		jp2.add(new JLabel("day:"));
 		jp2.add(fieldDay);
+		
+		jp2.add(new JLabel("sleep:"));
 		jp2.add(fieldSleep);
+		
+		jp2.add(new JLabel("组名:"));
 		jp2.add(fieldGroupName);
+		
+		jp2.add(new JLabel("线程数:"));
+		jp2.add(threadNum);
+		
+		/*jp2.add(new JLabel("档位:"));
+		jp2.add(levels);*/
+		
 		jp2.add(displayLabel);
 
 		fieldDay.setText("1");
 		fieldSleep.setText("1000");
 		fieldGroupName.setText(groupName);
+		threadNum.setText("1");
+		//levels.setText("3,5,10");
+		
 		displayLabel.setEditable(false);
 		displayLabel.setText("请选择。");
 
@@ -488,7 +506,15 @@ public class StockFrame extends JFrame implements ActionListener {
 		ReqHead head = new ReqHead();
 		head.day = Integer.parseInt(fieldDay.getText());
 		head.sleep = Integer.parseInt(fieldSleep.getText());
-
+		head.threadNum = Integer.parseInt(threadNum.getText());
+		
+		/*if(!StringUtil.isEmpty(levels.getText())){
+			String[] arrs = levels.getText().split(",");
+			for(int i = arrs.length-1 ;i>=0;i--){
+				head.levels.add(Integer.parseInt(arrs[i]));
+			}
+		}*/
+		
 		return head;
 	}
 

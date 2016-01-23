@@ -73,8 +73,7 @@ public class Worker implements Runnable{
 			//评论时间
 			long time = (Long) entity.get("created_at");
 			String createDate = DateUtil.formatDate(new Date(time), "yyyy-MM-dd");
-			String createDate_all = DateUtil.formatDate(new Date(time), DateUtil.yyyyMMdd_HHmmss);
-			int resultCode = matchMapKey(createDate,createDate_all);
+			int resultCode = matchMapKey(createDate);
 			if(resultCode == 1){
 				boolean isNotice = isNotice(entity);
 				if(isNotice && req.head.filterNotice){
@@ -113,7 +112,7 @@ public class Worker implements Runnable{
 	 * @param timeStr_all 
 	 * @return
 	 */
-	private int matchMapKey(String timeStr, String timeStr_all) {
+	private int matchMapKey(String timeStr) {
 		String maxKey = req.mapKey.get(0);
 		String minKey = req.mapKey.get(req.mapKey.size()-1);
 		
