@@ -114,9 +114,11 @@ public class ReqLoadImpl implements ReqLoad {
 			outMsg("——————" + title + " 个股热度——————",bw);
 			
 			List<Entity> sortList = getSortListByKey(title);
+			int num = 1;
 			for (Entity e : sortList) {
 				if(!e.stock.isError){
-					outMsg(e.toString(),bw);
+					outMsg(num + "、" + e.toString(),bw);
+					num++;
 				}
 			}
 			outMsg("",bw);
