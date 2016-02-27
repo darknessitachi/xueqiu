@@ -51,17 +51,7 @@ public class StringUtil {
 		}
 		return result;
 	}
-	/**
-	 * 如果股票名字是3个字，后面加两个空格
-	 * @param name
-	 * @return
-	 */
-	public static String formatStockName(String name) {
-		if(name.length() == 3){
-			return name+"  ";
-		}
-		return name;
-	}
+
 	/**
 	 * 通达信导出自选股编码，0开头的是sz，1开头的是sh
 	 * @param code
@@ -73,6 +63,16 @@ public class StringUtil {
 			return "1"+code;
 		}
 		return "0"+code;
+	}
+	
+	/**
+	 * 通过绝对路径，返回文件名
+	 * @param file
+	 * @return
+	 */
+	public static String getFileName(String path) {
+		int lastIndex = path.lastIndexOf("/");
+		return path.substring(lastIndex+1).split("\\.")[0];
 	}
 
 }

@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import util.Constants;
 import util.HttpUtil;
+import util.StringUtil;
 import func.domain.Req.ReqBody;
 import func.domain.Stock;
 
@@ -22,7 +23,7 @@ public class TranslateUtil {
 	public static ReqBody translate(String absolute_path) throws IOException {
 		
 		ReqBody body = new ReqBody();
-		body.bodyName = getFileName(absolute_path);
+		body.bodyName = StringUtil.getFileName(absolute_path);
 		
 		//先读取文件
 		BufferedReader br = null;
@@ -34,7 +35,7 @@ public class TranslateUtil {
 			while ((line = br.readLine()) != null) {
 				line = line.trim();
 				if (line.length() > 0 ) {
-					String completeCode = completeCode(line);
+					String completeCode = ProjectUtil.tdxCode2StandardCode(line);
 					if(completeCode!=null){
 						try {
 							String name = getNameByCode(completeCode);
@@ -64,16 +65,6 @@ public class TranslateUtil {
 		return !"\";".equals(name);
 	}
 
-	/**
-	 * 返回要翻译的板块名称
-	 * @param file
-	 * @return
-	 */
-	private static String getFileName(String path) {
-		int lastIndex = path.lastIndexOf("/");
-		return path.substring(lastIndex+1).split("\\.")[0];
-	}
-
 
 	private static String getNameByCode(String completeCode) throws IOException {
 		String httpReqUrl = Constants.inter_url+completeCode;
@@ -84,23 +75,6 @@ public class TranslateUtil {
 		String name = content.split(",")[0];
 		return name.substring(1);
 	}
-	/**
-	 * 通达信导出自选股编码，0开头的是sz，1开头的是sh
-	 * @param code
-	 * @return
-	 */
-	private static String completeCode(String code) {
-		//过滤掉指数
-		if(ProjectUtil.isStockIndex(code)){
-			return null;
-		};
-		
-		if(code.startsWith("1")){
-			return "sh"+code.substring(1);
-		}else{
-			return "sz"+code.substring(1);
-		}
-	}
-
 	
+
 }

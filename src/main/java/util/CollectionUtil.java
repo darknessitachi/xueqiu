@@ -46,5 +46,22 @@ public class CollectionUtil {
 		}
 		return sb.toString();
 	}
+	
+	/**
+	 * 统计targert中独有的元素
+	 * @param result_1
+	 * @param result_2
+	 * @return
+	 */
+	public static List<String> different(List<String> targert,
+			List<String> filter) {
+		List<String> result = new ArrayList<String>();
+		for(String str : targert){
+			if(!filter.contains(str)){
+				result.add(str);
+			}
+		}
+		return result;
+	}
 
 }

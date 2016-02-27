@@ -33,7 +33,6 @@ import javax.swing.JTextField;
 
 import util.CollectionUtil;
 import util.Constants;
-import util.DateUtil;
 import util.FileUtil;
 import util.StringUtil;
 import util.core.AccessUtil;
@@ -70,7 +69,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton JbuttonEmport = new JButton("下载雪球");
 	
 	private JButton JbuttonSame = new JButton("统计相同");
-	private JButton JbuttonDifferent = new JButton("统计不同");
+	private JButton JbuttonDifferent = new JButton("统计独有");
 	
 	private JButton JbuttonChoose = new JButton("导入EBK");
 	private JButton JbuttonDel = new JButton("删除EBK");
@@ -139,7 +138,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		//jp1.add(JbuttonImport);
 		//jp1.add(JbuttonImportGroup);
 		jp1.add(JbuttonSame);
-		//jp1.add(JbuttonDifferent);
+		jp1.add(JbuttonDifferent);
 
 		JbuttonOk.addActionListener(this);
 		JbuttonImport.addActionListener(this);
@@ -383,7 +382,45 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == JbuttonSame) {
 			performSame();
 		}
+		
+		if (e.getSource() == JbuttonDifferent) {
+			performDifferent();
+		}
 
+	}
+
+	private void performDifferent() {
+		// 获取选中的板块
+		List<String> names = getSelectNames();
+		if(names.size()==2){
+			try {
+				List<String> result_1 = FileUtil.readLines(names.get(0));
+				List<String> result_2 = FileUtil.readLines(names.get(1));
+				List<String> just_1 = CollectionUtil.different(result_1,result_2);
+				List<String> just_2 = CollectionUtil.different(result_2,result_1);
+				String just_str_1 = CollectionUtil.toLineString(just_1);
+				String just_str_2 = CollectionUtil.toLineString(just_2);
+				
+				String writePath1 = getDifferentWritePath(names.get(0));
+				FileUtil.write(writePath1, just_str_1);
+				
+				String writePath2 = getDifferentWritePath(names.get(1));
+				FileUtil.write(writePath2, just_str_2);
+				
+				displayLabel.setText("统计独有完成，目录："+ProjectUtil.getComputerHomeDir());
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}else{
+			displayLabel.setText("需要选择两个板块。");
+		}
+	}
+
+	private String getDifferentWritePath(String path) {
+		String fileName = StringUtil.getFileName(path);
+		return ProjectUtil.getComputerHomeDir()+"/"+fileName+"（独有）.EBK";
 	}
 
 	private void performSame() {
@@ -409,8 +446,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 	
 	private String getWritePath() {
-		String nowDate = DateUtil.getNowDate();
-		return ProjectUtil.getComputerHomeDir()+"/"+nowDate+"_same.EBK";
+		return ProjectUtil.getComputerHomeDir()+"/same.EBK";
 	}
 
 	private void performImportGroup() {

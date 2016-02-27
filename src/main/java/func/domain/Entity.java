@@ -1,6 +1,6 @@
 package func.domain;
 
-import util.StringUtil;
+import util.core.ProjectUtil;
 
 public class Entity {
 	
@@ -18,7 +18,7 @@ public class Entity {
 	
 	@Override
 	public String toString() {
-		return StringUtil.formatStockName(name)+" : "+number;
+		return ProjectUtil.formatStockName(name)+" : "+number;
 	}
 
 }
