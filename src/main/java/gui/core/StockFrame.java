@@ -139,7 +139,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		//jp1.add(JbuttonImport);
 		//jp1.add(JbuttonImportGroup);
 		jp1.add(JbuttonSame);
-		jp1.add(JbuttonDifferent);
+		//jp1.add(JbuttonDifferent);
 
 		JbuttonOk.addActionListener(this);
 		JbuttonImport.addActionListener(this);
