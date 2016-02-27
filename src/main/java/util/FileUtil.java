@@ -118,7 +118,13 @@ public class FileUtil {
 		}
 		return flag;
 	}
-
+	/**
+	 * 读取内容的行数，过滤不正确的行
+	 * @param path
+	 * @param filterIndex
+	 * @return
+	 * @throws FileNotFoundException
+	 */
 	public static int readValidLineNum(String path, boolean filterIndex) throws FileNotFoundException {
 		int num = 0;
 		FileReader fr = new FileReader(new File(path));
@@ -157,5 +163,34 @@ public class FileUtil {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	/**
+	 * 分行读取文件，存入list中
+	 * @param string
+	 * @return
+	 * @throws FileNotFoundException 
+	 */
+	public static List<String> readLines(String path) throws FileNotFoundException {
+		List<String> result = new ArrayList<String>();
+		FileReader fr = new FileReader(new File(path));
+		BufferedReader br = new BufferedReader(fr);
+		String line = null;
+		try {
+			while ((line = br.readLine()) != null) {
+				if (!StringUtil.isEmpty(line)) {
+					result.add(line);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 }

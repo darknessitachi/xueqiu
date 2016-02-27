@@ -31,7 +31,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import util.CollectionUtil;
 import util.Constants;
+import util.DateUtil;
 import util.FileUtil;
 import util.StringUtil;
 import util.core.AccessUtil;
@@ -66,6 +68,10 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton JbuttonImport = new JButton("上传雪球");
 	private JButton JbuttonImportGroup = new JButton("上传分组");
 	private JButton JbuttonEmport = new JButton("下载雪球");
+	
+	private JButton JbuttonSame = new JButton("统计相同");
+	private JButton JbuttonDifferent = new JButton("统计不同");
+	
 	private JButton JbuttonChoose = new JButton("导入EBK");
 	private JButton JbuttonDel = new JButton("删除EBK");
 	private JButton JbuttonSelectAll = new JButton("全选");
@@ -77,7 +83,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JTextField field_waitTime = new JTextField(5);
 	private JTextField field_addTime = new JTextField(5);
 	
-	public JTextField displayLabel = new JTextField(25);
+	public JTextField displayLabel = new JTextField(45);
 
 	private Map<String, JCheckBox> group = new HashMap<String, JCheckBox>();
 
@@ -129,9 +135,11 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.setBorder(BorderFactory.createTitledBorder("按钮"));
 		jp1.add(JbuttonOk);
 		jp1.add(JbuttonDelImport);
-		jp1.add(JbuttonImport);
 		jp1.add(JbuttonEmport);
-		jp1.add(JbuttonImportGroup);
+		//jp1.add(JbuttonImport);
+		//jp1.add(JbuttonImportGroup);
+		jp1.add(JbuttonSame);
+		jp1.add(JbuttonDifferent);
 
 		JbuttonOk.addActionListener(this);
 		JbuttonImport.addActionListener(this);
@@ -141,6 +149,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		JbuttonChoose.addActionListener(this);
 		JbuttonDelImport.addActionListener(this);
 		JbuttonDel.addActionListener(this);
+		JbuttonSame.addActionListener(this);
+		JbuttonDifferent.addActionListener(this);
 	}
 
 	private void initJPanel2() {
@@ -369,7 +379,38 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == JbuttonDelImport) {
 			performImport(true);
 		}
+		
+		if (e.getSource() == JbuttonSame) {
+			performSame();
+		}
 
+	}
+
+	private void performSame() {
+		// 获取选中的板块
+		List<String> names = getSelectNames();
+		if(names.size()==2){
+			try {
+				List<String> result_1 = FileUtil.readLines(names.get(0));
+				List<String> result_2 = FileUtil.readLines(names.get(1));
+				List<String> same = CollectionUtil.same(result_1,result_2);
+				String result = CollectionUtil.toLineString(same);
+				String writePath = getWritePath();
+				FileUtil.write(writePath, result);
+				displayLabel.setText("统计相同结果目录："+writePath);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}else{
+			displayLabel.setText("需要两个对比的板块。");
+		}
+	}
+	
+	private String getWritePath() {
+		String nowDate = DateUtil.getNowDate();
+		return ProjectUtil.getComputerHomeDir()+"/"+nowDate+"_same.EBK";
 	}
 
 	private void performImportGroup() {
