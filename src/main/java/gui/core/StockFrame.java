@@ -50,7 +50,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private int scroll_width = window_width;
 	private int scroll_height = 370;
 
-	private static final int GridLayoutColumn = 5;
+	private static final int GridLayoutColumn = 4;
 
 	private boolean isSelectAll = false;
 
