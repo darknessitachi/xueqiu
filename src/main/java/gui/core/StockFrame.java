@@ -160,8 +160,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp2.add(new JLabel("sleep:"));
 		jp2.add(field_sleep);
 		
-		jp2.add(new JLabel("组名:"));
-		jp2.add(field_groupName);
+		//jp2.add(new JLabel("组名:"));
+		//jp2.add(field_groupName);
 		
 		jp2.add(new JLabel("线程数:"));
 		jp2.add(field_thread);
@@ -195,12 +195,12 @@ public class StockFrame extends JFrame implements ActionListener {
 			field_sleep.setText(sleep);
 		}
 		
-		String groupName = params.getProperty("groupName");
+		/*String groupName = params.getProperty("groupName");
 		if(StringUtil.isEmpty(groupName)){
 			field_groupName.setText("top");
 		}else{
 			field_groupName.setText(groupName);
-		}
+		}*/
 		
 		String thread = params.getProperty("thread");
 		if(StringUtil.isEmpty(thread)){
