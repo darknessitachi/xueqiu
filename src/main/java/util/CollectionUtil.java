@@ -1,6 +1,7 @@
 package util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class CollectionUtil {
@@ -39,7 +40,7 @@ public class CollectionUtil {
 	 * @param same
 	 * @return
 	 */
-	public static String toLineString(List<String> same) {
+	public static String toLineString(Collection<String> same) {
 		StringBuilder sb = new StringBuilder();
 		for(String str : same){
 			sb.append(str).append("\n");

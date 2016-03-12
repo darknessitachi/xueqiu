@@ -18,9 +18,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -70,6 +72,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private JButton JbuttonSame = new JButton("统计相同");
 	private JButton JbuttonDifferent = new JButton("统计独有");
+	private JButton JbuttonCombine = new JButton("N合一");
 	
 	private JButton JbuttonChoose = new JButton("导入EBK");
 	private JButton JbuttonDel = new JButton("删除EBK");
@@ -139,6 +142,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		//jp1.add(JbuttonImportGroup);
 		jp1.add(JbuttonSame);
 		jp1.add(JbuttonDifferent);
+		jp1.add(JbuttonCombine);
+		
 
 		JbuttonOk.addActionListener(this);
 		JbuttonImport.addActionListener(this);
@@ -150,6 +155,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		JbuttonDel.addActionListener(this);
 		JbuttonSame.addActionListener(this);
 		JbuttonDifferent.addActionListener(this);
+		JbuttonCombine.addActionListener(this);
 	}
 
 	private void initJPanel2() {
@@ -386,7 +392,41 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == JbuttonDifferent) {
 			performDifferent();
 		}
+		
+		if (e.getSource() == JbuttonCombine) {
+			try {
+				performCombine();
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
 
+	private void performCombine() throws IOException {
+		// 获取选中的板块
+		List<String> names = getSelectNames();
+		if (names.size() > 0) {
+			displayLabel.setText("正在执行合并……");
+			
+			Set<String> all = new HashSet<String>();
+			for(String n : names){
+				List<String> result = FileUtil.readLines(n);
+				for(String ele : result){
+					all.add(ele);
+				}
+			}
+			
+			String writePath =  ProjectUtil.getComputerHomeDir()+"/N合一.EBK";
+			String str = CollectionUtil.toLineString(all);
+			
+			FileUtil.write(writePath, str);
+			
+			displayLabel.setText("合并完成。");
+		} else {
+			displayLabel.setText("请选择要上传的板块。");
+		}
 	}
 
 	private void performDifferent() {
