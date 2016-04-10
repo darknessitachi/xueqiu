@@ -8,7 +8,7 @@ import net.sf.json.JSONObject;
 import util.Constants;
 import util.DateUtil;
 import util.core.ProjectUtil;
-import util.http.HttpUtil;
+import util.http.HttpClientUtil;
 import func.domain.Req;
 import func.domain.Stock;
 
@@ -47,7 +47,7 @@ public class Worker implements Runnable{
 		String result = null;
 		String url = ProjectUtil.getSearchUrl(stock,page);
 		try {
-			result = HttpUtil.getResult(url,req.cookie,Constants.referer_prefix+stock.code);
+			result = HttpClientUtil.getResult(url,req.cookie,Constants.referer_prefix+stock.code);
 		} catch (IOException e1) {
 			//stock.isError = true;
 			System.err.println("【"+stock.name+"】，正在请求第【"+page+"】页，请求过于频繁。");
