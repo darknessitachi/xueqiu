@@ -7,8 +7,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import util.Constants;
-import util.HttpUtil;
 import util.StringUtil;
+import util.http.HttpUtil;
 import func.domain.Req.ReqBody;
 import func.domain.Stock;
 

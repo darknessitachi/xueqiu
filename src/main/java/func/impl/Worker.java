@@ -7,8 +7,8 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import util.Constants;
 import util.DateUtil;
-import util.HttpUtil;
 import util.core.ProjectUtil;
+import util.http.HttpUtil;
 import func.domain.Req;
 import func.domain.Stock;
 

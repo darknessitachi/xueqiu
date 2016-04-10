@@ -12,8 +12,9 @@ import net.sf.json.JSONObject;
 import util.Constants;
 import util.DateUtil;
 import util.FileUtil;
-import util.HttpUtil;
 import util.StringUtil;
+import util.http.HttpClientUtil;
+import util.http.HttpUtil;
 import func.domain.Req.ReqBody;
 import func.domain.Stock;
 
@@ -122,7 +123,7 @@ public class XueqiuUtil {
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("code", code);
 		params.put("_", new Date().getTime());
-		HttpUtil.get("http://xueqiu.com/stock/portfolio/delstock.json",params,cookie ,"http://xueqiu.com/S/"+code);
+		HttpClientUtil.get("http://xueqiu.com/stock/portfolio/delstock.json",params,cookie ,"http://xueqiu.com/S/"+code);
 		System.out.println("删除【"+code+"】完成。");
 	}
 
@@ -154,7 +155,7 @@ public class XueqiuUtil {
 
 
 	private List<String> queryAll() throws IOException {
-		String result = HttpUtil.getResult("http://xueqiu.com/v4/stock/portfolio/stocks.json?size=1000&tuid=9631865301&pid=-1&category=2&type=5",cookie,"http://xueqiu.com/9631865301","utf-8");
+		String result = HttpClientUtil.getResult("http://xueqiu.com/v4/stock/portfolio/stocks.json?size=1000&tuid=9631865301&pid=-1&category=2&type=5",cookie,"http://xueqiu.com/9631865301","utf-8");
 		JSONObject json = JSONObject.fromObject(result);
 		JSONArray array = (JSONArray) json.get("stocks");
 		List<String> list = new ArrayList<String>();

@@ -1,4 +1,4 @@
-package util;
+package util.http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,6 +36,13 @@ public class HttpUtil {
 			}
 			if (referer != null) {
 				conn.setRequestProperty("Referer", referer);
+			}
+			
+			//检查是否重定向  
+			int returnCode = conn.getResponseCode();  
+			if (returnCode == HttpURLConnection.HTTP_MOVED_PERM){
+				
+				System.out.println("301");
 			}
 			
 			result = getResultFromInputStream(conn.getInputStream(), code);

@@ -28,6 +28,20 @@
 		<version>2.4</version>
 		<classifier>jdk15</classifier><!--指定jdk版本-->  
 	</dependency>
+	
+	<!-- httpClient -->
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpclient</artifactId>
+		<version>4.3.6</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpmime</artifactId>
+		<version>4.3.6</version>
+	</dependency>
+	
     
     
   </dependencies>
