@@ -38,13 +38,6 @@ public class HttpUtil {
 				conn.setRequestProperty("Referer", referer);
 			}
 			
-			//检查是否重定向  
-			int returnCode = conn.getResponseCode();  
-			if (returnCode == HttpURLConnection.HTTP_MOVED_PERM){
-				
-				System.out.println("301");
-			}
-			
 			result = getResultFromInputStream(conn.getInputStream(), code);
 			conn.disconnect();
 		} catch (MalformedURLException e) {
@@ -66,9 +59,10 @@ public class HttpUtil {
 
 	
 	
-	public static String post(String httpReqUrl, Map<String, Object> param,
+	public static String post(String httpReqUrl, Map<String, String> param,
 			String cookie, String referer) throws IOException {
-		return handle(httpReqUrl, param, cookie, referer, "POST");
+		//return handle(httpReqUrl, param, cookie, referer, "POST");
+		return null;
 	}
 	
 	public static String get(String httpReqUrl, Map<String, Object> param,

@@ -128,9 +128,9 @@ public class XueqiuUtil {
 	}
 
 	private void addStock(String code, String name) throws IOException {
-		Map<String,Object> params = new HashMap<String,Object>();
+		Map<String,String> params = new HashMap<String,String>();
 		params.put("code", code);
-		params.put("isnotice", 1);
+		params.put("isnotice", 1+"");
 		HttpUtil.post("http://xueqiu.com/stock/portfolio/addstock.json",params,cookie,"http://xueqiu.com/S/"+code);
 		System.out.println("添加【"+code+","+name+"】完成。");
 	}
@@ -141,10 +141,10 @@ public class XueqiuUtil {
 	 * @throws IOException 
 	 */
 	private void updateStockGroup(String groupName,String code) throws IOException {
-		Map<String,Object> params = new HashMap<String,Object>();
+		Map<String,String> params = new HashMap<String,String>();
 		params.put("pnames", groupName);
 		params.put("symbol", code);
-		params.put("category", 2);
+		params.put("category", 2+"");
 		HttpUtil.post("http://xueqiu.com/v4/stock/portfolio/updstock.json",params,cookie,"http://xueqiu.com/S/"+code);
 		if(StringUtil.isEmpty(groupName)){
 			System.out.println("【"+code+"】从分组中删除。");
