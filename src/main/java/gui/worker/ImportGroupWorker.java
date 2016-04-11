@@ -1,15 +1,9 @@
 package gui.worker;
 
-import gui.core.StockFrame;
-
-import java.io.IOException;
-import java.util.List;
-
-import util.core.XueqiuUtil;
 
 public class ImportGroupWorker implements Runnable {
 
-	private List<String> names;
+	/*private List<String> names;
 	private StockFrame frame;
 	private String groupName;
 
@@ -18,10 +12,10 @@ public class ImportGroupWorker implements Runnable {
 		this.groupName = groupName;
 		this.frame = frame;
 	}
-
+*/
 	@Override
 	public void run() {
-		XueqiuUtil oper = new XueqiuUtil();
+		/*XueqiuUtil oper = new XueqiuUtil();
 		oper.cancelAllGroup();
 		for(String name : names){
 			try {
@@ -32,7 +26,7 @@ public class ImportGroupWorker implements Runnable {
 				e.printStackTrace();
 			}
 		}
-		frame.displayLabel.setText("上传分组完成。");
+		frame.displayLabel.setText("上传分组完成。");*/
 	}
 
 }

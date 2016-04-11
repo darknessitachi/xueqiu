@@ -5,10 +5,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import util.Constants;
 import util.StringUtil;
-import util.http.HttpUtil;
+import util.http.HttpClientUniqueUtil;
 import func.domain.Req.ReqBody;
 import func.domain.Stock;
 
@@ -68,7 +70,12 @@ public class TranslateUtil {
 
 	private static String getNameByCode(String completeCode) throws IOException {
 		String httpReqUrl = Constants.inter_url+completeCode;
-		String result = HttpUtil.getResult(httpReqUrl,"GBK");
+		
+		//请求头
+		Map<String,String> header = new HashMap<String,String>();
+		header.put(HttpClientUniqueUtil.ENCODING, "GBK");
+		
+		String result = HttpClientUniqueUtil.get(httpReqUrl,header);
 		//先通过=分割字符串
 		String content = result.split("=")[1];
 		//再通过，分割字符串

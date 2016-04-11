@@ -2,7 +2,6 @@ package gui.core;
 
 import func.domain.Req.ReqHead;
 import gui.worker.ExportWorker;
-import gui.worker.ImportGroupWorker;
 import gui.worker.ImportWorker;
 import gui.worker.StatisWorker;
 
@@ -80,7 +79,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private JTextField field_day = new JTextField(5);
 	private JTextField field_sleep = new JTextField(5);
-	private JTextField field_groupName = new JTextField(5);
+	//private JTextField field_groupName = new JTextField(5);
 	private JTextField field_thread = new JTextField(5);
 	private JTextField field_waitTime = new JTextField(5);
 	private JTextField field_addTime = new JTextField(5);
@@ -495,8 +494,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (names.size() > 0) {
 			displayLabel.setText("正在执行上传分组……");
 
-			String groupName = field_groupName.getText();
-			new Thread(new ImportGroupWorker(names, groupName, this)).start();
+			/*String groupName = field_groupName.getText();
+			new Thread(new ImportGroupWorker(names, groupName, this)).start();*/
 		} else {
 			displayLabel.setText("请选择要上传的板块。");
 		}

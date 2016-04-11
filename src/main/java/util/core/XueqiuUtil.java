@@ -14,7 +14,6 @@ import util.DateUtil;
 import util.FileUtil;
 import util.StringUtil;
 import util.http.HttpClientUniqueUtil;
-import util.http.HttpUtil;
 import func.domain.Req.ReqBody;
 import func.domain.Stock;
 
@@ -69,17 +68,17 @@ public class XueqiuUtil {
 	}
 
 
-	public void uploadFileToGroup(String groupName, String name) throws IOException, InterruptedException {
+	/*public void uploadFileToGroup(String groupName, String name) throws IOException, InterruptedException {
 		ReqBody body = TranslateUtil.translate(name);
 		uploadBodyToGroup(body,groupName);
-	}
+	}*/
 		
 	/**
 	 * 取消所有股票的分组
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	public void cancelAllGroup() {
+	/*public void cancelAllGroup() {
 		try {
 			setXueqiuList();
 		} catch (IOException e) {
@@ -96,7 +95,7 @@ public class XueqiuUtil {
 				e.printStackTrace();
 			}
 		}
-	}
+	}*/
 	
 	
 	public void export() throws IOException{
@@ -157,7 +156,7 @@ public class XueqiuUtil {
 	 * @param groupName 
 	 * @throws IOException 
 	 */
-	private void updateStockGroup(String groupName,String code) throws IOException {
+	/*private void updateStockGroup(String groupName,String code) throws IOException {
 		Map<String,String> params = new HashMap<String,String>();
 		params.put("pnames", groupName);
 		params.put("symbol", code);
@@ -168,7 +167,7 @@ public class XueqiuUtil {
 		}else{
 			System.out.println("【"+code+"】添加到分组【"+groupName+"】完成。");
 		}
-	}
+	}*/
 
 
 	private List<String> queryAll() throws IOException {
@@ -225,7 +224,7 @@ public class XueqiuUtil {
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private void uploadBodyToGroup(ReqBody body, String groupName) throws IOException, InterruptedException {
+	/*private void uploadBodyToGroup(ReqBody body, String groupName) throws IOException, InterruptedException {
 		//先添加股票
 		uploadBody(body);
 		//添加股票到分组
@@ -235,6 +234,6 @@ public class XueqiuUtil {
 			Thread.sleep(Constants.XUEQIU_SLEEP);
 		}
 		System.out.println("添加分组完成，分组【"+groupName+"】一共添加了【"+body.list.size()+"】只股票，总共【"+xueqiuList.size()+"】只股票。");
-	}
+	}*/
 
 }
