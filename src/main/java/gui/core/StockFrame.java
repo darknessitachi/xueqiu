@@ -333,9 +333,9 @@ public class StockFrame extends JFrame implements ActionListener {
 		String realName = element.substring(2, element.length());
 		int num = 0;
 		if (realName.equals("自选股") || realName.equals("垃圾回收站")) {
-			num = FileUtil.readValidLineNum(path, true);
+			num = ProjectUtil.readValidLineNum(path, true);
 		}else{
-			num = FileUtil.readValidLineNum(path, false);
+			num = ProjectUtil.readValidLineNum(path, false);
 		}
 		return realName + "（" + num + "）";
 	}
