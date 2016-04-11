@@ -2,13 +2,15 @@ package func.impl;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import util.Constants;
 import util.DateUtil;
 import util.core.ProjectUtil;
-import util.http.HttpClientUtil;
+import util.http.HttpClientUniqueUtil;
 import func.domain.Req;
 import func.domain.Stock;
 
@@ -47,7 +49,12 @@ public class Worker implements Runnable{
 		String result = null;
 		String url = ProjectUtil.getSearchUrl(stock,page);
 		try {
-			result = HttpClientUtil.getResult(url,req.cookie,Constants.referer_prefix+stock.code);
+			//请求头
+			Map<String,String> header = new HashMap<String,String>();
+			header.put(HttpClientUniqueUtil.COOKIE, req.cookie);
+			header.put(HttpClientUniqueUtil.REFERER, Constants.referer_prefix+stock.code);
+			
+			result = HttpClientUniqueUtil.get(url,header);
 		} catch (IOException e1) {
 			//stock.isError = true;
 			System.err.println("【"+stock.name+"】，正在请求第【"+page+"】页，请求过于频繁。");

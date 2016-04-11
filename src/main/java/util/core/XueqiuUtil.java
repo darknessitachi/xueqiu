@@ -13,7 +13,7 @@ import util.Constants;
 import util.DateUtil;
 import util.FileUtil;
 import util.StringUtil;
-import util.http.HttpClientUtil;
+import util.http.HttpClientUniqueUtil;
 import util.http.HttpUtil;
 import func.domain.Req.ReqBody;
 import func.domain.Stock;
@@ -120,19 +120,36 @@ public class XueqiuUtil {
 	}
 	
 	private void delStock(String code) throws IOException {
-		Map<String,Object> params = new HashMap<String,Object>();
-		params.put("code", code);
-		params.put("_", new Date().getTime());
-		HttpClientUtil.get("http://xueqiu.com/stock/portfolio/delstock.json",params,cookie ,"http://xueqiu.com/S/"+code);
+		//请求头
+		Map<String,String> header = new HashMap<String,String>();
+		header.put(HttpClientUniqueUtil.COOKIE, cookie);
+		header.put(HttpClientUniqueUtil.REFERER, "http://xueqiu.com/S/"+code);
+		//请求参数
+		Map<String,String> params = new HashMap<String,String>();
+		params.put("url", "/stock/portfolio/delstock.json");
+		params.put("data[code]", code);
+		params.put("data[_]", new Date().getTime()+"");
+		
+		HttpClientUniqueUtil.post("https://xueqiu.com/service/poster",header,params);
+		
 		System.out.println("删除【"+code+"】完成。");
 	}
 
 	private void addStock(String code, String name) throws IOException {
+		//请求头
+		Map<String,String> header = new HashMap<String,String>();
+		header.put(HttpClientUniqueUtil.COOKIE, cookie);
+		header.put(HttpClientUniqueUtil.REFERER, "http://xueqiu.com/S/"+code);
+		
+		//请求参数
 		Map<String,String> params = new HashMap<String,String>();
 		params.put("code", code);
 		params.put("isnotice", 1+"");
-		HttpUtil.post("http://xueqiu.com/stock/portfolio/addstock.json",params,cookie,"http://xueqiu.com/S/"+code);
+		
+		HttpClientUniqueUtil.post("https://xueqiu.com/stock/portfolio/addstock.json",header,params);
+		
 		System.out.println("添加【"+code+","+name+"】完成。");
+		
 	}
 	
 	/**
@@ -155,7 +172,11 @@ public class XueqiuUtil {
 
 
 	private List<String> queryAll() throws IOException {
-		String result = HttpClientUtil.getResult("http://xueqiu.com/v4/stock/portfolio/stocks.json?size=1000&tuid=9631865301&pid=-1&category=2&type=5",cookie,"http://xueqiu.com/9631865301","utf-8");
+		//请求头
+		Map<String,String> header = new HashMap<String,String>();
+		header.put(HttpClientUniqueUtil.COOKIE, cookie);
+		
+		String result = HttpClientUniqueUtil.get("http://xueqiu.com/v4/stock/portfolio/stocks.json?size=1000&tuid=9631865301&pid=-1&category=2&type=5",header);
 		JSONObject json = JSONObject.fromObject(result);
 		JSONArray array = (JSONArray) json.get("stocks");
 		List<String> list = new ArrayList<String>();
