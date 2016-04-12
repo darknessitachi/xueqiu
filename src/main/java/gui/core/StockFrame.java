@@ -136,7 +136,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.setBorder(BorderFactory.createTitledBorder("按钮"));
 		jp1.add(JbuttonOk);
 		jp1.add(JbuttonDelImport);
-		jp1.add(JbuttonEmport);
+		//jp1.add(JbuttonEmport);
 		//jp1.add(JbuttonImport);
 		//jp1.add(JbuttonImportGroup);
 		jp1.add(JbuttonSame);
@@ -424,7 +424,7 @@ public class StockFrame extends JFrame implements ActionListener {
 			
 			displayLabel.setText("合并完成。");
 		} else {
-			displayLabel.setText("请选择要上传的板块。");
+			displayLabel.setText("请选择要合并的板块。");
 		}
 	}
 
