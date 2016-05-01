@@ -90,6 +90,10 @@ public class Worker implements Runnable{
 	private boolean calculate(String result, Stock stock) {
 		JSONObject json = JSONObject.fromObject(result);
 		JSONArray array = (JSONArray) json.get("list");
+		if(json.get("error_description")!=null){
+			System.err.println("cookie可能过期，请重新获取cookie。");
+			return true;
+		}
 		for(int i=0;i<array.size();i++){
 			JSONObject entity = (JSONObject) array.get(i);
 			//评论时间
