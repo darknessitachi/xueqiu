@@ -89,7 +89,7 @@ public class ReqLoadImpl implements ReqLoad {
 		}
 		//创建子文件夹
 		String subFolder = Constants.out_result_path+"/" + DateUtil.formatDate(new Date(), DateUtil.yyyyMMdd);
-		FileUtil.createFolde(subFolder);
+		FileUtil.createFolder(subFolder);
 		
 		String errorMsg = getErrorMsg();
 		String filepath = getWriteFilePath(subFolder,errorMsg);

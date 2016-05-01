@@ -65,8 +65,6 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private JButton JbuttonOk = new JButton("统计");
 	private JButton JbuttonDelImport = new JButton("删除上传");
-	private JButton JbuttonImport = new JButton("上传雪球");
-	private JButton JbuttonImportGroup = new JButton("上传分组");
 	private JButton JbuttonEmport = new JButton("下载雪球");
 	
 	private JButton JbuttonSame = new JButton("统计相同");
@@ -79,7 +77,6 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private JTextField field_day = new JTextField(5);
 	private JTextField field_sleep = new JTextField(5);
-	//private JTextField field_groupName = new JTextField(5);
 	private JTextField field_thread = new JTextField(5);
 	private JTextField field_waitTime = new JTextField(5);
 	private JTextField field_addTime = new JTextField(5);
@@ -137,16 +134,12 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.add(JbuttonOk);
 		jp1.add(JbuttonDelImport);
 		//jp1.add(JbuttonEmport);
-		//jp1.add(JbuttonImport);
-		//jp1.add(JbuttonImportGroup);
 		jp1.add(JbuttonSame);
 		jp1.add(JbuttonDifferent);
 		jp1.add(JbuttonCombine);
 		
 
 		JbuttonOk.addActionListener(this);
-		JbuttonImport.addActionListener(this);
-		JbuttonImportGroup.addActionListener(this);
 		JbuttonEmport.addActionListener(this);
 		JbuttonSelectAll.addActionListener(this);
 		JbuttonChoose.addActionListener(this);
@@ -164,9 +157,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 		jp2.add(new JLabel("sleep:"));
 		jp2.add(field_sleep);
-		
-		//jp2.add(new JLabel("组名:"));
-		//jp2.add(field_groupName);
 		
 		jp2.add(new JLabel("线程数:"));
 		jp2.add(field_thread);
@@ -199,13 +189,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		}else{
 			field_sleep.setText(sleep);
 		}
-		
-		/*String groupName = params.getProperty("groupName");
-		if(StringUtil.isEmpty(groupName)){
-			field_groupName.setText("top");
-		}else{
-			field_groupName.setText(groupName);
-		}*/
 		
 		String thread = params.getProperty("thread");
 		if(StringUtil.isEmpty(thread)){
@@ -358,14 +341,6 @@ public class StockFrame extends JFrame implements ActionListener {
 			}
 		}
 
-		if (e.getSource() == JbuttonImport) {
-			performImport(false);
-		}
-
-		if (e.getSource() == JbuttonImportGroup) {
-			performImportGroup();
-		}
-
 		if (e.getSource() == JbuttonSelectAll) {
 			performSelectAll();
 		}
@@ -488,18 +463,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		return ProjectUtil.getComputerHomeDir()+"/same.EBK";
 	}
 
-	private void performImportGroup() {
-		// 获取选中的板块
-		List<String> names = getSelectNames();
-		if (names.size() > 0) {
-			displayLabel.setText("正在执行上传分组……");
-
-			/*String groupName = field_groupName.getText();
-			new Thread(new ImportGroupWorker(names, groupName, this)).start();*/
-		} else {
-			displayLabel.setText("请选择要上传的板块。");
-		}
-	}
 
 	private void performDel() {
 		// 获取选中的板块

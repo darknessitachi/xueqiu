@@ -16,6 +16,30 @@ import func.domain.Stock;
 
 public class ProjectUtil {
 	
+	/**
+	 * 获取工程的路径
+	 * @return
+	 */
+	public static String getProjectPath() {
+		File directory = new File("");
+		String outputPath = directory.getAbsolutePath();
+		return outputPath;
+	}
+	
+	
+	
+	/**
+	 * 获取工程class文件的路径
+	 * @return
+	 */
+	public static String getSrcpath() {
+		return getProjectPath()+"/src/main/java";
+	}
+	
+	/**
+	 * 获取工程class文件的路径
+	 * @return
+	 */
 	public static String getClasspath() {
 		return ProjectUtil.class.getClassLoader().getResource("").getPath();
 	}
@@ -30,7 +54,9 @@ public class ProjectUtil {
 	}
 	
 	public static void main(String[] args) {
+		System.out.println(getSrcpath());
 		System.out.println(getClasspath());
+		
 	}
 	
 	/**
