@@ -14,12 +14,12 @@ import util.core.TranslateUtil;
 public class StatisWorker implements Runnable {
 
 	private List<String> names;
-	private StockFrame frameFirst;
+	private StockFrame frame;
 	private ReqHead head;
 
 	public StatisWorker(ReqHead head, List<String> names, StockFrame frameFirst) {
 		this.names = names;
-		this.frameFirst = frameFirst;
+		this.frame = frameFirst;
 		this.head = head;
 	}
 
@@ -36,7 +36,7 @@ public class StatisWorker implements Runnable {
 				e1.printStackTrace();
 			}
 		}
-		frameFirst.displayLabel.setText("统计完成，输出目录【"+Constants.out_result_path+"】");
+		frame.displayLabel.setText("统计完成，输出目录【"+Constants.out_result_path+"】");
 		
 	}
 

@@ -3,6 +3,7 @@ package gui.core;
 import func.domain.Req.ReqHead;
 import gui.worker.ExportWorker;
 import gui.worker.ImportWorker;
+import gui.worker.LoginWorker;
 import gui.worker.StatisWorker;
 
 import java.awt.BorderLayout;
@@ -29,6 +30,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -62,15 +66,15 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JPanel jp_custom = new JPanel();
 	private JPanel jp_concept = new JPanel();
 	private JPanel jp_industry = new JPanel();
+	
+	private JMenuItem loginItem = new JMenuItem("登录");
 
 	private JButton JbuttonOk = new JButton("统计");
 	private JButton JbuttonDelImport = new JButton("删除上传");
 	private JButton JbuttonEmport = new JButton("下载雪球");
-	
 	private JButton JbuttonSame = new JButton("统计相同");
 	private JButton JbuttonDifferent = new JButton("统计独有");
 	private JButton JbuttonCombine = new JButton("N合一");
-	
 	private JButton JbuttonChoose = new JButton("导入EBK");
 	private JButton JbuttonDel = new JButton("删除EBK");
 	private JButton JbuttonSelectAll = new JButton("全选");
@@ -107,7 +111,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void initWindow() {
 		initParams();
 		initContentData();
-
+		
+		initMenuBar();
 		initJPanel1();
 		initJPanel2();
 		initJPanel3();
@@ -116,6 +121,15 @@ public class StockFrame extends JFrame implements ActionListener {
 		super.add(jp2, BorderLayout.CENTER);
 		super.add(jp3, BorderLayout.SOUTH);
 
+	}
+
+	private void initMenuBar() {
+		JMenuBar menuBar = new JMenuBar();  
+		JMenu menu = new JMenu("菜单");  
+        menu.add(loginItem);  
+		menuBar.add(menu);  
+        this.setJMenuBar(menuBar);
+        loginItem.addActionListener(this);
 	}
 
 	private void initParams() {
@@ -137,7 +151,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.add(JbuttonSame);
 		jp1.add(JbuttonDifferent);
 		jp1.add(JbuttonCombine);
-		
 
 		JbuttonOk.addActionListener(this);
 		JbuttonEmport.addActionListener(this);
@@ -148,6 +161,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		JbuttonSame.addActionListener(this);
 		JbuttonDifferent.addActionListener(this);
 		JbuttonCombine.addActionListener(this);
+		loginItem.addActionListener(this);
 	}
 
 	private void initJPanel2() {
@@ -367,6 +381,10 @@ public class StockFrame extends JFrame implements ActionListener {
 			performDifferent();
 		}
 		
+		if (e.getSource() == loginItem) {
+			performLogin();
+		}
+		
 		if (e.getSource() == JbuttonCombine) {
 			try {
 				performCombine();
@@ -376,6 +394,12 @@ public class StockFrame extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
+	}
+
+	private void performLogin() {
+		String username = params.getProperty("username");
+		String password = params.getProperty("password");
+		new Thread(new LoginWorker(username, password, this)).start();
 	}
 
 	private void performCombine() throws IOException {

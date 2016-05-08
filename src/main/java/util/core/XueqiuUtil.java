@@ -67,36 +67,6 @@ public class XueqiuUtil {
 		return uploadBody(body);
 	}
 
-
-	/*public void uploadFileToGroup(String groupName, String name) throws IOException, InterruptedException {
-		ReqBody body = TranslateUtil.translate(name);
-		uploadBodyToGroup(body,groupName);
-	}*/
-		
-	/**
-	 * 取消所有股票的分组
-	 * @throws IOException 
-	 * @throws InterruptedException 
-	 */
-	/*public void cancelAllGroup() {
-		try {
-			setXueqiuList();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		//把之前的分组的股票取消
-		for(String code : xueqiuList){
-			try {
-				updateStockGroup("", code);
-				Thread.sleep(Constants.XUEQIU_SLEEP);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}*/
-	
 	
 	public void export() throws IOException{
 		List<String> list = this.queryAll();
@@ -151,23 +121,6 @@ public class XueqiuUtil {
 		
 	}
 	
-	/**
-	 * 添加股票到分组
-	 * @param groupName 
-	 * @throws IOException 
-	 */
-	/*private void updateStockGroup(String groupName,String code) throws IOException {
-		Map<String,String> params = new HashMap<String,String>();
-		params.put("pnames", groupName);
-		params.put("symbol", code);
-		params.put("category", 2+"");
-		HttpUtil.post("http://xueqiu.com/v4/stock/portfolio/updstock.json",params,cookie,"http://xueqiu.com/S/"+code);
-		if(StringUtil.isEmpty(groupName)){
-			System.out.println("【"+code+"】从分组中删除。");
-		}else{
-			System.out.println("【"+code+"】添加到分组【"+groupName+"】完成。");
-		}
-	}*/
 
 
 	private List<String> queryAll() throws IOException {
@@ -217,23 +170,28 @@ public class XueqiuUtil {
 		System.out.println("添加股票完成，一共添加了【"+num+"】只股票。");
 		return num;
 	}
-	
-	/**
-	 * 把当前body中的股票导入雪球自选股的分组中
-	 * @param body 
-	 * @throws IOException
-	 * @throws InterruptedException
-	 */
-	/*private void uploadBodyToGroup(ReqBody body, String groupName) throws IOException, InterruptedException {
-		//先添加股票
-		uploadBody(body);
-		//添加股票到分组
-		for(Stock stock : body.list){
-			String code = stock.code;
-			updateStockGroup(groupName, code);
-			Thread.sleep(Constants.XUEQIU_SLEEP);
+
+
+	public String login(String username,String passeword) {
+		Map<String,String> result = null;
+		//请求头
+		Map<String,String> header = new HashMap<String,String>();
+		header.put(HttpClientUniqueUtil.X_Requested_With, "XMLHttpRequest");
+		
+		//请求参数
+		Map<String,String> params = new HashMap<String,String>();
+		params.put("telephone", username);
+		params.put("password", passeword);
+		params.put("areacode", "86");
+		params.put("remember_me", "on");
+		
+		try {
+			result = HttpClientUniqueUtil.post("https://xueqiu.com/user/login", header, params);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		System.out.println("添加分组完成，分组【"+groupName+"】一共添加了【"+body.list.size()+"】只股票，总共【"+xueqiuList.size()+"】只股票。");
-	}*/
+		return result!=null?result.get(HttpClientUniqueUtil.COOKIE):null;
+	}
+	
 
 }
