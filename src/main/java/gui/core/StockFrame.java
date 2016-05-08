@@ -50,9 +50,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	private static final String lastCustomPrefix = "A9";
 
 	private int window_width = 700;
-	private int window_height = 600;
+	private int window_height = 630;
 
-	private int scroll_width = window_width;
 	private int scroll_height = 370;
 
 	private static final int GridLayoutColumn = 4;
@@ -166,6 +165,8 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private void initJPanel2() {
 		jp2.setBorder(BorderFactory.createTitledBorder("输入参数"));
+		//jp2.setBounds(0, 0, window_width, 400);
+		//jp2.setSize(window_width, 300);
 		jp2.add(new JLabel("day:"));
 		jp2.add(field_day);
 		
@@ -186,7 +187,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp2.add(displayLabel);
 		displayLabel.setEditable(false);
 		displayLabel.setText("请选择。");
-
 	}
 
 	private void initDefaultParams() {
@@ -252,7 +252,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp3_content_temp.add(jp_industry, BorderLayout.SOUTH);
 
 		ScrollPane jp3_content = new ScrollPane();
-		jp3_content.setSize(scroll_width, scroll_height);
+		jp3_content.setSize(window_width, scroll_height);
 		jp3_content.add(jp3_content_temp);
 
 		return jp3_content;
