@@ -399,6 +399,9 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void performLogin() {
 		String username = params.getProperty("username");
 		String password = params.getProperty("password");
+		if(StringUtil.isEmpty(username)){
+			System.err.println("params.properties缺少用户登录信息。");
+		}
 		new Thread(new LoginWorker(username, password, this)).start();
 	}
 
