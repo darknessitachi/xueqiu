@@ -146,7 +146,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.setBorder(BorderFactory.createTitledBorder("按钮"));
 		jp1.add(JbuttonOk);
 		jp1.add(JbuttonDelImport);
-		//jp1.add(JbuttonEmport);
+		jp1.add(JbuttonEmport);
 		jp1.add(JbuttonSame);
 		jp1.add(JbuttonDifferent);
 		jp1.add(JbuttonCombine);
