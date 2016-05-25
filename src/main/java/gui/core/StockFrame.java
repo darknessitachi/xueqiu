@@ -405,6 +405,9 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void performAutoChoose() {
 		String installPath = params.getProperty("tdxInstallPath");
 		String fileNames = params.getProperty("autoImportFile");
+		if(StringUtil.isEmpty(installPath)||StringUtil.isEmpty(fileNames)){
+			System.err.println("params.properties缺少券商软件安装目录的属性。");
+		}
 		try {
 			String newValue = new String(fileNames.getBytes("ISO-8859-1"),"utf-8");
 			System.out.println(newValue);
