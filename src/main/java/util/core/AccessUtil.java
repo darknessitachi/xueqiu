@@ -3,7 +3,6 @@ package util.core;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 import util.Constants;
@@ -24,11 +23,10 @@ public class AccessUtil {
 
 	public static Properties readParams() {
 		String params_path = Constants.out_config_path + "/" + Constants.req_params_name;
-		InputStream fis = null;
 		Properties prop = new Properties();
 		try {
-			fis = new FileInputStream(params_path);
-			prop.load(fis);
+			prop.load(new FileInputStream(params_path));
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e1) {

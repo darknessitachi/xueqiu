@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -75,6 +76,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton JbuttonDifferent = new JButton("统计独有");
 	private JButton JbuttonCombine = new JButton("N合一");
 	private JButton JbuttonChoose = new JButton("导入EBK");
+	private JButton autoChoose = new JButton("自动导入");
 	private JButton JbuttonDel = new JButton("删除EBK");
 	private JButton JbuttonSelectAll = new JButton("全选");
 
@@ -155,6 +157,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		JbuttonEmport.addActionListener(this);
 		JbuttonSelectAll.addActionListener(this);
 		JbuttonChoose.addActionListener(this);
+		autoChoose.addActionListener(this);
 		JbuttonDelImport.addActionListener(this);
 		JbuttonDel.addActionListener(this);
 		JbuttonSame.addActionListener(this);
@@ -261,6 +264,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JPanel get_jp3_btn() {
 		JPanel jp3_btn = new JPanel();
 		// jp3_btn.setLayout(new FlowLayout(FlowLayout.LEFT));
+		jp3_btn.add(autoChoose);
 		jp3_btn.add(JbuttonChoose);
 		jp3_btn.add(JbuttonDel);
 		jp3_btn.add(JbuttonSelectAll);
@@ -362,9 +366,11 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == JbuttonEmport) {
 			performExport();
 		}
-
 		if (e.getSource() == JbuttonChoose) {
 			performChoose();
+		}
+		if (e.getSource() == autoChoose) {
+			performAutoChoose();
 		}
 		if (e.getSource() == JbuttonDel) {
 			performDel();
@@ -393,6 +399,46 @@ public class StockFrame extends JFrame implements ActionListener {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+		}
+	}
+
+	private void performAutoChoose() {
+		String installPath = params.getProperty("tdxInstallPath");
+		String fileNames = params.getProperty("autoImportFile");
+		try {
+			String newValue = new String(fileNames.getBytes("ISO-8859-1"),"utf-8");
+			System.out.println(newValue);
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}  
+		String[] array = installPath.split(";");
+		boolean result = false;
+		for(String path : array){
+			File folder = new File(path);
+			if(folder.exists()){
+				String[] elements = fileNames.split(";");
+				for(String e : elements){
+					String srcName = e.split(",")[0];
+					String targetName = null;
+					if("ZXG.BLK".equals(srcName.toUpperCase())){
+						targetName = "A1自选股.EBK";
+					}else{
+						targetName = "A9A2 观察股(25内).EBK";
+					}
+					//拷贝到EBK目录
+					FileUtil.copy(Constants.out_custom_path+"/"+targetName, new File(path+"/"+srcName));
+				}
+				result = true;
+				refreshCustomPanel();
+			}else{
+				continue;
+			}
+		}
+		
+		if(result){
+			displayLabel.setText("自动导入完成。");
+		}else{
+			displayLabel.setText("没有找到券商软件安装目录。");
 		}
 	}
 
