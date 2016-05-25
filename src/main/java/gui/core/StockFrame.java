@@ -16,7 +16,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -408,12 +407,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		if(StringUtil.isEmpty(installPath)||StringUtil.isEmpty(fileNames)){
 			System.err.println("params.properties缺少券商软件安装目录的属性。");
 		}
-		try {
-			String newValue = new String(fileNames.getBytes("ISO-8859-1"),"utf-8");
-			System.out.println(newValue);
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}  
 		String[] array = installPath.split(";");
 		boolean result = false;
 		for(String path : array){
