@@ -412,22 +412,20 @@ public class StockFrame extends JFrame implements ActionListener {
 		for(String path : array){
 			File folder = new File(path);
 			if(folder.exists()){
+				//先删除自选股
+				for (String name : this.customContent) {
+					FileUtil.delete(Constants.out_custom_path+"/"+name+".EBK");
+				}
+				
 				String[] elements = fileNames.split(";");
 				for(String e : elements){
 					String srcName = e.split(",")[0];
 					String targetName = e.split(",")[1];
-					/*if("ZXG.BLK".equals(srcName.toUpperCase())){
-						targetName = "A1自选股.EBK";
-					}else if(srcName.toUpperCase().contains("A2GCG")){
-						targetName = "A2A2 观察股(25内).EBK";
-					}else{
-						targetName = "A9"+srcName.split("\\.")[0]+".EBK";
-					}*/
-					//拷贝到EBK目录
 					FileUtil.copy(Constants.out_custom_path+"/"+targetName, new File(path+"/"+srcName));
 				}
 				result = true;
 				refreshCustomPanel();
+				break;
 			}else{
 				continue;
 			}
