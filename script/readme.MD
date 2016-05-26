@@ -8,4 +8,6 @@
 					--custom
 					--concept
 					--industry
+					
+3、params.properties中的中文用Unicode显示。
 
