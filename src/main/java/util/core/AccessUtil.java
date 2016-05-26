@@ -26,6 +26,7 @@ public class AccessUtil {
 		Properties prop = new Properties();
 		try {
 			prop.load(new FileInputStream(params_path));
+			//prop.load(new InputStreamReader(new FileInputStream(params_path), "GBK"));
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

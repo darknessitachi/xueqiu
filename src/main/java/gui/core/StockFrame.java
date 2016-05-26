@@ -415,14 +415,14 @@ public class StockFrame extends JFrame implements ActionListener {
 				String[] elements = fileNames.split(";");
 				for(String e : elements){
 					String srcName = e.split(",")[0];
-					String targetName = null;
-					if("ZXG.BLK".equals(srcName.toUpperCase())){
+					String targetName = e.split(",")[1];
+					/*if("ZXG.BLK".equals(srcName.toUpperCase())){
 						targetName = "A1自选股.EBK";
 					}else if(srcName.toUpperCase().contains("A2GCG")){
 						targetName = "A2A2 观察股(25内).EBK";
 					}else{
 						targetName = "A9"+srcName.split("\\.")[0]+".EBK";
-					}
+					}*/
 					//拷贝到EBK目录
 					FileUtil.copy(Constants.out_custom_path+"/"+targetName, new File(path+"/"+srcName));
 				}
