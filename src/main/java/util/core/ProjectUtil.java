@@ -6,10 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Properties;
 
 import javax.swing.filechooser.FileSystemView;
 
 import util.Constants;
+import util.FileUtil;
 import util.StringUtil;
 import func.domain.Stock;
 
@@ -146,6 +148,58 @@ public class ProjectUtil {
 			}
 		}
 		return num;
+	}
+
+	
+	/**
+	 * 验证工程需要的文件夹是否存在，不存在则建立
+	 */
+	public static void validate() {
+		validateDict();
+		validateFile();
+	}
+	
+	private static void validateDict() {
+		FileUtil.createFolder(Constants.out_result_path);
+		FileUtil.createFolder(Constants.out_config_path);
+		FileUtil.createFolder(Constants.out_custom_path);
+		FileUtil.createFolder(Constants.out_concept_path);
+		FileUtil.createFolder(Constants.out_industry_path);
+	}
+	private static void validateFile() {
+		String cookiePath = Constants.out_config_path+"/"+Constants.req_cookie_name;
+		String paramsPath = Constants.out_config_path+"/"+Constants.req_params_name;
+		boolean noCookie = false;
+		if(!FileUtil.exists(cookiePath)){
+			System.out.println("拷贝cookie文件到【"+Constants.out_config_path+"】中");
+			File oldfile = new File(ProjectUtil.getClasspath() + Constants.config_path + Constants.req_cookie_name);
+			FileUtil.copy(cookiePath, oldfile);
+			noCookie = true;
+		};
+		
+		if(!FileUtil.exists(paramsPath)){
+			System.out.println("拷贝params文件到【"+Constants.out_config_path+"】中");
+			File oldfile = new File(ProjectUtil.getClasspath() + Constants.config_path + Constants.req_params_name);
+			FileUtil.copy(paramsPath, oldfile);
+		};
+		//登录操作
+		if(noCookie){
+			Properties params = AccessUtil.readParams();
+			String username = params.getProperty("username");
+			String password = params.getProperty("password");
+			if (StringUtil.isEmpty(username)) {
+				System.err.println("params.properties缺少用户登录信息。");
+			}
+			XueqiuUtil xq = new XueqiuUtil();
+			String cookies = xq.login(username,password);
+			try {
+				FileUtil.write(Constants.out_config_path+"/"+Constants.req_cookie_name, cookies);
+				System.out.println("登录成功。");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
 	}
 
 }

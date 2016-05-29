@@ -64,8 +64,10 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JPanel jp_custom = new JPanel();
 	private JPanel jp_concept = new JPanel();
 	private JPanel jp_industry = new JPanel();
-	
+
 	private JMenuItem loginItem = new JMenuItem("登录");
+	private JMenuItem resetItem = new JMenuItem("重置");
+	
 
 	private JButton JbuttonOk = new JButton("统计");
 	private JButton JbuttonDelImport = new JButton("删除上传");
@@ -83,7 +85,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JTextField field_thread = new JTextField(5);
 	private JTextField field_waitTime = new JTextField(5);
 	private JTextField field_addTime = new JTextField(5);
-	
+
 	public JTextField displayLabel = new JTextField(45);
 
 	private Map<String, JCheckBox> group = new HashMap<String, JCheckBox>();
@@ -92,7 +94,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	private List<String> customContent;
 	private List<String> conceptContent;
 	private List<String> industryContent;
-	
 
 	private Map<String, String> prefixMap = new HashMap<String, String>();
 
@@ -110,7 +111,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void initWindow() {
 		initParams();
 		initContentData();
-		
+
 		initMenuBar();
 		initJPanel1();
 		initJPanel2();
@@ -123,12 +124,14 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	private void initMenuBar() {
-		JMenuBar menuBar = new JMenuBar();  
-		JMenu menu = new JMenu("菜单");  
-        menu.add(loginItem);  
-		menuBar.add(menu);  
-        this.setJMenuBar(menuBar);
-        loginItem.addActionListener(this);
+		JMenuBar menuBar = new JMenuBar();
+		JMenu menu = new JMenu("菜单");
+		menu.add(loginItem);
+		menu.add(resetItem);
+		menuBar.add(menu);
+		this.setJMenuBar(menuBar);
+		loginItem.addActionListener(this);
+		resetItem.addActionListener(this);
 	}
 
 	private void initParams() {
@@ -161,30 +164,29 @@ public class StockFrame extends JFrame implements ActionListener {
 		JbuttonSame.addActionListener(this);
 		JbuttonDifferent.addActionListener(this);
 		JbuttonCombine.addActionListener(this);
-		loginItem.addActionListener(this);
 	}
 
 	private void initJPanel2() {
 		jp2.setBorder(BorderFactory.createTitledBorder("参数"));
-		//jp2.setBounds(0, 0, window_width, 400);
-		//jp2.setSize(window_width, 300);
+		// jp2.setBounds(0, 0, window_width, 400);
+		// jp2.setSize(window_width, 300);
 		jp2.add(new JLabel("day:"));
 		jp2.add(field_day);
-		
+
 		jp2.add(new JLabel("sleep:"));
 		jp2.add(field_sleep);
-		
+
 		jp2.add(new JLabel("线程数:"));
 		jp2.add(field_thread);
-		
+
 		jp2.add(new JLabel("errWaitTime:"));
 		jp2.add(field_waitTime);
-		
+
 		jp2.add(new JLabel("addTime:"));
 		jp2.add(field_addTime);
-		
+
 		initDefaultParams();
-		
+
 		jp2.add(displayLabel);
 		displayLabel.setEditable(false);
 		displayLabel.setText("请选择。");
@@ -192,40 +194,40 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private void initDefaultParams() {
 		String day = params.getProperty("day");
-		if(StringUtil.isEmpty(day)){
+		if (StringUtil.isEmpty(day)) {
 			field_day.setText("1");
-		}else{
+		} else {
 			field_day.setText(day);
 		}
-		
+
 		String sleep = params.getProperty("sleep");
-		if(StringUtil.isEmpty(sleep)){
+		if (StringUtil.isEmpty(sleep)) {
 			field_sleep.setText("1");
-		}else{
+		} else {
 			field_sleep.setText(sleep);
 		}
-		
+
 		String thread = params.getProperty("thread");
-		if(StringUtil.isEmpty(thread)){
+		if (StringUtil.isEmpty(thread)) {
 			field_thread.setText("1");
-		}else{
+		} else {
 			field_thread.setText(thread);
 		}
-		
+
 		String errWaitTime = params.getProperty("errWaitTime");
-		if(StringUtil.isEmpty(errWaitTime)){
+		if (StringUtil.isEmpty(errWaitTime)) {
 			field_waitTime.setText("40");
-		}else{
+		} else {
 			field_waitTime.setText(errWaitTime);
 		}
-		
+
 		String addTime = params.getProperty("addTime");
-		if(StringUtil.isEmpty(addTime)){
+		if (StringUtil.isEmpty(addTime)) {
 			field_addTime.setText("1");
-		}else{
+		} else {
 			field_addTime.setText(addTime);
 		}
-		
+
 	}
 
 	private void initJPanel3() {
@@ -244,9 +246,10 @@ public class StockFrame extends JFrame implements ActionListener {
 
 		initContentJPanel(jp_custom, this.customContent, "自选", "custom");
 		String hide = (String) params.get("hideOtherPanel");
-		if(StringUtil.isEmpty(hide) || hide.equals("false")){
+		if (StringUtil.isEmpty(hide) || hide.equals("false")) {
 			initContentJPanel(jp_concept, this.conceptContent, "概念", "concept");
-			initContentJPanel(jp_industry, this.industryContent, "行业", "industry");
+			initContentJPanel(jp_industry, this.industryContent, "行业",
+					"industry");
 		}
 
 		setDefaultPrefixMap();
@@ -289,7 +292,7 @@ public class StockFrame extends JFrame implements ActionListener {
 			String realName = element.substring(2, element.length());
 			// 设置前缀映射
 			prefixMap.put(realName, prefix);
-			//板块名字后面加上个股数量
+			// 板块名字后面加上个股数量
 			String realNameWithNum = null;
 			try {
 				realNameWithNum = addSuffixWithNum(name, element);
@@ -329,14 +332,15 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	private String addSuffixWithNum(String subpath, String element) throws FileNotFoundException {
+	private String addSuffixWithNum(String subpath, String element)
+			throws FileNotFoundException {
 		String path = Constants.out_path + Constants.code_path + subpath + "/"
 				+ element + ".EBK";
 		String realName = element.substring(2, element.length());
 		int num = 0;
 		if (realName.equals("自选股") || realName.equals("垃圾回收站")) {
 			num = ProjectUtil.readValidLineNum(path, true);
-		}else{
+		} else {
 			num = ProjectUtil.readValidLineNum(path, false);
 		}
 		return realName + "（" + num + "）";
@@ -379,19 +383,23 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == JbuttonDelImport) {
 			performImport(true);
 		}
-		
+
 		if (e.getSource() == JbuttonSame) {
 			performSame();
 		}
-		
+
 		if (e.getSource() == JbuttonDifferent) {
 			performDifferent();
 		}
-		
+
 		if (e.getSource() == loginItem) {
 			performLogin();
 		}
 		
+		if (e.getSource() == resetItem) {
+			performReset();
+		}
+
 		if (e.getSource() == JbuttonCombine) {
 			try {
 				performCombine();
@@ -403,39 +411,46 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 	}
 
+	private void performReset() {
+		this.dispose();
+		
+	}
+
 	private void performAutoChoose() {
 		String installPath = params.getProperty("tdxInstallPath");
 		String fileNames = params.getProperty("autoImportFile");
-		if(StringUtil.isEmpty(installPath)||StringUtil.isEmpty(fileNames)){
+		if (StringUtil.isEmpty(installPath) || StringUtil.isEmpty(fileNames)) {
 			System.err.println("params.properties缺少券商软件安装目录的属性。");
 		}
 		String[] array = installPath.split(";");
 		boolean result = false;
-		for(String path : array){
+		for (String path : array) {
 			File folder = new File(path);
-			if(folder.exists()){
-				//先删除自选股
+			if (folder.exists()) {
+				// 先删除自选股
 				for (String name : this.customContent) {
-					FileUtil.delete(Constants.out_custom_path+"/"+name+".EBK");
+					FileUtil.delete(Constants.out_custom_path + "/" + name
+							+ ".EBK");
 				}
-				
+
 				String[] elements = fileNames.split(";");
-				for(String e : elements){
+				for (String e : elements) {
 					String srcName = e.split(",")[0];
 					String targetName = e.split(",")[1];
-					FileUtil.copy(Constants.out_custom_path+"/"+targetName, new File(path+"/"+srcName));
+					FileUtil.copy(Constants.out_custom_path + "/" + targetName,
+							new File(path + "/" + srcName));
 				}
 				result = true;
 				refreshCustomPanel();
 				break;
-			}else{
+			} else {
 				continue;
 			}
 		}
-		
-		if(result){
+
+		if (result) {
 			displayLabel.setText("自动导入完成。");
-		}else{
+		} else {
 			displayLabel.setText("没有找到券商软件安装目录。");
 		}
 	}
@@ -443,7 +458,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void performLogin() {
 		String username = params.getProperty("username");
 		String password = params.getProperty("password");
-		if(StringUtil.isEmpty(username)){
+		if (StringUtil.isEmpty(username)) {
 			System.err.println("params.properties缺少用户登录信息。");
 		}
 		new Thread(new LoginWorker(username, password, this)).start();
@@ -454,20 +469,20 @@ public class StockFrame extends JFrame implements ActionListener {
 		List<String> names = getSelectNames();
 		if (names.size() > 0) {
 			displayLabel.setText("正在执行合并……");
-			
+
 			Set<String> all = new HashSet<String>();
-			for(String n : names){
+			for (String n : names) {
 				List<String> result = FileUtil.readLines(n);
-				for(String ele : result){
+				for (String ele : result) {
 					all.add(ele);
 				}
 			}
-			
-			String writePath =  ProjectUtil.getComputerHomeDir()+"/N合一.EBK";
+
+			String writePath = ProjectUtil.getComputerHomeDir() + "/N合一.EBK";
 			String str = CollectionUtil.toLineString(all);
-			
+
 			FileUtil.write(writePath, str);
-			
+
 			displayLabel.setText("合并完成。");
 		} else {
 			displayLabel.setText("请选择要合并的板块。");
@@ -477,63 +492,65 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void performDifferent() {
 		// 获取选中的板块
 		List<String> names = getSelectNames();
-		if(names.size()==2){
+		if (names.size() == 2) {
 			try {
 				List<String> result_1 = FileUtil.readLines(names.get(0));
 				List<String> result_2 = FileUtil.readLines(names.get(1));
-				List<String> just_1 = CollectionUtil.different(result_1,result_2);
-				List<String> just_2 = CollectionUtil.different(result_2,result_1);
+				List<String> just_1 = CollectionUtil.different(result_1,
+						result_2);
+				List<String> just_2 = CollectionUtil.different(result_2,
+						result_1);
 				String just_str_1 = CollectionUtil.toLineString(just_1);
 				String just_str_2 = CollectionUtil.toLineString(just_2);
-				
+
 				String writePath1 = getDifferentWritePath(names.get(0));
 				FileUtil.write(writePath1, just_str_1);
-				
+
 				String writePath2 = getDifferentWritePath(names.get(1));
 				FileUtil.write(writePath2, just_str_2);
-				
-				displayLabel.setText("统计独有完成，目录："+ProjectUtil.getComputerHomeDir());
+
+				displayLabel.setText("统计独有完成，目录："
+						+ ProjectUtil.getComputerHomeDir());
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}else{
+		} else {
 			displayLabel.setText("需要选择两个板块。");
 		}
 	}
 
 	private String getDifferentWritePath(String path) {
 		String fileName = StringUtil.getFileName(path);
-		return ProjectUtil.getComputerHomeDir()+"/"+fileName+"（独有）.EBK";
+		return ProjectUtil.getComputerHomeDir() + "/" + fileName + "（独有）.EBK";
 	}
 
 	private void performSame() {
 		// 获取选中的板块
 		List<String> names = getSelectNames();
-		if(names.size()==2){
+		if (names.size() == 2) {
 			try {
 				List<String> result_1 = FileUtil.readLines(names.get(0));
 				List<String> result_2 = FileUtil.readLines(names.get(1));
-				List<String> same = CollectionUtil.same(result_1,result_2);
+				List<String> same = CollectionUtil.same(result_1, result_2);
 				String result = CollectionUtil.toLineString(same);
 				String writePath = getWritePath();
 				FileUtil.write(writePath, result);
-				displayLabel.setText("统计相同结果目录："+writePath);
+				displayLabel.setText("统计相同结果目录：" + writePath);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}else{
+		} else {
 			displayLabel.setText("需要两个对比的板块。");
 		}
 	}
-	
-	private String getWritePath() {
-		return ProjectUtil.getComputerHomeDir()+"/same.EBK";
-	}
 
+	private String getWritePath() {
+		return ProjectUtil.getComputerHomeDir() + "/same.EBK";
+	}
 
 	private void performDel() {
 		// 获取选中的板块
@@ -590,7 +607,6 @@ public class StockFrame extends JFrame implements ActionListener {
 			refreshCustomPanel();
 		}
 	}
-
 
 	private void refreshCustomPanel() {
 		Container con = this.getContentPane();
@@ -690,7 +706,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		head.threadNum = Integer.parseInt(field_thread.getText());
 		head.errWaitTime = Integer.parseInt(field_waitTime.getText());
 		head.addTime = Integer.parseInt(field_addTime.getText());
-		
+
 		return head;
 	}
 
