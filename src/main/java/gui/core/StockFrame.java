@@ -50,9 +50,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	private static final String lastCustomPrefix = "A9";
 
 	private int window_width = 700;
-	private int window_height = 630;
-
 	private int scroll_height = 370;
+	private int window_height = scroll_height + 260;;
 
 	private static final int GridLayoutColumn = 4;
 
@@ -244,8 +243,11 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp3_content_temp.setLayout(new BorderLayout());
 
 		initContentJPanel(jp_custom, this.customContent, "自选", "custom");
-		initContentJPanel(jp_concept, this.conceptContent, "概念", "concept");
-		initContentJPanel(jp_industry, this.industryContent, "行业", "industry");
+		String hide = (String) params.get("hideOtherPanel");
+		if(StringUtil.isEmpty(hide) || hide.equals("false")){
+			initContentJPanel(jp_concept, this.conceptContent, "概念", "concept");
+			initContentJPanel(jp_industry, this.industryContent, "行业", "industry");
+		}
 
 		setDefaultPrefixMap();
 
