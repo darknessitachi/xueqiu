@@ -143,7 +143,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	private void initJPanel1() {
-		jp1.setBorder(BorderFactory.createTitledBorder("按钮"));
+		jp1.setBorder(BorderFactory.createTitledBorder("操作"));
 		jp1.add(JbuttonOk);
 		jp1.add(JbuttonDelImport);
 		jp1.add(JbuttonEmport);
@@ -165,7 +165,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	private void initJPanel2() {
-		jp2.setBorder(BorderFactory.createTitledBorder("输入参数"));
+		jp2.setBorder(BorderFactory.createTitledBorder("参数"));
 		//jp2.setBounds(0, 0, window_width, 400);
 		//jp2.setSize(window_width, 300);
 		jp2.add(new JLabel("day:"));
