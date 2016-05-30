@@ -66,7 +66,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JPanel jp_industry = new JPanel();
 
 	private JMenuItem loginItem = new JMenuItem("登录");
-	private JMenuItem resetItem = new JMenuItem("重置");
 	
 
 	private JButton JbuttonOk = new JButton("统计");
@@ -127,11 +126,9 @@ public class StockFrame extends JFrame implements ActionListener {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("菜单");
 		menu.add(loginItem);
-		menu.add(resetItem);
 		menuBar.add(menu);
 		this.setJMenuBar(menuBar);
 		loginItem.addActionListener(this);
-		resetItem.addActionListener(this);
 	}
 
 	private void initParams() {
@@ -396,9 +393,6 @@ public class StockFrame extends JFrame implements ActionListener {
 			performLogin();
 		}
 		
-		if (e.getSource() == resetItem) {
-			performReset();
-		}
 
 		if (e.getSource() == JbuttonCombine) {
 			try {
@@ -411,10 +405,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	private void performReset() {
-		this.dispose();
-		
-	}
 
 	private void performAutoChoose() {
 		String installPath = params.getProperty("tdxInstallPath");
