@@ -2,8 +2,8 @@ package util.core;
 
 import java.io.IOException;
 
-import func.domain.Req;
-import func.inter.StockCommand;
+import core.domain.Req;
+import core.inter.StockCommand;
 
 public class StatisticUtil {
 	

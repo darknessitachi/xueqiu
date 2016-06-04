@@ -1,4 +1,4 @@
-package func.domain;
+package core.domain;
 
 import java.util.ArrayList;
 import java.util.List;

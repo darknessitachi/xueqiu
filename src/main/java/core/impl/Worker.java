@@ -1,4 +1,4 @@
-package func.impl;
+package core.impl;
 
 import java.io.IOException;
 import java.util.Date;
@@ -11,8 +11,8 @@ import util.Constants;
 import util.DateUtil;
 import util.core.ProjectUtil;
 import util.http.HttpClientUniqueUtil;
-import func.domain.Req;
-import func.domain.Stock;
+import core.domain.Req;
+import core.domain.Stock;
 
 public class Worker implements Runnable{
 
@@ -43,8 +43,6 @@ public class Worker implements Runnable{
 			}
 		}
 	}
-	
-	
 	private String getResult(int page) {
 		String result = null;
 		String url = ProjectUtil.getSearchUrl(stock,page);

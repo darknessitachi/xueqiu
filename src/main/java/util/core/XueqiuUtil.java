@@ -14,8 +14,8 @@ import util.DateUtil;
 import util.FileUtil;
 import util.StringUtil;
 import util.http.HttpClientUniqueUtil;
-import func.domain.Req.ReqBody;
-import func.domain.Stock;
+import core.domain.Req.ReqBody;
+import core.domain.Stock;
 
 public class XueqiuUtil {
 	

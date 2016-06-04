@@ -1,8 +1,8 @@
-package func.inter;
+package core.inter;
 
 import java.io.IOException;
 
-import func.domain.Req;
+import core.domain.Req;
 
 public interface ReqLoad {
 	

@@ -1,14 +1,14 @@
-package func.inter;
+package core.inter;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import func.domain.Req;
-import func.domain.Stock;
-import func.impl.ReqLoadImpl;
-import func.impl.Worker;
+import core.domain.Req;
+import core.domain.Stock;
+import core.impl.ReqLoadImpl;
+import core.impl.Worker;
 
 public class StockCommand {
 	

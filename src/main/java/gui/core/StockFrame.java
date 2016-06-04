@@ -1,6 +1,6 @@
 package gui.core;
 
-import func.domain.Req.ReqHead;
+import core.domain.Req.ReqHead;
 import gui.worker.ExportWorker;
 import gui.worker.ImportWorker;
 import gui.worker.LoginWorker;

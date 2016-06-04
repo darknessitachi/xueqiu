@@ -13,7 +13,7 @@ import javax.swing.filechooser.FileSystemView;
 import util.Constants;
 import util.FileUtil;
 import util.StringUtil;
-import func.domain.Stock;
+import core.domain.Stock;
 
 
 public class ProjectUtil {

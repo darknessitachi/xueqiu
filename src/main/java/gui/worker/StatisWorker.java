@@ -1,7 +1,7 @@
 package gui.worker;
 
-import func.domain.Req;
-import func.domain.Req.ReqHead;
+import core.domain.Req;
+import core.domain.Req.ReqHead;
 import gui.core.StockFrame;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package func.impl;
+package core.impl;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,10 +18,10 @@ import util.DateUtil;
 import util.FileUtil;
 import util.StringUtil;
 import util.core.AccessUtil;
-import func.domain.Entity;
-import func.domain.Req;
-import func.domain.Stock;
-import func.inter.ReqLoad;
+import core.domain.Entity;
+import core.domain.Req;
+import core.domain.Stock;
+import core.inter.ReqLoad;
 
 public class ReqLoadImpl implements ReqLoad {
 	

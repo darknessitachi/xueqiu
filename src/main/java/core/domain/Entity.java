@@ -1,4 +1,4 @@
-package func.domain;
+package core.domain;
 
 import util.core.ProjectUtil;
 
