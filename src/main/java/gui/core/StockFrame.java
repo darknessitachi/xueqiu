@@ -147,9 +147,18 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.add(JbuttonOk);
 		jp1.add(JbuttonDelImport);
 		jp1.add(JbuttonEmport);
-		jp1.add(JbuttonSame);
-		jp1.add(JbuttonDifferent);
-		jp1.add(JbuttonCombine);
+		String hideSameBtn = (String) params.get("hideSameBtn");
+		if (StringUtil.isEmpty(hideSameBtn) || hideSameBtn.equals("false")) {
+			jp1.add(JbuttonSame);
+		}
+		String hideDiffBtn = (String) params.get("hideDiffBtn");
+		if (StringUtil.isEmpty(hideDiffBtn) || hideDiffBtn.equals("false")) {
+			jp1.add(JbuttonDifferent);
+		}
+		String hideCombineBtn = (String) params.get("hideCombineBtn");
+		if (StringUtil.isEmpty(hideCombineBtn) || hideCombineBtn.equals("false")) {
+			jp1.add(JbuttonCombine);
+		}
 
 		JbuttonOk.addActionListener(this);
 		JbuttonEmport.addActionListener(this);

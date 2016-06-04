@@ -106,13 +106,11 @@ public class ReqLoadImpl implements ReqLoad {
 		StringBuilder head_msg = new StringBuilder();
 		head_msg.append("【"+getCodeShowName(req.body.bodyName)+"】板块的股票总数为【"+req.body.list.size()+"】个，请求耗时【"+useTimes+"】秒 ").append("\n")
 		.append("请求参数sleep【"+req.head.sleep+"】毫秒").append("\n")
-		.append("请求参数thread个数【"+req.head.threadNum+"】").append("\n");
+		.append("请求参数thread个数【"+req.head.threadNum+"】").append("\n").append(getSellMsg(req.body.list)).append("\n");
 		outMsg(head_msg.toString(),bw);
 		//遍历打印
 		for (String title : req.mapKey) {
-			
 			outMsg("——————" + title + " 个股热度——————",bw);
-			
 			List<Entity> sortList = getSortListByKey(title);
 			int num = 1;
 			for (Entity e : sortList) {
@@ -123,8 +121,21 @@ public class ReqLoadImpl implements ReqLoad {
 			}
 			outMsg("",bw);
 		}
-		bw.close();
 		
+		bw.close();
+	}
+
+	private String getSellMsg(List<Stock> list) {
+		StringBuilder sb = new StringBuilder();
+		for(Stock e : list){
+			if(e.isSell){
+				sb.append(",").append(e.name);
+			}
+		}
+		if(!StringUtil.isEmpty(sb.toString())){
+			return "★★★★★★★★【遭到减持的个股："+sb.toString().substring(1)+"】★★★★★★★★";
+		}
+		return "";
 	}
 
 	private String getCodeShowName(String bodyName) {

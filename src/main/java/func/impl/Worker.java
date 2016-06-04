@@ -96,12 +96,14 @@ public class Worker implements Runnable{
 		}
 		for(int i=0;i<array.size();i++){
 			JSONObject entity = (JSONObject) array.get(i);
+			//System.out.println(entity.toString());
 			//评论时间
 			long time = (Long) entity.get("created_at");
 			String createDate = DateUtil.formatDate(new Date(time), "yyyy-MM-dd");
 			int resultCode = matchMapKey(createDate);
 			if(resultCode == 1){
 				boolean isNotice = isNotice(entity);
+				validateSell(entity,stock);
 				if(isNotice && req.head.filterNotice){
 					continue;
 				}else{
@@ -114,6 +116,20 @@ public class Worker implements Runnable{
 			}
 		}
 		return false;
+	}
+	/**
+	 * 是否减持
+	 * @param entity
+	 * @param stock 
+	 */
+	private void validateSell(JSONObject entity, Stock stock) {
+		String source = (String) entity.get("source");
+		if("公告".equals(source) ||"新闻".equals(source)){
+			String title = entity.getString("title");
+			if(title.indexOf("减持")>=0){
+				stock.isSell = true;
+			}
+		}
 	}
 	/**
 	 * 判断当前评论是否公告
