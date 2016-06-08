@@ -74,6 +74,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton JbuttonSame = new JButton("统计相同");
 	private JButton JbuttonDifferent = new JButton("统计独有");
 	private JButton JbuttonCombine = new JButton("N合一");
+	private JButton JbuttonCleaUp = new JButton("整理");
 	private JButton JbuttonChoose = new JButton("导入EBK");
 	private JButton autoChoose = new JButton("自动导入");
 	private JButton JbuttonDel = new JButton("删除EBK");
@@ -147,6 +148,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.add(JbuttonOk);
 		jp1.add(JbuttonDelImport);
 		jp1.add(JbuttonEmport);
+		//jp1.add(JbuttonCleaUp);
+		
 		String hideSameBtn = (String) params.get("hideSameBtn");
 		if (StringUtil.isEmpty(hideSameBtn) || hideSameBtn.equals("false")) {
 			jp1.add(JbuttonSame);
@@ -170,6 +173,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		JbuttonSame.addActionListener(this);
 		JbuttonDifferent.addActionListener(this);
 		JbuttonCombine.addActionListener(this);
+		JbuttonCleaUp.addActionListener(this);
+		
 	}
 
 	private void initJPanel2() {
@@ -412,8 +417,27 @@ public class StockFrame extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
+		
+		if (e.getSource() == JbuttonCleaUp) {
+			performCleaUp();
+		}
 	}
 
+
+	private void performCleaUp() {
+		/*String zxg = params.getProperty("zxg");
+		String a1 = params.getProperty("a1");
+		String a2 = params.getProperty("a2");
+		String wc = params.getProperty("wc");*/
+		//获取自选股中除了指数的内容
+		
+		//把自选股中除了指数的内容写入当前天
+		
+		//把自选股中除了指数的内容写入当前周
+		
+		//删除自选股中的内容
+		
+	}
 
 	private void performAutoChoose() {
 		String installPath = params.getProperty("tdxInstallPath");
@@ -424,12 +448,12 @@ public class StockFrame extends JFrame implements ActionListener {
 		String[] array = installPath.split(";");
 		boolean result = false;
 		for (String path : array) {
+			path = path + "/" + Constants.zxg_path;
 			File folder = new File(path);
 			if (folder.exists()) {
 				// 先删除自选股
 				for (String name : this.customContent) {
-					FileUtil.delete(Constants.out_custom_path + "/" + name
-							+ ".EBK");
+					FileUtil.delete(Constants.out_custom_path + "/" + name+ ".EBK");
 				}
 
 				String[] elements = fileNames.split(";");

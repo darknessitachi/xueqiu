@@ -17,12 +17,14 @@ public class Constants {
 	public static final String out_concept_path  =  "d:/xueqiu/code/concept";
 	public static final String out_industry_path =  "d:/xueqiu/code/industry";
 	
+	public static final String zxg_path =  "T0002/blocknew";
+	
+	public static final String a1 =  "T0002/blocknew";
+	public static final String a2 =  "T0002/blocknew";
+	
 	public static final String referer_prefix = "http://xueqiu.com/S/";
 	public static final String inter_url = "http://hq.sinajs.cn/list=";
 	
 	public static final String[] stockIndex = new String[]{"999","399"};
 	public static final long XUEQIU_SLEEP = 100;
-	
-	//请求报错后，首先睡眠的时间
-	public static long badReqSleep = 34;
 }
