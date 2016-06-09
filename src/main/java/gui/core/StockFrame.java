@@ -1,6 +1,5 @@
 package gui.core;
 
-import core.domain.Req.ReqHead;
 import gui.worker.ExportWorker;
 import gui.worker.ImportWorker;
 import gui.worker.LoginWorker;
@@ -27,6 +26,7 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -42,6 +42,7 @@ import util.FileUtil;
 import util.StringUtil;
 import util.core.AccessUtil;
 import util.core.ProjectUtil;
+import core.domain.Req.ReqHead;
 
 public class StockFrame extends JFrame implements ActionListener {
 
@@ -74,13 +75,12 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton JbuttonSame = new JButton("统计相同");
 	private JButton JbuttonDifferent = new JButton("统计独有");
 	private JButton JbuttonCombine = new JButton("N合一");
-	private JButton JbuttonCleaUp = new JButton("整理");
 	private JButton JbuttonChoose = new JButton("导入EBK");
 	private JButton autoChoose = new JButton("自动导入");
 	private JButton JbuttonDel = new JButton("删除EBK");
 	private JButton JbuttonSelectAll = new JButton("全选");
 
-	private JTextField field_day = new JTextField(5);
+	private JComboBox comboBox = new JComboBox();
 	private JTextField field_sleep = new JTextField(5);
 	private JTextField field_thread = new JTextField(5);
 	private JTextField field_waitTime = new JTextField(5);
@@ -96,6 +96,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	private List<String> industryContent;
 
 	private Map<String, String> prefixMap = new HashMap<String, String>();
+
+	
 
 	public StockFrame(String title) throws ClassNotFoundException {
 		super(title);
@@ -148,7 +150,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.add(JbuttonOk);
 		jp1.add(JbuttonDelImport);
 		jp1.add(JbuttonEmport);
-		//jp1.add(JbuttonCleaUp);
 		
 		String hideSameBtn = (String) params.get("hideSameBtn");
 		if (StringUtil.isEmpty(hideSameBtn) || hideSameBtn.equals("false")) {
@@ -173,7 +174,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		JbuttonSame.addActionListener(this);
 		JbuttonDifferent.addActionListener(this);
 		JbuttonCombine.addActionListener(this);
-		JbuttonCleaUp.addActionListener(this);
 		
 	}
 
@@ -182,7 +182,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		// jp2.setBounds(0, 0, window_width, 400);
 		// jp2.setSize(window_width, 300);
 		jp2.add(new JLabel("day:"));
-		jp2.add(field_day);
+		jp2.add(comboBox);
 
 		jp2.add(new JLabel("sleep:"));
 		jp2.add(field_sleep);
@@ -205,10 +205,12 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private void initDefaultParams() {
 		String day = params.getProperty("day");
-		if (StringUtil.isEmpty(day)) {
-			field_day.setText("1");
-		} else {
-			field_day.setText(day);
+		if (!StringUtil.isEmpty(day)) {
+			String[] array = day.split(",");
+			String fillWord = getFillWord();
+			for(String e : array){
+				comboBox.addItem(fillWord+e+fillWord);
+			}
 		}
 
 		String sleep = params.getProperty("sleep");
@@ -239,6 +241,15 @@ public class StockFrame extends JFrame implements ActionListener {
 			field_addTime.setText(addTime);
 		}
 
+	}
+
+	private String getFillWord() {
+		int width = Integer.parseInt(params.getProperty("dayFieldWidth"));
+		String fillWord = "";
+		for(int i=0;i<width;i++){
+			fillWord = fillWord +" ";
+		}
+		return fillWord;
 	}
 
 	private void initJPanel3() {
@@ -418,26 +429,8 @@ public class StockFrame extends JFrame implements ActionListener {
 			}
 		}
 		
-		if (e.getSource() == JbuttonCleaUp) {
-			performCleaUp();
-		}
 	}
 
-
-	private void performCleaUp() {
-		/*String zxg = params.getProperty("zxg");
-		String a1 = params.getProperty("a1");
-		String a2 = params.getProperty("a2");
-		String wc = params.getProperty("wc");*/
-		//获取自选股中除了指数的内容
-		
-		//把自选股中除了指数的内容写入当前天
-		
-		//把自选股中除了指数的内容写入当前周
-		
-		//删除自选股中的内容
-		
-	}
 
 	private void performAutoChoose() {
 		String installPath = params.getProperty("tdxInstallPath");
@@ -722,14 +715,15 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	private ReqHead getReqHead() throws IOException {
-
+		
 		ReqHead head = new ReqHead();
-		head.day = Integer.parseInt(field_day.getText());
+		
+		head.day = Integer.parseInt(comboBox.getSelectedItem().toString().trim());
 		head.sleep = Integer.parseInt(field_sleep.getText());
 		head.threadNum = Integer.parseInt(field_thread.getText());
 		head.errWaitTime = Integer.parseInt(field_waitTime.getText());
 		head.addTime = Integer.parseInt(field_addTime.getText());
-
+		
 		return head;
 	}
 
