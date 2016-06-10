@@ -183,6 +183,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		// jp2.setSize(window_width, 300);
 		jp2.add(new JLabel("day:"));
 		jp2.add(comboBox);
+		//jp2.setComponentZOrder(comboBox,2);
 
 		jp2.add(new JLabel("sleep:"));
 		jp2.add(field_sleep);
@@ -356,11 +357,11 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private String addSuffixWithNum(String subpath, String element)
 			throws FileNotFoundException {
-		String path = Constants.out_path + Constants.code_path + subpath + "/"
-				+ element + ".EBK";
+		String path = Constants.out_path + Constants.code_path + subpath + "/"+ element + ".EBK";
 		String realName = element.substring(2, element.length());
 		int num = 0;
-		if (realName.equals("自选股") || realName.equals("垃圾回收站")) {
+		
+		if (realName.equals("自选股")) {
 			num = ProjectUtil.readValidLineNum(path, true);
 		} else {
 			num = ProjectUtil.readValidLineNum(path, false);
@@ -433,6 +434,8 @@ public class StockFrame extends JFrame implements ActionListener {
 
 
 	private void performAutoChoose() {
+		//先隐藏，然后再显示，解决下拉框被自选股覆盖的问题。
+		comboBox.setVisible(false);
 		String installPath = params.getProperty("tdxInstallPath");
 		String fileNames = params.getProperty("autoImportFile");
 		if (StringUtil.isEmpty(installPath) || StringUtil.isEmpty(fileNames)) {
@@ -448,7 +451,7 @@ public class StockFrame extends JFrame implements ActionListener {
 				for (String name : this.customContent) {
 					FileUtil.delete(Constants.out_custom_path + "/" + name+ ".EBK");
 				}
-
+				//拷贝自选股
 				String[] elements = fileNames.split(";");
 				for (String e : elements) {
 					String srcName = e.split(",")[0];
@@ -457,7 +460,9 @@ public class StockFrame extends JFrame implements ActionListener {
 							new File(path + "/" + srcName));
 				}
 				result = true;
+				//刷新组件
 				refreshCustomPanel();
+				comboBox.setVisible(true);
 				break;
 			} else {
 				continue;
@@ -633,8 +638,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		con.validate();
 
 		con.invalidate();
-		this.customContent = FileUtil
-				.getFileFromFolder(Constants.out_custom_path);
+		this.customContent = FileUtil.getFileFromFolder(Constants.out_custom_path);
 		initContentJPanel(jp_custom, this.customContent, "自选", "custom");
 		con.validate();
 	}
