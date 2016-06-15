@@ -71,6 +71,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private JButton JbuttonOk = new JButton("统计");
 	private JButton JbuttonDelImport = new JButton("删除上传");
+	private JButton JbuttonBoth = new JButton("统计+上传");
 	private JButton JbuttonEmport = new JButton("下载雪球");
 	private JButton JbuttonSame = new JButton("统计相同");
 	private JButton JbuttonDifferent = new JButton("统计独有");
@@ -80,7 +81,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton JbuttonDel = new JButton("删除EBK");
 	private JButton JbuttonSelectAll = new JButton("全选");
 
-	private JComboBox comboBox = new JComboBox();
+	private JComboBox<String> comboBox = new JComboBox<String>();
 	private JTextField field_sleep = new JTextField(5);
 	private JTextField field_thread = new JTextField(5);
 	private JTextField field_waitTime = new JTextField(5);
@@ -149,7 +150,9 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.setBorder(BorderFactory.createTitledBorder("操作"));
 		jp1.add(JbuttonOk);
 		jp1.add(JbuttonDelImport);
+		jp1.add(JbuttonBoth);
 		jp1.add(JbuttonEmport);
+		
 		
 		String hideSameBtn = (String) params.get("hideSameBtn");
 		if (StringUtil.isEmpty(hideSameBtn) || hideSameBtn.equals("false")) {
@@ -174,7 +177,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		JbuttonSame.addActionListener(this);
 		JbuttonDifferent.addActionListener(this);
 		JbuttonCombine.addActionListener(this);
-		
+		JbuttonBoth.addActionListener(this);
 	}
 
 	private void initJPanel2() {
@@ -430,8 +433,30 @@ public class StockFrame extends JFrame implements ActionListener {
 			}
 		}
 		
+		if (e.getSource() == JbuttonBoth) {
+			try {
+				performBoth();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+		
+		
 	}
 
+
+	private void performBoth() throws IOException {
+		boolean delImport = true;
+		// 获取选中的板块
+		List<String> names = getSelectNames();
+		if (names.size() > 0) {
+			displayLabel.setText("正在执行统计……");
+			ReqHead head = getReqHead();
+			new Thread(new StatisWorker(head, names, this,delImport)).start();
+		} else {
+			displayLabel.setText("请选择要统计的板块。");
+		}
+	}
 
 	private void performAutoChoose() {
 		//先隐藏，然后再显示，解决下拉框被自选股覆盖的问题。
@@ -682,7 +707,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (names.size() > 0) {
 			displayLabel.setText("正在执行统计……");
 			ReqHead head = getReqHead();
-			new Thread(new StatisWorker(head, names, this)).start();
+			new Thread(new StatisWorker(head, names, this,false)).start();
 		} else {
 			displayLabel.setText("请选择要统计的板块。");
 		}
@@ -693,7 +718,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * 
 	 * @param del
 	 */
-	private void performImport(boolean del) {
+	public void performImport(boolean del) {
 		// 获取选中的板块
 		List<String> names = getSelectNames();
 		if (names.size() > 0) {

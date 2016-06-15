@@ -16,11 +16,13 @@ public class StatisWorker implements Runnable {
 	private List<String> names;
 	private StockFrame frame;
 	private ReqHead head;
+	private boolean delImport;
 
-	public StatisWorker(ReqHead head, List<String> names, StockFrame frameFirst) {
+	public StatisWorker(ReqHead head, List<String> names, StockFrame frameFirst, boolean delImport) {
 		this.names = names;
 		this.frame = frameFirst;
 		this.head = head;
+		this.delImport = delImport;
 	}
 
 	@Override
@@ -37,7 +39,9 @@ public class StatisWorker implements Runnable {
 			}
 		}
 		frame.displayLabel.setText("统计完成，输出目录【"+Constants.out_result_path+"】");
-		
+		if(delImport){
+			frame.performImport(true);
+		}
 	}
 
 }

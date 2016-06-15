@@ -106,10 +106,14 @@ public class ReqLoadImpl implements ReqLoad {
 		StringBuilder head_msg = new StringBuilder();
 		head_msg.append("【"+getCodeShowName(req.body.bodyName)+"】板块的股票总数为【"+req.body.list.size()+"】个，请求耗时【"+useTimes+"】秒 ").append("\n")
 		.append("请求参数sleep【"+req.head.sleep+"】毫秒").append("\n")
-		.append("请求参数thread个数【"+req.head.threadNum+"】").append("\n").append(getSellMsg(req.body.list)).append("\n");
+		.append("请求参数thread个数【"+req.head.threadNum+"】").append("\n");
 		outMsg(head_msg.toString(),bw);
 		//遍历打印
-		for (String title : req.mapKey) {
+		for(int i=0;i<req.mapKey.size();i++){
+			String title = req.mapKey.get(i);
+			if(i == req.mapKey.size()-1){
+				outMsg(getSellMsg(req.body.list),bw);
+			}
 			outMsg("——————" + title + " 个股热度——————",bw);
 			List<Entity> sortList = getSortListByKey(title);
 			int num = 1;
