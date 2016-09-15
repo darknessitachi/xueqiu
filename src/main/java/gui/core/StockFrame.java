@@ -477,13 +477,8 @@ public class StockFrame extends JFrame implements ActionListener {
 					FileUtil.delete(Constants.out_custom_path + "/" + name+ ".EBK");
 				}
 				//拷贝自选股
-				String[] elements = fileNames.split(";");
-				for (String e : elements) {
-					String srcName = e.split(",")[0];
-					String targetName = e.split(",")[1];
-					FileUtil.copy(Constants.out_custom_path + "/" + targetName,
-							new File(path + "/" + srcName));
-				}
+				copyStockFile(path);
+				
 				result = true;
 				//刷新组件
 				refreshCustomPanel();
@@ -498,6 +493,27 @@ public class StockFrame extends JFrame implements ActionListener {
 			displayLabel.setText("自动导入完成。");
 		} else {
 			displayLabel.setText("没有找到券商软件安装目录。");
+		}
+	}
+	
+	
+	
+	/**
+	 * 拷贝安装目录下的自选股A1，A2，A3到custom目录
+	 * @param path
+	 */
+	private void copyStockFile(String path) {
+		List<String> list = FileUtil.getFullFileNames(path);
+		for(String fileName : list){
+			if(fileName.startsWith("ZXG.blk")){
+				FileUtil.copy(Constants.out_custom_path + "/A1自选股.EBK",new File(path + "/" + fileName));
+			}
+			if(fileName.startsWith("A2")){
+				FileUtil.copy(Constants.out_custom_path + "/A2人气妖股.EBK",new File(path + "/" + fileName));
+			}
+			if(fileName.startsWith("A3")){
+				FileUtil.copy(Constants.out_custom_path + "/A3目标股.EBK",new File(path + "/" + fileName));
+			}
 		}
 	}
 
@@ -663,7 +679,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		con.validate();
 
 		con.invalidate();
-		this.customContent = FileUtil.getFileFromFolder(Constants.out_custom_path);
+		this.customContent = FileUtil.getFileNames(Constants.out_custom_path);
 		initContentJPanel(jp_custom, this.customContent, "自选", "custom");
 		con.validate();
 	}
@@ -780,11 +796,11 @@ public class StockFrame extends JFrame implements ActionListener {
 	 */
 	private void initContentData() {
 		this.customContent = FileUtil
-				.getFileFromFolder(Constants.out_custom_path);
+				.getFileNames(Constants.out_custom_path);
 		this.conceptContent = FileUtil
-				.getFileFromFolder(Constants.out_concept_path);
+				.getFileNames(Constants.out_concept_path);
 		this.industryContent = FileUtil
-				.getFileFromFolder(Constants.out_industry_path);
+				.getFileNames(Constants.out_industry_path);
 	}
 
 }

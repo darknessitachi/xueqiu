@@ -58,7 +58,7 @@ public class TranslateUtil {
 			br.close();
 		}
 		
-		System.out.println("一共写入【"+num+"】只股票！\n");
+		System.out.println("\n【"+absolute_path+"】文件中有【"+num+"】只股票！");
 		return body;
 	}
 

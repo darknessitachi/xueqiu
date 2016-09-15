@@ -33,15 +33,27 @@ public class ImportWorker implements Runnable {
 			}
 			for(String name : names){
 				try {
-					num = num + oper.uploadFile(name);
+					String groupName = getGroupName(name);
+					num = num + oper.uploadFile(name,groupName);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 			}
-		} catch (InterruptedException e) {
+			oper.commitGroup();
+		} catch (InterruptedException e) { 
 			e.printStackTrace();
 		}
 		frame.displayLabel.setText("上传雪球完成，添加【"+num+"】只股票，共【"+oper.countXueqiu(true)+"】只股票。");
+	}
+
+	private String getGroupName(String name) {
+		String groupName = "ZX";
+		if(name.contains("A2")){
+			groupName = "A2";
+		}else if(name.contains("A3")){
+			groupName = "A3";
+		}
+		return groupName;
 	}
 
 }

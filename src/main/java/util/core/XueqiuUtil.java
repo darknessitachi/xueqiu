@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -23,6 +24,10 @@ public class XueqiuUtil {
 	
 	//当前雪球list
 	private List<String> xueqiuList = null;
+	
+	//组名：组下的个股
+	private Map<String,List<Stock>> map = new HashMap<String, List<Stock>>();
+	
 	
 	/**
 	 * 
@@ -66,8 +71,52 @@ public class XueqiuUtil {
 		ReqBody body = TranslateUtil.translate(name);
 		return uploadBody(body);
 	}
-
 	
+	/**
+	 * 上传自选股到指定组
+	 * @param name
+	 * @param string
+	 * @return
+	 * @throws IOException 
+	 * @throws InterruptedException 
+	 */
+	public int uploadFile(String name, String groupName) throws IOException, InterruptedException {
+		ReqBody body = TranslateUtil.translate(name);
+		//System.out.println(name+"下的个股数："+body.list.size());
+		
+		map.put(groupName, body.list);
+		
+		return uploadBody(body);
+	}
+	
+
+
+	/**
+	 * 添加个股到指定组内
+	 * @param code
+	 * @param name
+	 */
+	private void addIntoGroup(String code,String groupName) {
+		//请求头
+		Map<String,String> header = new HashMap<String,String>();
+		header.put(HttpClientUniqueUtil.COOKIE, cookie);
+		header.put(HttpClientUniqueUtil.REFERER, "http://xueqiu.com/S/"+code);
+		
+		//请求参数
+		Map<String,String> params = new HashMap<String,String>();
+		params.put("pnames", groupName);
+		params.put("symbol", code);
+		params.put("category", "2");
+		
+		try {
+			HttpClientUniqueUtil.post("https://xueqiu.com/v4/stock/portfolio/updstock.json",header,params);
+			System.out.println("添加【"+code+"】到组【"+groupName+"】完成。");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
 	public void export() throws IOException{
 		List<String> list = this.queryAll();
 		StringBuilder sb = new StringBuilder();
@@ -192,6 +241,37 @@ public class XueqiuUtil {
 		}
 		return result!=null?result.get(HttpClientUniqueUtil.COOKIE):null;
 	}
+
+	//分析个股所在的所有组，然后上传到对应的组中
+	public void commitGroup() {
+		//个股名：个股所在的组。如：SZ300496：XZ,A2
+	    Map<String,String> stockToGroup = new HashMap<String, String>();
+	    
+	    Set<String> keys = map.keySet();
+	    for(String key : keys){
+	    	List<Stock> list = map.get(key);
+	    	for(Stock stock : list){
+	    		String code = stock.code;
+	    		String currentGroup = stockToGroup.get(code);
+	    		//如果group为空，则添加group；如果group不为空，在group后面追加",GroupName"
+	    		if(StringUtil.isEmpty(currentGroup)){
+	    			stockToGroup.put(code, key);
+	    		}else{
+	    			stockToGroup.put(code, currentGroup+","+key);
+	    		}
+	    	}
+	    	
+	    }
+	    
+	    //分析个股所在组完成后，执行添加操作
+	    Set<String> codes = stockToGroup.keySet();
+	    for(String code : codes){
+	    	String groupName = stockToGroup.get(code);
+	    	addIntoGroup(code, groupName);
+	    }
+	    
+	}
+
 	
 
 }
