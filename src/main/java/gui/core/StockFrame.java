@@ -504,15 +504,22 @@ public class StockFrame extends JFrame implements ActionListener {
 	 */
 	private void copyStockFile(String path) {
 		List<String> list = FileUtil.getFullFileNames(path);
+		int count = 0;
 		for(String fileName : list){
 			if(fileName.startsWith("ZXG.blk")){
 				FileUtil.copy(Constants.out_custom_path + "/A1自选股.EBK",new File(path + "/" + fileName));
+				count++;
 			}
 			if(fileName.startsWith("A2")){
 				FileUtil.copy(Constants.out_custom_path + "/A2人气妖股.EBK",new File(path + "/" + fileName));
+				count++;
 			}
 			if(fileName.startsWith("A3")){
 				FileUtil.copy(Constants.out_custom_path + "/A3目标股.EBK",new File(path + "/" + fileName));
+				count++;
+			}
+			if(count>3){
+				System.err.println("券商软件目录下A1、A2、A3开头的板块文件数大于1个。");
 			}
 		}
 	}
