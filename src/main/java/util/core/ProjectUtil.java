@@ -131,7 +131,7 @@ public class ProjectUtil {
 	 */
 	public static int readValidLineNum(String path, boolean filterIndex) throws FileNotFoundException {
 		int num = 0;
-		System.out.println(path);
+		//System.out.println(path);
 		FileReader fr = new FileReader(new File(path));
 		BufferedReader br = new BufferedReader(fr);
 		String line = null;
