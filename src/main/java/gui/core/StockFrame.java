@@ -1,5 +1,6 @@
 package gui.core;
 
+import gui.worker.SyncLocalWorker;
 import gui.worker.ExportWorker;
 import gui.worker.ImportWorker;
 import gui.worker.LoginWorker;
@@ -70,9 +71,10 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 
 	private JButton JbuttonOk = new JButton("统计");
-	private JButton JbuttonDelImport = new JButton("删除上传");
+	private JButton JbuttonDelImport = new JButton("上传雪球");
 	private JButton JbuttonBoth = new JButton("统计+上传");
 	private JButton JbuttonEmport = new JButton("下载雪球");
+	private JButton JbuttonDownLocal = new JButton("同步本地");
 	private JButton JbuttonSame = new JButton("统计相同");
 	private JButton JbuttonDifferent = new JButton("统计独有");
 	private JButton JbuttonCombine = new JButton("N合一");
@@ -149,9 +151,11 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void initJPanel1() {
 		jp1.setBorder(BorderFactory.createTitledBorder("操作"));
 		jp1.add(JbuttonOk);
-		jp1.add(JbuttonDelImport);
 		jp1.add(JbuttonBoth);
-		jp1.add(JbuttonEmport);
+		jp1.add(JbuttonDelImport);
+		jp1.add(JbuttonDownLocal);
+		
+		//jp1.add(JbuttonEmport);
 		
 		
 		String hideSameBtn = (String) params.get("hideSameBtn");
@@ -178,6 +182,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		JbuttonDifferent.addActionListener(this);
 		JbuttonCombine.addActionListener(this);
 		JbuttonBoth.addActionListener(this);
+		JbuttonDownLocal.addActionListener(this);
 	}
 
 	private void initJPanel2() {
@@ -397,6 +402,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == JbuttonEmport) {
 			performExport();
 		}
+		if (e.getSource() == JbuttonDownLocal) {
+			performDownLocal();
+		}
+		
 		if (e.getSource() == JbuttonChoose) {
 			performChoose();
 		}
@@ -461,67 +470,121 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void performAutoChoose() {
 		//先隐藏，然后再显示，解决下拉框被自选股覆盖的问题。
 		comboBox.setVisible(false);
+		
+		String installPath = getInstallZXGPath();
+		if(!StringUtil.isEmpty(installPath)){
+			// 先删除自选股
+			for (String name : this.customContent) {
+				FileUtil.delete(Constants.out_custom_path + "/" + name+ ".EBK");
+			}
+			//拷贝自选股
+			copyStockFile(installPath);
+			//刷新组件
+			refreshCustomPanel();
+			comboBox.setVisible(true);
+			displayLabel.setText("自动导入完成。");
+		}else{
+			displayLabel.setText("没有找到券商软件安装目录。");
+		}
+		
+	}
+	
+
+	/**
+	 * 同步雪球的自选股到本地的板块
+	 */
+	private void performDownLocal() {
+		
+		String path = getInstallZXGPath();
+		
+		if(StringUtil.isEmpty(path)){
+			System.err.println("本地券商软件安装目录不存在。");
+			return;
+		}
+		
+		List<String> list = FileUtil.getFullFileNames(path);
+		boolean isRight = validateFileCount(list);
+		if(isRight){
+			displayLabel.setText("正在执行本地同步……");
+			new Thread(new SyncLocalWorker(this)).start();
+		}else{
+			displayLabel.setText("本地证券软件目录下ZXG、A2、A3的文件个数不对。");
+		}
+		
+	}
+	
+	
+	/**
+	 * 获取本地券商软件安装目录
+	 * @return
+	 */
+	private String getInstallZXGPath() {
+		
+		String result = null;
+		
 		String installPath = params.getProperty("tdxInstallPath");
 		String fileNames = params.getProperty("autoImportFile");
 		if (StringUtil.isEmpty(installPath) || StringUtil.isEmpty(fileNames)) {
 			System.err.println("params.properties缺少券商软件安装目录的属性。");
 		}
 		String[] array = installPath.split(";");
-		boolean result = false;
 		for (String path : array) {
-			path = path + "/" + Constants.zxg_path;
-			File folder = new File(path);
+			String zxg_path = path + "/" + Constants.zxg_path;
+			File folder = new File(zxg_path);
 			if (folder.exists()) {
-				// 先删除自选股
-				for (String name : this.customContent) {
-					FileUtil.delete(Constants.out_custom_path + "/" + name+ ".EBK");
-				}
-				//拷贝自选股
-				copyStockFile(path);
-				
-				result = true;
-				//刷新组件
-				refreshCustomPanel();
-				comboBox.setVisible(true);
-				break;
-			} else {
-				continue;
+				result = zxg_path;
 			}
 		}
-
-		if (result) {
-			displayLabel.setText("自动导入完成。");
-		} else {
-			displayLabel.setText("没有找到券商软件安装目录。");
-		}
+		return result;
 	}
-	
-	
-	
+
 	/**
 	 * 拷贝安装目录下的自选股A1，A2，A3到custom目录
 	 * @param path
 	 */
 	private void copyStockFile(String path) {
+		
 		List<String> list = FileUtil.getFullFileNames(path);
+		boolean isRight = validateFileCount(list);
+		
+		if(isRight){
+			for(String fileName : list){
+				if(fileName.startsWith("ZXG.blk")){
+					FileUtil.copy(Constants.out_custom_path + "/A1自选股.EBK",new File(path + "/" + fileName));
+				}
+				if(fileName.startsWith("A2")){
+					FileUtil.copy(Constants.out_custom_path + "/A2目标股.EBK",new File(path + "/" + fileName));
+				}
+				if(fileName.startsWith("A3")){
+					FileUtil.copy(Constants.out_custom_path + "/A3第二天看好.EBK",new File(path + "/" + fileName));
+				}
+			}
+		}else{
+			System.err.println("券商软件目录下ZXG.blk、A2、A3开头的板块个数不对。");
+		}
+	}
+
+	private boolean validateFileCount(List<String> list) {
+		
+		boolean result = true;
+		
 		int count = 0;
 		for(String fileName : list){
-			if(fileName.startsWith("ZXG.blk")){
-				FileUtil.copy(Constants.out_custom_path + "/A1自选股.EBK",new File(path + "/" + fileName));
+			if(fileName.equalsIgnoreCase("ZXG.blk")){
 				count++;
 			}
 			if(fileName.startsWith("A2")){
-				FileUtil.copy(Constants.out_custom_path + "/A2人气妖股.EBK",new File(path + "/" + fileName));
 				count++;
 			}
 			if(fileName.startsWith("A3")){
-				FileUtil.copy(Constants.out_custom_path + "/A3目标股.EBK",new File(path + "/" + fileName));
 				count++;
 			}
-			if(count>3){
-				System.err.println("券商软件目录下A1、A2、A3开头的板块文件数大于1个。");
-			}
 		}
+		
+		if(count!=3){
+			result = false;
+		}
+		return result;
 	}
 
 	private void performLogin() {
@@ -808,6 +871,53 @@ public class StockFrame extends JFrame implements ActionListener {
 				.getFileNames(Constants.out_concept_path);
 		this.industryContent = FileUtil
 				.getFileNames(Constants.out_industry_path);
+	}
+	
+	/**
+	 * 同步本地目录
+	 * @param data
+	 */
+	public void syncLocal(Map<String, List<String>> data) {
+		
+		String ZXG_NAME = null;
+		String A2_NAME = null;
+		String A3_NAME = null;
+		
+		String path = getInstallZXGPath();
+		List<String> list = FileUtil.getFullFileNames(path);
+		for(String fileName : list){
+			if(fileName.startsWith("ZXG.blk")){
+				ZXG_NAME = fileName;
+			}
+			if(fileName.startsWith("A2")){
+				A2_NAME = fileName;
+			}
+			if(fileName.startsWith("A3")){
+				A3_NAME = fileName;
+			}
+		}
+		
+		String zxg_content = getTdxContent(data.get("ZX"));
+		zxg_content = Constants.SH_INDEX+"\n" + Constants.CYB_INDEX+"\n"+zxg_content;
+		String a2_content = getTdxContent(data.get("A2"));
+		String a3_content = getTdxContent(data.get("A3"));
+		
+		try {
+			FileUtil.write(path+"/"+ZXG_NAME, zxg_content);
+			FileUtil.write(path+"/"+A2_NAME, a2_content);
+			FileUtil.write(path+"/"+A3_NAME, a3_content);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	private String getTdxContent(List<String> list) {
+		StringBuffer sb = new StringBuffer();
+		for(String code : list){
+			sb.append(ProjectUtil.StandardCode2tdxCode(code)).append("\n");
+		}
+		return sb.toString();
 	}
 
 }

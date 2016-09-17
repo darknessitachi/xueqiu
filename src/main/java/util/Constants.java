@@ -19,12 +19,15 @@ public class Constants {
 	
 	public static final String zxg_path =  "T0002/blocknew";
 	
-	public static final String a1 =  "T0002/blocknew";
-	public static final String a2 =  "T0002/blocknew";
 	
 	public static final String referer_prefix = "http://xueqiu.com/S/";
 	public static final String inter_url = "http://hq.sinajs.cn/list=";
 	
 	public static final String[] stockIndex = new String[]{"999","399"};
+	
+	//大盘和创业板指数
+	public static final String SH_INDEX = "1999999";
+	public static final String CYB_INDEX = "0399006";
+	
 	public static final long XUEQIU_SLEEP = 100;
 }

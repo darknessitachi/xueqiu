@@ -20,6 +20,12 @@ import core.domain.Stock;
 
 public class XueqiuUtil {
 	
+	
+	private static final String ALL_GROUP_PID = "-1";
+	private static final String ZX_GROUP_PID = "2";
+	private static final String A2_GROUP_PID = "0";
+	private static final String A3_GROUP_PID = "1";
+	
 	private String cookie = AccessUtil.readCookie();
 	
 	//当前雪球list
@@ -42,7 +48,7 @@ public class XueqiuUtil {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				return this.queryAll().size();
+				return this.query(ALL_GROUP_PID).size();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -59,7 +65,7 @@ public class XueqiuUtil {
 	
 	
 	public void delAll() throws IOException, InterruptedException {
-		List<String> stocks = this.queryAll();
+		List<String> stocks = this.query(ALL_GROUP_PID);
 		for(String code:stocks){
 			delStock(code);
 			Thread.sleep(Constants.XUEQIU_SLEEP);
@@ -116,9 +122,12 @@ public class XueqiuUtil {
 		}
 	}
 
-
+	/**
+	 * 导出自选股到桌面
+	 * @throws IOException
+	 */
 	public void export() throws IOException{
-		List<String> list = this.queryAll();
+		List<String> list = this.query(ALL_GROUP_PID);
 		StringBuilder sb = new StringBuilder();
 		for(String code : list){
 			String tdxCode = StringUtil.xq2Tdx(code);
@@ -133,7 +142,7 @@ public class XueqiuUtil {
 	
 	private void setXueqiuList() throws IOException {
 		if(this.xueqiuList == null){
-			this.xueqiuList = this.queryAll();
+			this.xueqiuList = this.query(ALL_GROUP_PID);
 		}
 	}
 	
@@ -172,12 +181,13 @@ public class XueqiuUtil {
 	
 
 
-	private List<String> queryAll() throws IOException {
+	private List<String> query(String group_pid) throws IOException {
 		//请求头
 		Map<String,String> header = new HashMap<String,String>();
 		header.put(HttpClientUniqueUtil.COOKIE, cookie);
 		
-		String result = HttpClientUniqueUtil.get("http://xueqiu.com/v4/stock/portfolio/stocks.json?size=1000&tuid=9631865301&pid=-1&category=2&type=5",header);
+		String url = getQueryURL(group_pid);
+		String result = HttpClientUniqueUtil.get(url,header);
 		JSONObject json = JSONObject.fromObject(result);
 		JSONArray array = (JSONArray) json.get("stocks");
 		List<String> list = new ArrayList<String>();
@@ -189,6 +199,19 @@ public class XueqiuUtil {
 		return list;
 	}
 	
+	private String getQueryURL(String group_pid) {
+		String type = "2";
+		if(group_pid.equals(ALL_GROUP_PID)){
+			type = "1";
+		}else{
+			type = "2";
+		}
+		long date = new Date().getTime();
+		String url = "https://xueqiu.com/v4/stock/portfolio/stocks.json?size=1000&tuid=9631865301&pid="+group_pid+"&category=2&type="+type+"&_="+date;
+		return url;
+	}
+
+
 	private String getWritePath() {
 		String nowDate = DateUtil.getNowDate();
 		String writePath = ProjectUtil.getComputerHomeDir()  + "/" + nowDate + ".EBK";
@@ -270,6 +293,19 @@ public class XueqiuUtil {
 	    	addIntoGroup(code, groupName);
 	    }
 	    
+	}
+
+	/**
+	 * 下载雪球的各个板块下的个股信息
+	 * @return
+	 * @throws IOException 
+	 */
+	public Map<String, List<String>> queryStockWithGroup() throws IOException {
+		Map<String, List<String>> result = new HashMap<String, List<String>>();
+		result.put("ZX", this.query(ZX_GROUP_PID));
+		result.put("A2", this.query(A2_GROUP_PID));
+		result.put("A3", this.query(A3_GROUP_PID));
+		return result;
 	}
 
 	

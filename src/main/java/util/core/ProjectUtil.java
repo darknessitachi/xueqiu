@@ -102,6 +102,14 @@ public class ProjectUtil {
 		}
 	}
 	
+	public static String StandardCode2tdxCode(String code) {
+		if(code.toLowerCase().startsWith("sh")){
+			return "1"+code.substring(2);
+		}else{
+			return "0"+code.substring(2);
+		}
+	}
+	
 	/**
 	 * 如果股票名字是3个字，后面加两个空格
 	 * @param name
