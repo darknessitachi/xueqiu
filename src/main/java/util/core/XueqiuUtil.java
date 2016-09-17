@@ -288,10 +288,12 @@ public class XueqiuUtil {
 	    
 	    //分析个股所在组完成后，执行添加操作
 	    Set<String> codes = stockToGroup.keySet();
+	    System.out.println();
 	    for(String code : codes){
 	    	String groupName = stockToGroup.get(code);
 	    	addIntoGroup(code, groupName);
 	    }
+	    System.out.println("添加到各个分组完成。");
 	    
 	}
 
