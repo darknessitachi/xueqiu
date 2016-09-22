@@ -1,10 +1,10 @@
 package gui.core;
 
-import gui.worker.SyncLocalWorker;
 import gui.worker.ExportWorker;
 import gui.worker.ImportWorker;
 import gui.worker.LoginWorker;
 import gui.worker.StatisWorker;
+import gui.worker.SyncLocalWorker;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -34,6 +34,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -58,6 +59,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	private static final int GridLayoutColumn = 4;
 
 	private boolean isSelectAll = false;
+	
+	private String installZXGPath = null;
 
 	private JPanel jp1 = new JPanel();
 	private JPanel jp2 = new JPanel();
@@ -78,6 +81,9 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton JbuttonSame = new JButton("统计相同");
 	private JButton JbuttonDifferent = new JButton("统计独有");
 	private JButton JbuttonCombine = new JButton("N合一");
+	private JButton JbuttonSettle = new JButton("整理当天");
+	
+	
 	private JButton JbuttonChoose = new JButton("导入EBK");
 	private JButton autoChoose = new JButton("自动导入");
 	private JButton JbuttonDel = new JButton("删除EBK");
@@ -108,9 +114,14 @@ public class StockFrame extends JFrame implements ActionListener {
 		this.setCenterLocation();
 		super.setLayout(new BorderLayout());
 		super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
 		initWindow();
 		this.setVisible(true);
+		
+		//寻找券商软件安装目录
+		this.installZXGPath = getInstallZXGPath();
+		if(StringUtil.isEmpty(installZXGPath)){
+			showMsgBox("没有找到券商软件安装目录。");
+		}
 	}
 
 	private void initWindow() {
@@ -126,6 +137,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		super.add(jp2, BorderLayout.CENTER);
 		super.add(jp3, BorderLayout.SOUTH);
 
+	}
+
+	private void showMsgBox(String msg) {
+		JOptionPane.showMessageDialog(null,msg);
 	}
 
 	private void initMenuBar() {
@@ -151,7 +166,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void initJPanel1() {
 		jp1.setBorder(BorderFactory.createTitledBorder("操作"));
 		jp1.add(JbuttonOk);
-		jp1.add(JbuttonBoth);
+		jp1.add(JbuttonSettle);
+		//jp1.add(JbuttonBoth);
 		jp1.add(JbuttonDelImport);
 		jp1.add(JbuttonDownLocal);
 		
@@ -183,6 +199,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		JbuttonCombine.addActionListener(this);
 		JbuttonBoth.addActionListener(this);
 		JbuttonDownLocal.addActionListener(this);
+		JbuttonSettle.addActionListener(this);
+		
 	}
 
 	private void initJPanel2() {
@@ -431,6 +449,12 @@ public class StockFrame extends JFrame implements ActionListener {
 			performLogin();
 		}
 		
+		if (e.getSource() == JbuttonSettle) {
+			performSettle();
+		}
+		
+		
+		
 
 		if (e.getSource() == JbuttonCombine) {
 			try {
@@ -453,6 +477,12 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 	}
 
+	/**
+	 * 整理当天
+	 */
+	private void performSettle() {
+		
+	}
 
 	private void performBoth() throws IOException {
 		boolean delImport = true;
@@ -471,21 +501,16 @@ public class StockFrame extends JFrame implements ActionListener {
 		//先隐藏，然后再显示，解决下拉框被自选股覆盖的问题。
 		comboBox.setVisible(false);
 		
-		String installPath = getInstallZXGPath();
-		if(!StringUtil.isEmpty(installPath)){
-			// 先删除自选股
-			for (String name : this.customContent) {
-				FileUtil.delete(Constants.out_custom_path + "/" + name+ ".EBK");
-			}
-			//拷贝自选股
-			copyStockFile(installPath);
-			//刷新组件
-			refreshCustomPanel();
-			comboBox.setVisible(true);
-			displayLabel.setText("自动导入完成。");
-		}else{
-			displayLabel.setText("没有找到券商软件安装目录。");
+		// 先删除自选股
+		for (String name : this.customContent) {
+			FileUtil.delete(Constants.out_custom_path + "/" + name+ ".EBK");
 		}
+		//拷贝自选股
+		copyStockFile(installZXGPath);
+		//刷新组件
+		refreshCustomPanel();
+		comboBox.setVisible(true);
+		displayLabel.setText("自动导入完成。");
 		
 	}
 	
@@ -495,14 +520,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	 */
 	private void performDownLocal() {
 		
-		String path = getInstallZXGPath();
-		
-		if(StringUtil.isEmpty(path)){
-			System.err.println("本地券商软件安装目录不存在。");
-			return;
-		}
-		
-		List<String> list = FileUtil.getFullFileNames(path);
+		List<String> list = FileUtil.getFullFileNames(installZXGPath);
 		boolean isRight = validateFileCount(list);
 		if(isRight){
 			displayLabel.setText("正在执行本地同步……");
@@ -883,8 +901,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		String A2_NAME = null;
 		String A3_NAME = null;
 		
-		String path = getInstallZXGPath();
-		List<String> list = FileUtil.getFullFileNames(path);
+		List<String> list = FileUtil.getFullFileNames(installZXGPath);
 		for(String fileName : list){
 			if(fileName.startsWith("ZXG.blk")){
 				ZXG_NAME = fileName;
@@ -903,9 +920,9 @@ public class StockFrame extends JFrame implements ActionListener {
 		String a3_content = getTdxContent(data.get("A3"));
 		
 		try {
-			FileUtil.write(path+"/"+ZXG_NAME, zxg_content);
-			FileUtil.write(path+"/"+A2_NAME, a2_content);
-			FileUtil.write(path+"/"+A3_NAME, a3_content);
+			FileUtil.write(installZXGPath+"/"+ZXG_NAME, zxg_content);
+			FileUtil.write(installZXGPath+"/"+A2_NAME, a2_content);
+			FileUtil.write(installZXGPath+"/"+A3_NAME, a3_content);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
