@@ -18,11 +18,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -38,7 +36,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import util.CollectionUtil;
 import util.Constants;
 import util.FileUtil;
 import util.StringUtil;
@@ -75,9 +72,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton JbuttonBoth = new JButton("上传+统计");
 	private JButton JbuttonEmport = new JButton("下载雪球");
 	private JButton JbuttonDownLocal = new JButton("同步本地");
-	private JButton JbuttonSame = new JButton("统计相同");
-	private JButton JbuttonDifferent = new JButton("统计独有");
-	private JButton JbuttonCombine = new JButton("N合一");
 	private JButton JbuttonSettle = new JButton("整理当天");
 	
 	
@@ -187,18 +181,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		//jp1.add(JbuttonEmport);
 		
 		
-		String hideSameBtn = (String) params.get("hideSameBtn");
-		if (StringUtil.isEmpty(hideSameBtn) || hideSameBtn.equals("false")) {
-			jp1.add(JbuttonSame);
-		}
-		String hideDiffBtn = (String) params.get("hideDiffBtn");
-		if (StringUtil.isEmpty(hideDiffBtn) || hideDiffBtn.equals("false")) {
-			jp1.add(JbuttonDifferent);
-		}
-		String hideCombineBtn = (String) params.get("hideCombineBtn");
-		if (StringUtil.isEmpty(hideCombineBtn) || hideCombineBtn.equals("false")) {
-			jp1.add(JbuttonCombine);
-		}
 
 		JbuttonOk.addActionListener(this);
 		JbuttonEmport.addActionListener(this);
@@ -207,9 +189,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		autoChoose.addActionListener(this);
 		JbuttonDelImport.addActionListener(this);
 		JbuttonDel.addActionListener(this);
-		JbuttonSame.addActionListener(this);
-		JbuttonDifferent.addActionListener(this);
-		JbuttonCombine.addActionListener(this);
 		JbuttonBoth.addActionListener(this);
 		JbuttonDownLocal.addActionListener(this);
 		JbuttonSettle.addActionListener(this);
@@ -450,14 +429,6 @@ public class StockFrame extends JFrame implements ActionListener {
 			performImport(true);
 		}
 
-		if (e.getSource() == JbuttonSame) {
-			performSame();
-		}
-
-		if (e.getSource() == JbuttonDifferent) {
-			performDifferent();
-		}
-
 		if (e.getSource() == loginItem) {
 			performLogin();
 		}
@@ -466,18 +437,6 @@ public class StockFrame extends JFrame implements ActionListener {
 			performSettle();
 		}
 		
-		
-		
-
-		if (e.getSource() == JbuttonCombine) {
-			try {
-				performCombine();
-			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
 		
 		if (e.getSource() == JbuttonBoth) {
 			try {
@@ -618,93 +577,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		new Thread(new LoginWorker(username, password, this)).start();
 	}
 
-	private void performCombine() throws IOException {
-		// 获取选中的板块
-		List<String> names = getSelectNames();
-		if (names.size() > 0) {
-			displayLabel.setText("正在执行合并……");
-
-			Set<String> all = new HashSet<String>();
-			for (String n : names) {
-				List<String> result = FileUtil.readLines(n);
-				for (String ele : result) {
-					all.add(ele);
-				}
-			}
-
-			String writePath = ProjectUtil.getComputerHomeDir() + "/N合一.EBK";
-			String str = CollectionUtil.toLineString(all);
-
-			FileUtil.write(writePath, str);
-
-			displayLabel.setText("合并完成。");
-		} else {
-			displayLabel.setText("请选择要合并的板块。");
-		}
-	}
-
-	private void performDifferent() {
-		// 获取选中的板块
-		List<String> names = getSelectNames();
-		if (names.size() == 2) {
-			try {
-				List<String> result_1 = FileUtil.readLines(names.get(0));
-				List<String> result_2 = FileUtil.readLines(names.get(1));
-				List<String> just_1 = CollectionUtil.different(result_1,
-						result_2);
-				List<String> just_2 = CollectionUtil.different(result_2,
-						result_1);
-				String just_str_1 = CollectionUtil.toLineString(just_1);
-				String just_str_2 = CollectionUtil.toLineString(just_2);
-
-				String writePath1 = getDifferentWritePath(names.get(0));
-				FileUtil.write(writePath1, just_str_1);
-
-				String writePath2 = getDifferentWritePath(names.get(1));
-				FileUtil.write(writePath2, just_str_2);
-
-				displayLabel.setText("统计独有完成，目录："
-						+ ProjectUtil.getComputerHomeDir());
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else {
-			displayLabel.setText("需要选择两个板块。");
-		}
-	}
-
-	private String getDifferentWritePath(String path) {
-		String fileName = StringUtil.getFileName(path);
-		return ProjectUtil.getComputerHomeDir() + "/" + fileName + "（独有）.EBK";
-	}
-
-	private void performSame() {
-		// 获取选中的板块
-		List<String> names = getSelectNames();
-		if (names.size() == 2) {
-			try {
-				List<String> result_1 = FileUtil.readLines(names.get(0));
-				List<String> result_2 = FileUtil.readLines(names.get(1));
-				List<String> same = CollectionUtil.same(result_1, result_2);
-				String result = CollectionUtil.toLineString(same);
-				String writePath = getWritePath();
-				FileUtil.write(writePath, result);
-				displayLabel.setText("统计相同结果目录：" + writePath);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else {
-			displayLabel.setText("需要两个对比的板块。");
-		}
-	}
-
-	private String getWritePath() {
-		return ProjectUtil.getComputerHomeDir() + "/same.EBK";
-	}
 
 	private void performDel() {
 		// 获取选中的板块
