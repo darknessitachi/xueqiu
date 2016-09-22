@@ -539,18 +539,14 @@ public class StockFrame extends JFrame implements ActionListener {
 	private String getInstallZXGPath() {
 		
 		String result = null;
-		
 		String installPath = params.getProperty("tdxInstallPath");
-		String fileNames = params.getProperty("autoImportFile");
-		if (StringUtil.isEmpty(installPath) || StringUtil.isEmpty(fileNames)) {
-			System.err.println("params.properties缺少券商软件安装目录的属性。");
-		}
 		String[] array = installPath.split(";");
 		for (String path : array) {
 			String zxg_path = path + "/" + Constants.zxg_path;
 			File folder = new File(zxg_path);
 			if (folder.exists()) {
 				result = zxg_path;
+				break;
 			}
 		}
 		return result;
