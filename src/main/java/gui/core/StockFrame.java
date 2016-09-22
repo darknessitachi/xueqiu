@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import util.Constants;
+import util.DateUtil;
 import util.FileUtil;
 import util.StringUtil;
 import util.core.AccessUtil;
@@ -46,8 +48,6 @@ import core.domain.Req.ReqHead;
 public class StockFrame extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-
-	private static final String lastCustomPrefix = "A9";
 
 	private int window_width = 700;
 	private int scroll_height = 370;
@@ -173,14 +173,9 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void initJPanel1() {
 		jp1.setBorder(BorderFactory.createTitledBorder("操作"));
 		jp1.add(JbuttonOk);
-		//jp1.add(JbuttonBoth);
 		jp1.add(JbuttonDelImport);
 		jp1.add(JbuttonDownLocal);
 		jp1.add(JbuttonSettle);
-		
-		//jp1.add(JbuttonEmport);
-		
-		
 
 		JbuttonOk.addActionListener(this);
 		JbuttonEmport.addActionListener(this);
@@ -201,7 +196,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		// jp2.setSize(window_width, 300);
 		jp2.add(new JLabel("day:"));
 		jp2.add(comboBox);
-		//jp2.setComponentZOrder(comboBox,2);
 
 		jp2.add(new JLabel("sleep:"));
 		jp2.add(field_sleep);
@@ -293,8 +287,6 @@ public class StockFrame extends JFrame implements ActionListener {
 					"industry");
 		}
 
-		setDefaultPrefixMap();
-
 		jp3_content_temp.add(jp_custom, BorderLayout.NORTH);
 		jp3_content_temp.add(jp_concept, BorderLayout.CENTER);
 		jp3_content_temp.add(jp_industry, BorderLayout.SOUTH);
@@ -366,10 +358,6 @@ public class StockFrame extends JFrame implements ActionListener {
 				currentGroup = elementGroup;
 			}
 			group.put(realName, cb);
-			// 如果是自选股，默认选中
-			/*
-			 * if(realName.equals("自选股")){ cb.setSelected(true); }
-			 */
 		}
 	}
 
@@ -387,12 +375,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		return realName + "（" + num + "）";
 	}
 
-	private void setDefaultPrefixMap() {
-		this.prefixMap.put("自选股", "A1");
-		this.prefixMap.put("垃圾回收站", "A2");
-		this.prefixMap.put("强势股", "A3");
-		this.prefixMap.put("新股", "A4");
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -454,12 +436,27 @@ public class StockFrame extends JFrame implements ActionListener {
 	 */
 	private void performSettle() {
 		//如果当天blk不存在，则提示
+		String curFile = DateUtil.formatDate(new Date(), "M.d")+"H(ZXG).blk";
+		File f = new File(installZXGPath + "/" + curFile);
+		if(f.exists()){
+			//获取自选股，A2，A1，WC四个文件的个股Set集合
+			try {
+				List<String> zxg_list = FileUtil.readLines(installZXGPath+"/ZXG.blk");
+				List<String> a1_list = FileUtil.readLines(installZXGPath+"/"+FileUtil.fileLike(installZXG_FileList,"A1"));
+				
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			
+			//把当天自选股写入当天blk
+			
+			//把当天自选股写入WC.blk（去重）
+			
+			//把当天自选股写入A1.blk（去重）
+		}else{
+			displayLabel.setText("今天对应的blk文件未找到。");
+		}
 		
-		//把当天自选股写入当天blk
-		
-		//把当天自选股写入WC.blk（去重）
-		
-		//把当天自选股写入A1.blk（去重）
 		
 	}
 
@@ -499,10 +496,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * 同步雪球的自选股到本地的板块
 	 */
 	private void performDownLocal() {
-		
 		displayLabel.setText("正在执行本地同步……");
 		new Thread(new SyncLocalWorker(this)).start();
-		
 	}
 	
 	
@@ -626,9 +621,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			File[] files = fc.getSelectedFiles();
 			for (File file : files) {
-				String fileName = addPrefix(file.getName());
-				// System.out.println(file.getAbsolutePath());
-				FileUtil.copy(Constants.out_custom_path + "/" + fileName, file);
+				FileUtil.copy(Constants.out_custom_path + "/" + file.getName(), file);
 			}
 			refreshCustomPanel();
 		}
@@ -654,22 +647,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	/**
-	 * 参数name的格式是：自选股.EBK
-	 * 
-	 * @param name
-	 * @return
-	 */
-	private String addPrefix(String name) {
-		String realName = name.split("\\.")[0];
-		String prefix = prefixMap.get(realName);
-		if (prefix == null) {
-			System.out.println("导入的EBK文件没有对应的序号，增加默认序号【" + lastCustomPrefix
-					+ "】。");
-			prefix = lastCustomPrefix;
-		}
-		return prefix + name;
-	}
 
 	private void performExport() {
 		displayLabel.setText("正在执行下载……");
@@ -773,21 +750,9 @@ public class StockFrame extends JFrame implements ActionListener {
 	 */
 	public void syncLocal(Map<String, List<String>> data) {
 		
-		String ZXG_NAME = null;
-		String A2_NAME = null;
-		String A3_NAME = null;
-		
-		for(String fileName : installZXG_FileList){
-			if(fileName.startsWith("ZXG.blk")){
-				ZXG_NAME = fileName;
-			}
-			if(fileName.startsWith("A2")){
-				A2_NAME = fileName;
-			}
-			if(fileName.startsWith("A3")){
-				A3_NAME = fileName;
-			}
-		}
+		String ZXG_NAME = FileUtil.fileLike(installZXG_FileList, "ZXG.blk");
+		String A2_NAME = FileUtil.fileLike(installZXG_FileList, "A2");
+		String A3_NAME = FileUtil.fileLike(installZXG_FileList, "A3");
 		
 		String zxg_content = getTdxContent(data.get("ZX"));
 		zxg_content = Constants.SH_INDEX+"\n" + Constants.CYB_INDEX+"\n"+zxg_content;
