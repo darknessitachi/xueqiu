@@ -1,6 +1,5 @@
 package gui.core;
 
-import gui.worker.ExportWorker;
 import gui.worker.ImportWorker;
 import gui.worker.LoginWorker;
 import gui.worker.StatisWorker;
@@ -70,7 +69,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton JbuttonOk = new JButton("统计");
 	private JButton JbuttonDelImport = new JButton("上传雪球");
 	private JButton JbuttonBoth = new JButton("上传+统计");
-	private JButton JbuttonEmport = new JButton("下载雪球");
 	private JButton JbuttonDownLocal = new JButton("同步本地");
 	private JButton JbuttonSettle = new JButton("整理当天");
 	
@@ -178,7 +176,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.add(JbuttonSettle);
 
 		JbuttonOk.addActionListener(this);
-		JbuttonEmport.addActionListener(this);
 		JbuttonSelectAll.addActionListener(this);
 		JbuttonChoose.addActionListener(this);
 		autoChoose.addActionListener(this);
@@ -391,9 +388,6 @@ public class StockFrame extends JFrame implements ActionListener {
 			performSelectAll();
 		}
 
-		if (e.getSource() == JbuttonEmport) {
-			performExport();
-		}
 		if (e.getSource() == JbuttonDownLocal) {
 			performDownLocal();
 		}
@@ -647,11 +641,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 	}
 
-
-	private void performExport() {
-		displayLabel.setText("正在执行下载……");
-		new Thread(new ExportWorker(this)).start();
-	}
 
 	/**
 	 * 执行统计
