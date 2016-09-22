@@ -27,6 +27,11 @@ public class StatisWorker implements Runnable {
 
 	@Override
 	public void run() {
+		
+		if(delImport){
+			frame.performImport(true);
+		}
+		
 		for(String name : names){
 			//获取每个板块的路径
 			try {
@@ -39,9 +44,7 @@ public class StatisWorker implements Runnable {
 			}
 		}
 		frame.displayLabel.setText("统计完成，输出目录【"+Constants.out_result_path+"】");
-		if(delImport){
-			frame.performImport(true);
-		}
+		
 	}
 
 }

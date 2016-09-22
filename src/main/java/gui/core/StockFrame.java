@@ -60,8 +60,6 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private boolean isSelectAll = false;
 	
-	private String installZXGPath = null;
-
 	private JPanel jp1 = new JPanel();
 	private JPanel jp2 = new JPanel();
 	private JPanel jp3 = new JPanel();
@@ -71,11 +69,10 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JPanel jp_industry = new JPanel();
 
 	private JMenuItem loginItem = new JMenuItem("登录");
-	
 
 	private JButton JbuttonOk = new JButton("统计");
 	private JButton JbuttonDelImport = new JButton("上传雪球");
-	private JButton JbuttonBoth = new JButton("统计+上传");
+	private JButton JbuttonBoth = new JButton("上传+统计");
 	private JButton JbuttonEmport = new JButton("下载雪球");
 	private JButton JbuttonDownLocal = new JButton("同步本地");
 	private JButton JbuttonSame = new JButton("统计相同");
@@ -96,6 +93,9 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JTextField field_addTime = new JTextField(5);
 
 	public JTextField displayLabel = new JTextField(45);
+	
+	private String installZXGPath = null;
+	private List<String> installZXG_FileList = null;
 
 	private Map<String, JCheckBox> group = new HashMap<String, JCheckBox>();
 
@@ -117,11 +117,24 @@ public class StockFrame extends JFrame implements ActionListener {
 		initWindow();
 		this.setVisible(true);
 		
-		//寻找券商软件安装目录
+		validateAndInitData();
+	}
+
+	private void validateAndInitData() {
+		
 		this.installZXGPath = getInstallZXGPath();
 		if(StringUtil.isEmpty(installZXGPath)){
 			showMsgBox("没有找到券商软件安装目录。");
+			return;
 		}
+		
+		installZXG_FileList = FileUtil.getFullFileNames(installZXGPath);
+		boolean isThreeFile = validateFileCount(installZXG_FileList);
+		if(!isThreeFile){
+			showMsgBox("本地证券软件目录下ZXG、A2、A3的文件个数不对。");
+			return;
+		}
+		
 	}
 
 	private void initWindow() {
@@ -166,10 +179,10 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void initJPanel1() {
 		jp1.setBorder(BorderFactory.createTitledBorder("操作"));
 		jp1.add(JbuttonOk);
-		jp1.add(JbuttonSettle);
 		//jp1.add(JbuttonBoth);
 		jp1.add(JbuttonDelImport);
 		jp1.add(JbuttonDownLocal);
+		jp1.add(JbuttonSettle);
 		
 		//jp1.add(JbuttonEmport);
 		
@@ -481,6 +494,13 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * 整理当天
 	 */
 	private void performSettle() {
+		//如果当天blk不存在，则提示
+		
+		//把当天自选股写入当天blk
+		
+		//把当天自选股写入WC.blk（去重）
+		
+		//把当天自选股写入A1.blk（去重）
 		
 	}
 
@@ -495,6 +515,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		} else {
 			displayLabel.setText("请选择要统计的板块。");
 		}
+		
 	}
 
 	private void performAutoChoose() {
@@ -520,14 +541,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	 */
 	private void performDownLocal() {
 		
-		List<String> list = FileUtil.getFullFileNames(installZXGPath);
-		boolean isRight = validateFileCount(list);
-		if(isRight){
-			displayLabel.setText("正在执行本地同步……");
-			new Thread(new SyncLocalWorker(this)).start();
-		}else{
-			displayLabel.setText("本地证券软件目录下ZXG、A2、A3的文件个数不对。");
-		}
+		displayLabel.setText("正在执行本地同步……");
+		new Thread(new SyncLocalWorker(this)).start();
 		
 	}
 	
@@ -558,23 +573,16 @@ public class StockFrame extends JFrame implements ActionListener {
 	 */
 	private void copyStockFile(String path) {
 		
-		List<String> list = FileUtil.getFullFileNames(path);
-		boolean isRight = validateFileCount(list);
-		
-		if(isRight){
-			for(String fileName : list){
-				if(fileName.startsWith("ZXG.blk")){
-					FileUtil.copy(Constants.out_custom_path + "/A1自选股.EBK",new File(path + "/" + fileName));
-				}
-				if(fileName.startsWith("A2")){
-					FileUtil.copy(Constants.out_custom_path + "/A2目标股.EBK",new File(path + "/" + fileName));
-				}
-				if(fileName.startsWith("A3")){
-					FileUtil.copy(Constants.out_custom_path + "/A3第二天看好.EBK",new File(path + "/" + fileName));
-				}
+		for(String fileName : installZXG_FileList){
+			if(fileName.startsWith("ZXG.blk")){
+				FileUtil.copy(Constants.out_custom_path + "/A1自选股.EBK",new File(path + "/" + fileName));
 			}
-		}else{
-			System.err.println("券商软件目录下ZXG.blk、A2、A3开头的板块个数不对。");
+			if(fileName.startsWith("A2")){
+				FileUtil.copy(Constants.out_custom_path + "/A2目标股.EBK",new File(path + "/" + fileName));
+			}
+			if(fileName.startsWith("A3")){
+				FileUtil.copy(Constants.out_custom_path + "/A3第二天看好.EBK",new File(path + "/" + fileName));
+			}
 		}
 	}
 
@@ -897,8 +905,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		String A2_NAME = null;
 		String A3_NAME = null;
 		
-		List<String> list = FileUtil.getFullFileNames(installZXGPath);
-		for(String fileName : list){
+		for(String fileName : installZXG_FileList){
 			if(fileName.startsWith("ZXG.blk")){
 				ZXG_NAME = fileName;
 			}
