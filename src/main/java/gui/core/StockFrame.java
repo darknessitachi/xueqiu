@@ -88,6 +88,12 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private String installZXGPath = null;
 	private List<String> installZXG_FileList = null;
+	private String ZXG_NAME = null;
+	private String A1_NAME = null;
+	private String A2_NAME = null;
+	private String A3_NAME = null;
+	private String WC_NAME = null;
+	private String TODAY_NAME = null;
 
 	private Map<String, JCheckBox> group = new HashMap<String, JCheckBox>();
 
@@ -95,10 +101,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	private List<String> customContent;
 	private List<String> conceptContent;
 	private List<String> industryContent;
-
-	private Map<String, String> prefixMap = new HashMap<String, String>();
-
-	
 
 	public StockFrame(String title) throws ClassNotFoundException {
 		super(title);
@@ -121,12 +123,24 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 		
 		installZXG_FileList = FileUtil.getFullFileNames(installZXGPath);
-		boolean isThreeFile = validateFileCount(installZXG_FileList);
-		if(!isThreeFile){
-			showMsgBox("本地证券软件目录下ZXG、A2、A3的文件个数不对。");
+		boolean isRight = validateFileCount(installZXG_FileList);
+		if(!isRight){
+			showMsgBox("本地证券软件目录下ZXG、A1、A2、A3、WC的文件个数不对。");
 			return;
 		}
 		
+		ZXG_NAME = FileUtil.fileLike(installZXG_FileList, "ZXG.blk");
+		A1_NAME = FileUtil.fileLike(installZXG_FileList, "A1");
+		A2_NAME = FileUtil.fileLike(installZXG_FileList, "A2");
+		A3_NAME = FileUtil.fileLike(installZXG_FileList, "A3");
+		WC_NAME = FileUtil.fileLike(installZXG_FileList, "WC");
+		String today = DateUtil.formatDate(new Date(), "M.d");
+		TODAY_NAME = FileUtil.fileLike(installZXG_FileList,today);
+		
+		if(StringUtil.isEmpty(TODAY_NAME)){
+			showMsgBox("今天【"+today+"】对应的blk未找到。");
+			return;
+		}
 	}
 
 	private void initWindow() {
@@ -317,11 +331,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		for (String element : content) {
 			// element 有前缀，没后缀，如：A1自选股
 			String elementGroup = element.substring(0, 1);
-			String prefix = element.substring(0, 2);
 			// realName没有前缀（A1）和后缀（.EBK）
 			String realName = element.substring(2, element.length());
-			// 设置前缀映射
-			prefixMap.put(realName, prefix);
 			// 板块名字后面加上个股数量
 			String realNameWithNum = null;
 			try {
@@ -435,8 +446,12 @@ public class StockFrame extends JFrame implements ActionListener {
 		if(f.exists()){
 			//获取自选股，A2，A1，WC四个文件的个股Set集合
 			try {
-				List<String> zxg_list = FileUtil.readLines(installZXGPath+"/ZXG.blk");
-				List<String> a1_list = FileUtil.readLines(installZXGPath+"/"+FileUtil.fileLike(installZXG_FileList,"A1"));
+				List<String> zxg_list = FileUtil.readLines(installZXGPath+"/"+ZXG_NAME);
+				
+				List<String> today_list = FileUtil.readLines(installZXGPath+"/"+TODAY_NAME);
+				List<String> wc_list = FileUtil.readLines(installZXGPath+"/"+WC_NAME);
+				List<String> a1_list = FileUtil.readLines(installZXGPath+"/"+A1_NAME);
+				
 				
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -477,10 +492,11 @@ public class StockFrame extends JFrame implements ActionListener {
 			FileUtil.delete(Constants.out_custom_path + "/" + name+ ".EBK");
 		}
 		//拷贝自选股
-		copyStockFile(installZXGPath);
+		copyStockFile();
 		//刷新组件
 		refreshCustomPanel();
 		comboBox.setVisible(true);
+		isSelectAll = false;
 		displayLabel.setText("自动导入完成。");
 		
 	}
@@ -519,19 +535,10 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * 拷贝安装目录下的自选股A1，A2，A3到custom目录
 	 * @param path
 	 */
-	private void copyStockFile(String path) {
-		
-		for(String fileName : installZXG_FileList){
-			if(fileName.startsWith("ZXG.blk")){
-				FileUtil.copy(Constants.out_custom_path + "/A1自选股.EBK",new File(path + "/" + fileName));
-			}
-			if(fileName.startsWith("A2")){
-				FileUtil.copy(Constants.out_custom_path + "/A2目标股.EBK",new File(path + "/" + fileName));
-			}
-			if(fileName.startsWith("A3")){
-				FileUtil.copy(Constants.out_custom_path + "/A3第二天看好.EBK",new File(path + "/" + fileName));
-			}
-		}
+	private void copyStockFile() {
+		FileUtil.copy(Constants.out_custom_path + "/A1自选股.EBK",new File(installZXGPath + "/" + ZXG_NAME ));
+		FileUtil.copy(Constants.out_custom_path + "/A2目标股.EBK",new File(installZXGPath + "/" + A2_NAME));
+		FileUtil.copy(Constants.out_custom_path + "/A3第二天看好.EBK",new File(installZXGPath + "/" + A3_NAME));
 	}
 
 	private boolean validateFileCount(List<String> list) {
@@ -543,15 +550,22 @@ public class StockFrame extends JFrame implements ActionListener {
 			if(fileName.equalsIgnoreCase("ZXG.blk")){
 				count++;
 			}
+			if(fileName.startsWith("A1")){
+				count++;
+			}
 			if(fileName.startsWith("A2")){
 				count++;
 			}
 			if(fileName.startsWith("A3")){
 				count++;
 			}
+			if(fileName.startsWith("WC")){
+				count++;
+			}
+			
 		}
 		
-		if(count!=3){
+		if(count!=5){
 			result = false;
 		}
 		return result;
@@ -739,14 +753,10 @@ public class StockFrame extends JFrame implements ActionListener {
 	 */
 	public void syncLocal(Map<String, List<String>> data) {
 		
-		String ZXG_NAME = FileUtil.fileLike(installZXG_FileList, "ZXG.blk");
-		String A2_NAME = FileUtil.fileLike(installZXG_FileList, "A2");
-		String A3_NAME = FileUtil.fileLike(installZXG_FileList, "A3");
-		
 		String zxg_content = getTdxContent(data.get("ZX"));
-		zxg_content = Constants.SH_INDEX+"\n" + Constants.CYB_INDEX+"\n"+zxg_content;
 		String a2_content = getTdxContent(data.get("A2"));
 		String a3_content = getTdxContent(data.get("A3"));
+		zxg_content = Constants.SH_INDEX+"\n" + Constants.CYB_INDEX+"\n"+zxg_content;
 		
 		try {
 			FileUtil.write(installZXGPath+"/"+ZXG_NAME, zxg_content);
