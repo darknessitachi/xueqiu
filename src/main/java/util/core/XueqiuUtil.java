@@ -11,8 +11,6 @@ import java.util.Set;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import util.Constants;
-import util.DateUtil;
-import util.FileUtil;
 import util.StringUtil;
 import util.http.HttpClientUniqueUtil;
 import core.domain.Req.ReqBody;
@@ -122,22 +120,6 @@ public class XueqiuUtil {
 		}
 	}
 
-	/**
-	 * 导出自选股到桌面
-	 * @throws IOException
-	 */
-	public void export() throws IOException{
-		List<String> list = this.query(ALL_GROUP_PID);
-		StringBuilder sb = new StringBuilder();
-		for(String code : list){
-			String tdxCode = StringUtil.xq2Tdx(code);
-			sb.append(tdxCode).append("\n");
-		}
-		String writePath = getWritePath();
-		FileUtil.write(writePath, sb.toString());
-		System.out.println("导出股票个数【"+list.size()+"】");
-	}
-	
 	
 	
 	private void setXueqiuList() throws IOException {
@@ -211,12 +193,6 @@ public class XueqiuUtil {
 		return url;
 	}
 
-
-	private String getWritePath() {
-		String nowDate = DateUtil.getNowDate();
-		String writePath = ProjectUtil.getComputerHomeDir()  + "/" + nowDate + ".EBK";
-		return writePath;
-	}
 
 	/**
 	 * 把当前body中的股票导入雪球自选股中

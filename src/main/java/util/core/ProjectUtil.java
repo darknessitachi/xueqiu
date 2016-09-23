@@ -34,7 +34,7 @@ public class ProjectUtil {
 	 * 获取工程class文件的路径
 	 * @return
 	 */
-	public static String getSrcpath() {
+	public static String getSrcPath() {
 		return getProjectPath()+"/src/main/java";
 	}
 	
@@ -56,7 +56,7 @@ public class ProjectUtil {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(getSrcpath());
+		System.out.println(getSrcPath());
 		System.out.println(getClasspath());
 		
 	}
@@ -68,11 +68,8 @@ public class ProjectUtil {
 	 * @return
 	 */
 	public static boolean isStockIndex(String code) {
-		String prefix = code.substring(1,4);
-		for(String element:Constants.stockIndex){
-			if(element.equals(prefix)){
-				return true;
-			}
+		if(code.equals(Constants.CYB_INDEX) || code.equals(Constants.SH_INDEX)){
+			return true;
 		}
 		return false;
 	}
