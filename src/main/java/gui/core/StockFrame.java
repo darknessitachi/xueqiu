@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -36,6 +37,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import util.CollectionUtil;
 import util.Constants;
 import util.DateUtil;
 import util.FileUtil;
@@ -123,8 +125,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 		
 		installZXG_FileList = FileUtil.getFullFileNames(installZXGPath);
-		boolean isRight = validateFileCount(installZXG_FileList);
-		if(!isRight){
+		boolean originalFileExist = validateFileCount(installZXG_FileList);
+		if(!originalFileExist){
 			showMsgBox("本地证券软件目录下ZXG、A1、A2、A3、WC的文件个数不对。");
 			return;
 		}
@@ -141,6 +143,8 @@ public class StockFrame extends JFrame implements ActionListener {
 			showMsgBox("今天【"+today+"】对应的blk未找到。");
 			return;
 		}
+		
+		displayLabel.setText("今天【"+today+"】");
 	}
 
 	private void initWindow() {
@@ -440,33 +444,43 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * 整理当天
 	 */
 	private void performSettle() {
-		//如果当天blk不存在，则提示
-		String curFile = DateUtil.formatDate(new Date(), "M.d")+"H(ZXG).blk";
-		File f = new File(installZXGPath + "/" + curFile);
-		if(f.exists()){
-			//获取自选股，A2，A1，WC四个文件的个股Set集合
+		//获取自选股，A2，A1，WC四个文件的个股Set集合
+		try {
+			List<String> zxg_list = FileUtil.readLines(installZXGPath+"/"+ZXG_NAME);
+			zxg_list = removeIndex(zxg_list);
+			
+			List<String> today_list = FileUtil.readLines(installZXGPath+"/"+TODAY_NAME);
+			List<String> wc_list = FileUtil.readLines(installZXGPath+"/"+WC_NAME);
+			List<String> a1_list = FileUtil.readLines(installZXGPath+"/"+A1_NAME);
+			
+			Set<String> today_new = CollectionUtil.combine(zxg_list,today_list);
+			Set<String> wc_new = CollectionUtil.combine(zxg_list,wc_list);
+			Set<String> a1_new = CollectionUtil.combine(zxg_list,a1_list);
+			
 			try {
-				List<String> zxg_list = FileUtil.readLines(installZXGPath+"/"+ZXG_NAME);
-				
-				List<String> today_list = FileUtil.readLines(installZXGPath+"/"+TODAY_NAME);
-				List<String> wc_list = FileUtil.readLines(installZXGPath+"/"+WC_NAME);
-				List<String> a1_list = FileUtil.readLines(installZXGPath+"/"+A1_NAME);
-				
-				
-			} catch (FileNotFoundException e) {
+				FileUtil.write(installZXGPath+"/"+TODAY_NAME, CollectionUtil.toLineString(today_new));
+				FileUtil.write(installZXGPath+"/"+WC_NAME, CollectionUtil.toLineString(wc_new));
+				FileUtil.write(installZXGPath+"/"+A1_NAME, CollectionUtil.toLineString(a1_new));
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			
-			//把当天自选股写入当天blk
-			
-			//把当天自选股写入WC.blk（去重）
-			
-			//把当天自选股写入A1.blk（去重）
-		}else{
-			displayLabel.setText("今天对应的blk文件未找到。");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
+			
 		
 		
+	}
+	
+	private List<String> removeIndex(List<String> zxg_list) {
+		List<String> newList = new ArrayList<String>();
+		for(String code : zxg_list){
+			if(!ProjectUtil.isStockIndex(code) ){
+				newList.add(code);
+			}
+		}
+		return newList;
 	}
 
 	private void performBoth() throws IOException {
