@@ -144,7 +144,6 @@ public class StockFrame extends JFrame implements ActionListener {
 			return;
 		}
 		
-		displayLabel.setText("今天【"+today+"】");
 	}
 
 	private void initWindow() {
@@ -191,7 +190,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.add(JbuttonOk);
 		jp1.add(JbuttonDelImport);
 		jp1.add(JbuttonDownLocal);
-		jp1.add(JbuttonSettle);
+		//jp1.add(JbuttonSettle);
 
 		JbuttonOk.addActionListener(this);
 		JbuttonSelectAll.addActionListener(this);
@@ -464,6 +463,7 @@ public class StockFrame extends JFrame implements ActionListener {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			displayLabel.setText("整理完成。");
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -497,7 +497,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 	}
 
-	private void performAutoChoose() {
+	public void performAutoChoose() {
 		//先隐藏，然后再显示，解决下拉框被自选股覆盖的问题。
 		comboBox.setVisible(false);
 		

@@ -26,7 +26,8 @@ public class SyncLocalWorker implements Runnable {
 			e.printStackTrace();
 		}
 		frame.syncLocal(data);
-		frame.displayLabel.setText("同步本地目录完成。");
+		frame.performAutoChoose();
+		frame.displayLabel.setText("同步本地目录完成。自动导入完成。");
 	}
 
 }
