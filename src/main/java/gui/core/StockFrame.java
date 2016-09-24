@@ -139,10 +139,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		String today = DateUtil.formatDate(new Date(), "M.d");
 		TODAY_NAME = FileUtil.fileLike(installZXG_FileList,today);
 		
-		if(StringUtil.isEmpty(TODAY_NAME)){
+		/*if(StringUtil.isEmpty(TODAY_NAME)){
 			showMsgBox("今天【"+today+"】对应的blk未找到。");
 			return;
-		}
+		}*/
 		
 	}
 
