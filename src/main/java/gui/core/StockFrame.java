@@ -57,7 +57,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private static final int GridLayoutColumn = 4;
 
 	private boolean isSelectAll = false;
-	
+
 	private JPanel jp1 = new JPanel();
 	private JPanel jp2 = new JPanel();
 	private JPanel jp3 = new JPanel();
@@ -73,8 +73,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton JbuttonBoth = new JButton("上传+统计");
 	private JButton JbuttonDownLocal = new JButton("同步本地");
 	private JButton JbuttonSettle = new JButton("整理当天");
-	
-	
+
 	private JButton JbuttonChoose = new JButton("导入EBK");
 	private JButton autoChoose = new JButton("自动导入");
 	private JButton JbuttonDel = new JButton("删除EBK");
@@ -87,7 +86,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JTextField field_addTime = new JTextField(5);
 
 	public JTextField displayLabel = new JTextField(45);
-	
+
 	private String installZXGPath = null;
 	private List<String> installZXG_FileList = null;
 	private String ZXG_NAME = null;
@@ -112,38 +111,38 @@ public class StockFrame extends JFrame implements ActionListener {
 		super.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		initWindow();
 		this.setVisible(true);
-		
+
 		validateAndInitData();
 	}
 
 	private void validateAndInitData() {
-		
+
 		this.installZXGPath = getInstallZXGPath();
-		if(StringUtil.isEmpty(installZXGPath)){
+		if (StringUtil.isEmpty(installZXGPath)) {
 			showMsgBox("没有找到券商软件安装目录。");
 			return;
 		}
-		
+
 		installZXG_FileList = FileUtil.getFullFileNames(installZXGPath);
 		boolean originalFileExist = validateFileCount(installZXG_FileList);
-		if(!originalFileExist){
+		if (!originalFileExist) {
 			showMsgBox("本地证券软件目录下ZXG、A1、A2、A3、WC的文件个数不对。");
 			return;
 		}
-		
+
 		ZXG_NAME = FileUtil.fileLike(installZXG_FileList, "ZXG.blk");
 		A1_NAME = FileUtil.fileLike(installZXG_FileList, "A1");
 		A2_NAME = FileUtil.fileLike(installZXG_FileList, "A2");
 		A3_NAME = FileUtil.fileLike(installZXG_FileList, "A3");
 		WC_NAME = FileUtil.fileLike(installZXG_FileList, "WC");
 		String today = DateUtil.formatDate(new Date(), "M.d");
-		TODAY_NAME = FileUtil.fileLike(installZXG_FileList,today);
-		
-		/*if(StringUtil.isEmpty(TODAY_NAME)){
-			showMsgBox("今天【"+today+"】对应的blk未找到。");
-			return;
-		}*/
-		
+		TODAY_NAME = FileUtil.fileLike(installZXG_FileList, today);
+
+		/*
+		 * if(StringUtil.isEmpty(TODAY_NAME)){
+		 * showMsgBox("今天【"+today+"】对应的blk未找到。"); return; }
+		 */
+
 	}
 
 	private void initWindow() {
@@ -162,7 +161,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	private void showMsgBox(String msg) {
-		JOptionPane.showMessageDialog(null,msg);
+		JOptionPane.showMessageDialog(null, msg);
 	}
 
 	private void initMenuBar() {
@@ -190,7 +189,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.add(JbuttonOk);
 		jp1.add(JbuttonDelImport);
 		jp1.add(JbuttonDownLocal);
-		//jp1.add(JbuttonSettle);
+		// jp1.add(JbuttonSettle);
 
 		JbuttonOk.addActionListener(this);
 		JbuttonSelectAll.addActionListener(this);
@@ -201,7 +200,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		JbuttonBoth.addActionListener(this);
 		JbuttonDownLocal.addActionListener(this);
 		JbuttonSettle.addActionListener(this);
-		
+
 	}
 
 	private void initJPanel2() {
@@ -235,8 +234,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (!StringUtil.isEmpty(day)) {
 			String[] array = day.split(",");
 			String fillWord = getFillWord();
-			for(String e : array){
-				comboBox.addItem(fillWord+e+fillWord);
+			for (String e : array) {
+				comboBox.addItem(fillWord + e + fillWord);
 			}
 		}
 
@@ -273,8 +272,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	private String getFillWord() {
 		int width = Integer.parseInt(params.getProperty("dayFieldWidth"));
 		String fillWord = "";
-		for(int i=0;i<width;i++){
-			fillWord = fillWord +" ";
+		for (int i = 0; i < width; i++) {
+			fillWord = fillWord + " ";
 		}
 		return fillWord;
 	}
@@ -374,10 +373,11 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private String addSuffixWithNum(String subpath, String element)
 			throws FileNotFoundException {
-		String path = Constants.out_path + Constants.code_path + subpath + "/"+ element + ".EBK";
+		String path = Constants.out_path + Constants.code_path + subpath + "/"
+				+ element + ".EBK";
 		String realName = element.substring(2, element.length());
 		int num = 0;
-		
+
 		if (realName.equals("自选股")) {
 			num = ProjectUtil.readValidLineNum(path, true);
 		} else {
@@ -385,7 +385,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 		return realName + "（" + num + "）";
 	}
-
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -403,9 +402,9 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 
 		if (e.getSource() == JbuttonDownLocal) {
-			performDownLocal();
+			performSyncLocal();
 		}
-		
+
 		if (e.getSource() == JbuttonChoose) {
 			performChoose();
 		}
@@ -422,12 +421,11 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == loginItem) {
 			performLogin();
 		}
-		
+
 		if (e.getSource() == JbuttonSettle) {
 			performSettle();
 		}
-		
-		
+
 		if (e.getSource() == JbuttonBoth) {
 			try {
 				performBoth();
@@ -435,48 +433,53 @@ public class StockFrame extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
-		
-		
+
 	}
 
 	/**
 	 * 整理当天
 	 */
 	private void performSettle() {
-		//获取自选股，A2，A1，WC四个文件的个股Set集合
+		// 获取自选股，A2，A1，WC四个文件的个股Set集合
 		try {
-			List<String> zxg_list = FileUtil.readLines(installZXGPath+"/"+ZXG_NAME);
+			List<String> zxg_list = FileUtil.readLines(installZXGPath + "/"
+					+ ZXG_NAME);
 			zxg_list = removeIndex(zxg_list);
-			
-			List<String> today_list = FileUtil.readLines(installZXGPath+"/"+TODAY_NAME);
-			List<String> wc_list = FileUtil.readLines(installZXGPath+"/"+WC_NAME);
-			List<String> a1_list = FileUtil.readLines(installZXGPath+"/"+A1_NAME);
-			
-			Set<String> today_new = CollectionUtil.combine(zxg_list,today_list);
-			Set<String> wc_new = CollectionUtil.combine(zxg_list,wc_list);
-			Set<String> a1_new = CollectionUtil.combine(zxg_list,a1_list);
-			
+
+			List<String> today_list = FileUtil.readLines(installZXGPath + "/"
+					+ TODAY_NAME);
+			List<String> wc_list = FileUtil.readLines(installZXGPath + "/"
+					+ WC_NAME);
+			List<String> a1_list = FileUtil.readLines(installZXGPath + "/"
+					+ A1_NAME);
+
+			Set<String> today_new = CollectionUtil
+					.combine(zxg_list, today_list);
+			Set<String> wc_new = CollectionUtil.combine(zxg_list, wc_list);
+			Set<String> a1_new = CollectionUtil.combine(zxg_list, a1_list);
+
 			try {
-				FileUtil.write(installZXGPath+"/"+TODAY_NAME, CollectionUtil.toLineString(today_new));
-				FileUtil.write(installZXGPath+"/"+WC_NAME, CollectionUtil.toLineString(wc_new));
-				FileUtil.write(installZXGPath+"/"+A1_NAME, CollectionUtil.toLineString(a1_new));
+				FileUtil.write(installZXGPath + "/" + TODAY_NAME,
+						CollectionUtil.toLineString(today_new));
+				FileUtil.write(installZXGPath + "/" + WC_NAME,
+						CollectionUtil.toLineString(wc_new));
+				FileUtil.write(installZXGPath + "/" + A1_NAME,
+						CollectionUtil.toLineString(a1_new));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			displayLabel.setText("整理完成。");
-			
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-			
-		
-		
+
 	}
-	
+
 	private List<String> removeIndex(List<String> zxg_list) {
 		List<String> newList = new ArrayList<String>();
-		for(String code : zxg_list){
-			if(!ProjectUtil.isStockIndex(code) ){
+		for (String code : zxg_list) {
+			if (!ProjectUtil.isStockIndex(code)) {
 				newList.add(code);
 			}
 		}
@@ -490,47 +493,52 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (names.size() > 0) {
 			displayLabel.setText("正在执行统计……");
 			ReqHead head = getReqHead();
-			new Thread(new StatisWorker(head, names, this,delImport)).start();
+			new Thread(new StatisWorker(head, names, this, delImport)).start();
 		} else {
 			displayLabel.setText("请选择要统计的板块。");
 		}
-		
+
 	}
 
 	public void performAutoChoose() {
-		//先隐藏，然后再显示，解决下拉框被自选股覆盖的问题。
+		// 先隐藏，然后再显示，解决下拉框被自选股覆盖的问题。
 		comboBox.setVisible(false);
-		
+
 		// 先删除自选股
 		for (String name : this.customContent) {
-			FileUtil.delete(Constants.out_custom_path + "/" + name+ ".EBK");
+			FileUtil.delete(Constants.out_custom_path + "/" + name + ".EBK");
 		}
-		//拷贝自选股
+		// 拷贝自选股
 		copyStockFile();
-		//刷新组件
+		// 刷新组件
 		refreshCustomPanel();
 		comboBox.setVisible(true);
 		isSelectAll = false;
 		displayLabel.setText("自动导入完成。");
-		
+
 	}
-	
 
 	/**
 	 * 同步雪球的自选股到本地的板块
 	 */
-	private void performDownLocal() {
-		displayLabel.setText("正在执行本地同步……");
-		new Thread(new SyncLocalWorker(this)).start();
+	private void performSyncLocal() {
+		int res = JOptionPane.showConfirmDialog(null, "请确认当前是备用机。要继续执行同步吗？", null,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		if (res == JOptionPane.YES_OPTION) {
+			displayLabel.setText("正在执行本地同步……");
+			new Thread(new SyncLocalWorker(this)).start();
+		}else{
+			displayLabel.setText("取消本地同步。");
+		}
+
 	}
-	
-	
+
 	/**
 	 * 获取本地券商软件安装目录
+	 * 
 	 * @return
 	 */
 	private String getInstallZXGPath() {
-		
+
 		String result = null;
 		String installPath = params.getProperty("tdxInstallPath");
 		String[] array = installPath.split(";");
@@ -547,39 +555,43 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	/**
 	 * 拷贝安装目录下的自选股A1，A2，A3到custom目录
+	 * 
 	 * @param path
 	 */
 	private void copyStockFile() {
-		FileUtil.copy(Constants.out_custom_path + "/A1自选股.EBK",new File(installZXGPath + "/" + ZXG_NAME ));
-		FileUtil.copy(Constants.out_custom_path + "/A2目标股.EBK",new File(installZXGPath + "/" + A2_NAME));
-		FileUtil.copy(Constants.out_custom_path + "/A3第二天看好.EBK",new File(installZXGPath + "/" + A3_NAME));
+		FileUtil.copy(Constants.out_custom_path + "/A1自选股.EBK", new File(
+				installZXGPath + "/" + ZXG_NAME));
+		FileUtil.copy(Constants.out_custom_path + "/A2目标股.EBK", new File(
+				installZXGPath + "/" + A2_NAME));
+		FileUtil.copy(Constants.out_custom_path + "/A3第二天看好.EBK", new File(
+				installZXGPath + "/" + A3_NAME));
 	}
 
 	private boolean validateFileCount(List<String> list) {
-		
+
 		boolean result = true;
-		
+
 		int count = 0;
-		for(String fileName : list){
-			if(fileName.equalsIgnoreCase("ZXG.blk")){
+		for (String fileName : list) {
+			if (fileName.equalsIgnoreCase("ZXG.blk")) {
 				count++;
 			}
-			if(fileName.startsWith("A1")){
+			if (fileName.startsWith("A1")) {
 				count++;
 			}
-			if(fileName.startsWith("A2")){
+			if (fileName.startsWith("A2")) {
 				count++;
 			}
-			if(fileName.startsWith("A3")){
+			if (fileName.startsWith("A3")) {
 				count++;
 			}
-			if(fileName.startsWith("WC")){
+			if (fileName.startsWith("WC")) {
 				count++;
 			}
-			
+
 		}
-		
-		if(count!=5){
+
+		if (count != 5) {
 			result = false;
 		}
 		return result;
@@ -593,7 +605,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 		new Thread(new LoginWorker(username, password, this)).start();
 	}
-
 
 	private void performDel() {
 		// 获取选中的板块
@@ -643,7 +654,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			File[] files = fc.getSelectedFiles();
 			for (File file : files) {
-				FileUtil.copy(Constants.out_custom_path + "/" + file.getName(), file);
+				FileUtil.copy(Constants.out_custom_path + "/" + file.getName(),
+						file);
 			}
 			refreshCustomPanel();
 		}
@@ -669,7 +681,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 	}
 
-
 	/**
 	 * 执行统计
 	 * 
@@ -681,7 +692,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (names.size() > 0) {
 			displayLabel.setText("正在执行统计……");
 			ReqHead head = getReqHead();
-			new Thread(new StatisWorker(head, names, this,false)).start();
+			new Thread(new StatisWorker(head, names, this, false)).start();
 		} else {
 			displayLabel.setText("请选择要统计的板块。");
 		}
@@ -718,15 +729,16 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	private ReqHead getReqHead() throws IOException {
-		
+
 		ReqHead head = new ReqHead();
-		
-		head.day = Integer.parseInt(comboBox.getSelectedItem().toString().trim());
+
+		head.day = Integer.parseInt(comboBox.getSelectedItem().toString()
+				.trim());
 		head.sleep = Integer.parseInt(field_sleep.getText());
 		head.threadNum = Integer.parseInt(field_thread.getText());
 		head.errWaitTime = Integer.parseInt(field_waitTime.getText());
 		head.addTime = Integer.parseInt(field_addTime.getText());
-		
+
 		return head;
 	}
 
@@ -753,38 +765,38 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * content的内容格式是：["A1自选股","A4新股"]，有前缀，没有后缀
 	 */
 	private void initContentData() {
-		this.customContent = FileUtil
-				.getFileNames(Constants.out_custom_path);
-		this.conceptContent = FileUtil
-				.getFileNames(Constants.out_concept_path);
+		this.customContent = FileUtil.getFileNames(Constants.out_custom_path);
+		this.conceptContent = FileUtil.getFileNames(Constants.out_concept_path);
 		this.industryContent = FileUtil
 				.getFileNames(Constants.out_industry_path);
 	}
-	
+
 	/**
 	 * 同步本地目录
+	 * 
 	 * @param data
 	 */
 	public void syncLocal(Map<String, List<String>> data) {
-		
+
 		String zxg_content = getTdxContent(data.get("ZX"));
 		String a2_content = getTdxContent(data.get("A2"));
 		String a3_content = getTdxContent(data.get("A3"));
-		zxg_content = Constants.SH_INDEX+"\n" + Constants.CYB_INDEX+"\n"+zxg_content;
-		
+		zxg_content = Constants.SH_INDEX + "\n" + Constants.CYB_INDEX + "\n"
+				+ zxg_content;
+
 		try {
-			FileUtil.write(installZXGPath+"/"+ZXG_NAME, zxg_content);
-			FileUtil.write(installZXGPath+"/"+A2_NAME, a2_content);
-			FileUtil.write(installZXGPath+"/"+A3_NAME, a3_content);
+			FileUtil.write(installZXGPath + "/" + ZXG_NAME, zxg_content);
+			FileUtil.write(installZXGPath + "/" + A2_NAME, a2_content);
+			FileUtil.write(installZXGPath + "/" + A3_NAME, a3_content);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private String getTdxContent(List<String> list) {
 		StringBuffer sb = new StringBuffer();
-		for(String code : list){
+		for (String code : list) {
 			sb.append(ProjectUtil.StandardCode2tdxCode(code)).append("\n");
 		}
 		return sb.toString();
