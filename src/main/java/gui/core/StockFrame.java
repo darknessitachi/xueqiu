@@ -16,12 +16,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -37,9 +35,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import util.CollectionUtil;
 import util.Constants;
-import util.DateUtil;
 import util.FileUtil;
 import util.StringUtil;
 import util.core.AccessUtil;
@@ -72,7 +68,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton JbuttonDelImport = new JButton("上传雪球");
 	private JButton JbuttonBoth = new JButton("上传+统计");
 	private JButton JbuttonDownLocal = new JButton("同步本地");
-	private JButton JbuttonSettle = new JButton("整理当天");
 
 	private JButton JbuttonChoose = new JButton("导入EBK");
 	private JButton autoChoose = new JButton("自动导入");
@@ -90,11 +85,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	private String installZXGPath = null;
 	private List<String> installZXG_FileList = null;
 	private String ZXG_NAME = null;
-	private String A1_NAME = null;
 	private String A2_NAME = null;
 	private String A3_NAME = null;
-	private String WC_NAME = null;
-	private String TODAY_NAME = null;
 
 	private Map<String, JCheckBox> group = new HashMap<String, JCheckBox>();
 
@@ -130,17 +122,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 
 		ZXG_NAME = FileUtil.fileLike(installZXG_FileList, "ZXG.blk");
-		A1_NAME = FileUtil.fileLike(installZXG_FileList, "A1");
 		A2_NAME = FileUtil.fileLike(installZXG_FileList, "A2");
 		A3_NAME = FileUtil.fileLike(installZXG_FileList, "A3");
-		WC_NAME = FileUtil.fileLike(installZXG_FileList, "WC");
-		String today = DateUtil.formatDate(new Date(), "M.d");
-		TODAY_NAME = FileUtil.fileLike(installZXG_FileList, today);
-
-		/*
-		 * if(StringUtil.isEmpty(TODAY_NAME)){
-		 * showMsgBox("今天【"+today+"】对应的blk未找到。"); return; }
-		 */
 
 	}
 
@@ -188,7 +171,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.add(JbuttonOk);
 		jp1.add(JbuttonDelImport);
 		jp1.add(JbuttonDownLocal);
-		// jp1.add(JbuttonSettle);
 
 		JbuttonOk.addActionListener(this);
 		JbuttonSelectAll.addActionListener(this);
@@ -198,7 +180,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		JbuttonDel.addActionListener(this);
 		JbuttonBoth.addActionListener(this);
 		JbuttonDownLocal.addActionListener(this);
-		JbuttonSettle.addActionListener(this);
 
 	}
 
@@ -421,9 +402,6 @@ public class StockFrame extends JFrame implements ActionListener {
 			performLogin();
 		}
 
-		if (e.getSource() == JbuttonSettle) {
-			performSettle();
-		}
 
 		if (e.getSource() == JbuttonBoth) {
 			try {
@@ -435,55 +413,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	}
 
-	/**
-	 * 整理当天
-	 */
-	private void performSettle() {
-		// 获取自选股，A2，A1，WC四个文件的个股Set集合
-		try {
-			List<String> zxg_list = FileUtil.readLines(installZXGPath + "/"
-					+ ZXG_NAME);
-			zxg_list = removeIndex(zxg_list);
 
-			List<String> today_list = FileUtil.readLines(installZXGPath + "/"
-					+ TODAY_NAME);
-			List<String> wc_list = FileUtil.readLines(installZXGPath + "/"
-					+ WC_NAME);
-			List<String> a1_list = FileUtil.readLines(installZXGPath + "/"
-					+ A1_NAME);
-
-			Set<String> today_new = CollectionUtil
-					.combine(zxg_list, today_list);
-			Set<String> wc_new = CollectionUtil.combine(zxg_list, wc_list);
-			Set<String> a1_new = CollectionUtil.combine(zxg_list, a1_list);
-
-			try {
-				FileUtil.write(installZXGPath + "/" + TODAY_NAME,
-						CollectionUtil.toLineString(today_new));
-				FileUtil.write(installZXGPath + "/" + WC_NAME,
-						CollectionUtil.toLineString(wc_new));
-				FileUtil.write(installZXGPath + "/" + A1_NAME,
-						CollectionUtil.toLineString(a1_new));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			displayLabel.setText("整理完成。");
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	private List<String> removeIndex(List<String> zxg_list) {
-		List<String> newList = new ArrayList<String>();
-		for (String code : zxg_list) {
-			if (!ProjectUtil.isStockIndex(code)) {
-				newList.add(code);
-			}
-		}
-		return newList;
-	}
 
 	private void performBoth() throws IOException {
 		boolean delImport = true;
