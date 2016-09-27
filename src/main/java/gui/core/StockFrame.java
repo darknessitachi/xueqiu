@@ -127,7 +127,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		boolean originalFileExist = validateFileCount(installZXG_FileList);
 		if (!originalFileExist) {
 			showMsgBox("本地证券软件目录下ZXG、A1、A2、A3、WC的文件个数不对。");
-			return;
 		}
 
 		ZXG_NAME = FileUtil.fileLike(installZXG_FileList, "ZXG.blk");
