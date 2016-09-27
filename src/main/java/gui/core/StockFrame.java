@@ -126,7 +126,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		installZXG_FileList = FileUtil.getFullFileNames(installZXGPath);
 		boolean originalFileExist = validateFileCount(installZXG_FileList);
 		if (!originalFileExist) {
-			showMsgBox("本地证券软件目录下ZXG、A1、A2、A3、WC的文件个数不对。");
+			showMsgBox("本地证券软件目录下ZXG、A1、A2、A3的文件个数不对。");
 		}
 
 		ZXG_NAME = FileUtil.fileLike(installZXG_FileList, "ZXG.blk");
@@ -584,13 +584,10 @@ public class StockFrame extends JFrame implements ActionListener {
 			if (fileName.startsWith("A3")) {
 				count++;
 			}
-			if (fileName.startsWith("WC")) {
-				count++;
-			}
 
 		}
 
-		if (count != 5) {
+		if (count != 4) {
 			result = false;
 		}
 		return result;
