@@ -6,6 +6,7 @@ public class Constants {
 	
 	public static final String code_path = "code/";
 	public static final String config_path = "config/";
+	public static final String data_path = "dataFile/";
 	
 	public static final String req_cookie_name = "cookie.txt";
 	public static final String req_params_name = "params.properties";

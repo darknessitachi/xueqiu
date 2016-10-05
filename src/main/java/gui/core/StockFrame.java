@@ -1,6 +1,7 @@
 package gui.core;
 
 import gui.worker.ImportWorker;
+import gui.worker.LogAnalyzeWorker;
 import gui.worker.LoginWorker;
 import gui.worker.StatisWorker;
 import gui.worker.SyncLocalWorker;
@@ -64,10 +65,11 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private JMenuItem loginItem = new JMenuItem("登录");
 
-	private JButton JbuttonOk = new JButton("统计");
-	private JButton JbuttonDelImport = new JButton("上传雪球");
-	private JButton JbuttonBoth = new JButton("上传+统计");
-	private JButton JbuttonDownLocal = new JButton("同步本地");
+	private JButton jbuttonOk = new JButton("统计");
+	private JButton jbuttonDelImport = new JButton("上传雪球");
+	private JButton jbuttonBoth = new JButton("上传+统计");
+	private JButton jbuttonDownLocal = new JButton("同步本地");
+	private JButton jbuttonLogAnalyze = new JButton("日志分析");
 
 	private JButton JbuttonChoose = new JButton("导入EBK");
 	private JButton autoChoose = new JButton("自动导入");
@@ -168,18 +170,20 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private void initJPanel1() {
 		jp1.setBorder(BorderFactory.createTitledBorder("操作"));
-		jp1.add(JbuttonOk);
-		jp1.add(JbuttonDelImport);
-		jp1.add(JbuttonDownLocal);
+		jp1.add(jbuttonOk);
+		jp1.add(jbuttonDelImport);
+		jp1.add(jbuttonDownLocal);
+		jp1.add(jbuttonLogAnalyze);
 
-		JbuttonOk.addActionListener(this);
+		jbuttonOk.addActionListener(this);
 		JbuttonSelectAll.addActionListener(this);
 		JbuttonChoose.addActionListener(this);
 		autoChoose.addActionListener(this);
-		JbuttonDelImport.addActionListener(this);
+		jbuttonDelImport.addActionListener(this);
 		JbuttonDel.addActionListener(this);
-		JbuttonBoth.addActionListener(this);
-		JbuttonDownLocal.addActionListener(this);
+		jbuttonBoth.addActionListener(this);
+		jbuttonDownLocal.addActionListener(this);
+		jbuttonLogAnalyze.addActionListener(this);
 
 	}
 
@@ -369,7 +373,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		if (e.getSource() == JbuttonOk) {
+		if (e.getSource() == jbuttonOk) {
 			try {
 				performOk();
 			} catch (IOException e1) {
@@ -381,7 +385,7 @@ public class StockFrame extends JFrame implements ActionListener {
 			performSelectAll();
 		}
 
-		if (e.getSource() == JbuttonDownLocal) {
+		if (e.getSource() == jbuttonDownLocal) {
 			performSyncLocal();
 		}
 
@@ -394,16 +398,19 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == JbuttonDel) {
 			performDel();
 		}
-		if (e.getSource() == JbuttonDelImport) {
+		if (e.getSource() == jbuttonDelImport) {
 			performImport(true);
 		}
 
 		if (e.getSource() == loginItem) {
 			performLogin();
 		}
+		
+		if (e.getSource() == jbuttonLogAnalyze) {
+			performLogAnalyze();
+		}
 
-
-		if (e.getSource() == JbuttonBoth) {
+		if (e.getSource() == jbuttonBoth) {
 			try {
 				performBoth();
 			} catch (IOException e1) {
@@ -414,6 +421,19 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 
+	/**
+	 * 日志分析
+	 */
+	private void performLogAnalyze() {
+		File sheet2 = new File(Constants.out_path + Constants.data_path + "sheet2.txt");
+		File sheet3 = new File(Constants.out_path + Constants.data_path + "sheet3.txt");
+		File sheet4 = new File(Constants.out_path + Constants.data_path + "sheet4.txt");
+		if(sheet2.exists() && sheet3.exists() && sheet4.exists()){
+			new Thread(new LogAnalyzeWorker(this)).start();
+		}else{
+			displayLabel.setText("日志文件不完整。");
+		}
+	}
 
 	private void performBoth() throws IOException {
 		boolean delImport = true;

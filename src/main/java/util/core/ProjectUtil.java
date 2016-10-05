@@ -2,17 +2,28 @@ package util.core;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.swing.filechooser.FileSystemView;
 
 import util.Constants;
 import util.FileUtil;
 import util.StringUtil;
+import core.domain.DayRecordInfo;
+import core.domain.MyComparator;
 import core.domain.Stock;
 
 
@@ -207,5 +218,119 @@ public class ProjectUtil {
 			
 		}
 	}
+
+
+	/**
+	 * 读取日志文件，以月为单位分组
+	 * @param sheet2
+	 * @return
+	 * @throws FileNotFoundException 
+	 * @throws UnsupportedEncodingException 
+	 */
+	public static Map<String,List<DayRecordInfo>> readLog(File file) throws FileNotFoundException, UnsupportedEncodingException {
+		
+		Map<String,List<DayRecordInfo>> result = new HashMap<String,List<DayRecordInfo>>();
+		
+		InputStreamReader isr = new InputStreamReader(new FileInputStream(file), "GB2312");
+		BufferedReader br = new BufferedReader(isr);
+		
+		String line = null;
+		try {
+			while ((line = br.readLine()) != null) {
+				if (!StringUtil.isEmpty(line)) {
+					String[] arr = line.split(",");
+					if(arr.length == 1){
+						System.err.println(file.getName()+"点数不完整。");
+					}
+					String key = getFormatDay(arr[0]);
+					Float value = new Float(arr[1]);
+					
+					String month = key.substring(0,7);
+					List<DayRecordInfo> monthList = result.get(month);
+					//如果list为空，创建
+					if(monthList == null){
+						monthList = new ArrayList<DayRecordInfo>();
+					}
+					//从list寻找当天的记录，如果没有则创建
+					DayRecordInfo dayRecord = ProjectUtil.findRecord(monthList,key);
+					if(dayRecord == null){
+						dayRecord = new DayRecordInfo(key);
+						monthList.add(dayRecord);
+					}
+					dayRecord.addValue(value);
+					
+					//重新把monthList加入结果集
+					result.put(month, monthList);
+					
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+
+
+
+	private static String getFormatDay(String str) {
+		String[] arr1 = str.split("年");
+		String year = arr1[0];
+		
+		String[] arr2 = arr1[1].split("月");
+		String month = arr2[0];
+		if(new Integer(month)<10){
+			month = "0" + month;
+		}
+		
+		String[] arr3 = arr2[1].split("号");
+		String day = arr3[0];
+		if(new Integer(day)<10){
+			day = "0" + day;
+		}
+		
+		return year+"-"+month+"-"+day;
+	}
+
+
+
+	private static DayRecordInfo findRecord(List<DayRecordInfo> list, String key) {
+		for(DayRecordInfo d : list){
+			if(d.day.equals(key)){
+				return d;
+			}
+		}
+		return null;
+	}
+
+
+
+	public static TreeSet<String> getTreeSet(Set<String> keySet) {
+		TreeSet<String> result = new TreeSet<String>(new MyComparator());
+		for(String e : keySet){
+			result.add(e);
+		}
+		return result;
+	}
+
+
+
+	public static String caculateMonthRate(List<DayRecordInfo> list) {
+		float baseHalf = 1;
+		float baseWhole = 1;
+		for(DayRecordInfo day : list){
+			baseHalf = baseHalf		*	(	1	+   (day.getMidRate()/2)	);
+			baseWhole = baseWhole	*	(	1	+	day.getMidRate()		);
+		}
+		String resultHalf = StringUtil.formatNumber2((baseHalf-1)*100)+"%";
+		String resultWhole = StringUtil.formatNumber2((baseWhole-1)*100)+"%";
+		return resultHalf+ " ~ " + resultWhole;
+	}
+
 
 }
