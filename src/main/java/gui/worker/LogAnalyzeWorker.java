@@ -27,7 +27,7 @@ public class LogAnalyzeWorker implements Runnable {
 		File sheet3 = new File(Constants.out_path + Constants.data_path + "sheet3.txt");
 		File sheet4 = new File(Constants.out_path + Constants.data_path + "sheet4.txt");
 		
-		System.out.println("-----采用每日平均分统计算法-----");
+		System.out.println("-----采用每日平均算法-----");
 		printOut(sheet2,"【错过】：");
 		printOut(sheet3,"【意外（追涨）】：");
 		printOut(sheet4,"【意外（首阴）】：");

@@ -431,7 +431,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		if(sheet2.exists() && sheet3.exists() && sheet4.exists()){
 			new Thread(new LogAnalyzeWorker(this)).start();
 		}else{
-			displayLabel.setText("日志文件不完整。");
+			displayLabel.setText("【"+Constants.out_path + Constants.data_path+"】日志文件不完整。");
 		}
 	}
 
