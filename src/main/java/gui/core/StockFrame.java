@@ -69,14 +69,17 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton jbuttonDelImport = new JButton("上传雪球");
 	private JButton jbuttonDownLocal = new JButton("同步本地");
 	private JButton jbuttonLogAnalyze = new JButton("日志分析");
+	
+	private JComboBox<String> dayCombo = new JComboBox<String>();
+	private JComboBox<String> logCombo = new JComboBox<String>();
+
 
 	private JButton JbuttonChoose = new JButton("导入EBK");
 	private JButton autoChoose = new JButton("自动导入");
 	private JButton JbuttonDel = new JButton("删除EBK");
 	private JButton JbuttonSelectAll = new JButton("全选");
 
-	private JComboBox<String> comboBox = new JComboBox<String>();
-
+	
 	public JTextField displayLabel = new JTextField(45);
 
 	private String installZXGPath = null;
@@ -186,7 +189,9 @@ public class StockFrame extends JFrame implements ActionListener {
 		// jp2.setBounds(0, 0, window_width, 400);
 		// jp2.setSize(window_width, 300);
 		jp2.add(new JLabel("day:"));
-		jp2.add(comboBox);
+		jp2.add(dayCombo);
+		jp2.add(new JLabel("日志参数:"));
+		jp2.add(logCombo);
 
 		initDefaultParams();
 
@@ -196,17 +201,21 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	private void initDefaultParams() {
-		String day = params.getProperty("day");
-		if (!StringUtil.isEmpty(day)) {
-			String[] array = day.split(",");
-			String fillWord = getFillWord();
+		initCombo(dayCombo,params.getProperty("day"));
+		initCombo(logCombo,params.getProperty("logParam"));
+	}
+
+	private void initCombo(JComboBox<String> combo, String param) {
+		if (!StringUtil.isEmpty(param)) {
+			String[] array = param.split(",");
+			String widthBlank = getWidthBlank();
 			for (String e : array) {
-				comboBox.addItem(fillWord + e + fillWord);
+				combo.addItem(widthBlank + e + widthBlank);
 			}
 		}
 	}
 
-	private String getFillWord() {
+	private String getWidthBlank() {
 		int width = Integer.parseInt(params.getProperty("dayFieldWidth"));
 		String fillWord = "";
 		for (int i = 0; i < width; i++) {
@@ -367,20 +376,27 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * 日志分析
 	 */
 	private void performLogAnalyze() {
-		File sheet2 = new File(Constants.out_path + Constants.data_path + "sheet2.txt");
-		File sheet3 = new File(Constants.out_path + Constants.data_path + "sheet3.txt");
-		File sheet4 = new File(Constants.out_path + Constants.data_path + "sheet4.txt");
-		if(sheet2.exists() && sheet3.exists() && sheet4.exists()){
-			new Thread(new LogAnalyzeWorker(this)).start();
+		if(isLogExist()){
+			new Thread(new LogAnalyzeWorker(this,logCombo.getSelectedItem().toString().trim())).start();
 		}else{
 			displayLabel.setText("【"+Constants.out_path + Constants.data_path+"】日志文件不完整。");
 		}
 	}
 
+	/**
+	 * 日志文件是否存在
+	 * @return
+	 */
+	private boolean isLogExist() {
+		File sheet2 = new File(Constants.out_path + Constants.data_path + "sheet2.txt");
+		File sheet3 = new File(Constants.out_path + Constants.data_path + "sheet3.txt");
+		File sheet4 = new File(Constants.out_path + Constants.data_path + "sheet4.txt");
+		return sheet2.exists() && sheet3.exists() && sheet4.exists();
+	}
 
 	public void performAutoChoose() {
 		// 先隐藏，然后再显示，解决下拉框被自选股覆盖的问题。
-		comboBox.setVisible(false);
+		dayCombo.setVisible(false);
 
 		// 先删除自选股
 		for (String name : this.customContent) {
@@ -390,7 +406,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		copyStockFile();
 		// 刷新组件
 		refreshCustomPanel();
-		comboBox.setVisible(true);
+		dayCombo.setVisible(true);
 		isSelectAll = false;
 		displayLabel.setText("自动导入完成。");
 
@@ -607,7 +623,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 		ReqHead head = new ReqHead();
 
-		head.day = Integer.parseInt(comboBox.getSelectedItem().toString().trim());
+		head.day = Integer.parseInt(dayCombo.getSelectedItem().toString().trim());
 		head.sleep = Integer.parseInt(params.getProperty("sleep"));
 		head.threadNum = Integer.parseInt(params.getProperty("thread"));
 		head.errWaitTime = Integer.parseInt(params.getProperty("errWaitTime"));

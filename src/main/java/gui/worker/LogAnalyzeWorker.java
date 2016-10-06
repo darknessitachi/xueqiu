@@ -16,9 +16,11 @@ import core.domain.DayRecordInfo;
 public class LogAnalyzeWorker implements Runnable {
 
 	private StockFrame frame;
+	private String param;
 
-	public LogAnalyzeWorker(StockFrame frame) {
+	public LogAnalyzeWorker(StockFrame frame, String param) {
 		this.frame = frame;
+		this.param = param;
 	}
 
 	@Override
@@ -29,8 +31,10 @@ public class LogAnalyzeWorker implements Runnable {
 		
 		System.out.println("-----采用每日平均算法-----");
 		printOut(sheet2,"【错过】：");
-		printOut(sheet3,"【意外（追涨）】：");
-		printOut(sheet4,"【意外（首阴）】：");
+		if(param.toLowerCase().startsWith("all")){
+			printOut(sheet3,"【意外（追涨）】：");
+			printOut(sheet4,"【意外（首阴）】：");
+		}
 		
 		frame.displayLabel.setText("分析完毕。");
 	}
@@ -44,7 +48,7 @@ public class LogAnalyzeWorker implements Runnable {
 			for(String key : orderSet){
 				System.out.println(key+"月预期收益 : "+ProjectUtil.caculateMonthRate(sheet2Data.get(key)));
 			}
-			System.out.println("---------------------");
+			System.out.println();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
