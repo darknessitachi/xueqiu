@@ -321,6 +321,9 @@ public class ProjectUtil {
 
 
 	public static String caculateMonthRate(List<DayRecordInfo> list) {
+		if(list == null){
+			return "无记录";
+		}
 		float baseHalf = 1;
 		float baseWhole = 1;
 		for(DayRecordInfo day : list){
