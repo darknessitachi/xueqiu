@@ -331,8 +331,9 @@ public class ProjectUtil {
 			baseWhole = baseWhole	*	(	1	+	day.getMidRate()		);
 		}
 		String resultHalf = StringUtil.formatNumber2((baseHalf-1)*100)+"%";
-		String resultWhole = StringUtil.formatNumber2((baseWhole-1)*100)+"%";
-		return resultHalf+ " ~ " + resultWhole;
+		//String resultWhole = StringUtil.formatNumber2((baseWhole-1)*100)+"%";
+		return resultHalf;
+		//return resultHalf+ " ~ " + resultWhole;
 	}
 
 
