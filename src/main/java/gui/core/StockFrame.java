@@ -67,7 +67,6 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private JButton jbuttonOk = new JButton("统计");
 	private JButton jbuttonDelImport = new JButton("上传雪球");
-	private JButton jbuttonBoth = new JButton("上传+统计");
 	private JButton jbuttonDownLocal = new JButton("同步本地");
 	private JButton jbuttonLogAnalyze = new JButton("日志分析");
 
@@ -177,7 +176,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		autoChoose.addActionListener(this);
 		jbuttonDelImport.addActionListener(this);
 		JbuttonDel.addActionListener(this);
-		jbuttonBoth.addActionListener(this);
 		jbuttonDownLocal.addActionListener(this);
 		jbuttonLogAnalyze.addActionListener(this);
 
@@ -364,15 +362,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == jbuttonLogAnalyze) {
 			performLogAnalyze();
 		}
-
-		if (e.getSource() == jbuttonBoth) {
-			try {
-				performBoth();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
-
 	}
 	/**
 	 * 日志分析
@@ -388,19 +377,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	private void performBoth() throws IOException {
-		boolean delImport = true;
-		// 获取选中的板块
-		List<String> names = getSelectNames();
-		if (names.size() > 0) {
-			displayLabel.setText("正在执行统计……");
-			ReqHead head = getReqHead();
-			new Thread(new StatisWorker(head, names, this, delImport)).start();
-		} else {
-			displayLabel.setText("请选择要统计的板块。");
-		}
-
-	}
 
 	public void performAutoChoose() {
 		// 先隐藏，然后再显示，解决下拉框被自选股覆盖的问题。
