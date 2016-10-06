@@ -77,10 +77,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton JbuttonSelectAll = new JButton("全选");
 
 	private JComboBox<String> comboBox = new JComboBox<String>();
-	private JTextField field_sleep = new JTextField(5);
-	private JTextField field_thread = new JTextField(5);
-	private JTextField field_waitTime = new JTextField(5);
-	private JTextField field_addTime = new JTextField(5);
 
 	public JTextField displayLabel = new JTextField(45);
 
@@ -194,18 +190,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp2.add(new JLabel("day:"));
 		jp2.add(comboBox);
 
-		jp2.add(new JLabel("sleep:"));
-		jp2.add(field_sleep);
-
-		jp2.add(new JLabel("线程数:"));
-		jp2.add(field_thread);
-
-		jp2.add(new JLabel("errWaitTime:"));
-		jp2.add(field_waitTime);
-
-		jp2.add(new JLabel("addTime:"));
-		jp2.add(field_addTime);
-
 		initDefaultParams();
 
 		jp2.add(displayLabel);
@@ -222,35 +206,6 @@ public class StockFrame extends JFrame implements ActionListener {
 				comboBox.addItem(fillWord + e + fillWord);
 			}
 		}
-
-		String sleep = params.getProperty("sleep");
-		if (StringUtil.isEmpty(sleep)) {
-			field_sleep.setText("1");
-		} else {
-			field_sleep.setText(sleep);
-		}
-
-		String thread = params.getProperty("thread");
-		if (StringUtil.isEmpty(thread)) {
-			field_thread.setText("1");
-		} else {
-			field_thread.setText(thread);
-		}
-
-		String errWaitTime = params.getProperty("errWaitTime");
-		if (StringUtil.isEmpty(errWaitTime)) {
-			field_waitTime.setText("40");
-		} else {
-			field_waitTime.setText(errWaitTime);
-		}
-
-		String addTime = params.getProperty("addTime");
-		if (StringUtil.isEmpty(addTime)) {
-			field_addTime.setText("1");
-		} else {
-			field_addTime.setText(addTime);
-		}
-
 	}
 
 	private String getFillWord() {
@@ -419,8 +374,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 
 	}
-
-
 	/**
 	 * 日志分析
 	 */
@@ -678,12 +631,11 @@ public class StockFrame extends JFrame implements ActionListener {
 
 		ReqHead head = new ReqHead();
 
-		head.day = Integer.parseInt(comboBox.getSelectedItem().toString()
-				.trim());
-		head.sleep = Integer.parseInt(field_sleep.getText());
-		head.threadNum = Integer.parseInt(field_thread.getText());
-		head.errWaitTime = Integer.parseInt(field_waitTime.getText());
-		head.addTime = Integer.parseInt(field_addTime.getText());
+		head.day = Integer.parseInt(comboBox.getSelectedItem().toString().trim());
+		head.sleep = Integer.parseInt(params.getProperty("sleep"));
+		head.threadNum = Integer.parseInt(params.getProperty("thread"));
+		head.errWaitTime = Integer.parseInt(params.getProperty("errWaitTime"));
+		head.addTime = Integer.parseInt(params.getProperty("addTime"));
 
 		return head;
 	}
