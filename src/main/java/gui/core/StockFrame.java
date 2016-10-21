@@ -71,7 +71,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton jbuttonLogAnalyze = new JButton("日志分析");
 	
 	private JComboBox<String> dayCombo = new JComboBox<String>();
-	private JComboBox<String> logCombo = new JComboBox<String>();
 
 
 	private JButton JbuttonChoose = new JButton("导入EBK");
@@ -202,7 +201,6 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private void initDefaultParams() {
 		initCombo(dayCombo,params.getProperty("day"));
-		initCombo(logCombo,params.getProperty("logParam"));
 	}
 
 	private void initCombo(JComboBox<String> combo, String param) {
@@ -377,8 +375,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	 */
 	private void performLogAnalyze() {
 		if(isLogExist()){
-			String param_val = "all";
-			new Thread(new LogAnalyzeWorker(this,param_val)).start();
+			new Thread(new LogAnalyzeWorker(this)).start();
 		}else{
 			displayLabel.setText("【"+Constants.out_path + Constants.data_path+"】日志文件不完整。");
 		}

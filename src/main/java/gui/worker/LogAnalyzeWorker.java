@@ -16,11 +16,9 @@ import core.domain.DayRecordInfo;
 public class LogAnalyzeWorker implements Runnable {
 
 	private StockFrame frame;
-	private String param;
 
-	public LogAnalyzeWorker(StockFrame frame, String param) {
+	public LogAnalyzeWorker(StockFrame frame) {
 		this.frame = frame;
-		this.param = param;
 	}
 
 	@Override
@@ -31,10 +29,8 @@ public class LogAnalyzeWorker implements Runnable {
 		
 		System.out.println("-----采用每日平均算法-----");
 		printOut(sheet2,"【错过】：");
-		if(param.toLowerCase().startsWith("all")){
-			printOut(sheet3,"【意外（追涨）】：");
-			printOut(sheet4,"【意外（首阴）】：");
-		}
+		printOut(sheet3,"【意外（追涨）】：");
+		printOut(sheet4,"【意外（首阴）】：");
 		
 		frame.displayLabel.setText("分析完毕。");
 	}
