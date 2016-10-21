@@ -190,8 +190,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		// jp2.setSize(window_width, 300);
 		jp2.add(new JLabel("day:"));
 		jp2.add(dayCombo);
-		jp2.add(new JLabel("日志参数:"));
-		jp2.add(logCombo);
+		/*jp2.add(new JLabel("日志参数:"));
+		jp2.add(logCombo);*/
 
 		initDefaultParams();
 
@@ -377,7 +377,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	 */
 	private void performLogAnalyze() {
 		if(isLogExist()){
-			new Thread(new LogAnalyzeWorker(this,logCombo.getSelectedItem().toString().trim())).start();
+			String param_val = "all";
+			new Thread(new LogAnalyzeWorker(this,param_val)).start();
 		}else{
 			displayLabel.setText("【"+Constants.out_path + Constants.data_path+"】日志文件不完整。");
 		}

@@ -29,5 +29,6 @@ public class SyncLocalWorker implements Runnable {
 		frame.performAutoChoose();
 		frame.displayLabel.setText("同步本地目录完成。自动导入完成。");
 	}
+	
 
 }
