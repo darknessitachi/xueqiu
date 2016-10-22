@@ -38,11 +38,11 @@ public class LogAnalyzeWorker implements Runnable {
 	private void printOut(File file, String title) {
 		try {
 			
-			Map<String,List<DayRecordInfo>> sheet2Data = ProjectUtil.readLog(file);
-			TreeSet<String> orderSet = ProjectUtil.getTreeSet(sheet2Data.keySet());
+			Map<String,List<DayRecordInfo>> data = ProjectUtil.readLog(file);
+			TreeSet<String> dateOrderSet = ProjectUtil.getTreeSet(data.keySet());
 			System.out.println(title);
-			for(String key : orderSet){
-				System.out.println(key+"月预期收益 : "+ProjectUtil.caculateMonthRate(sheet2Data.get(key)));
+			for(String key : dateOrderSet){
+				System.out.println(key+"月预期收益 : "+ProjectUtil.caculateMonthRate(data.get(key)));
 			}
 			System.out.println();
 		} catch (FileNotFoundException e) {

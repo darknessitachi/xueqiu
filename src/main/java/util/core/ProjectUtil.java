@@ -235,15 +235,18 @@ public class ProjectUtil {
 		BufferedReader br = new BufferedReader(isr);
 		
 		String line = null;
+		int i = 0;
 		try {
 			while ((line = br.readLine()) != null) {
 				if (!StringUtil.isEmpty(line)) {
+					i++;
 					String[] arr = line.split(",");
-					if(arr.length == 1){
-						System.err.println(file.getName()+"点数不完整。");
+					if(arr.length != 7){
+						System.err.println("【"+file.getName()+"】文件第【"+i+"】行数据部完整。");
+						continue;
 					}
 					String key = getFormatDay(arr[0]);
-					Float value = new Float(arr[1]);
+					Float value = new Float(arr[6]);
 					
 					String month = key.substring(0,7);
 					List<DayRecordInfo> monthList = result.get(month);
