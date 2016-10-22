@@ -10,6 +10,7 @@ public class Constants {
 	
 	public static final String req_cookie_name = "cookie.txt";
 	public static final String req_params_name = "params.properties";
+	public static final String db_name = "test.db";
 	
 	public static final String out_path          =  "d:/xueqiu/";
 	public static final String out_result_path   =  "d:/xueqiu/result";
