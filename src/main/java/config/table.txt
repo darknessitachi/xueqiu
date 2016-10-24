@@ -1,0 +1,11 @@
+	create table record
+	(
+		day varchar(64), 
+		indexType varchar(64), 
+		chartType varchar(64), 
+		stockType varchar(64), 
+		compare varchar(64), 
+		phase varchar(64), 
+		rate number,
+		fileName varchar(64) 
+	)

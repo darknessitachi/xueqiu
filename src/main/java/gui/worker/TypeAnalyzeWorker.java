@@ -19,17 +19,6 @@ import util.StringUtil;
 public class TypeAnalyzeWorker implements Runnable {
 	
 	
-	private String tableSQL = "create table record("
-			+ "day varchar(64), "
-			+ "indexType varchar(64), "
-			+ "chartType varchar(64), "
-			+ "stockType varchar(64), "
-			+ "compare varchar(64), "
-			+ "phase varchar(64), "
-			+ "rate number,"
-			+ "fileName varchar(64) "
-			+ ")";
-	
 	private StockFrame frame;
 
 	public TypeAnalyzeWorker(StockFrame frame) {
@@ -43,7 +32,6 @@ public class TypeAnalyzeWorker implements Runnable {
 	}
 
 	private void sqLiteProcess() {
-		
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rset = null;
@@ -59,6 +47,7 @@ public class TypeAnalyzeWorker implements Runnable {
 			conn.commit();
 			
 			//开始建表
+			String tableSQL = FileUtil.read(Constants.out_config_path +	"/" + Constants.table_name);
 			stmt.executeUpdate(tableSQL);
 			//System.out.println("建表成功。");
 			
@@ -72,11 +61,14 @@ public class TypeAnalyzeWorker implements Runnable {
 			Map<String,String> map = FileUtil.readAsProperties(Constants.out_config_path +	"/" + Constants.sql_name);
 			int i=1;
 			while(!StringUtil.isEmpty(map.get("title"+i))){
+				
 				String title = map.get("title"+i);
 				String sql = map.get("sql"+i);
+				
 				System.out.println(title);
 				businessQuery(stmt,rset,sql);
 				System.out.println("--------------------");
+				
 				i++;
 			}
 			
