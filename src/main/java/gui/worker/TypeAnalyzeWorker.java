@@ -42,9 +42,12 @@ public class TypeAnalyzeWorker implements Runnable {
 			stmt = conn.createStatement();
 			
 			//先删除表
-			stmt.executeUpdate("drop table record");
-			//System.out.println("删表成功。");
-			conn.commit();
+			try {
+				stmt.executeUpdate("drop table record");
+				conn.commit();
+			} catch (Exception e) {
+				//System.out.println("当前没有表record。");
+			}
 			
 			//开始建表
 			String tableSQL = FileUtil.read(Constants.out_config_path +	"/" + Constants.table_name);
