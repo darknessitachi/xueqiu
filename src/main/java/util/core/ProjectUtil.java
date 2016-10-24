@@ -179,6 +179,8 @@ public class ProjectUtil {
 	private static void validateDict() {
 		FileUtil.createFolder(Constants.out_result_path);
 		FileUtil.createFolder(Constants.out_config_path);
+		FileUtil.createFolder(Constants.out_datafile_path);
+		
 		FileUtil.createFolder(Constants.out_custom_path);
 		FileUtil.createFolder(Constants.out_concept_path);
 		FileUtil.createFolder(Constants.out_industry_path);
