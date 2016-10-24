@@ -69,7 +69,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton jbuttonOk = new JButton("统计");
 	private JButton jbuttonDelImport = new JButton("上传雪球");
 	private JButton jbuttonDownLocal = new JButton("同步本地");
-	private JButton jbuttonLogAnalyze = new JButton("日志分析");
+	private JButton jbuttonLogAnalyze = new JButton("比率分析");
 	private JButton jbuttonTypeAnalyze = new JButton("类型分析");
 	
 	private JComboBox<String> dayCombo = new JComboBox<String>();
