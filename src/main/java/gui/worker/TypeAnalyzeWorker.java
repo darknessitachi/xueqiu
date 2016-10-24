@@ -10,6 +10,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Map;
 
 import util.Constants;
 import util.FileUtil;
@@ -29,9 +30,6 @@ public class TypeAnalyzeWorker implements Runnable {
 			+ "fileName varchar(64) "
 			+ ")";
 	
-	private String businessSQL = " SELECT phase,count(phase) as sum0 FROM record where stockType in ('强势首阴','强势上影首阴','强势下影首阴')  group by phase  order by sum0 desc   ";
-
-
 	private StockFrame frame;
 
 	public TypeAnalyzeWorker(StockFrame frame) {
@@ -71,11 +69,23 @@ public class TypeAnalyzeWorker implements Runnable {
 			conn.commit();
 			
 			//开始查询
-			businessQuery(stmt,rset);
+			Map<String,String> map = FileUtil.readAsProperties(Constants.out_config_path +	"/" + Constants.sql_name);
+			int i=1;
+			while(!StringUtil.isEmpty(map.get("title"+i))){
+				String title = map.get("title"+i);
+				String sql = map.get("sql"+i);
+				System.out.println(title);
+				businessQuery(stmt,rset,sql);
+				System.out.println("--------------------");
+				i++;
+			}
+			
 			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		
@@ -85,12 +95,13 @@ public class TypeAnalyzeWorker implements Runnable {
 	 * 获取查询语句中有多少列
 	 * @param stmt
 	 * @param rset
+	 * @param sql 
 	 * @return
 	 */
-	private int getColumnNum(Statement stmt, ResultSet rset) {
+	private int getColumnNum(Statement stmt, ResultSet rset, String sql) {
 		int columnCount = 0;
 		try {
-			rset = stmt.executeQuery(businessSQL); 
+			rset = stmt.executeQuery(sql); 
 			ResultSetMetaData rsmd = rset.getMetaData() ; 
 			columnCount = rsmd.getColumnCount();
 		} catch (SQLException e) {
@@ -102,14 +113,15 @@ public class TypeAnalyzeWorker implements Runnable {
 	 * 查询
 	 * @param stmt
 	 * @param rset
+	 * @param sql 
 	 * @param columnNum 
 	 * @throws SQLException
 	 */
-	private void businessQuery(Statement stmt, ResultSet rset) throws SQLException {
+	private void businessQuery(Statement stmt, ResultSet rset, String sql) throws SQLException {
 		
-		int columnNum = getColumnNum(stmt,rset);
+		int columnNum = getColumnNum(stmt,rset,sql);
 		
-		rset = stmt.executeQuery(businessSQL);
+		rset = stmt.executeQuery(sql);
 		while (rset.next()) {
 			StringBuilder row = new StringBuilder();
 			for(int i=1;i<=columnNum;i++){
