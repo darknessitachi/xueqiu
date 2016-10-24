@@ -1,5 +1,8 @@
-title1=1、【强势首阴】【强势上影首阴】【强势下影首阴】的最高点时间段排序
-sql1=SELECT phase,count(phase) as sum0 FROM record where stockType in ('强势首阴','强势上影首阴','强势下影首阴')  group by phase  order by sum0 desc
+title1=所有类型的次数排序
+sql1=SELECT stockType,count(stockType) as sum0 FROM record   group by stockType  order by sum0 desc    
 
-title2=2、所有类型的最高点时间段排序
+title2=所有类型的时间段排序
 sql2=SELECT phase,count(phase) as sum0 FROM record   group by phase  order by sum0 desc    
+
+title3=【强势首阴】【强势上影首阴】【强势下影首阴】的时间段排序
+sql3=SELECT phase,count(phase) as sum0 FROM record where stockType in ('强势首阴','强势上影首阴','强势下影首阴')  group by phase  order by sum0 desc
