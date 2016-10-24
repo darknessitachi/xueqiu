@@ -453,6 +453,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 		String result = null;
 		String installPath = params.getProperty("tdxInstallPath");
+		System.out.println(installPath);
 		String[] array = installPath.split(";");
 		for (String path : array) {
 			String zxg_path = path + "/" + Constants.zxg_path;

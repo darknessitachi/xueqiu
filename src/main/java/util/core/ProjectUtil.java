@@ -188,6 +188,10 @@ public class ProjectUtil {
 	private static void validateFile() {
 		String cookiePath = Constants.out_config_path+"/"+Constants.req_cookie_name;
 		String paramsPath = Constants.out_config_path+"/"+Constants.req_params_name;
+		
+		String tablePath = Constants.out_config_path+"/"+Constants.table_name;
+		String sqlPath = Constants.out_config_path+"/"+Constants.sql_name;
+		
 		boolean noCookie = false;
 		if(!FileUtil.exists(cookiePath)){
 			System.out.println("拷贝cookie文件到【"+Constants.out_config_path+"】中");
@@ -201,6 +205,19 @@ public class ProjectUtil {
 			File oldfile = new File(ProjectUtil.getClasspath() + Constants.config_path + Constants.req_params_name);
 			FileUtil.copy(paramsPath, oldfile);
 		};
+		
+		if(!FileUtil.exists(tablePath)){
+			System.out.println("拷贝params文件到【"+Constants.out_config_path+"】中");
+			File oldfile = new File(ProjectUtil.getClasspath() + Constants.config_path + Constants.table_name);
+			FileUtil.copy(paramsPath, oldfile);
+		};
+		
+		if(!FileUtil.exists(sqlPath)){
+			System.out.println("拷贝params文件到【"+Constants.out_config_path+"】中");
+			File oldfile = new File(ProjectUtil.getClasspath() + Constants.config_path + Constants.sql_name);
+			FileUtil.copy(paramsPath, oldfile);
+		};
+		
 		//登录操作
 		if(noCookie){
 			Properties params = AccessUtil.readParams();
