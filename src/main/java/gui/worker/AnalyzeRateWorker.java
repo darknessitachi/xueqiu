@@ -5,7 +5,6 @@ import gui.core.StockFrame;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -40,7 +39,6 @@ public class AnalyzeRateWorker implements Runnable {
 		
 		Connection conn = null;
 		Statement stmt = null;
-		ResultSet rset = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			conn = DriverManager.getConnection("jdbc:sqlite:/"+Constants.out_path + Constants.data_path + Constants.db_name);
@@ -61,7 +59,7 @@ public class AnalyzeRateWorker implements Runnable {
 			stmt.executeUpdate(" INSERT INTO recordCombineSheetDay  SELECT day,sum(rate/2.0)/count(day) as rate0,'sheet3' FROM record where  fileName like '%sheet3%'   group by day ");
 			stmt.executeUpdate(" INSERT INTO recordCombineSheetDay  SELECT day,sum(rate/2.0)/count(day) as rate0,'sheet4' FROM record where  fileName like '%sheet4%'   group by day ");
 			
-			SqlUtil.printSql("SELECT  * from recordCombineSheetDay order by day asc    ",stmt,rset);
+			SqlUtil.printSql("SELECT  * from recordCombineSheetDay order by day asc    ",stmt);
 			
 			traditionOut("sheet2");
 			

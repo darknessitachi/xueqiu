@@ -5,7 +5,6 @@ import gui.core.StockFrame;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
@@ -36,7 +35,6 @@ public class AnalyzeTypeWorker implements Runnable {
 		
 		Connection conn = null;
 		Statement stmt = null;
-		ResultSet rset = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			conn = DriverManager.getConnection("jdbc:sqlite:/"+Constants.out_path + Constants.data_path + Constants.db_name);
@@ -58,7 +56,7 @@ public class AnalyzeTypeWorker implements Runnable {
 				String title = map.get("title"+i);
 				String sql = map.get("sql"+i);
 				System.out.println("-------------"+title+"-------------");
-				SqlUtil.printSql(sql, stmt, rset);
+				SqlUtil.printSql(sql, stmt);
 				i++;
 			}
 		} catch (ClassNotFoundException e) {

@@ -64,10 +64,10 @@ public class SqlUtil {
 	 * @param sql 
 	 * @return
 	 */
-	public static int getColumnNum(Statement stmt, ResultSet rset, String sql) {
+	public static int getColumnNum(Statement stmt, String sql) {
 		int columnCount = 0;
 		try {
-			rset = stmt.executeQuery(sql); 
+			ResultSet rset = stmt.executeQuery(sql); 
 			ResultSetMetaData rsmd = rset.getMetaData() ; 
 			columnCount = rsmd.getColumnCount();
 		} catch (SQLException e) {
@@ -76,10 +76,10 @@ public class SqlUtil {
 		return columnCount;
 	}
 
-	public static void printSql(String sql, Statement stmt, ResultSet rset) throws SQLException {
-		int columnNum = getColumnNum(stmt,rset,sql);
+	public static void printSql(String sql, Statement stmt) throws SQLException {
+		int columnNum = getColumnNum(stmt,sql);
 		
-		rset = stmt.executeQuery(sql);
+		ResultSet rset = stmt.executeQuery(sql);
 		while (rset.next()) {
 			StringBuilder row = new StringBuilder();
 			for(int i=1;i<=columnNum;i++){
