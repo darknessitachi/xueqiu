@@ -13,7 +13,7 @@ import util.Constants;
 import util.FileUtil;
 import util.SqlUtil;
 
-public class RateAnalyzeWorker implements Runnable {
+public class AnalyzeRateWorker implements Runnable {
 	
 	
 	private static final String tableRecordCombineSheetDay = "create table recordCombineSheetDay ("
@@ -24,7 +24,7 @@ public class RateAnalyzeWorker implements Runnable {
 	
 	private StockFrame frame;
 
-	public RateAnalyzeWorker(StockFrame frame) {
+	public AnalyzeRateWorker(StockFrame frame) {
 		this.frame = frame;
 	}
 
@@ -63,6 +63,8 @@ public class RateAnalyzeWorker implements Runnable {
 			
 			SqlUtil.printSql("SELECT  * from recordCombineSheetDay order by day asc    ",stmt,rset);
 			
+			traditionOut("sheet2");
+			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -70,6 +72,10 @@ public class RateAnalyzeWorker implements Runnable {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		
+	}
+
+	private void traditionOut(String fileName) {
 		
 	}
 	

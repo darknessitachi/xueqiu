@@ -1,12 +1,12 @@
 package gui.core;
 
 import gui.worker.ImportWorker;
-import gui.worker.LogAnalyzeWorker;
+import gui.worker.AnalyzeLogWorker;
 import gui.worker.LoginWorker;
-import gui.worker.RateAnalyzeWorker;
+import gui.worker.AnalyzeRateWorker;
 import gui.worker.StatisWorker;
 import gui.worker.SyncLocalWorker;
-import gui.worker.TypeAnalyzeWorker;
+import gui.worker.AnalyzeTypeWorker;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -395,7 +395,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private void performRateAnalyze() {
 		if(isLogExist()){
-			new Thread(new RateAnalyzeWorker(this)).start();
+			new Thread(new AnalyzeRateWorker(this)).start();
 		}else{
 			displayLabel.setText("【"+Constants.out_path + Constants.data_path+"】日志文件不完整。");
 		}
@@ -403,7 +403,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private void performTypeAnalyze() {
 		if(isLogExist()){
-			new Thread(new TypeAnalyzeWorker(this)).start();
+			new Thread(new AnalyzeTypeWorker(this)).start();
 		}else{
 			displayLabel.setText("【"+Constants.out_path + Constants.data_path+"】日志文件不完整。");
 		}
@@ -414,7 +414,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	 */
 	private void performLogAnalyze() {
 		if(isLogExist()){
-			new Thread(new LogAnalyzeWorker(this)).start();
+			new Thread(new AnalyzeLogWorker(this)).start();
 		}else{
 			displayLabel.setText("【"+Constants.out_path + Constants.data_path+"】日志文件不完整。");
 		}

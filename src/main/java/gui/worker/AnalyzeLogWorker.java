@@ -13,11 +13,11 @@ import bean.DayRecordInfo;
 import util.Constants;
 import util.ProjectUtil;
 
-public class LogAnalyzeWorker implements Runnable {
+public class AnalyzeLogWorker implements Runnable {
 
 	private StockFrame frame;
 
-	public LogAnalyzeWorker(StockFrame frame) {
+	public AnalyzeLogWorker(StockFrame frame) {
 		this.frame = frame;
 	}
 

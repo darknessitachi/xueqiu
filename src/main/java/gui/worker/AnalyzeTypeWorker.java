@@ -15,12 +15,12 @@ import util.FileUtil;
 import util.SqlUtil;
 import util.StringUtil;
 
-public class TypeAnalyzeWorker implements Runnable {
+public class AnalyzeTypeWorker implements Runnable {
 	
 	
 	private StockFrame frame;
 
-	public TypeAnalyzeWorker(StockFrame frame) {
+	public AnalyzeTypeWorker(StockFrame frame) {
 		this.frame = frame;
 	}
 
