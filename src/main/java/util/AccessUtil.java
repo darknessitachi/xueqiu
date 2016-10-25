@@ -1,11 +1,10 @@
-package util.core;
+package util;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
-import util.Constants;
 import util.FileUtil;
 
 

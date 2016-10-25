@@ -2,7 +2,7 @@ package core.inter;
 
 import java.io.IOException;
 
-import core.domain.Req;
+import bean.Req;
 
 public interface ReqLoad {
 	

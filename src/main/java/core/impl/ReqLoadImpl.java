@@ -12,15 +12,15 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import util.ComparatorEntity;
+import bean.ComparatorEntity;
+import bean.Entity;
+import bean.Req;
+import bean.Stock;
+import util.AccessUtil;
 import util.Constants;
 import util.DateUtil;
 import util.FileUtil;
 import util.StringUtil;
-import util.core.AccessUtil;
-import core.domain.Entity;
-import core.domain.Req;
-import core.domain.Stock;
 import core.inter.ReqLoad;
 
 public class ReqLoadImpl implements ReqLoad {

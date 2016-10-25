@@ -1,4 +1,4 @@
-package util.core;
+package util;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,13 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import bean.Stock;
+import bean.Req.ReqBody;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import util.Constants;
 import util.StringUtil;
 import util.http.HttpClientUniqueUtil;
-import core.domain.Req.ReqBody;
-import core.domain.Stock;
 
 public class XueqiuUtil {
 	

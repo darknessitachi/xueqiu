@@ -1,8 +1,6 @@
-package util;
+package bean;
 
 import java.util.Comparator;
-
-import core.domain.Entity;
 
 public class ComparatorEntity implements Comparator<Object> {
 

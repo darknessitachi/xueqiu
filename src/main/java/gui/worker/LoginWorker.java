@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import util.Constants;
 import util.FileUtil;
-import util.core.XueqiuUtil;
+import util.XueqiuUtil;
 import gui.core.StockFrame;
 
 public class LoginWorker implements Runnable {

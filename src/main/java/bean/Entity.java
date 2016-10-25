@@ -1,6 +1,6 @@
-package core.domain;
+package bean;
 
-import util.core.ProjectUtil;
+import util.ProjectUtil;
 
 public class Entity {
 	

@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import core.domain.Req;
-import core.domain.Stock;
+import bean.Req;
+import bean.Stock;
 import core.impl.ReqLoadImpl;
 import core.impl.Worker;
 

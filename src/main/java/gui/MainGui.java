@@ -1,7 +1,7 @@
 package gui;
 
 import gui.core.StockFrame;
-import util.core.ProjectUtil;
+import util.ProjectUtil;
 
 
 

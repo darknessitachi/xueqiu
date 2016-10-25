@@ -5,14 +5,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import bean.Req;
+import bean.Stock;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import util.Constants;
 import util.DateUtil;
-import util.core.ProjectUtil;
+import util.ProjectUtil;
 import util.http.HttpClientUniqueUtil;
-import core.domain.Req;
-import core.domain.Stock;
 
 public class Worker implements Runnable{
 

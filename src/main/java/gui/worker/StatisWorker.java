@@ -1,15 +1,15 @@
 package gui.worker;
 
-import core.domain.Req;
-import core.domain.Req.ReqHead;
+import bean.Req;
+import bean.Req.ReqHead;
 import gui.core.StockFrame;
 
 import java.io.IOException;
 import java.util.List;
 
 import util.Constants;
-import util.core.StatisticUtil;
-import util.core.TranslateUtil;
+import util.StatisticUtil;
+import util.TranslateUtil;
 
 public class StatisWorker implements Runnable {
 

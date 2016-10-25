@@ -38,12 +38,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import bean.Req.ReqHead;
+import util.AccessUtil;
 import util.Constants;
 import util.FileUtil;
+import util.ProjectUtil;
 import util.StringUtil;
-import util.core.AccessUtil;
-import util.core.ProjectUtil;
-import core.domain.Req.ReqHead;
 
 public class StockFrame extends JFrame implements ActionListener {
 

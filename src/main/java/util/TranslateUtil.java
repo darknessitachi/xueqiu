@@ -1,4 +1,4 @@
-package util.core;
+package util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,11 +8,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import util.Constants;
+import bean.Stock;
+import bean.Req.ReqBody;
 import util.StringUtil;
 import util.http.HttpClientUniqueUtil;
-import core.domain.Req.ReqBody;
-import core.domain.Stock;
 
 public class TranslateUtil {
 	

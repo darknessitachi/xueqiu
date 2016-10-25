@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import util.core.XueqiuUtil;
+import util.XueqiuUtil;
 
 public class SyncLocalWorker implements Runnable {
 

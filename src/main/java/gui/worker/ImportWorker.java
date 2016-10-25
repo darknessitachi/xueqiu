@@ -5,7 +5,7 @@ import gui.core.StockFrame;
 import java.io.IOException;
 import java.util.List;
 
-import util.core.XueqiuUtil;
+import util.XueqiuUtil;
 
 public class ImportWorker implements Runnable {
 

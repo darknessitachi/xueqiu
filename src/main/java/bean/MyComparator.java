@@ -1,4 +1,4 @@
-package core.domain;
+package bean;
 
 import java.util.Comparator;
 

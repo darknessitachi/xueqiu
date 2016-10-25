@@ -1,8 +1,8 @@
-package util.core;
+package util;
 
 import java.io.IOException;
 
-import core.domain.Req;
+import bean.Req;
 import core.inter.StockCommand;
 
 public class StatisticUtil {
