@@ -207,13 +207,13 @@ public class ProjectUtil {
 		};
 		
 		if(!FileUtil.exists(tablePath)){
-			System.out.println("拷贝params文件到【"+Constants.out_config_path+"】中");
+			System.out.println("拷贝table文件到【"+Constants.out_config_path+"】中");
 			File oldfile = new File(ProjectUtil.getClasspath() + Constants.config_path + Constants.table_name);
 			FileUtil.copy(tablePath, oldfile);
 		};
 		
 		if(!FileUtil.exists(sqlPath)){
-			System.out.println("拷贝params文件到【"+Constants.out_config_path+"】中");
+			System.out.println("拷贝sql文件到【"+Constants.out_config_path+"】中");
 			File oldfile = new File(ProjectUtil.getClasspath() + Constants.config_path + Constants.sql_name);
 			FileUtil.copy(sqlPath, oldfile);
 		};
