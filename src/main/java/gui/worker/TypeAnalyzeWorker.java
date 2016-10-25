@@ -31,6 +31,9 @@ public class TypeAnalyzeWorker implements Runnable {
 	}
 
 	private void sqLiteProcess() {
+		
+		FileUtil.delete(Constants.out_path + Constants.data_path + Constants.db_name);
+		
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rset = null;
@@ -40,19 +43,12 @@ public class TypeAnalyzeWorker implements Runnable {
 			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
 			
-			//先删除表
-			try {
-				stmt.executeUpdate("drop table record");
-				conn.commit();
-			} catch (Exception e) {
-			}
-			
 			//开始建表
 			String tableSQL = FileUtil.read(Constants.out_config_path +	"/" + Constants.table_name);
 			stmt.executeUpdate(tableSQL);
 			
 			//开始插入数据
-			SqlUtil.insertData(stmt);
+			SqlUtil.insertDataFromLog(stmt);
 			conn.commit();
 			
 			//开始查询
@@ -62,7 +58,7 @@ public class TypeAnalyzeWorker implements Runnable {
 				String title = map.get("title"+i);
 				String sql = map.get("sql"+i);
 				System.out.println("-------------"+title+"-------------");
-				businessQuery(stmt,rset,sql);
+				SqlUtil.printSql(sql, stmt, rset);
 				i++;
 			}
 		} catch (ClassNotFoundException e) {
@@ -75,32 +71,6 @@ public class TypeAnalyzeWorker implements Runnable {
 		
 	}
 	
-	
-	/**
-	 * 查询
-	 * @param stmt
-	 * @param rset
-	 * @param sql 
-	 * @param columnNum 
-	 * @throws SQLException
-	 */
-	private void businessQuery(Statement stmt, ResultSet rset, String sql) throws SQLException {
-		int columnNum = SqlUtil.getColumnNum(stmt,rset,sql);
-		
-		rset = stmt.executeQuery(sql);
-		while (rset.next()) {
-			StringBuilder row = new StringBuilder();
-			for(int i=1;i<=columnNum;i++){
-				row.append(",").append(rset.getString(i));
-			}
-			System.out.println(row.toString().substring(1));
-		}
-		if (rset != null) {
-			rset.close();
-			rset = null;
-		}
-	}
-
 
 
 }

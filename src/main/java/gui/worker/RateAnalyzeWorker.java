@@ -16,6 +16,12 @@ import util.SqlUtil;
 public class RateAnalyzeWorker implements Runnable {
 	
 	
+	private static final String tableRecordCombineSheetDay = "create table recordCombineSheetDay ("
+																	+ "day varchar(64), "
+																	+ "rate number, "
+																	+ "fileName varchar(64) "
+																+ ")";
+	
 	private StockFrame frame;
 
 	public RateAnalyzeWorker(StockFrame frame) {
@@ -29,6 +35,9 @@ public class RateAnalyzeWorker implements Runnable {
 	}
 
 	private void sqLiteProcess() {
+		
+		FileUtil.delete(Constants.out_path + Constants.data_path + Constants.db_name);
+		
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rset = null;
@@ -38,26 +47,21 @@ public class RateAnalyzeWorker implements Runnable {
 			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
 			
-			//先删除表
-			try {
-				stmt.executeUpdate("drop table record");
-				conn.commit();
-			} catch (Exception e) {
-				//System.out.println("当前没有表record。");
-			}
-			
 			//开始建表
-			String tableSQL = FileUtil.read(Constants.out_config_path +	"/" + Constants.table_name);
-			stmt.executeUpdate(tableSQL);
+			String tableRecord = FileUtil.read(Constants.out_config_path +	"/" + Constants.table_name);
+			stmt.executeUpdate(tableRecord);
+			stmt.executeUpdate(tableRecordCombineSheetDay);
 			
 			//开始插入原始表数据
-			SqlUtil.insertData(stmt);
+			SqlUtil.insertDataFromLog(stmt);
 			conn.commit();
 			
-			SqlUtil.printResult("select * from record order by day asc ",stmt,rset);
-			//
+			//使用1/2算法合并每个sheet中每天的数据，插入recordCombineSheetDay表
+			stmt.executeUpdate(" INSERT INTO recordCombineSheetDay  SELECT day,sum(rate/2.0)/count(day) as rate0,'sheet2' FROM record where  fileName like '%sheet2%'   group by day ");
+			stmt.executeUpdate(" INSERT INTO recordCombineSheetDay  SELECT day,sum(rate/2.0)/count(day) as rate0,'sheet3' FROM record where  fileName like '%sheet3%'   group by day ");
+			stmt.executeUpdate(" INSERT INTO recordCombineSheetDay  SELECT day,sum(rate/2.0)/count(day) as rate0,'sheet4' FROM record where  fileName like '%sheet4%'   group by day ");
 			
-			//开始查询
+			SqlUtil.printSql("SELECT  * from recordCombineSheetDay order by day asc    ",stmt,rset);
 			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();

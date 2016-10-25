@@ -12,13 +12,17 @@ public class SqlUtil {
 	 * 日志数据插入到原始表
 	 * @param stmt
 	 */
-	public static void insertData(Statement stmt) {
+	public static void insertDataFromLog(Statement stmt) {
 		insertData(Constants.out_path + Constants.data_path + "sheet2.txt",stmt);
 		insertData(Constants.out_path + Constants.data_path + "sheet3.txt",stmt);
 		insertData(Constants.out_path + Constants.data_path + "sheet4.txt",stmt);
 	}
 	
-	
+	/**
+	 * day字段要先转换，后插入
+	 * @param filePath
+	 * @param stmt
+	 */
 	private static void insertData(String filePath, Statement stmt) {
 		try {
 			List<String> list = FileUtil.readLines(filePath);
@@ -28,19 +32,20 @@ public class SqlUtil {
 				
 				String[] arr = line.split(",");
 				StringBuilder sb = new StringBuilder();
+				int i=1;
 				for(String val : arr){
-					if(StringUtil.isNumeric(val)){
+					if(i == 1){
+						sb.append("'"+CustStringUtil.getFormatDay(val)+"'").append(",");
+					}else if(StringUtil.isNumeric(val)){
 						sb.append(val).append(",");
 					}else{
 						sb.append("'"+val+"'").append(",");
 					}
+					i++;
 				}
 				sb.append("'"+filePath+"'");
-				
 				updateSQL = updateSQL.replace("${VALUES}", sb.toString());
-				
 				//System.out.println(updateSQL);
-				
 				stmt.executeUpdate(updateSQL);
 			}
 		} catch (FileNotFoundException e) {
@@ -71,7 +76,7 @@ public class SqlUtil {
 		return columnCount;
 	}
 
-	public static void printResult(String sql, Statement stmt, ResultSet rset) throws SQLException {
+	public static void printSql(String sql, Statement stmt, ResultSet rset) throws SQLException {
 		int columnNum = getColumnNum(stmt,rset,sql);
 		
 		rset = stmt.executeQuery(sql);
