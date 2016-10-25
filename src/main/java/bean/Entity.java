@@ -1,6 +1,6 @@
 package bean;
 
-import util.ProjectUtil;
+import util.CustStringUtil;
 
 public class Entity {
 	
@@ -18,7 +18,7 @@ public class Entity {
 	
 	@Override
 	public String toString() {
-		return ProjectUtil.formatStockName(name)+" : "+number;
+		return CustStringUtil.formatStockName(name)+" : "+number;
 	}
 
 }

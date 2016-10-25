@@ -38,12 +38,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import bean.Req.ReqHead;
 import util.AccessUtil;
 import util.Constants;
+import util.CustStringUtil;
 import util.FileUtil;
 import util.ProjectUtil;
 import util.StringUtil;
+import bean.Req.ReqHead;
 
 public class StockFrame extends JFrame implements ActionListener {
 
@@ -723,7 +724,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private String getTdxContent(List<String> list) {
 		StringBuffer sb = new StringBuffer();
 		for (String code : list) {
-			sb.append(ProjectUtil.StandardCode2tdxCode(code)).append("\n");
+			sb.append(CustStringUtil.StandardCode2tdxCode(code)).append("\n");
 		}
 		return sb.toString();
 	}

@@ -36,7 +36,7 @@ public class TranslateUtil {
 			while ((line = br.readLine()) != null) {
 				line = line.trim();
 				if (line.length() > 0 ) {
-					String completeCode = ProjectUtil.tdxCode2StandardCode(line);
+					String completeCode = CustStringUtil.tdxCode2StandardCode(line);
 					if(completeCode!=null){
 						try {
 							String name = getNameByCode(completeCode);
