@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SqlUtil {
@@ -91,6 +92,27 @@ public class SqlUtil {
 			rset.close();
 			rset = null;
 		}
+	}
+	
+	/**
+	 * 把结果集包装成list
+	 * @param monthSql
+	 * @param stmt
+	 * @return
+	 * @throws SQLException 
+	 */
+	public static List<String> getList(String sql, Statement stmt) throws SQLException {
+		List<String> result = new ArrayList<String>();
+		
+		ResultSet rset = stmt.executeQuery(sql);
+		while (rset.next()) {
+			result.add(rset.getString(1));
+		}
+		if (rset != null) {
+			rset.close();
+			rset = null;
+		}
+		return result;
 	}
 
 }

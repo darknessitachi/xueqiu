@@ -1,12 +1,11 @@
 package gui.core;
 
-import gui.worker.ImportWorker;
-import gui.worker.AnalyzeLogWorker;
-import gui.worker.LoginWorker;
 import gui.worker.AnalyzeRateWorker;
+import gui.worker.AnalyzeTypeWorker;
+import gui.worker.ImportWorker;
+import gui.worker.LoginWorker;
 import gui.worker.StatisWorker;
 import gui.worker.SyncLocalWorker;
-import gui.worker.AnalyzeTypeWorker;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -71,8 +70,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton jbuttonOk = new JButton("统计");
 	private JButton jbuttonDelImport = new JButton("上传雪球");
 	private JButton jbuttonDownLocal = new JButton("同步本地");
-	private JButton jbuttonLogAnalyze = new JButton("比率分析");
-	private JButton jbuttonRateAnalyze = new JButton("比率分析2");
+	private JButton jbuttonRateAnalyze = new JButton("比率分析");
 	private JButton jbuttonTypeAnalyze = new JButton("类型分析");
 	
 	private JComboBox<String> dayCombo = new JComboBox<String>();
@@ -175,7 +173,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.add(jbuttonOk);
 		jp1.add(jbuttonDelImport);
 		jp1.add(jbuttonDownLocal);
-		jp1.add(jbuttonLogAnalyze);
 		jp1.add(jbuttonRateAnalyze);
 		jp1.add(jbuttonTypeAnalyze);
 		
@@ -187,7 +184,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		jbuttonDelImport.addActionListener(this);
 		JbuttonDel.addActionListener(this);
 		jbuttonDownLocal.addActionListener(this);
-		jbuttonLogAnalyze.addActionListener(this);
 		jbuttonTypeAnalyze.addActionListener(this);
 		jbuttonRateAnalyze.addActionListener(this);
 
@@ -376,9 +372,6 @@ public class StockFrame extends JFrame implements ActionListener {
 			performLogin();
 		}
 		
-		if (e.getSource() == jbuttonLogAnalyze) {
-			performLogAnalyze();
-		}
 		
 		if (e.getSource() == jbuttonTypeAnalyze) {
 			performTypeAnalyze();
@@ -409,16 +402,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	/**
-	 * 日志分析
-	 */
-	private void performLogAnalyze() {
-		if(isLogExist()){
-			new Thread(new AnalyzeLogWorker(this)).start();
-		}else{
-			displayLabel.setText("【"+Constants.out_path + Constants.data_path+"】日志文件不完整。");
-		}
-	}
 
 	/**
 	 * 日志文件是否存在
