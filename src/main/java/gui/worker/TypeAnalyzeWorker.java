@@ -6,14 +6,13 @@ import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 import java.util.Map;
 
 import util.Constants;
 import util.FileUtil;
+import util.SqlUtil;
 import util.StringUtil;
 
 public class TypeAnalyzeWorker implements Runnable {
@@ -46,35 +45,26 @@ public class TypeAnalyzeWorker implements Runnable {
 				stmt.executeUpdate("drop table record");
 				conn.commit();
 			} catch (Exception e) {
-				//System.out.println("当前没有表record。");
 			}
 			
 			//开始建表
 			String tableSQL = FileUtil.read(Constants.out_config_path +	"/" + Constants.table_name);
 			stmt.executeUpdate(tableSQL);
-			//System.out.println("建表成功。");
 			
 			//开始插入数据
-			insertData(Constants.out_path + Constants.data_path + "sheet2.txt",stmt);
-			insertData(Constants.out_path + Constants.data_path + "sheet3.txt",stmt);
-			insertData(Constants.out_path + Constants.data_path + "sheet4.txt",stmt);
+			SqlUtil.insertData(stmt);
 			conn.commit();
 			
 			//开始查询
 			Map<String,String> map = FileUtil.readAsProperties(Constants.out_config_path +	"/" + Constants.sql_name);
 			int i=1;
 			while(!StringUtil.isEmpty(map.get("title"+i))){
-				
 				String title = map.get("title"+i);
 				String sql = map.get("sql"+i);
-				
 				System.out.println("-------------"+title+"-------------");
 				businessQuery(stmt,rset,sql);
-				
 				i++;
 			}
-			
-			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -85,24 +75,7 @@ public class TypeAnalyzeWorker implements Runnable {
 		
 	}
 	
-	/**
-	 * 获取查询语句中有多少列
-	 * @param stmt
-	 * @param rset
-	 * @param sql 
-	 * @return
-	 */
-	private int getColumnNum(Statement stmt, ResultSet rset, String sql) {
-		int columnCount = 0;
-		try {
-			rset = stmt.executeQuery(sql); 
-			ResultSetMetaData rsmd = rset.getMetaData() ; 
-			columnCount = rsmd.getColumnCount();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return columnCount;
-	}
+	
 	/**
 	 * 查询
 	 * @param stmt
@@ -112,8 +85,7 @@ public class TypeAnalyzeWorker implements Runnable {
 	 * @throws SQLException
 	 */
 	private void businessQuery(Statement stmt, ResultSet rset, String sql) throws SQLException {
-		
-		int columnNum = getColumnNum(stmt,rset,sql);
+		int columnNum = SqlUtil.getColumnNum(stmt,rset,sql);
 		
 		rset = stmt.executeQuery(sql);
 		while (rset.next()) {
@@ -129,36 +101,6 @@ public class TypeAnalyzeWorker implements Runnable {
 		}
 	}
 
-	private void insertData(String filePath, Statement stmt) {
-		try {
-			List<String> list = FileUtil.readLines(filePath);
-			for(String line : list){
-				
-				String updateSQL = "INSERT INTO record VALUES( ${VALUES} )";
-				
-				String[] arr = line.split(",");
-				StringBuilder sb = new StringBuilder();
-				for(String val : arr){
-					if(StringUtil.isNumeric(val)){
-						sb.append(val).append(",");
-					}else{
-						sb.append("'"+val+"'").append(",");
-					}
-				}
-				sb.append("'"+filePath+"'");
-				
-				updateSQL = updateSQL.replace("${VALUES}", sb.toString());
-				
-				//System.out.println(updateSQL);
-				
-				stmt.executeUpdate(updateSQL);
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 
 
 }

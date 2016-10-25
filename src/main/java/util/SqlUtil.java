@@ -1,6 +1,8 @@
 package util;
 
 import java.io.FileNotFoundException;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -45,6 +47,44 @@ public class SqlUtil {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+
+	
+	
+	/**
+	 * 获取查询语句中有多少列
+	 * @param stmt
+	 * @param rset
+	 * @param sql 
+	 * @return
+	 */
+	public static int getColumnNum(Statement stmt, ResultSet rset, String sql) {
+		int columnCount = 0;
+		try {
+			rset = stmt.executeQuery(sql); 
+			ResultSetMetaData rsmd = rset.getMetaData() ; 
+			columnCount = rsmd.getColumnCount();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return columnCount;
+	}
+
+	public static void printResult(String sql, Statement stmt, ResultSet rset) throws SQLException {
+		int columnNum = getColumnNum(stmt,rset,sql);
+		
+		rset = stmt.executeQuery(sql);
+		while (rset.next()) {
+			StringBuilder row = new StringBuilder();
+			for(int i=1;i<=columnNum;i++){
+				row.append(",").append(rset.getString(i));
+			}
+			System.out.println(row.toString().substring(1));
+		}
+		if (rset != null) {
+			rset.close();
+			rset = null;
 		}
 	}
 
