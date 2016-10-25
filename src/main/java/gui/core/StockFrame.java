@@ -3,6 +3,7 @@ package gui.core;
 import gui.worker.ImportWorker;
 import gui.worker.LogAnalyzeWorker;
 import gui.worker.LoginWorker;
+import gui.worker.RateAnalyzeWorker;
 import gui.worker.StatisWorker;
 import gui.worker.SyncLocalWorker;
 import gui.worker.TypeAnalyzeWorker;
@@ -70,6 +71,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JButton jbuttonDelImport = new JButton("上传雪球");
 	private JButton jbuttonDownLocal = new JButton("同步本地");
 	private JButton jbuttonLogAnalyze = new JButton("比率分析");
+	private JButton jbuttonRateAnalyze = new JButton("比率分析2");
 	private JButton jbuttonTypeAnalyze = new JButton("类型分析");
 	
 	private JComboBox<String> dayCombo = new JComboBox<String>();
@@ -173,6 +175,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.add(jbuttonDelImport);
 		jp1.add(jbuttonDownLocal);
 		jp1.add(jbuttonLogAnalyze);
+		jp1.add(jbuttonRateAnalyze);
 		jp1.add(jbuttonTypeAnalyze);
 		
 
@@ -185,6 +188,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		jbuttonDownLocal.addActionListener(this);
 		jbuttonLogAnalyze.addActionListener(this);
 		jbuttonTypeAnalyze.addActionListener(this);
+		jbuttonRateAnalyze.addActionListener(this);
 
 	}
 
@@ -379,9 +383,23 @@ public class StockFrame extends JFrame implements ActionListener {
 			performTypeAnalyze();
 		}
 		
+		if (e.getSource() == jbuttonRateAnalyze) {
+			performRateAnalyze();
+		}
+		
+		
+		
 	}
 	
 	
+	private void performRateAnalyze() {
+		if(isLogExist()){
+			new Thread(new RateAnalyzeWorker(this)).start();
+		}else{
+			displayLabel.setText("【"+Constants.out_path + Constants.data_path+"】日志文件不完整。");
+		}
+	}
+
 	private void performTypeAnalyze() {
 		if(isLogExist()){
 			new Thread(new TypeAnalyzeWorker(this)).start();
