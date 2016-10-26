@@ -59,12 +59,22 @@ public class AnalyzeTypeWorker implements Runnable {
 				SqlUtil.printSql(sql, stmt);
 				i++;
 			}
+			
+			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		}finally{
+			try {
+				if(conn!=null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 	}

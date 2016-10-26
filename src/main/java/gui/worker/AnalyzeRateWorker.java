@@ -77,6 +77,14 @@ public class AnalyzeRateWorker implements Runnable {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		}finally{
+			try {
+				if(conn!=null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 	}
