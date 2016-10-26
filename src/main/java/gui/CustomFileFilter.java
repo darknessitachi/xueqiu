@@ -1,4 +1,4 @@
-package gui.core;
+package gui;
 
 import java.io.File;
 

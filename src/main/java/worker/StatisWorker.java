@@ -1,8 +1,8 @@
-package gui.worker;
+package worker;
 
 import bean.Req;
 import bean.Req.ReqHead;
-import gui.core.StockFrame;
+import gui.StockFrame;
 
 import java.io.IOException;
 import java.util.List;

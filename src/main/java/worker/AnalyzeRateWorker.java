@@ -1,6 +1,6 @@
-package gui.worker;
+package worker;
 
-import gui.core.StockFrame;
+import gui.StockFrame;
 
 import java.io.FileNotFoundException;
 import java.sql.Connection;

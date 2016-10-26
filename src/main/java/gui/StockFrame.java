@@ -1,11 +1,4 @@
-package gui.core;
-
-import gui.worker.AnalyzeRateWorker;
-import gui.worker.AnalyzeTypeWorker;
-import gui.worker.ImportWorker;
-import gui.worker.LoginWorker;
-import gui.worker.StatisWorker;
-import gui.worker.SyncLocalWorker;
+package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -43,6 +36,12 @@ import util.CustStringUtil;
 import util.FileUtil;
 import util.ProjectUtil;
 import util.StringUtil;
+import worker.AnalyzeRateWorker;
+import worker.AnalyzeTypeWorker;
+import worker.ImportWorker;
+import worker.LoginWorker;
+import worker.StatisWorker;
+import worker.SyncLocalWorker;
 import bean.Req.ReqHead;
 
 public class StockFrame extends JFrame implements ActionListener {

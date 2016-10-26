@@ -1,11 +1,11 @@
-package gui.worker;
+package worker;
 
 import java.io.IOException;
 
 import util.Constants;
 import util.FileUtil;
 import util.XueqiuUtil;
-import gui.core.StockFrame;
+import gui.StockFrame;
 
 public class LoginWorker implements Runnable {
 	
