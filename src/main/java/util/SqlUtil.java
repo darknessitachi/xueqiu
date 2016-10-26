@@ -76,7 +76,14 @@ public class SqlUtil {
 		}
 		return columnCount;
 	}
-
+	
+	
+	/**
+	 * 公共的打印方法
+	 * @param sql
+	 * @param stmt
+	 * @throws SQLException
+	 */
 	public static void printSql(String sql, Statement stmt) throws SQLException {
 		int columnNum = getColumnNum(stmt,sql);
 		
@@ -87,6 +94,24 @@ public class SqlUtil {
 				row.append(",").append(rset.getString(i));
 			}
 			System.out.println(row.toString().substring(1));
+		}
+		if (rset != null) {
+			rset.close();
+			rset = null;
+		}
+	}
+	
+	/**
+	 * 类型分析特定的打印方法
+	 * @param sql
+	 * @param stmt
+	 * @throws SQLException
+	 */
+	public static void printCustomSql(String sql, Statement stmt) throws SQLException {
+		ResultSet rset = stmt.executeQuery(sql);
+		while (rset.next()) {
+			String row = "【"+rset.getString(1)+"】："+rset.getString(2);
+			System.out.println(row);
 		}
 		if (rset != null) {
 			rset.close();

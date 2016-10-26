@@ -56,7 +56,7 @@ public class AnalyzeTypeWorker implements Runnable {
 				String title = map.get("title"+i);
 				String sql = map.get("sql"+i);
 				System.out.println("-------------"+title+"-------------");
-				SqlUtil.printSql(sql, stmt);
+				SqlUtil.printCustomSql(sql, stmt);
 				i++;
 			}
 			
