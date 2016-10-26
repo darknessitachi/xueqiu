@@ -65,11 +65,12 @@ public class AnalyzeRateWorker implements Runnable {
 			stmt.executeUpdate(" INSERT INTO recordCombineSheetDay  SELECT day,sum(rate/2.0)/count(day) as rate0,'sheet2' FROM record where  fileName like '%sheet2%'   group by day ");
 			stmt.executeUpdate(" INSERT INTO recordCombineSheetDay  SELECT day,sum(rate/2.0)/count(day) as rate0,'sheet3' FROM record where  fileName like '%sheet3%'   group by day ");
 			stmt.executeUpdate(" INSERT INTO recordCombineSheetDay  SELECT day,sum(rate/2.0)/count(day) as rate0,'sheet4' FROM record where  fileName like '%sheet4%'   group by day ");
-			
+			stmt.executeUpdate(" INSERT INTO recordCombineSheetDay  SELECT day,sum(rate/2.0)/count(day) as rate0,'all' FROM record   group by day ");
 			System.out.println("-----采用每日平均算法-----");
 			traditionOut("sheet2","【错过】：",stmt);
 			traditionOut("sheet3","【意外（追涨）】：",stmt);
 			traditionOut("sheet4","【意外（首阴）】：",stmt);
+			traditionOut("all","【合并】：",stmt);
 			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
