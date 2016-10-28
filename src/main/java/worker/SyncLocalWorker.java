@@ -1,12 +1,15 @@
 package worker;
 
-import gui.StockFrame;
-
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.Date;
 
-import util.XueqiuUtil;
+import org.apache.http.client.ClientProtocolException;
+
+import util.Constants;
+import util.FileUtil;
+import util.ZipUtil;
+import util.qiniu.QiniuUtil;
+import gui.StockFrame;
 
 public class SyncLocalWorker implements Runnable {
 
@@ -18,15 +21,32 @@ public class SyncLocalWorker implements Runnable {
 
 	@Override
 	public void run() {
-		XueqiuUtil xq = new XueqiuUtil();
-		Map<String, List<String>> data = null;
+		long start = new Date().getTime();
+		//如果有zip文件，先删除。
+		String zip_path = frame.installZXGRootPath+"/"+Constants.user_path + ".zip";
+		FileUtil.delete(zip_path);
+		System.out.println("删除zip文件玩成。");
+		
 		try {
-			data = xq.queryStockWithGroup();
+			//下载zip
+			QiniuUtil.download(Constants.user_path + ".zip", zip_path);
+			System.out.println("下载【"+Constants.user_path+"】完成。");
+			
+			//删除文件夹
+			FileUtil.deleteFolder(frame.installZXGRootPath+"/"+Constants.user_path);
+			
+			//解压zip到指定文件夹
+			ZipUtil.decompressZip(zip_path, frame.installZXGRootPath+"/"+Constants.user_path);
+			
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		frame.syncLocal(data);
-		frame.performAutoChoose();
+		
+		long end = new Date().getTime();
+		System.out.println("总共耗时【"+((end-start)/1000)+"】秒。");
+	//	frame.performAutoChoose();
 		frame.displayLabel.setText("同步本地目录完成。自动导入完成。");
 	}
 	

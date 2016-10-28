@@ -32,7 +32,6 @@ import javax.swing.JTextField;
 
 import util.AccessUtil;
 import util.Constants;
-import util.CustStringUtil;
 import util.FileUtil;
 import util.ProjectUtil;
 import util.StringUtil;
@@ -698,35 +697,6 @@ public class StockFrame extends JFrame implements ActionListener {
 				.getFileNames(Constants.out_industry_path);
 	}
 
-	/**
-	 * 同步本地目录
-	 * 
-	 * @param data
-	 */
-	public void syncLocal(Map<String, List<String>> data) {
 
-		String zxg_content = getTdxContent(data.get("ZX"));
-		String a2_content = getTdxContent(data.get("A2"));
-		String a3_content = getTdxContent(data.get("A3"));
-		zxg_content = Constants.SH_INDEX + "\n" + Constants.CYB_INDEX + "\n"
-				+ zxg_content;
-
-		try {
-			FileUtil.write(installZXGPath + "/" + ZXG_NAME, zxg_content);
-			FileUtil.write(installZXGPath + "/" + A2_NAME, a2_content);
-			FileUtil.write(installZXGPath + "/" + A3_NAME, a3_content);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	private String getTdxContent(List<String> list) {
-		StringBuffer sb = new StringBuffer();
-		for (String code : list) {
-			sb.append(CustStringUtil.StandardCode2tdxCode(code)).append("\n");
-		}
-		return sb.toString();
-	}
 
 }

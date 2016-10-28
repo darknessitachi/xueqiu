@@ -1,6 +1,7 @@
 package worker;
 
 import java.io.IOException;
+import java.util.Date;
 
 import gui.StockFrame;
 import util.Constants;
@@ -18,6 +19,8 @@ public class UploadCloudWorker implements Runnable {
 
 	@Override
 	public void run() {
+		
+		long start = new Date().getTime();
 		
 		//如果有压缩文件，先删除
 		String zip_path = frame.installZXGRootPath+"/"+Constants.user_path + ".zip";
@@ -38,7 +41,8 @@ public class UploadCloudWorker implements Runnable {
 			e.printStackTrace();
 		}
 		
-		
+		long end = new Date().getTime();
+		System.out.println("总共耗时【"+((end-start)/1000)+"】秒。");
 		frame.displayLabel.setText("上传七牛完成。");
 	}
 	
