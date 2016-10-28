@@ -42,6 +42,7 @@ import worker.ImportWorker;
 import worker.LoginWorker;
 import worker.StatisWorker;
 import worker.SyncLocalWorker;
+import worker.UploadCloudWorker;
 import bean.Req.ReqHead;
 
 public class StockFrame extends JFrame implements ActionListener {
@@ -68,6 +69,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private JButton jbuttonOk = new JButton("统计");
 	private JButton jbuttonDelImport = new JButton("上传雪球");
+	private JButton jbuttonUploadCloud = new JButton("上传七牛");
 	private JButton jbuttonDownLocal = new JButton("同步本地");
 	private JButton jbuttonRateAnalyze = new JButton("比率分析");
 	private JButton jbuttonTypeAnalyze = new JButton("类型分析");
@@ -83,7 +85,9 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	public JTextField displayLabel = new JTextField(45);
 
-	private String installZXGPath = null;
+	public String installZXGPath = null;
+	public String installZXGRootPath = null;
+	
 	private List<String> installZXG_FileList = null;
 	private String ZXG_NAME = null;
 	private String A2_NAME = null;
@@ -110,7 +114,8 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private void validateAndInitData() {
 
-		this.installZXGPath = getInstallZXGPath();
+		setInstallZXGPath();
+		
 		if (StringUtil.isEmpty(installZXGPath)) {
 			showMsgBox("没有找到券商软件安装目录。");
 			return;
@@ -171,6 +176,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp1.setBorder(BorderFactory.createTitledBorder("操作"));
 		jp1.add(jbuttonOk);
 		jp1.add(jbuttonDelImport);
+		jp1.add(jbuttonUploadCloud);
 		jp1.add(jbuttonDownLocal);
 		jp1.add(jbuttonRateAnalyze);
 		jp1.add(jbuttonTypeAnalyze);
@@ -185,6 +191,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		jbuttonDownLocal.addActionListener(this);
 		jbuttonTypeAnalyze.addActionListener(this);
 		jbuttonRateAnalyze.addActionListener(this);
+		jbuttonUploadCloud.addActionListener(this);
 
 	}
 
@@ -381,10 +388,17 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 		
 		
+		if (e.getSource() == jbuttonUploadCloud) {
+			performUploadCloud();
+		}
 		
 	}
 	
 	
+	private void performUploadCloud() {
+		new Thread(new UploadCloudWorker(this)).start();
+	}
+
 	private void performRateAnalyze() {
 		if(isLogExist()){
 			new Thread(new AnalyzeRateWorker(this)).start();
@@ -450,20 +464,24 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * 
 	 * @return
 	 */
-	private String getInstallZXGPath() {
+	private void setInstallZXGPath() {
 
-		String result = null;
 		String installPath = params.getProperty("tdxInstallPath");
 		String[] array = installPath.split(";");
+		int i = 0;
 		for (String path : array) {
 			String zxg_path = path + "/" + Constants.zxg_path;
 			File folder = new File(zxg_path);
 			if (folder.exists()) {
-				result = zxg_path;
-				break;
+				this.installZXGPath = zxg_path;
+				this.installZXGRootPath = path;
+				i++;
 			}
 		}
-		return result;
+		if(i>1){
+			showMsgBox("找到多个券商安装目录。");
+		}
+		
 	}
 
 	/**
