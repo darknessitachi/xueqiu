@@ -11,12 +11,10 @@ public class ImportWorker implements Runnable {
 
 	private List<String> names;
 	private StockFrame frame;
-	private boolean del = false;
 
-	public ImportWorker(List<String> names, boolean del, StockFrame frame) {
+	public ImportWorker(List<String> names,StockFrame frame) {
 		this.names = names;
 		this.frame = frame;
-		this.del  = del;
 	}
 
 	@Override
@@ -24,12 +22,11 @@ public class ImportWorker implements Runnable {
 		int num = 0;
 		XueqiuUtil oper = new XueqiuUtil();
 		try {
-			if(del){
-				try {
-					oper.delAll();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			//先删除，后上传
+			try {
+				oper.delAll();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 			for(String name : names){
 				try {

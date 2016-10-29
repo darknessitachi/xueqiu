@@ -16,21 +16,15 @@ public class StatisWorker implements Runnable {
 	private List<String> names;
 	private StockFrame frame;
 	private ReqHead head;
-	private boolean delImport;
 
-	public StatisWorker(ReqHead head, List<String> names, StockFrame frameFirst, boolean delImport) {
+	public StatisWorker(ReqHead head, List<String> names, StockFrame frameFirst) {
 		this.names = names;
 		this.frame = frameFirst;
 		this.head = head;
-		this.delImport = delImport;
 	}
 
 	@Override
 	public void run() {
-		
-		if(delImport){
-			frame.performImport(true);
-		}
 		
 		for(String name : names){
 			//获取每个板块的路径

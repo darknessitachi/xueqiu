@@ -196,12 +196,8 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private void initJPanel2() {
 		jp2.setBorder(BorderFactory.createTitledBorder("参数"));
-		// jp2.setBounds(0, 0, window_width, 400);
-		// jp2.setSize(window_width, 300);
 		jp2.add(new JLabel("day:"));
 		jp2.add(dayCombo);
-		/*jp2.add(new JLabel("日志参数:"));
-		jp2.add(logCombo);*/
 
 		initDefaultParams();
 
@@ -370,7 +366,7 @@ public class StockFrame extends JFrame implements ActionListener {
 			performDel();
 		}
 		if (e.getSource() == jbuttonDelImport) {
-			performImport(true);
+			performImport();
 		}
 
 		if (e.getSource() == loginItem) {
@@ -619,7 +615,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (names.size() > 0) {
 			displayLabel.setText("正在执行统计……");
 			ReqHead head = getReqHead();
-			new Thread(new StatisWorker(head, names, this, false)).start();
+			new Thread(new StatisWorker(head, names, this)).start();
 		} else {
 			displayLabel.setText("请选择要统计的板块。");
 		}
@@ -630,12 +626,16 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * 
 	 * @param del
 	 */
-	public void performImport(boolean del) {
+	public void performImport() {
+		//先自动导入
+		performAutoChoose();
+		//全选中
+		performSelectAll();
 		// 获取选中的板块
 		List<String> names = getSelectNames();
 		if (names.size() > 0) {
 			displayLabel.setText("正在执行上传……");
-			new Thread(new ImportWorker(names, del, this)).start();
+			new Thread(new ImportWorker(names, this)).start();
 		} else {
 			displayLabel.setText("请选择要上传的板块。");
 		}
