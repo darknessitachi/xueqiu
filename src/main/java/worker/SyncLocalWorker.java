@@ -37,6 +37,7 @@ public class SyncLocalWorker implements Runnable {
 			
 			//解压zip到指定文件夹
 			ZipUtil.decompressZip(zip_path, frame.installZXGRootPath+"/"+Constants.user_path);
+			System.out.println("解压zip完成。");
 			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();

@@ -29,6 +29,7 @@ public class UploadCloudWorker implements Runnable {
 		//压缩T0002目录
 		try {
 			ZipUtil.compressFile(frame.installZXGRootPath+"/"+Constants.user_path, frame.installZXGRootPath);
+			System.out.println("压缩zip文件完成。");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -36,13 +37,12 @@ public class UploadCloudWorker implements Runnable {
 		//上传压缩后的zip文件到七牛
 		try {
 			QiniuUtil.upload(zip_path , Constants.user_path + ".zip");
-			System.out.println("上传七牛完成。");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 		long end = new Date().getTime();
-		System.out.println("总共耗时【"+((end-start)/1000)+"】秒。");
+		System.out.println("上传七牛完成，总共耗时【"+((end-start)/1000)+"】秒。");
 		frame.displayLabel.setText("上传七牛完成。");
 	}
 	
