@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.ScrollPane;
@@ -66,12 +67,12 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private JMenuItem loginItem = new JMenuItem("登录");
 
-	private JButton jbuttonOk = new JButton("统计");
-	private JButton jbuttonDelImport = new JButton("上传雪球");
-	private JButton jbuttonUploadCloud = new JButton("上传七牛");
-	private JButton jbuttonDownLocal = new JButton("同步本地");
-	private JButton jbuttonRateAnalyze = new JButton("比率分析");
-	private JButton jbuttonTypeAnalyze = new JButton("类型分析");
+	private JButton jbuttonOk = null;
+	private JButton jbuttonDelImport = null;
+	private JButton jbuttonUploadCloud = null;
+	private JButton jbuttonDownLocal = null;
+	private JButton jbuttonRateAnalyze = null;
+	private JButton jbuttonTypeAnalyze = null;
 	
 	private JComboBox<String> dayCombo = new JComboBox<String>();
 
@@ -172,6 +173,17 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	private void initJPanel1() {
+		
+		jbuttonOk = new JButton("统计");
+		jbuttonDelImport = new JButton("上传雪球");
+		jbuttonUploadCloud = new JButton("上传七牛");
+		jbuttonDownLocal = new JButton("同步本地");
+		jbuttonRateAnalyze = new JButton("比率分析");
+		jbuttonTypeAnalyze = new JButton("类型分析");
+		
+		jbuttonDelImport.setForeground(Color.RED);
+		jbuttonUploadCloud.setForeground(Color.RED);
+		
 		jp1.setBorder(BorderFactory.createTitledBorder("操作"));
 		jp1.add(jbuttonOk);
 		jp1.add(jbuttonDelImport);
