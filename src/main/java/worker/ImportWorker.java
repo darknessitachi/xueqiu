@@ -11,12 +11,13 @@ public class ImportWorker implements Runnable {
 
 	private List<String> names;
 	private StockFrame frame;
+	private boolean continueUploadCloud;
 
-	public ImportWorker(List<String> names,StockFrame frame) {
+	public ImportWorker(List<String> names,StockFrame frame, boolean continueUploadCloud) {
 		this.names = names;
 		this.frame = frame;
+		this.continueUploadCloud = continueUploadCloud;
 	}
-
 	@Override
 	public void run() {
 		int num = 0;
@@ -41,6 +42,9 @@ public class ImportWorker implements Runnable {
 			e.printStackTrace();
 		}
 		frame.displayLabel.setText("上传雪球完成，添加【"+num+"】只股票，共【"+oper.countXueqiu(true)+"】只股票。");
+		if(continueUploadCloud){
+			frame.performUploadCloud();
+		}
 	}
 
 	private String getGroupName(String name) {

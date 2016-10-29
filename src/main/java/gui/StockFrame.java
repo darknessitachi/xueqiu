@@ -68,8 +68,9 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JMenuItem loginItem = new JMenuItem("登录");
 
 	private JButton jbuttonOk = null;
-	private JButton jbuttonDelImport = null;
+	private JButton jbuttonUploadXueqiu = null;
 	private JButton jbuttonUploadCloud = null;
+	private JButton jbuttonUploadBoth = null;
 	private JButton jbuttonDownLocal = null;
 	private JButton jbuttonRateAnalyze = null;
 	private JButton jbuttonTypeAnalyze = null;
@@ -177,34 +178,37 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void initJPanel1() {
 		
 		jbuttonOk = new JButton("统计");
-		jbuttonDelImport = new JButton("上传雪球");
+		jbuttonUploadXueqiu = new JButton("上传雪球");
 		jbuttonUploadCloud = new JButton("上传七牛");
+		jbuttonUploadBoth = new JButton("同时上传");
 		jbuttonDownLocal = new JButton("同步本地");
 		jbuttonRateAnalyze = new JButton("比率分析");
 		jbuttonTypeAnalyze = new JButton("类型分析");
 		
-		jbuttonDelImport.setForeground(Color.RED);
+		jbuttonUploadXueqiu.setForeground(Color.RED);
 		jbuttonUploadCloud.setForeground(Color.RED);
+		jbuttonUploadBoth.setForeground(Color.RED);
 		
 		jp1.setBorder(BorderFactory.createTitledBorder("操作"));
 		jp1.add(jbuttonOk);
-		jp1.add(jbuttonDelImport);
+		jp1.add(jbuttonUploadXueqiu);
 		jp1.add(jbuttonUploadCloud);
+		jp1.add(jbuttonUploadBoth);
 		jp1.add(jbuttonDownLocal);
 		jp1.add(jbuttonRateAnalyze);
 		jp1.add(jbuttonTypeAnalyze);
 		
-
 		jbuttonOk.addActionListener(this);
 		JbuttonSelectAll.addActionListener(this);
 		JbuttonChoose.addActionListener(this);
 		autoChoose.addActionListener(this);
-		jbuttonDelImport.addActionListener(this);
+		jbuttonUploadXueqiu.addActionListener(this);
 		JbuttonDel.addActionListener(this);
 		jbuttonDownLocal.addActionListener(this);
 		jbuttonTypeAnalyze.addActionListener(this);
 		jbuttonRateAnalyze.addActionListener(this);
 		jbuttonUploadCloud.addActionListener(this);
+		jbuttonUploadBoth.addActionListener(this);
 
 	}
 
@@ -379,9 +383,15 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == JbuttonDel) {
 			performDel();
 		}
-		if (e.getSource() == jbuttonDelImport) {
-			performImport();
+		if (e.getSource() == jbuttonUploadXueqiu) {
+			performImport(false);
 		}
+		
+		if (e.getSource() == jbuttonUploadBoth) {
+			performImport(true);
+		}
+		
+		
 
 		if (e.getSource() == loginItem) {
 			performLogin();
@@ -402,9 +412,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 		
 	}
-	
-	
-	private void performUploadCloud() {
+
+	public void performUploadCloud() {
 		new Thread(new UploadCloudWorker(this)).start();
 	}
 
@@ -624,10 +633,11 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	/**
 	 * 执行导入
+	 * @param continueUploadCloud 
 	 * 
 	 * @param del
 	 */
-	public void performImport() {
+	public void performImport(boolean continueUploadCloud) {
 		//先自动导入
 		performAutoChoose();
 		//全选中
@@ -636,7 +646,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		List<String> names = getSelectNames();
 		if (names.size() > 0) {
 			displayLabel.setText("正在执行上传……");
-			new Thread(new ImportWorker(names, this)).start();
+			new Thread(new ImportWorker(names, this,continueUploadCloud)).start();
 		} else {
 			displayLabel.setText("请选择要上传的板块。");
 		}

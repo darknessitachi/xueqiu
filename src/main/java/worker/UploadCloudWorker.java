@@ -29,7 +29,6 @@ public class UploadCloudWorker implements Runnable {
 		//压缩T0002目录
 		try {
 			ZipUtil.compressFile(frame.installZXGRootPath+"/"+Constants.user_path, frame.installZXGRootPath);
-			System.out.println("压缩zip文件完成。");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
