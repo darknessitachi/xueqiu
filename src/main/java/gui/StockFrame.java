@@ -114,10 +114,12 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private void validateAndInitData() {
 
-		setInstallZXGPath();
-		
-		if (StringUtil.isEmpty(installZXGPath)) {
+		int i = setInstallZXGPath();
+		if (i == 0) {
 			showMsgBox("没有找到券商软件安装目录。");
+			return;
+		}else if(i > 1){
+			showMsgBox("找到多个券商安装目录。");
 			return;
 		}
 
@@ -471,7 +473,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * 
 	 * @return
 	 */
-	private void setInstallZXGPath() {
+	private int setInstallZXGPath() {
 
 		String installPath = params.getProperty("tdxInstallPath");
 		String[] array = installPath.split(";");
@@ -485,10 +487,7 @@ public class StockFrame extends JFrame implements ActionListener {
 				i++;
 			}
 		}
-		if(i>1){
-			showMsgBox("找到多个券商安装目录。");
-		}
-		
+		return i;
 	}
 
 	/**
@@ -511,19 +510,9 @@ public class StockFrame extends JFrame implements ActionListener {
 
 		int count = 0;
 		for (String fileName : list) {
-			if (fileName.equalsIgnoreCase("ZXG.blk")) {
+			if (fileName.equalsIgnoreCase("ZXG.blk") || fileName.startsWith("A1") || fileName.startsWith("A2") || fileName.startsWith("A3")  ) {
 				count++;
 			}
-			if (fileName.startsWith("A1")) {
-				count++;
-			}
-			if (fileName.startsWith("A2")) {
-				count++;
-			}
-			if (fileName.startsWith("A3")) {
-				count++;
-			}
-
 		}
 
 		if (count != 4) {
