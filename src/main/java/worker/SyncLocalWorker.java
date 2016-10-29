@@ -25,7 +25,7 @@ public class SyncLocalWorker implements Runnable {
 		//如果有zip文件，先删除。
 		String zip_path = frame.installZXGRootPath+"/"+Constants.user_path + ".zip";
 		FileUtil.delete(zip_path);
-		System.out.println("删除zip文件玩成。");
+		System.out.println("删除zip文件完成。");
 		
 		try {
 			//下载zip
@@ -45,9 +45,8 @@ public class SyncLocalWorker implements Runnable {
 		}
 		
 		long end = new Date().getTime();
-		System.out.println("总共耗时【"+((end-start)/1000)+"】秒。");
-	//	frame.performAutoChoose();
-		frame.displayLabel.setText("同步本地目录完成。自动导入完成。");
+		System.out.println("同步本地完成，总共耗时【"+((end-start)/1000)+"】秒。");
+		frame.displayLabel.setText("同步本地目录完成。");
 	}
 	
 
