@@ -188,7 +188,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		jbuttonUploadXueqiu.setForeground(Color.RED);
 		jbuttonUploadCloud.setForeground(Color.RED);
 		jbuttonUploadBoth.setForeground(Color.RED);
-		jbuttonDownLocal.setForeground(new Color(185, 131, 24, 255));
+		//jbuttonDownLocal.setForeground(new Color(185, 131, 24, 255));
 		
 		jp1.setBorder(BorderFactory.createTitledBorder("操作"));
 		jp1.add(jbuttonOk);
