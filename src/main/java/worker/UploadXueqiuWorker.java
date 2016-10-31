@@ -7,13 +7,13 @@ import java.util.List;
 
 import util.XueqiuUtil;
 
-public class ImportWorker implements Runnable {
+public class UploadXueqiuWorker implements Runnable {
 
 	private List<String> names;
 	private StockFrame frame;
 	private boolean continueUploadCloud;
 
-	public ImportWorker(List<String> names,StockFrame frame, boolean continueUploadCloud) {
+	public UploadXueqiuWorker(List<String> names,StockFrame frame, boolean continueUploadCloud) {
 		this.names = names;
 		this.frame = frame;
 		this.continueUploadCloud = continueUploadCloud;

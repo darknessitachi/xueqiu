@@ -19,30 +19,32 @@ public class UploadCloudWorker implements Runnable {
 
 	@Override
 	public void run() {
-		
-		long start = new Date().getTime();
-		
-		//如果有压缩文件，先删除
-		String zip_path = frame.installZXGRootPath+"/"+Constants.user_path + ".zip";
-		FileUtil.delete(zip_path);
-		
-		//压缩T0002目录
 		try {
+			
+			long start = new Date().getTime();
+			
+			//如果有压缩文件，先删除
+			String zip_path = frame.installZXGRootPath+"/"+Constants.user_path + ".zip";
+			FileUtil.delete(zip_path);
+			System.out.println("删除zip文件完成。");
+			
+			//压缩T0002目录
 			ZipUtil.compressFile(frame.installZXGRootPath+"/"+Constants.user_path, frame.installZXGRootPath);
+			
+			//上传压缩后的zip文件到七牛
+			boolean success = QiniuUtil.upload(zip_path , Constants.user_path + ".zip");
+			
+			long end = new Date().getTime();
+			if(success){
+				System.out.println("上传七牛完成，总共耗时【"+((end-start)/1000)+"】秒。");
+				frame.displayLabel.setText("上传七牛完成。");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		//上传压缩后的zip文件到七牛
-		try {
-			QiniuUtil.upload(zip_path , Constants.user_path + ".zip");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		long end = new Date().getTime();
-		System.out.println("上传七牛完成，总共耗时【"+((end-start)/1000)+"】秒。");
-		frame.displayLabel.setText("上传七牛完成。");
 	}
 	
 }

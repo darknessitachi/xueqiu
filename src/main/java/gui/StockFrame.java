@@ -38,7 +38,7 @@ import util.ProjectUtil;
 import util.StringUtil;
 import worker.AnalyzeRateWorker;
 import worker.AnalyzeTypeWorker;
-import worker.ImportWorker;
+import worker.UploadXueqiuWorker;
 import worker.LoginWorker;
 import worker.StatisWorker;
 import worker.SyncLocalWorker;
@@ -647,7 +647,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		List<String> names = getSelectNames();
 		if (names.size() > 0) {
 			displayLabel.setText("正在执行上传……");
-			new Thread(new ImportWorker(names, this,continueUploadCloud)).start();
+			new Thread(new UploadXueqiuWorker(names, this,continueUploadCloud)).start();
 		} else {
 			displayLabel.setText("请选择要上传的板块。");
 		}
