@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.ScrollPane;
@@ -38,11 +37,11 @@ import util.ProjectUtil;
 import util.StringUtil;
 import worker.AnalyzeRateWorker;
 import worker.AnalyzeTypeWorker;
-import worker.UploadXueqiuWorker;
 import worker.LoginWorker;
 import worker.StatisWorker;
 import worker.SyncLocalWorker;
 import worker.UploadCloudWorker;
+import worker.UploadXueqiuWorker;
 import bean.Req.ReqHead;
 
 public class StockFrame extends JFrame implements ActionListener {
@@ -66,14 +65,16 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JPanel jp_industry = new JPanel();
 
 	private JMenuItem loginItem = new JMenuItem("登录");
+	
+	private JMenuItem uploadXqItem = new JMenuItem("上传雪球");
+	private JMenuItem uploadCloudItem = new JMenuItem("上传七牛");
+	private JMenuItem uploadBothItem = new JMenuItem("同时上传");
+	private JMenuItem downLocalItem = new JMenuItem("同步本地");
+	
 	private JMenuItem rateAnalyzeItem = new JMenuItem("比率分析");
 	private JMenuItem typeAnalyzeItem = new JMenuItem("类型分析");
 
 	private JButton jbuttonOk = null;
-	private JButton jbuttonUploadXueqiu = null;
-	private JButton jbuttonUploadCloud = null;
-	private JButton jbuttonUploadBoth = null;
-	private JButton jbuttonDownLocal = null;
 	
 	private JComboBox<String> dayCombo = new JComboBox<String>();
 
@@ -162,6 +163,17 @@ public class StockFrame extends JFrame implements ActionListener {
 		menu.add(loginItem);
 		loginItem.addActionListener(this);
 		
+		JMenu menuUpDown = new JMenu("上传下载");
+		menuUpDown.add(uploadXqItem);
+		menuUpDown.add(uploadCloudItem);
+		menuUpDown.add(uploadBothItem);
+		menuUpDown.addSeparator();
+		menuUpDown.add(downLocalItem);
+		uploadXqItem.addActionListener(this);
+		uploadCloudItem.addActionListener(this);
+		uploadBothItem.addActionListener(this);
+		downLocalItem.addActionListener(this);
+		
 		JMenu menu1 = new JMenu("分析");
 		menu1.add(rateAnalyzeItem);
 		menu1.add(typeAnalyzeItem);
@@ -169,6 +181,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		typeAnalyzeItem.addActionListener(this);
 		
 		menuBar.add(menu);
+		menuBar.add(menuUpDown);
 		menuBar.add(menu1);
 		this.setJMenuBar(menuBar);
 	}
@@ -187,32 +200,15 @@ public class StockFrame extends JFrame implements ActionListener {
 	private void initJPanel1() {
 		
 		jbuttonOk = new JButton("统计");
-		jbuttonUploadXueqiu = new JButton("上传雪球");
-		jbuttonUploadCloud = new JButton("上传七牛");
-		jbuttonUploadBoth = new JButton("同时上传");
-		jbuttonDownLocal = new JButton("同步本地");
-		
-		jbuttonUploadXueqiu.setForeground(Color.RED);
-		jbuttonUploadCloud.setForeground(Color.RED);
-		jbuttonUploadBoth.setForeground(Color.RED);
-		//jbuttonDownLocal.setForeground(new Color(185, 131, 24, 255));
 		
 		jp1.setBorder(BorderFactory.createTitledBorder("操作"));
 		jp1.add(jbuttonOk);
-		jp1.add(jbuttonUploadXueqiu);
-		jp1.add(jbuttonUploadCloud);
-		jp1.add(jbuttonUploadBoth);
-		jp1.add(jbuttonDownLocal);
 		
 		jbuttonOk.addActionListener(this);
 		JbuttonSelectAll.addActionListener(this);
 		JbuttonChoose.addActionListener(this);
 		autoChoose.addActionListener(this);
-		jbuttonUploadXueqiu.addActionListener(this);
 		JbuttonDel.addActionListener(this);
-		jbuttonDownLocal.addActionListener(this);
-		jbuttonUploadCloud.addActionListener(this);
-		jbuttonUploadBoth.addActionListener(this);
 
 	}
 
@@ -369,15 +365,9 @@ public class StockFrame extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
-
 		if (e.getSource() == JbuttonSelectAll) {
 			performSelectAll();
 		}
-
-		if (e.getSource() == jbuttonDownLocal) {
-			performSyncLocal();
-		}
-
 		if (e.getSource() == JbuttonChoose) {
 			performChoose();
 		}
@@ -387,17 +377,12 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == JbuttonDel) {
 			performDel();
 		}
-		if (e.getSource() == jbuttonUploadXueqiu) {
-			performImport(false);
-		}
 		
-		if (e.getSource() == jbuttonUploadBoth) {
-			performImport(true);
-		}
 
 		if (e.getSource() == loginItem) {
 			performLogin();
 		}
+		
 		
 		if (e.getSource() == rateAnalyzeItem) {
 			performRateAnalyze();
@@ -406,9 +391,21 @@ public class StockFrame extends JFrame implements ActionListener {
 			performTypeAnalyze();
 		}
 		
-		if (e.getSource() == jbuttonUploadCloud) {
+		
+		if (e.getSource() == uploadXqItem) {
+			performImport(false);
+		}
+		if (e.getSource() == uploadCloudItem) {
 			performUploadCloud();
 		}
+		if (e.getSource() == uploadBothItem) {
+			performImport(true);
+		}
+		if (e.getSource() == downLocalItem) {
+			performSyncLocal();
+		}
+		
+		
 		
 	}
 
