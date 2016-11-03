@@ -74,15 +74,16 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JMenuItem rateAnalyzeItem = new JMenuItem("比率分析");
 	private JMenuItem typeAnalyzeItem = new JMenuItem("类型分析");
 
-	private JButton jbuttonOk = null;
-	
-	private JComboBox<String> dayCombo = new JComboBox<String>();
+	private JButton jbuttonOk = new JButton("统计");
+	private JButton jbuttonPrice = new JButton("price");
 
 	private JButton JbuttonChoose = new JButton("导入EBK");
 	private JButton autoChoose = new JButton("自动导入");
 	private JButton JbuttonDel = new JButton("删除EBK");
 	private JButton JbuttonSelectAll = new JButton("全选");
 
+	private JComboBox<String> dayCombo = new JComboBox<String>();
+	private JTextField price = new JTextField(8);
 	
 	public JTextField displayLabel = new JTextField(45);
 
@@ -144,11 +145,31 @@ public class StockFrame extends JFrame implements ActionListener {
 		initJPanel1();
 		initJPanel2();
 		initJPanel3();
+		
+		addActionListener();
 
 		super.add(jp1, BorderLayout.NORTH);
 		super.add(jp2, BorderLayout.CENTER);
 		super.add(jp3, BorderLayout.SOUTH);
 
+	}
+
+	private void addActionListener() {
+		
+		loginItem.addActionListener(this);
+		uploadXqItem.addActionListener(this);
+		uploadCloudItem.addActionListener(this);
+		uploadBothItem.addActionListener(this);
+		downLocalItem.addActionListener(this);
+		rateAnalyzeItem.addActionListener(this);
+		typeAnalyzeItem.addActionListener(this);
+		
+		jbuttonOk.addActionListener(this);
+		JbuttonSelectAll.addActionListener(this);
+		JbuttonChoose.addActionListener(this);
+		autoChoose.addActionListener(this);
+		JbuttonDel.addActionListener(this);
+		jbuttonPrice.addActionListener(this);
 	}
 
 	private void showMsgBox(String msg) {
@@ -161,7 +182,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 		JMenu menu = new JMenu("菜单");
 		menu.add(loginItem);
-		loginItem.addActionListener(this);
 		
 		JMenu menuUpDown = new JMenu("上传下载");
 		menuUpDown.add(uploadXqItem);
@@ -169,21 +189,16 @@ public class StockFrame extends JFrame implements ActionListener {
 		menuUpDown.add(uploadBothItem);
 		menuUpDown.addSeparator();
 		menuUpDown.add(downLocalItem);
-		uploadXqItem.addActionListener(this);
-		uploadCloudItem.addActionListener(this);
-		uploadBothItem.addActionListener(this);
-		downLocalItem.addActionListener(this);
 		
 		JMenu menu1 = new JMenu("分析");
 		menu1.add(rateAnalyzeItem);
 		menu1.add(typeAnalyzeItem);
-		rateAnalyzeItem.addActionListener(this);
-		typeAnalyzeItem.addActionListener(this);
 		
 		menuBar.add(menu);
 		menuBar.add(menuUpDown);
 		menuBar.add(menu1);
 		this.setJMenuBar(menuBar);
+		
 	}
 
 	private void initParams() {
@@ -198,25 +213,18 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	private void initJPanel1() {
-		
-		jbuttonOk = new JButton("统计");
-		
 		jp1.setBorder(BorderFactory.createTitledBorder("操作"));
 		jp1.add(jbuttonOk);
-		
-		jbuttonOk.addActionListener(this);
-		JbuttonSelectAll.addActionListener(this);
-		JbuttonChoose.addActionListener(this);
-		autoChoose.addActionListener(this);
-		JbuttonDel.addActionListener(this);
-
+		jp1.add(jbuttonPrice);
 	}
 
 	private void initJPanel2() {
 		jp2.setBorder(BorderFactory.createTitledBorder("参数"));
 		jp2.add(new JLabel("day:"));
 		jp2.add(dayCombo);
-
+		jp2.add(new JLabel("price:"));
+		jp2.add(price);
+		
 		initDefaultParams();
 
 		jp2.add(displayLabel);
@@ -405,8 +413,14 @@ public class StockFrame extends JFrame implements ActionListener {
 			performSyncLocal();
 		}
 		
-		
-		
+		if (e.getSource() == jbuttonPrice) {
+			performPrice();
+		}
+	}
+
+	private void performPrice() {
+		float f = Float.parseFloat(price.getText());
+		displayLabel.setText(f+"");
 	}
 
 	public void performUploadCloud() {
