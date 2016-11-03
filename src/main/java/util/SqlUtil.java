@@ -35,6 +35,10 @@ public class SqlUtil {
 				StringBuilder sb = new StringBuilder();
 				int i=1;
 				for(String val : arr){
+					if(i == arr.length && !StringUtil.isNumeric(val)){
+						System.err.println("有未完成的反弹点数->"+val);
+					}
+					
 					if(i == 1){
 						sb.append("'"+CustStringUtil.getFormatDay(val)+"'").append(",");
 					}else if(StringUtil.isNumeric(val)){
