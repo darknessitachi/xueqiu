@@ -32,6 +32,7 @@ import javax.swing.JTextField;
 
 import util.AccessUtil;
 import util.Constants;
+import util.CustNumberUtil;
 import util.FileUtil;
 import util.ProjectUtil;
 import util.StringUtil;
@@ -75,7 +76,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JMenuItem typeAnalyzeItem = new JMenuItem("类型分析");
 
 	private JButton jbuttonOk = new JButton("统计");
-	private JButton jbuttonPrice = new JButton("price");
+	private JButton jbuttonPrice = new JButton("价格计算");
 
 	private JButton JbuttonChoose = new JButton("导入EBK");
 	private JButton autoChoose = new JButton("自动导入");
@@ -419,8 +420,17 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	private void performPrice() {
-		float f = Float.parseFloat(price.getText());
-		displayLabel.setText(f+"");
+		String text = price.getText();
+		if(StringUtil.isEmpty(text)){
+			displayLabel.setText("请输入价格。");
+			return;
+		}
+		if(!StringUtil.isNumeric(text)){
+			displayLabel.setText("请输入数字。");
+			return;
+		}
+		double f = Double.parseDouble(text);
+		displayLabel.setText(CustNumberUtil.calculateLimitUp(f)+"");
 	}
 
 	public void performUploadCloud() {

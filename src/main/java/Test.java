@@ -1,13 +1,15 @@
-import java.io.IOException;
-
-import net.sf.json.JSONObject;
+import util.CustNumberUtil;
 
 
 public class Test {
 
-	public static void main(String[] args) throws IOException {
-		JSONObject json = JSONObject.fromObject("{'hash':'lhHdRDYHujZixfyqca2jJ1T12cGU','key':'T0002.zip'}");
-		System.out.println(json.get("key"));
-	}
+		
+		public static void main(String[] args) {
+			double d = 8.37;
+			for(int i=0;i<5;i++){
+				d = CustNumberUtil.calculateLimitUp(d);
+				System.out.println(d);
+			}
+		}
 
 }
