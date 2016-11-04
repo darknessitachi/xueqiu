@@ -75,13 +75,13 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JMenuItem rateAnalyzeItem = new JMenuItem("比率分析");
 	private JMenuItem typeAnalyzeItem = new JMenuItem("类型分析");
 
-	private JButton jbuttonOk = new JButton("统计");
-	private JButton jbuttonPrice = new JButton("价格计算");
+	private JButton okBtn = new JButton("统计");
+	private JButton priceBtn = new JButton("价格计算");
 
-	private JButton JbuttonChoose = new JButton("导入EBK");
-	private JButton autoChoose = new JButton("自动导入");
-	private JButton JbuttonDel = new JButton("删除EBK");
-	private JButton JbuttonSelectAll = new JButton("全选");
+	private JButton chooseBtn = new JButton("导入EBK");
+	private JButton autoChooseBtn = new JButton("自动导入");
+	private JButton deleteBtn = new JButton("删除EBK");
+	private JButton selectAllBtn = new JButton("全选");
 
 	private JComboBox<String> dayCombo = new JComboBox<String>();
 	private JTextField price = new JTextField(8);
@@ -165,12 +165,12 @@ public class StockFrame extends JFrame implements ActionListener {
 		rateAnalyzeItem.addActionListener(this);
 		typeAnalyzeItem.addActionListener(this);
 		
-		jbuttonOk.addActionListener(this);
-		JbuttonSelectAll.addActionListener(this);
-		JbuttonChoose.addActionListener(this);
-		autoChoose.addActionListener(this);
-		JbuttonDel.addActionListener(this);
-		jbuttonPrice.addActionListener(this);
+		okBtn.addActionListener(this);
+		selectAllBtn.addActionListener(this);
+		chooseBtn.addActionListener(this);
+		autoChooseBtn.addActionListener(this);
+		deleteBtn.addActionListener(this);
+		priceBtn.addActionListener(this);
 	}
 
 	private void showMsgBox(String msg) {
@@ -217,8 +217,8 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private void initJPanel1() {
 		jp1.setBorder(BorderFactory.createTitledBorder("操作"));
-		jp1.add(jbuttonOk);
-		jp1.add(jbuttonPrice);
+		jp1.add(okBtn);
+		jp1.add(priceBtn);
 	}
 
 	private void initJPanel2() {
@@ -294,10 +294,10 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JPanel get_jp3_btn() {
 		JPanel jp3_btn = new JPanel();
 		// jp3_btn.setLayout(new FlowLayout(FlowLayout.LEFT));
-		jp3_btn.add(autoChoose);
-		jp3_btn.add(JbuttonChoose);
-		jp3_btn.add(JbuttonDel);
-		jp3_btn.add(JbuttonSelectAll);
+		jp3_btn.add(autoChooseBtn);
+		jp3_btn.add(chooseBtn);
+		jp3_btn.add(deleteBtn);
+		jp3_btn.add(selectAllBtn);
 		return jp3_btn;
 	}
 
@@ -369,23 +369,23 @@ public class StockFrame extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		if (e.getSource() == jbuttonOk) {
+		if (e.getSource() == okBtn) {
 			try {
 				performOk();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 		}
-		if (e.getSource() == JbuttonSelectAll) {
+		if (e.getSource() == selectAllBtn) {
 			performSelectAll();
 		}
-		if (e.getSource() == JbuttonChoose) {
+		if (e.getSource() == chooseBtn) {
 			performChoose();
 		}
-		if (e.getSource() == autoChoose) {
+		if (e.getSource() == autoChooseBtn) {
 			performAutoChoose();
 		}
-		if (e.getSource() == JbuttonDel) {
+		if (e.getSource() == deleteBtn) {
 			performDel();
 		}
 		
@@ -416,7 +416,7 @@ public class StockFrame extends JFrame implements ActionListener {
 			performSyncLocal();
 		}
 		
-		if (e.getSource() == jbuttonPrice) {
+		if (e.getSource() == priceBtn) {
 			performPrice();
 		}
 	}
