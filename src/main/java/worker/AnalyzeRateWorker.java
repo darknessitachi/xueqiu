@@ -72,7 +72,7 @@ public class AnalyzeRateWorker implements Runnable {
 			traditionOut("sheet4","【意外（首阴）】：",stmt);
 			traditionOut("all","【合并】：",stmt);
 			
-			
+			//SqlUtil.printSql(" select sum(rate/2.0)/count(*) as result from record where stockType not like '%追涨%' ", stmt);
 			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
