@@ -72,6 +72,8 @@ public class AnalyzeRateWorker implements Runnable {
 			traditionOut("sheet4","【意外（首阴）】：",stmt);
 			traditionOut("all","【合并】：",stmt);
 			
+			
+			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

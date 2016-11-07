@@ -1,6 +1,7 @@
 	create table record
 	(
 		day varchar(64), 
+		stockName varchar(64), 
 		indexType varchar(64), 
 		chartType varchar(64), 
 		stockType varchar(64), 
