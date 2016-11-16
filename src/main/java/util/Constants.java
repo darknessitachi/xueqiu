@@ -7,6 +7,7 @@ public class Constants {
 	public static final String code_path = "code/";
 	public static final String config_path = "config/";
 	public static final String data_path = "dataFile/";
+	public static final String db_path = "database/";
 	
 	public static final String req_cookie_name = "cookie.txt";
 	public static final String req_params_name = "params.properties";
@@ -19,10 +20,9 @@ public class Constants {
 	public static final String out_result_path   	 =  "d:/xueqiu/result";
 	public static final String out_config_path  	 =  "d:/xueqiu/config";
 	public static final String out_datafile_path     =  "d:/xueqiu/dataFile";
-	
-	public static final String out_custom_path   =  "d:/xueqiu/code/custom";
-	public static final String out_concept_path  =  "d:/xueqiu/code/concept";
-	public static final String out_industry_path =  "d:/xueqiu/code/industry";
+	public static final String out_custom_path       =  "d:/xueqiu/code/custom";
+	public static final String out_concept_path      =  "d:/xueqiu/code/concept";
+	public static final String out_industry_path     =  "d:/xueqiu/code/industry";
 	
 	public static final String zxg_path =  "T0002/blocknew";
 	
