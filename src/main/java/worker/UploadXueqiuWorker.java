@@ -44,6 +44,7 @@ public class UploadXueqiuWorker implements Runnable {
 		frame.displayLabel.setText("上传雪球完成，添加【"+num+"】只股票，共【"+oper.countXueqiu(true)+"】只股票。");
 		if(continueUploadCloud){
 			frame.performUploadCloud();
+			frame.performUploadDb();
 		}
 	}
 

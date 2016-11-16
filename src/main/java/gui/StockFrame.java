@@ -430,7 +430,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	private void performUploadDb() {
+	public void performUploadDb() {
 		new Thread(new UploadDbWorker(this)).start();
 	}
 
