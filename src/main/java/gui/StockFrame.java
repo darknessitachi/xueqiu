@@ -70,7 +70,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private JMenuItem uploadXqItem = new JMenuItem("上传雪球");
 	private JMenuItem uploadCloudItem = new JMenuItem("上传七牛");
-	private JMenuItem uploadDbItem = new JMenuItem("上传数据库");
+	private JMenuItem uploadDbItem = new JMenuItem("上传训练数据库");
 	private JMenuItem uploadBothItem = new JMenuItem("同时上传");
 	private JMenuItem downLocalItem = new JMenuItem("同步本地");
 	
@@ -188,9 +188,9 @@ public class StockFrame extends JFrame implements ActionListener {
 		menu.add(loginItem);
 		
 		JMenu menuUp = new JMenu("上传");
-		menuUp.add(uploadXqItem);
-		menuUp.add(uploadCloudItem);
 		menuUp.add(uploadDbItem);
+		menuUp.add(uploadCloudItem);
+		menuUp.add(uploadXqItem);
 		menuUp.addSeparator();
 		menuUp.add(uploadBothItem);
 		
