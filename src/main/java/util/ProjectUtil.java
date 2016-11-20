@@ -123,6 +123,7 @@ public class ProjectUtil {
 				FileUtil.copyDirectiory(ProjectUtil.getProjectPath() +"/"+Constants.folder_name,Constants.out_path);
 				System.out.println("拷贝文件夹【xueqiu】完成。");
 				login();
+				System.out.println("如果需要使用训练数据库，请更新。");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

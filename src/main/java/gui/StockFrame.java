@@ -38,6 +38,7 @@ import util.ProjectUtil;
 import util.StringUtil;
 import worker.AnalyzeRateWorker;
 import worker.AnalyzeTypeWorker;
+import worker.DownDatabase;
 import worker.LoginWorker;
 import worker.StatisWorker;
 import worker.SyncLocalWorker;
@@ -73,6 +74,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JMenuItem uploadDbItem = new JMenuItem("上传训练数据库");
 	private JMenuItem uploadBothItem = new JMenuItem("同时上传");
 	private JMenuItem downLocalItem = new JMenuItem("同步本地");
+	private JMenuItem downDatabaseItem = new JMenuItem("同步训练数据库");
 	
 	private JMenuItem rateAnalyzeItem = new JMenuItem("比率分析");
 	private JMenuItem typeAnalyzeItem = new JMenuItem("类型分析");
@@ -165,6 +167,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		uploadDbItem.addActionListener(this);
 		uploadBothItem.addActionListener(this);
 		downLocalItem.addActionListener(this);
+		downDatabaseItem.addActionListener(this);
 		rateAnalyzeItem.addActionListener(this);
 		typeAnalyzeItem.addActionListener(this);
 		
@@ -196,6 +199,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 		JMenu menuDown = new JMenu("下载");
 		menuDown.add(downLocalItem);
+		menuDown.add(downDatabaseItem);
 		
 		JMenu menuAnalyze = new JMenu("分析");
 		menuAnalyze.add(rateAnalyzeItem);
@@ -424,9 +428,22 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == downLocalItem) {
 			performSyncLocal();
 		}
+		if (e.getSource() == downDatabaseItem) {
+			performDownDatabase();
+		}
 		
 		if (e.getSource() == priceBtn) {
 			performPrice();
+		}
+	}
+
+	private void performDownDatabase() {
+		int res = JOptionPane.showConfirmDialog(null, "请确认云端的训练数据库是最新的。要继续执行同步吗？", null,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		if (res == JOptionPane.YES_OPTION) {
+			displayLabel.setText("正在执行本地同步……");
+			new Thread(new DownDatabase(this)).start();
+		}else{
+			displayLabel.setText("取消本地同步。");
 		}
 	}
 
