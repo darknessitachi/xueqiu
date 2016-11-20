@@ -1,14 +1,10 @@
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
-import util.CustNumberUtil;
 import util.FileUtil;
 
 
 public class Test {
-
-		
-		public static void main(String[] args) throws FileNotFoundException {
-			System.out.println(FileUtil.read("d:/test.txt"));
+		public static void main(String[] args) throws IOException {
+			FileUtil.copyDirectiory("d:/xueqiu", "c:/xueqiu");
 		}
-
 }

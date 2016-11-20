@@ -28,8 +28,6 @@ public class ProjectUtil {
 		return outputPath;
 	}
 	
-	
-	
 	/**
 	 * 获取工程class文件的路径
 	 * @return
@@ -58,7 +56,7 @@ public class ProjectUtil {
 	public static void main(String[] args) {
 		System.out.println(getSrcPath());
 		System.out.println(getClasspath());
-		
+		System.out.println(getProjectPath());
 	}
 	
 	
@@ -116,69 +114,37 @@ public class ProjectUtil {
 	 * 验证工程需要的文件夹是否存在，不存在则建立
 	 */
 	public static void validate() {
-		validateDict();
-		validateFile();
+		//validateDict();
+		//validateFile();
+		validateFolder();
 	}
 	
-	private static void validateDict() {
-		FileUtil.createFolder(Constants.out_result_path);
-		FileUtil.createFolder(Constants.out_config_path);
-		FileUtil.createFolder(Constants.out_datafile_path);
-		
-		FileUtil.createFolder(Constants.out_custom_path);
-		FileUtil.createFolder(Constants.out_concept_path);
-		FileUtil.createFolder(Constants.out_industry_path);
-	}
-	private static void validateFile() {
-		String cookiePath = Constants.out_config_path+"/"+Constants.req_cookie_name;
-		String paramsPath = Constants.out_config_path+"/"+Constants.req_params_name;
-		
-		String tablePath = Constants.out_config_path+"/"+Constants.table_name;
-		String sqlPath = Constants.out_config_path+"/"+Constants.sql_name;
-		
-		boolean noCookie = false;
-		if(!FileUtil.exists(cookiePath)){
-			System.out.println("拷贝cookie文件到【"+Constants.out_config_path+"】中");
-			File oldfile = new File(ProjectUtil.getClasspath() + Constants.config_path + Constants.req_cookie_name);
-			FileUtil.copy(cookiePath, oldfile);
-			noCookie = true;
-		};
-		
-		if(!FileUtil.exists(paramsPath)){
-			System.out.println("拷贝params文件到【"+Constants.out_config_path+"】中");
-			File oldfile = new File(ProjectUtil.getClasspath() + Constants.config_path + Constants.req_params_name);
-			FileUtil.copy(paramsPath, oldfile);
-		};
-		
-		if(!FileUtil.exists(tablePath)){
-			System.out.println("拷贝table文件到【"+Constants.out_config_path+"】中");
-			File oldfile = new File(ProjectUtil.getClasspath() + Constants.config_path + Constants.table_name);
-			FileUtil.copy(tablePath, oldfile);
-		};
-		
-		if(!FileUtil.exists(sqlPath)){
-			System.out.println("拷贝sql文件到【"+Constants.out_config_path+"】中");
-			File oldfile = new File(ProjectUtil.getClasspath() + Constants.config_path + Constants.sql_name);
-			FileUtil.copy(sqlPath, oldfile);
-		};
-		
-		//登录操作
-		if(noCookie){
-			Properties params = AccessUtil.readParams();
-			String username = params.getProperty("username");
-			String password = params.getProperty("password");
-			if (StringUtil.isEmpty(username)) {
-				System.err.println("params.properties缺少用户登录信息。");
-			}
-			XueqiuUtil xq = new XueqiuUtil();
-			String cookies = xq.login(username,password);
+	private static void validateFolder() {
+		if(!FileUtil.exists("d:/xueqiu1")){
 			try {
-				FileUtil.write(Constants.out_config_path+"/"+Constants.req_cookie_name, cookies);
-				System.out.println("登录成功。");
+				FileUtil.copyDirectiory(ProjectUtil.getProjectPath() +"/xueqiu", "d:/xueqiu");
+				System.out.println("拷贝文件夹【xueqiu】完成。");
+				login();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+		}
+	}
+
+	private static void login() {
+		Properties params = AccessUtil.readParams();
+		String username = params.getProperty("username");
+		String password = params.getProperty("password");
+		if (StringUtil.isEmpty(username)) {
+			System.err.println("params.properties缺少用户登录信息。");
+		}
+		XueqiuUtil xq = new XueqiuUtil();
+		String cookies = xq.login(username,password);
+		try {
+			FileUtil.write(Constants.out_config_path+"/"+Constants.req_cookie_name, cookies);
+			System.out.println("登录成功。");
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -190,9 +156,6 @@ public class ProjectUtil {
 		}
 		return result;
 	}
-
-
-
 
 
 }
