@@ -13,6 +13,7 @@ public class Constants {
 	public static final String req_params_name = "params.properties";
 	public static final String sql_name = "sql.txt";
 	public static final String table_name = "table.txt";
+	public static final String folder_name = "xueqiu";
 	
 	public static final String db_name = "test.db";
 	

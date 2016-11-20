@@ -114,15 +114,13 @@ public class ProjectUtil {
 	 * 验证工程需要的文件夹是否存在，不存在则建立
 	 */
 	public static void validate() {
-		//validateDict();
-		//validateFile();
 		validateFolder();
 	}
 	
 	private static void validateFolder() {
-		if(!FileUtil.exists("d:/xueqiu1")){
+		if(!FileUtil.exists(Constants.out_path)){
 			try {
-				FileUtil.copyDirectiory(ProjectUtil.getProjectPath() +"/xueqiu", "d:/xueqiu");
+				FileUtil.copyDirectiory(ProjectUtil.getProjectPath() +"/"+Constants.folder_name,Constants.out_path);
 				System.out.println("拷贝文件夹【xueqiu】完成。");
 				login();
 			} catch (IOException e) {
