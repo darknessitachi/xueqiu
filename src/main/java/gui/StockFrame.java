@@ -36,8 +36,6 @@ import util.CustNumberUtil;
 import util.FileUtil;
 import util.ProjectUtil;
 import util.StringUtil;
-import worker.AnalyzeRateWorker;
-import worker.AnalyzeTypeWorker;
 import worker.DownDatabase;
 import worker.LoginWorker;
 import worker.StatisWorker;
@@ -76,8 +74,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JMenuItem downLocalItem = new JMenuItem("同步本地");
 	private JMenuItem downDatabaseItem = new JMenuItem("同步训练数据库");
 	
-	private JMenuItem rateAnalyzeItem = new JMenuItem("比率分析");
-	private JMenuItem typeAnalyzeItem = new JMenuItem("类型分析");
 
 	private JButton okBtn = new JButton("统计");
 	private JButton priceBtn = new JButton("价格计算");
@@ -168,8 +164,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		uploadBothItem.addActionListener(this);
 		downLocalItem.addActionListener(this);
 		downDatabaseItem.addActionListener(this);
-		rateAnalyzeItem.addActionListener(this);
-		typeAnalyzeItem.addActionListener(this);
 		
 		okBtn.addActionListener(this);
 		selectAllBtn.addActionListener(this);
@@ -201,14 +195,9 @@ public class StockFrame extends JFrame implements ActionListener {
 		menuDown.add(downLocalItem);
 		menuDown.add(downDatabaseItem);
 		
-		JMenu menuAnalyze = new JMenu("分析");
-		menuAnalyze.add(rateAnalyzeItem);
-		menuAnalyze.add(typeAnalyzeItem);
-		
 		menuBar.add(menu);
 		menuBar.add(menuUp);
 		menuBar.add(menuDown);
-		menuBar.add(menuAnalyze);
 		this.setJMenuBar(menuBar);
 		
 	}
@@ -404,13 +393,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 		
 		
-		if (e.getSource() == rateAnalyzeItem) {
-			performRateAnalyze();
-		}
-		if (e.getSource() == typeAnalyzeItem) {
-			performTypeAnalyze();
-		}
-		
 		
 		if (e.getSource() == uploadXqItem) {
 			performImport(false);
@@ -469,33 +451,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		new Thread(new UploadCloudWorker(this)).start();
 	}
 
-	private void performRateAnalyze() {
-		if(isLogExist()){
-			new Thread(new AnalyzeRateWorker(this)).start();
-		}else{
-			displayLabel.setText("【"+Constants.out_path + Constants.data_path+"】日志文件不完整。");
-		}
-	}
-
-	private void performTypeAnalyze() {
-		if(isLogExist()){
-			new Thread(new AnalyzeTypeWorker(this)).start();
-		}else{
-			displayLabel.setText("【"+Constants.out_path + Constants.data_path+"】日志文件不完整。");
-		}
-	}
-
-
-	/**
-	 * 日志文件是否存在
-	 * @return
-	 */
-	private boolean isLogExist() {
-		File sheet2 = new File(Constants.out_path + Constants.data_path + "sheet2.txt");
-		File sheet3 = new File(Constants.out_path + Constants.data_path + "sheet3.txt");
-		File sheet4 = new File(Constants.out_path + Constants.data_path + "sheet4.txt");
-		return sheet2.exists() && sheet3.exists() && sheet4.exists();
-	}
 
 	public void performAutoChoose() {
 		// 先隐藏，然后再显示，解决下拉框被自选股覆盖的问题。
