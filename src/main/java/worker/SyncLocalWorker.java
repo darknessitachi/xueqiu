@@ -14,9 +14,11 @@ import gui.StockFrame;
 public class SyncLocalWorker implements Runnable {
 
 	private StockFrame frame;
+	private boolean continueDownDb;
 
-	public SyncLocalWorker(StockFrame frame) {
+	public SyncLocalWorker(StockFrame frame, boolean continueDownDb) {
 		this.frame = frame;
+		this.continueDownDb = continueDownDb;
 	}
 
 	@Override
@@ -47,6 +49,9 @@ public class SyncLocalWorker implements Runnable {
 		long end = new Date().getTime();
 		System.out.println("同步本地完成，总共耗时【"+((end-start)/1000)+"】秒。");
 		frame.displayLabel.setText("同步本地目录完成。");
+		if(continueDownDb){
+			frame.performDownDatabase(true);
+		}
 	}
 	
 

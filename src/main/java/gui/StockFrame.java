@@ -73,7 +73,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JMenuItem uploadBothItem = new JMenuItem("同时上传");
 	private JMenuItem downLocalItem = new JMenuItem("同步本地");
 	private JMenuItem downDatabaseItem = new JMenuItem("同步训练数据库");
-	
+	private JMenuItem downBothItem = new JMenuItem("同时同步");
 
 	private JButton okBtn = new JButton("统计");
 	private JButton priceBtn = new JButton("价格计算");
@@ -164,6 +164,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		uploadBothItem.addActionListener(this);
 		downLocalItem.addActionListener(this);
 		downDatabaseItem.addActionListener(this);
+		downBothItem.addActionListener(this);
 		
 		okBtn.addActionListener(this);
 		selectAllBtn.addActionListener(this);
@@ -194,6 +195,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		JMenu menuDown = new JMenu("下载");
 		menuDown.add(downLocalItem);
 		menuDown.add(downDatabaseItem);
+		menuUp.addSeparator();
+		menuDown.add(downBothItem);
 		
 		menuBar.add(menu);
 		menuBar.add(menuUp);
@@ -408,10 +411,13 @@ public class StockFrame extends JFrame implements ActionListener {
 			performImport(true);
 		}
 		if (e.getSource() == downLocalItem) {
-			performSyncLocal();
+			performSyncLocal(false);
 		}
 		if (e.getSource() == downDatabaseItem) {
-			performDownDatabase();
+			performDownDatabase(false);
+		}
+		if (e.getSource() == downBothItem) {
+			performSyncLocal(true);
 		}
 		
 		if (e.getSource() == priceBtn) {
@@ -419,7 +425,13 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	private void performDownDatabase() {
+	public void performDownDatabase(boolean removeAlert) {
+		
+		if(removeAlert){
+			new Thread(new DownDatabase(this)).start();
+			return;
+		}
+		
 		int res = JOptionPane.showConfirmDialog(null, "请确认云端的训练数据库是最新的。要继续执行同步吗？", null,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if (res == JOptionPane.YES_OPTION) {
 			displayLabel.setText("正在执行本地同步……");
@@ -472,12 +484,17 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	/**
 	 * 同步雪球的自选股到本地的板块
+	 * @param continueDownDb 
 	 */
-	private void performSyncLocal() {
-		int res = JOptionPane.showConfirmDialog(null, "请确认当前是备用机。要继续执行同步吗？", null,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+	private void performSyncLocal(boolean continueDownDb) {
+		String msg = "请确认当前是备用机。要继续执行同步吗？";
+		if(continueDownDb){
+			msg = "请确认当前是备用机，并且云端的数据库是最新的吗？";
+		}
+		int res = JOptionPane.showConfirmDialog(null, msg, null,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if (res == JOptionPane.YES_OPTION) {
 			displayLabel.setText("正在执行本地同步……");
-			new Thread(new SyncLocalWorker(this)).start();
+			new Thread(new SyncLocalWorker(this,continueDownDb)).start();
 		}else{
 			displayLabel.setText("取消本地同步。");
 		}
