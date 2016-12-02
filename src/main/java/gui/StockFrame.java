@@ -71,9 +71,9 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JMenuItem uploadCloudItem = new JMenuItem("上传七牛");
 	private JMenuItem uploadDbItem = new JMenuItem("上传训练数据库");
 	private JMenuItem uploadBothItem = new JMenuItem("同时上传");
-	private JMenuItem downLocalItem = new JMenuItem("同步本地");
-	private JMenuItem downDatabaseItem = new JMenuItem("同步训练数据库");
-	private JMenuItem downBothItem = new JMenuItem("同时同步");
+	private JMenuItem downLocalItem = new JMenuItem("下载备份");
+	private JMenuItem downDatabaseItem = new JMenuItem("下载训练数据库");
+	private JMenuItem downBothItem = new JMenuItem("同时下载");
 
 	private JButton okBtn = new JButton("统计");
 	private JButton priceBtn = new JButton("价格计算");
