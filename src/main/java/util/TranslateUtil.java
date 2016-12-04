@@ -67,7 +67,7 @@ public class TranslateUtil {
 	}
 
 
-	private static String getNameByCode(String completeCode) throws IOException {
+	public static String getNameByCode(String completeCode) throws IOException {
 		String httpReqUrl = Constants.inter_url+completeCode;
 		
 		//请求头
