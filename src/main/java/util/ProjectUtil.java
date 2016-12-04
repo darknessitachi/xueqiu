@@ -177,7 +177,6 @@ public class ProjectUtil {
 						String name = TranslateUtil.getNameByCode(completeCode);
 						if(TranslateUtil.isValidName(name)){
 							result.add(name);
-							System.out.println(name);
 						}
 				}
 			}
