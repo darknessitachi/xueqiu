@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
@@ -153,6 +155,60 @@ public class ProjectUtil {
 		for(String e : keySet){
 			result.add(e);
 		}
+		return result;
+	}
+
+	public static List<String> getStockListByA3() {
+		
+		String installZXGPath = getInstallZXGPath();
+		List<String> installZXG_FileList = FileUtil.getFullFileNames(installZXGPath);
+		String A3_NAME = FileUtil.fileLike(installZXG_FileList, "A3");
+		if(StringUtil.isEmpty(A3_NAME)){
+			System.err.println("A3文件未找到。");
+			return null;
+		}
+		
+		List<String> result = new ArrayList<String>();
+		try {
+			List<String> source = FileUtil.readLines(installZXGPath + "/" + A3_NAME);
+			for(String code : source){
+				String completeCode = CustStringUtil.tdxCode2StandardCode(code);
+				if(completeCode!=null){
+						String name = TranslateUtil.getNameByCode(completeCode);
+						if(TranslateUtil.isValidName(name)){
+							result.add(name);
+							System.out.println(name);
+						}
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	private static String getInstallZXGPath() {
+		
+		String result = "";
+		Properties params = AccessUtil.readParams();
+		String installPath = params.getProperty("tdxInstallPath");
+		String[] array = installPath.split(";");
+		int i = 0;
+		for (String path : array) {
+			String zxg_path = path + "/" + Constants.zxg_path;
+			File folder = new File(zxg_path);
+			if (folder.exists()) {
+				result = zxg_path;
+				i++;
+			}
+		}
+		 if(i > 1){
+			System.err.println("找到多个券商安装目录。");
+		}
+		
 		return result;
 	}
 

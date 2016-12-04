@@ -62,7 +62,7 @@ public class TranslateUtil {
 	}
 
 
-	private static boolean isValidName(String name) {
+	public static boolean isValidName(String name) {
 		return !"\";".equals(name);
 	}
 
