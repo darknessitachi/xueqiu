@@ -193,8 +193,8 @@ public class StockFrame extends JFrame implements ActionListener {
 		menuUp.add(uploadBothItem);
 		
 		JMenu menuDown = new JMenu("下载");
-		menuDown.add(downLocalItem);
 		menuDown.add(downDatabaseItem);
+		menuDown.add(downLocalItem);
 		menuUp.addSeparator();
 		menuDown.add(downBothItem);
 		
