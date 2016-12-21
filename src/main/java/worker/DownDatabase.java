@@ -27,7 +27,7 @@ public class DownDatabase implements Runnable {
 			
 			QiniuUtil.download(latestFile, localFile);
 			
-			System.out.println("最新训练数据库【"+latestFile+"】下载完成。");
+			System.out.println("最新训练数据库【"+latestFile+"】下载完成，云端共有【"+fileList.size()+"】条记录。");
 			frame.displayLabel.setText("最新训练数据库【"+latestFile+"】下载完成。");
 		} catch (IOException e) {
 			e.printStackTrace();
