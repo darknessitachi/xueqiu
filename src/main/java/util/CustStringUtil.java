@@ -50,7 +50,7 @@ public class CustStringUtil {
 	
 	
 	/**
-	 * 把通达信导出的股票代码，转化成标准的股票代码
+	 * 把通达信导出的股票代码，转化成标准的股票代码（sh600234）
 	 * @param code
 	 * @return
 	 */
