@@ -8,6 +8,7 @@ import org.apache.http.client.ClientProtocolException;
 import util.Constants;
 import util.FileUtil;
 import util.ZipUtil;
+import util.qiniu.QiniuConstants;
 import util.qiniu.QiniuUtil;
 import gui.StockFrame;
 
@@ -30,6 +31,7 @@ public class SyncLocalWorker implements Runnable {
 		System.out.println("删除zip文件完成。");
 		
 		try {
+			QiniuConstants.bucketname = QiniuConstants.dbBucketname;
 			//下载zip
 			QiniuUtil.download(Constants.user_path + ".zip", zip_path);
 			System.out.println("下载【"+Constants.user_path+"】完成。");

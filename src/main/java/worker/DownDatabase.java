@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import util.Constants;
+import util.qiniu.QiniuConstants;
 import util.qiniu.QiniuUtil;
 
 public class DownDatabase implements Runnable {
@@ -20,6 +21,7 @@ public class DownDatabase implements Runnable {
 	public void run() {
 		try {
 			
+			QiniuConstants.bucketname = QiniuConstants.dbBucketname;
 			List<String> fileList = QiniuUtil.fileList(Constants.db_path);
 			String latestFile = getLatestFile(fileList);
 			

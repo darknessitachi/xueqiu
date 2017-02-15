@@ -42,6 +42,7 @@ import worker.StatisWorker;
 import worker.SyncLocalWorker;
 import worker.UploadCloudWorker;
 import worker.UploadDbWorker;
+import worker.UploadImgWorker;
 import worker.UploadXueqiuWorker;
 import bean.Req.ReqHead;
 
@@ -71,6 +72,9 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JMenuItem uploadCloudItem = new JMenuItem("上传七牛");
 	private JMenuItem uploadDbItem = new JMenuItem("上传训练数据库");
 	private JMenuItem uploadBothItem = new JMenuItem("同时上传");
+	private JMenuItem uploadImgItem = new JMenuItem("上传图片");
+	
+	
 	private JMenuItem downLocalItem = new JMenuItem("下载备份");
 	private JMenuItem downDatabaseItem = new JMenuItem("下载训练数据库");
 	private JMenuItem downBothItem = new JMenuItem("同时下载");
@@ -162,6 +166,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		uploadCloudItem.addActionListener(this);
 		uploadDbItem.addActionListener(this);
 		uploadBothItem.addActionListener(this);
+		uploadImgItem.addActionListener(this);
 		downLocalItem.addActionListener(this);
 		downDatabaseItem.addActionListener(this);
 		downBothItem.addActionListener(this);
@@ -191,6 +196,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		menuUp.add(uploadXqItem);
 		menuUp.addSeparator();
 		menuUp.add(uploadBothItem);
+		menuUp.add(uploadImgItem);
 		
 		JMenu menuDown = new JMenu("下载");
 		menuDown.add(downDatabaseItem);
@@ -410,6 +416,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == uploadBothItem) {
 			performImport(true);
 		}
+		if (e.getSource() == uploadImgItem) {
+			performUploadImg();
+		}
+		
 		if (e.getSource() == downLocalItem) {
 			performSyncLocal(false);
 		}
@@ -423,6 +433,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == priceBtn) {
 			performPrice();
 		}
+	}
+
+	private void performUploadImg() {
+		new Thread(new UploadImgWorker(this)).start();
 	}
 
 	public void performDownDatabase(boolean removeAlert) {

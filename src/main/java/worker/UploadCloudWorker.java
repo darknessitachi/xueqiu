@@ -7,6 +7,7 @@ import gui.StockFrame;
 import util.Constants;
 import util.FileUtil;
 import util.ZipUtil;
+import util.qiniu.QiniuConstants;
 import util.qiniu.QiniuUtil;
 
 public class UploadCloudWorker implements Runnable {
@@ -31,6 +32,7 @@ public class UploadCloudWorker implements Runnable {
 			//压缩T0002目录
 			ZipUtil.compressFile(frame.installZXGRootPath+"/"+Constants.user_path, frame.installZXGRootPath);
 			
+			QiniuConstants.bucketname = QiniuConstants.dbBucketname;
 			//上传压缩后的zip文件到七牛
 			boolean success = QiniuUtil.upload(zip_path , Constants.user_path + ".zip");
 			
