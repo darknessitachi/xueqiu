@@ -3,6 +3,7 @@ package worker;
 import gui.StockFrame;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import util.Constants;
@@ -26,13 +27,20 @@ public class UploadImgWorker implements Runnable {
 		List<String> cloudList = QiniuUtil.fileList(QiniuConstants.imgPrefix);
 		//获取本地所有文件，遍历，如果不在云端，则上传
 		List<String> localList = FileUtil.getFullFileNames(Constants.out_img_path);
+		List<String> newFileList = new ArrayList<String>();
 		for(String fileName:localList){
 			if(!exsit(cloudList,fileName)){
-				try {
-					QiniuUtil.upload(Constants.out_img_path+"/"+fileName, QiniuConstants.imgPrefix+"/"+ fileName);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				newFileList.add(fileName);
+			}
+		}
+		
+		System.out.println("有【"+newFileList.size()+"】条数据需要上传。");
+		
+		for(String fileName:newFileList){
+			try {
+				QiniuUtil.upload(Constants.out_img_path+"/"+fileName, QiniuConstants.imgPrefix+"/"+ fileName);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 		
