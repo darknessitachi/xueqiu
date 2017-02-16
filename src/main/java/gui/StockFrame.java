@@ -196,8 +196,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		menuUp.add(uploadXqItem);
 		menuUp.addSeparator();
 		menuUp.add(uploadBothItem);
-		menuUp.addSeparator();
-		menuUp.add(uploadImgItem);
 		
 		JMenu menuDown = new JMenu("下载");
 		menuDown.add(downDatabaseItem);
@@ -205,9 +203,13 @@ public class StockFrame extends JFrame implements ActionListener {
 		menuUp.addSeparator();
 		menuDown.add(downBothItem);
 		
+		JMenu img = new JMenu("图片");
+		img.add(uploadImgItem);
+		
 		menuBar.add(menu);
 		menuBar.add(menuUp);
 		menuBar.add(menuDown);
+		menuBar.add(img);
 		this.setJMenuBar(menuBar);
 		
 	}
