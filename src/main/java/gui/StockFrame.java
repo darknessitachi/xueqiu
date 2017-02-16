@@ -37,6 +37,7 @@ import util.FileUtil;
 import util.ProjectUtil;
 import util.StringUtil;
 import worker.DownDatabase;
+import worker.DownImgWorker;
 import worker.LoginWorker;
 import worker.StatisWorker;
 import worker.SyncLocalWorker;
@@ -72,12 +73,13 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JMenuItem uploadCloudItem = new JMenuItem("上传备份");
 	private JMenuItem uploadDbItem = new JMenuItem("上传训练数据库");
 	private JMenuItem uploadBothItem = new JMenuItem("同时上传");
-	private JMenuItem uploadImgItem = new JMenuItem("上传图片");
-	
 	
 	private JMenuItem downLocalItem = new JMenuItem("下载备份");
 	private JMenuItem downDatabaseItem = new JMenuItem("下载训练数据库");
 	private JMenuItem downBothItem = new JMenuItem("同时下载");
+	
+	private JMenuItem uploadImgItem = new JMenuItem("上传图片");
+	private JMenuItem downImgItem = new JMenuItem("下载图片");
 
 	private JButton okBtn = new JButton("统计");
 	private JButton priceBtn = new JButton("价格计算");
@@ -167,6 +169,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		uploadDbItem.addActionListener(this);
 		uploadBothItem.addActionListener(this);
 		uploadImgItem.addActionListener(this);
+		downImgItem.addActionListener(this);
 		downLocalItem.addActionListener(this);
 		downDatabaseItem.addActionListener(this);
 		downBothItem.addActionListener(this);
@@ -203,8 +206,9 @@ public class StockFrame extends JFrame implements ActionListener {
 		menuUp.addSeparator();
 		menuDown.add(downBothItem);
 		
-		JMenu img = new JMenu("图片");
+		JMenu img = new JMenu("图片操作");
 		img.add(uploadImgItem);
+		img.add(downImgItem);
 		
 		menuBar.add(menu);
 		menuBar.add(menuUp);
@@ -422,6 +426,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == uploadImgItem) {
 			performUploadImg();
 		}
+		if (e.getSource() == downImgItem) {
+			performDownImg();
+		}
+		
 		
 		if (e.getSource() == downLocalItem) {
 			performSyncLocal(false);
@@ -436,6 +444,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == priceBtn) {
 			performPrice();
 		}
+	}
+
+	private void performDownImg() {
+		new Thread(new DownImgWorker(this)).start();
 	}
 
 	private void performUploadImg() {
