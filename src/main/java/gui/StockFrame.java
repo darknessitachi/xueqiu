@@ -213,7 +213,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		menuBar.add(menu);
 		menuBar.add(menuUp);
 		menuBar.add(menuDown);
-		menuBar.add(img);
+		//menuBar.add(img);
 		this.setJMenuBar(menuBar);
 		
 	}
