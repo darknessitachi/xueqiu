@@ -69,7 +69,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JMenuItem loginItem = new JMenuItem("登录");
 	
 	private JMenuItem uploadXqItem = new JMenuItem("上传雪球");
-	private JMenuItem uploadCloudItem = new JMenuItem("上传七牛");
+	private JMenuItem uploadCloudItem = new JMenuItem("上传备份");
 	private JMenuItem uploadDbItem = new JMenuItem("上传训练数据库");
 	private JMenuItem uploadBothItem = new JMenuItem("同时上传");
 	private JMenuItem uploadImgItem = new JMenuItem("上传图片");
