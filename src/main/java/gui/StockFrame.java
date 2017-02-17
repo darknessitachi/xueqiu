@@ -133,7 +133,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 
 		installZXG_FileList = FileUtil.getFullFileNames(installZXGPath);
-		boolean originalFileExist = validateFileCount(installZXG_FileList);
+		boolean originalFileExist = ProjectUtil.validateFileCount(installZXG_FileList);
 		if (!originalFileExist) {
 			showMsgBox("本地证券软件目录下ZXG、A1、A2、A3的文件个数不对。");
 		}
@@ -566,22 +566,7 @@ public class StockFrame extends JFrame implements ActionListener {
 				installZXGPath + "/" + A3_NAME));
 	}
 
-	private boolean validateFileCount(List<String> list) {
-
-		boolean result = true;
-
-		int count = 0;
-		for (String fileName : list) {
-			if (fileName.equalsIgnoreCase("ZXG.blk") || fileName.startsWith("A1") || fileName.startsWith("A2") || fileName.startsWith("A3")  ) {
-				count++;
-			}
-		}
-
-		if (count != 4) {
-			result = false;
-		}
-		return result;
-	}
+	
 
 	private void performLogin() {
 		String username = params.getProperty("username");
