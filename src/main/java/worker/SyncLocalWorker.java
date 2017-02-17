@@ -35,11 +35,8 @@ public class SyncLocalWorker implements Runnable {
 			QiniuConstants.bucketname = QiniuConstants.dbBucketname;
 			//下载zip
 			QiniuUtil.download(Constants.user_path + ".zip", zip_path);
-			System.out.println("下载【"+Constants.user_path+"】完成。");
-			
 			//删除文件夹
 			FileUtil.deleteFolder(frame.installZXGRootPath+"/"+Constants.user_path);
-			
 			//解压zip到指定文件夹
 			ZipUtil.decompressZip(zip_path, frame.installZXGRootPath+"/"+Constants.user_path);
 			
