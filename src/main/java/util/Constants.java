@@ -20,6 +20,7 @@ public class Constants {
 	public static final String out_result_path   	 =  "d:/xueqiu/result";
 	public static final String out_config_path  	 =  "d:/xueqiu/config";
 	public static final String out_img_path   		 =  "d:/xueqiu/stockImg";
+	public static final String out_back_path   		 =  "d:/xueqiu/backup";
 	public static final String out_datafile_path     =  "d:/xueqiu/dataFile";
 	public static final String out_custom_path       =  "d:/xueqiu/code/custom";
 	public static final String out_concept_path      =  "d:/xueqiu/code/concept";
