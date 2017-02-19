@@ -29,7 +29,6 @@ public class UploadDbWorker implements Runnable {
 			boolean success = QiniuUtil.upload(file , QiniuConstants.databasePrefix+"/"+newName);
 			
 			if(success){
-				System.out.println("上传database完成。");
 				frame.displayLabel.setText("上传database完成。");
 			}
 		} catch (IOException e) {
