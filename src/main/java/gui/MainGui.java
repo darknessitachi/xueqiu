@@ -11,5 +11,4 @@ public class MainGui {
 		new StockFrame("stock");
 	}
 
-
 }
