@@ -5,6 +5,7 @@ import java.util.Date;
 
 import gui.StockFrame;
 import util.Constants;
+import util.DateUtil;
 import util.FileUtil;
 import util.ZipUtil;
 import util.qiniu.QiniuConstants;
@@ -34,7 +35,8 @@ public class UploadCloudWorker implements Runnable {
 			
 			QiniuConstants.bucketname = QiniuConstants.testBucketname;
 			//上传压缩后的zip文件到七牛
-			boolean success = QiniuUtil.upload(zip_path , Constants.user_path + ".zip");
+			String subFix = DateUtil.formatDate(new Date(), DateUtil.yyyy_MM_dd_HH_mm_ss);
+			boolean success = QiniuUtil.upload(zip_path , Constants.user_path +"_"+subFix+ ".zip");
 			
 			long end = new Date().getTime();
 			if(success){

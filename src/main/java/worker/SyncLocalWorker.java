@@ -2,11 +2,14 @@ package worker;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
+import java.util.TreeSet;
 
 import org.apache.http.client.ClientProtocolException;
 
 import util.Constants;
 import util.FileUtil;
+import util.ProjectUtil;
 import util.ZipUtil;
 import util.qiniu.QiniuConstants;
 import util.qiniu.QiniuUtil;
@@ -33,12 +36,17 @@ public class SyncLocalWorker implements Runnable {
 		try {
 			QiniuConstants.downloadDomainURL = QiniuConstants.testDownloadDomainURL;
 			QiniuConstants.bucketname = QiniuConstants.testBucketname;
+			
+			List<String> fileList = QiniuUtil.fileList(Constants.user_path);
+			TreeSet<String> treeSet = ProjectUtil.getOrderTreeSet(fileList);
+			
 			//下载zip
-			QiniuUtil.download(Constants.user_path + ".zip", zip_path);
+			QiniuUtil.download(treeSet.last(), zip_path);
 			//删除文件夹
 			FileUtil.deleteFolder(frame.installZXGRootPath+"/"+Constants.user_path);
 			//解压zip到指定文件夹
 			ZipUtil.decompressZip(zip_path, frame.installZXGRootPath+"/"+Constants.user_path);
+			
 			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();

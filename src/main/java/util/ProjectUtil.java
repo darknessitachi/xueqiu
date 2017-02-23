@@ -6,16 +6,17 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.filechooser.FileSystemView;
 
-import bean.MyComparator;
 import bean.Stock;
+import bean.StringComparator;
 
 
 public class ProjectUtil {
@@ -56,9 +57,21 @@ public class ProjectUtil {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(getSrcPath());
-		System.out.println(getClasspath());
-		System.out.println(getProjectPath());
+		
+		List<String> list = new ArrayList<String>();
+		list.add("a");
+		list.add("c");
+		list.add("b");
+		
+		TreeSet<String> tree = getOrderTreeSet(list);
+		
+		for (Iterator<String> iterator = tree.iterator(); iterator.hasNext();) {  
+            System.out.println(iterator.next());  
+        }  
+		System.out.println(tree.size());
+		System.out.println(tree.last());
+		System.out.println(tree.first());
+		
 	}
 	
 	
@@ -149,14 +162,19 @@ public class ProjectUtil {
 		}
 	}
 
-
-	public static TreeSet<String> getTreeSet(Set<String> keySet) {
-		TreeSet<String> result = new TreeSet<String>(new MyComparator());
-		for(String e : keySet){
+	/**
+	 * 对容器的字符串元素进行排序，从小到大排序
+	 * @param list
+	 * @return
+	 */
+	public static TreeSet<String> getOrderTreeSet(Collection<String> list) {
+		TreeSet<String> result = new TreeSet<String>(new StringComparator());
+		for(String e : list){
 			result.add(e);
 		}
 		return result;
 	}
+	
 	
 	public static boolean validateFileCount(List<String> list) {
 
