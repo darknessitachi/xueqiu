@@ -10,11 +10,11 @@ import util.DateUtil;
 import util.qiniu.QiniuConstants;
 import util.qiniu.QiniuUtil;
 
-public class UploadDbWorker implements Runnable {
+public class UploadDatabaseWorker implements Runnable {
 
 	private StockFrame frame;
 
-	public UploadDbWorker(StockFrame frame) {
+	public UploadDatabaseWorker(StockFrame frame) {
 		this.frame = frame;
 	}
 

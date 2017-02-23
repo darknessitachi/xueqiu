@@ -40,9 +40,9 @@ import worker.DownDatabase;
 import worker.DownImgWorker;
 import worker.LoginWorker;
 import worker.StatisWorker;
-import worker.SyncLocalWorker;
-import worker.UploadCloudWorker;
-import worker.UploadDbWorker;
+import worker.DownBackupWorker;
+import worker.UploadBackupWorker;
+import worker.UploadDatabaseWorker;
 import worker.UploadImgWorker;
 import worker.UploadXueqiuWorker;
 import bean.Req.ReqHead;
@@ -471,7 +471,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	public void performUploadDb() {
-		new Thread(new UploadDbWorker(this)).start();
+		new Thread(new UploadDatabaseWorker(this)).start();
 	}
 
 	private void performPrice() {
@@ -489,7 +489,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	public void performUploadCloud() {
-		new Thread(new UploadCloudWorker(this)).start();
+		new Thread(new UploadBackupWorker(this)).start();
 	}
 
 
@@ -523,7 +523,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		int res = JOptionPane.showConfirmDialog(null, msg, null,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if (res == JOptionPane.YES_OPTION) {
 			displayLabel.setText("正在执行本地同步……");
-			new Thread(new SyncLocalWorker(this,continueDownDb)).start();
+			new Thread(new DownBackupWorker(this,continueDownDb)).start();
 		}else{
 			displayLabel.setText("取消本地同步。");
 		}

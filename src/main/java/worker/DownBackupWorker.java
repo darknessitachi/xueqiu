@@ -15,12 +15,12 @@ import util.qiniu.QiniuConstants;
 import util.qiniu.QiniuUtil;
 import gui.StockFrame;
 
-public class SyncLocalWorker implements Runnable {
+public class DownBackupWorker implements Runnable {
 
 	private StockFrame frame;
 	private boolean continueDownDb;
 
-	public SyncLocalWorker(StockFrame frame, boolean continueDownDb) {
+	public DownBackupWorker(StockFrame frame, boolean continueDownDb) {
 		this.frame = frame;
 		this.continueDownDb = continueDownDb;
 	}

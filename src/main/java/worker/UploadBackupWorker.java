@@ -11,11 +11,11 @@ import util.ZipUtil;
 import util.qiniu.QiniuConstants;
 import util.qiniu.QiniuUtil;
 
-public class UploadCloudWorker implements Runnable {
+public class UploadBackupWorker implements Runnable {
 
 	private StockFrame frame;
 
-	public UploadCloudWorker(StockFrame frame) {
+	public UploadBackupWorker(StockFrame frame) {
 		this.frame = frame;
 	}
 
