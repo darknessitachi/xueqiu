@@ -210,7 +210,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		menuDown.addSeparator();
 		menuDown.add(downBothItem);
 		
-		JMenu img = new JMenu("图片操作");
+		JMenu img = new JMenu("图片");
 		img.add(uploadImgItem);
 		img.add(downImgItem);
 		
