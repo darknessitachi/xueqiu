@@ -25,7 +25,7 @@ public class UploadDbWorker implements Runnable {
 			String file = Constants.out_path + Constants.db_path + Constants.db_name;
 			
 			String newName = prefix + "_" + Constants.db_name;
-			QiniuConstants.bucketname = QiniuConstants.dbBucketname;
+			QiniuConstants.bucketname = QiniuConstants.testBucketname;
 			boolean success = QiniuUtil.upload(file , QiniuConstants.databasePrefix+"/"+newName);
 			
 			if(success){

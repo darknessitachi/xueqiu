@@ -32,7 +32,7 @@ public class UploadCloudWorker implements Runnable {
 			//压缩T0002目录
 			ZipUtil.compressFile(frame.installZXGRootPath+"/"+Constants.user_path, frame.installZXGRootPath);
 			
-			QiniuConstants.bucketname = QiniuConstants.dbBucketname;
+			QiniuConstants.bucketname = QiniuConstants.testBucketname;
 			//上传压缩后的zip文件到七牛
 			boolean success = QiniuUtil.upload(zip_path , Constants.user_path + ".zip");
 			

@@ -20,8 +20,8 @@ public class DownDatabase implements Runnable {
 	@Override
 	public void run() {
 		try {
-			QiniuConstants.downloadDomainURL = QiniuConstants.dbDownloadDomainURL;
-			QiniuConstants.bucketname = QiniuConstants.dbBucketname;
+			QiniuConstants.downloadDomainURL = QiniuConstants.testDownloadDomainURL;
+			QiniuConstants.bucketname = QiniuConstants.testBucketname;
 			List<String> fileList = QiniuUtil.fileList(Constants.db_path);
 			String latestFile = getLatestFile(fileList);
 			
