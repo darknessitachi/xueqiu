@@ -36,11 +36,12 @@ import util.CustNumberUtil;
 import util.FileUtil;
 import util.ProjectUtil;
 import util.StringUtil;
+import worker.ClearCloudWorker;
+import worker.DownBackupWorker;
 import worker.DownDatabase;
 import worker.DownImgWorker;
 import worker.LoginWorker;
 import worker.StatisWorker;
-import worker.DownBackupWorker;
 import worker.UploadBackupWorker;
 import worker.UploadDatabaseWorker;
 import worker.UploadImgWorker;
@@ -80,6 +81,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	
 	private JMenuItem uploadImgItem = new JMenuItem("上传图片");
 	private JMenuItem downImgItem = new JMenuItem("下载图片");
+	
+	private JMenuItem clearItem = new JMenuItem("清理");
 
 	private JButton okBtn = new JButton("统计");
 	private JButton priceBtn = new JButton("价格计算");
@@ -170,6 +173,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		uploadBothItem.addActionListener(this);
 		uploadImgItem.addActionListener(this);
 		downImgItem.addActionListener(this);
+		clearItem.addActionListener(this);
 		downLocalItem.addActionListener(this);
 		downDatabaseItem.addActionListener(this);
 		downBothItem.addActionListener(this);
@@ -203,17 +207,21 @@ public class StockFrame extends JFrame implements ActionListener {
 		JMenu menuDown = new JMenu("下载");
 		menuDown.add(downDatabaseItem);
 		menuDown.add(downLocalItem);
-		menuUp.addSeparator();
+		menuDown.addSeparator();
 		menuDown.add(downBothItem);
 		
 		JMenu img = new JMenu("图片操作");
 		img.add(uploadImgItem);
 		img.add(downImgItem);
 		
+		JMenu clear = new JMenu("清理");
+		clear.add(clearItem);
+		
 		menuBar.add(menu);
 		menuBar.add(menuUp);
 		menuBar.add(menuDown);
 		menuBar.add(img);
+		menuBar.add(clear);
 		this.setJMenuBar(menuBar);
 		
 	}
@@ -430,6 +438,11 @@ public class StockFrame extends JFrame implements ActionListener {
 			performDownImg();
 		}
 		
+		if (e.getSource() == clearItem) {
+			performClearCloud();
+		}
+		
+		
 		
 		if (e.getSource() == downLocalItem) {
 			performSyncLocal(false);
@@ -444,6 +457,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == priceBtn) {
 			performPrice();
 		}
+	}
+
+	private void performClearCloud() {
+		new Thread(new ClearCloudWorker(this)).start();
 	}
 
 	private void performDownImg() {

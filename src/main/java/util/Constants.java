@@ -29,9 +29,10 @@ public class Constants {
 	public static final String out_industry_path     =  "d:/xueqiu/code/industry";
 	
 	public static final String zxg_path =  "T0002/blocknew";
-	
 	public static final String user_path =  "T0002";
 	
+	public static final int DB_NUM =  50;
+	public static final int BACKUP_NUM =  5;
 	
 	public static final String referer_prefix = "http://xueqiu.com/S/";
 	public static final String inter_url = "http://hq.sinajs.cn/list=";
