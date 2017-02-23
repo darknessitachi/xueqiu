@@ -51,8 +51,8 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private int window_width = 700;
-	private int scroll_height = 370;
+	private int window_width = 560;
+	private int scroll_height = 250;
 	private int window_height = scroll_height + 260;;
 
 	private static final int GridLayoutColumn = 4;
