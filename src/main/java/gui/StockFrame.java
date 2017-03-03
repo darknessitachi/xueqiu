@@ -79,8 +79,8 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JMenuItem downDatabaseItem = new JMenuItem("下载训练数据库");
 	private JMenuItem downBothItem = new JMenuItem("同时下载");
 	
-	private JMenuItem uploadImgItem = new JMenuItem("上传");
-	private JMenuItem downImgItem = new JMenuItem("下载");
+	private JMenuItem uploadImgItem = new JMenuItem("上传图片");
+	private JMenuItem downImgItem = new JMenuItem("下载图片");
 	
 	private JMenuItem clearItem = new JMenuItem("清理");
 
