@@ -185,7 +185,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		deleteBtn.addActionListener(this);
 		priceBtn.addActionListener(this);
 	}
-
+	/**
+	 * 会阻塞程序的执行，直到点击确定按钮
+	 * @param msg
+	 */
 	private void showMsgBox(String msg) {
 		JOptionPane.showMessageDialog(null, msg);
 	}
@@ -693,6 +696,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * @param del
 	 */
 	public void performImport(boolean continueUploadCloud) {
+		showMsgBox("请再次检查是否已经执行备份。");
 		//先自动导入
 		performAutoChoose();
 		//全选中
