@@ -292,6 +292,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 		jp3.add(jp3_btn, BorderLayout.NORTH);
 		jp3.add(jp3_content, BorderLayout.CENTER);
+		//jp3.setVisible(false);
 	}
 
 	private ScrollPane get_jp3_content() {
