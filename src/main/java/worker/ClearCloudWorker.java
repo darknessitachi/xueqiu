@@ -32,6 +32,7 @@ public class ClearCloudWorker implements Runnable {
 		TreeSet<String> backSet = ProjectUtil.getOrderTreeSet(backList);
 		clearCloud(backSet,Constants.BACKUP_NUM);
 		
+		System.out.println("清理完成。");
 		frame.displayLabel.setText("清理完成。");
 	}
 	
