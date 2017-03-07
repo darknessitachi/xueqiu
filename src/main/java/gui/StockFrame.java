@@ -34,6 +34,7 @@ import util.AccessUtil;
 import util.Constants;
 import util.CustNumberUtil;
 import util.FileUtil;
+import util.MiniDbUtil;
 import util.ProjectUtil;
 import util.StringUtil;
 import worker.ClearCloudWorker;
@@ -696,7 +697,13 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * @param del
 	 */
 	public void performImport(boolean continueUploadCloud) {
-		showMsgBox("请再次检查是否已经执行备份。");
+		
+		int count = MiniDbUtil.count(" select * from backup where forecastDay=( select max(day) from envi) ");
+		if(count == 0){
+			showMsgBox("没有备份backup，不能上传。");
+			return;
+		}
+		
 		//先自动导入
 		performAutoChoose();
 		//全选中
