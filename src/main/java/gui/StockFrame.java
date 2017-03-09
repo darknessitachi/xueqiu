@@ -53,8 +53,8 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private int window_width = 560;
-	private int scroll_height = 250;
+	private int window_width = 460;
+	private int scroll_height = 50;
 	private int window_height = scroll_height + 260;;
 
 	private static final int GridLayoutColumn = 4;
@@ -96,7 +96,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JComboBox<String> dayCombo = new JComboBox<String>();
 	private JTextField price = new JTextField(8);
 	
-	public JTextField displayLabel = new JTextField(45);
+	public JTextField displayLabel = new JTextField(30);
 
 	public String installZXGPath = null;
 	public String installZXGRootPath = null;
@@ -292,7 +292,7 @@ public class StockFrame extends JFrame implements ActionListener {
 
 		jp3.add(jp3_btn, BorderLayout.NORTH);
 		jp3.add(jp3_content, BorderLayout.CENTER);
-		//jp3.setVisible(false);
+		jp3.setVisible(false);
 	}
 
 	private ScrollPane get_jp3_content() {
