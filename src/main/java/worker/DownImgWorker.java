@@ -48,6 +48,7 @@ public class DownImgWorker implements Runnable {
 				e.printStackTrace();
 			}
 		}
+		System.out.println("图片下载完成。");
 		
 	}
 

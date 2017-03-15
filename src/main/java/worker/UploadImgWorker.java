@@ -43,6 +43,7 @@ public class UploadImgWorker implements Runnable {
 				e.printStackTrace();
 			}
 		}
+		System.out.println("图片上传完成。");
 		
 	}
 
