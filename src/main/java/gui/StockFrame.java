@@ -47,6 +47,7 @@ import worker.UploadBackupWorker;
 import worker.UploadDatabaseWorker;
 import worker.UploadImgWorker;
 import worker.UploadXueqiuWorker;
+import worker.WriteJgyFolderWorker;
 import bean.Req.ReqHead;
 
 public class StockFrame extends JFrame implements ActionListener {
@@ -71,16 +72,17 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private JMenuItem loginItem = new JMenuItem("登录");
 	
-	private JMenuItem uploadXqItem = new JMenuItem("上传雪球");
+	private JMenuItem uploadDbItem = new JMenuItem("上传数据库");
 	private JMenuItem uploadImgItem = new JMenuItem("上传图片");
 	private JMenuItem uploadCloudItem = new JMenuItem("上传备份");
-	private JMenuItem uploadDbItem = new JMenuItem("上传数据库");
-	private JMenuItem uploadBothItem = new JMenuItem("同时上传");
+	private JMenuItem uploadXqItem = new JMenuItem("上传雪球");
+	private JMenuItem uploadJgyItem = new JMenuItem("写入坚果云");
+	private JMenuItem uploadBothItem = new JMenuItem("一键上传");
 	
 	private JMenuItem downDatabaseItem = new JMenuItem("下载数据库");
 	private JMenuItem downImgItem = new JMenuItem("下载图片");
 	private JMenuItem downLocalItem = new JMenuItem("下载备份");
-	private JMenuItem downBothItem = new JMenuItem("同时下载");
+	private JMenuItem downBothItem = new JMenuItem("一键下载");
 	
 	private JMenuItem clearItem = new JMenuItem("清理");
 
@@ -168,6 +170,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 		loginItem.addActionListener(this);
 		uploadXqItem.addActionListener(this);
+		uploadJgyItem.addActionListener(this);
 		uploadCloudItem.addActionListener(this);
 		uploadDbItem.addActionListener(this);
 		uploadBothItem.addActionListener(this);
@@ -205,6 +208,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		menuUp.add(uploadImgItem);
 		menuUp.add(uploadCloudItem);
 		menuUp.add(uploadXqItem);
+		menuUp.add(uploadJgyItem);
 		menuUp.addSeparator();
 		menuUp.add(uploadBothItem);
 		
@@ -417,11 +421,13 @@ public class StockFrame extends JFrame implements ActionListener {
 			performLogin();
 		}
 		
-		
-		
 		if (e.getSource() == uploadXqItem) {
 			performImport(false);
 		}
+		if (e.getSource() == uploadJgyItem) {
+			performUploadJgy();
+		}
+		
 		if (e.getSource() == uploadCloudItem) {
 			performUploadCloud();
 		}
@@ -458,6 +464,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == priceBtn) {
 			performPrice();
 		}
+	}
+
+	private void performUploadJgy() {
+		new Thread(new WriteJgyFolderWorker(this)).start();
 	}
 
 	private void performClearCloud() {
