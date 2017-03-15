@@ -72,16 +72,15 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JMenuItem loginItem = new JMenuItem("登录");
 	
 	private JMenuItem uploadXqItem = new JMenuItem("上传雪球");
+	private JMenuItem uploadImgItem = new JMenuItem("上传图片");
 	private JMenuItem uploadCloudItem = new JMenuItem("上传备份");
-	private JMenuItem uploadDbItem = new JMenuItem("上传database");
+	private JMenuItem uploadDbItem = new JMenuItem("上传数据库");
 	private JMenuItem uploadBothItem = new JMenuItem("同时上传");
 	
-	private JMenuItem downLocalItem = new JMenuItem("下载备份");
-	private JMenuItem downDatabaseItem = new JMenuItem("下载database");
-	private JMenuItem downBothItem = new JMenuItem("同时下载");
-	
-	private JMenuItem uploadImgItem = new JMenuItem("上传图片");
+	private JMenuItem downDatabaseItem = new JMenuItem("下载数据库");
 	private JMenuItem downImgItem = new JMenuItem("下载图片");
+	private JMenuItem downLocalItem = new JMenuItem("下载备份");
+	private JMenuItem downBothItem = new JMenuItem("同时下载");
 	
 	private JMenuItem clearItem = new JMenuItem("清理");
 
@@ -203,6 +202,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 		JMenu menuUp = new JMenu("上传");
 		menuUp.add(uploadDbItem);
+		menuUp.add(uploadImgItem);
 		menuUp.add(uploadCloudItem);
 		menuUp.add(uploadXqItem);
 		menuUp.addSeparator();
@@ -210,13 +210,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 		JMenu menuDown = new JMenu("下载");
 		menuDown.add(downDatabaseItem);
+		menuDown.add(downImgItem);
 		menuDown.add(downLocalItem);
 		menuDown.addSeparator();
 		menuDown.add(downBothItem);
-		
-		JMenu img = new JMenu("图片");
-		img.add(uploadImgItem);
-		img.add(downImgItem);
 		
 		JMenu clear = new JMenu("清理");
 		clear.add(clearItem);
@@ -224,7 +221,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		menuBar.add(menu);
 		menuBar.add(menuUp);
 		menuBar.add(menuDown);
-		menuBar.add(img);
 		menuBar.add(clear);
 		this.setJMenuBar(menuBar);
 		
@@ -468,11 +464,11 @@ public class StockFrame extends JFrame implements ActionListener {
 		new Thread(new ClearCloudWorker(this)).start();
 	}
 
-	private void performDownImg() {
+	public void performDownImg() {
 		new Thread(new DownImgWorker(this)).start();
 	}
 
-	private void performUploadImg() {
+	public void performUploadImg() {
 		new Thread(new UploadImgWorker(this)).start();
 	}
 

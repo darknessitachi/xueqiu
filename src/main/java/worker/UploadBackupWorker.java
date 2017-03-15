@@ -28,7 +28,7 @@ public class UploadBackupWorker implements Runnable {
 			//如果有压缩文件，先删除
 			String zip_path = frame.installZXGRootPath+"/"+Constants.user_path + ".zip";
 			FileUtil.delete(zip_path);
-			System.out.println("删除zip文件完成。");
+			//System.out.println("删除zip文件完成。");
 			
 			//压缩T0002目录
 			ZipUtil.compressFile(frame.installZXGRootPath+"/"+Constants.user_path, frame.installZXGRootPath);
