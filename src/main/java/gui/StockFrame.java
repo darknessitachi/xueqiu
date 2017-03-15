@@ -466,7 +466,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	private void performUploadJgy() {
+	public void performUploadJgy() {
 		new Thread(new WriteJgyFolderWorker(this)).start();
 	}
 

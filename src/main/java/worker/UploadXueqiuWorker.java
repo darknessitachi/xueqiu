@@ -46,6 +46,7 @@ public class UploadXueqiuWorker implements Runnable {
 			frame.performUploadCloud();
 			frame.performUploadDb();
 			frame.performUploadImg();
+			frame.performUploadJgy();
 		}
 	}
 
