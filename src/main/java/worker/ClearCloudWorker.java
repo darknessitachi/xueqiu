@@ -10,7 +10,7 @@ import util.ProjectUtil;
 import util.qiniu.QiniuConstants;
 import util.qiniu.QiniuUtil;
 
-public class ClearCloudWorker implements Runnable {
+public class ClearCloudWorker {
 
 	private StockFrame frame;
 
@@ -18,7 +18,6 @@ public class ClearCloudWorker implements Runnable {
 		this.frame = frame;
 	}
 
-	@Override
 	public void run() {
 		QiniuConstants.bucketname = QiniuConstants.testBucketname;
 		

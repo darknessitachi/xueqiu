@@ -13,7 +13,7 @@ import util.FileUtil;
 import util.qiniu.QiniuConstants;
 import util.qiniu.QiniuUtil;
 
-public class DownImgWorker implements Runnable {
+public class DownImgWorker  {
 
 	@SuppressWarnings("unused")
 	private StockFrame frame;
@@ -22,7 +22,6 @@ public class DownImgWorker implements Runnable {
 		this.frame = frame;
 	}
 
-	@Override
 	public void run() {
 		QiniuConstants.downloadDomainURL = QiniuConstants.imageDownloadDomainURL;
 		QiniuConstants.bucketname = QiniuConstants.imageBucketname;

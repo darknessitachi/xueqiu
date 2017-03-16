@@ -11,7 +11,7 @@ import util.FileUtil;
 import util.MiniDbUtil;
 import util.StringUtil;
 
-public class WriteJgyFolderWorker implements Runnable {
+public class WriteJgyFolderWorker  {
 
 	private StockFrame frame;
 
@@ -19,7 +19,6 @@ public class WriteJgyFolderWorker implements Runnable {
 		this.frame = frame;
 	}
 
-	@Override
 	public void run() {
 		if(!FileUtil.exists(Constants.jgy_path)){
 			System.out.println("文件夹【"+Constants.jgy_path+"】不存在");

@@ -7,7 +7,7 @@ import java.util.List;
 
 import util.XueqiuUtil;
 
-public class UploadXueqiuWorker implements Runnable {
+public class UploadXueqiuWorker  {
 
 	private List<String> names;
 	private StockFrame frame;
@@ -18,7 +18,7 @@ public class UploadXueqiuWorker implements Runnable {
 		this.frame = frame;
 		this.togetherUpload = continueUploadCloud;
 	}
-	@Override
+	
 	public void run() {
 		int num = 0;
 		XueqiuUtil oper = new XueqiuUtil();

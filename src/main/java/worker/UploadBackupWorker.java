@@ -11,7 +11,7 @@ import util.ZipUtil;
 import util.qiniu.QiniuConstants;
 import util.qiniu.QiniuUtil;
 
-public class UploadBackupWorker implements Runnable {
+public class UploadBackupWorker  {
 
 	private StockFrame frame;
 
@@ -19,7 +19,6 @@ public class UploadBackupWorker implements Runnable {
 		this.frame = frame;
 	}
 
-	@Override
 	public void run() {
 		try {
 			

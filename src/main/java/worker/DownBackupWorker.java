@@ -15,7 +15,7 @@ import util.qiniu.QiniuConstants;
 import util.qiniu.QiniuUtil;
 import gui.StockFrame;
 
-public class DownBackupWorker implements Runnable {
+public class DownBackupWorker  {
 
 	private StockFrame frame;
 	private boolean togetherDown;
@@ -25,7 +25,6 @@ public class DownBackupWorker implements Runnable {
 		this.togetherDown = continueDownDb;
 	}
 
-	@Override
 	public void run() {
 		long start = new Date().getTime();
 		//如果有zip文件，先删除。

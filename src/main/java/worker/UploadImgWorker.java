@@ -11,7 +11,7 @@ import util.FileUtil;
 import util.qiniu.QiniuConstants;
 import util.qiniu.QiniuUtil;
 
-public class UploadImgWorker implements Runnable {
+public class UploadImgWorker  {
 
 	@SuppressWarnings("unused")
 	private StockFrame frame;
@@ -20,7 +20,6 @@ public class UploadImgWorker implements Runnable {
 		this.frame = frame;
 	}
 
-	@Override
 	public void run() {
 		QiniuConstants.bucketname = QiniuConstants.imageBucketname;
 		//先获取云端已有的列表

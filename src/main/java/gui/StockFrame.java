@@ -467,39 +467,39 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	public void performUploadJgy() {
-		new Thread(new WriteJgyFolderWorker(this)).start();
+		new WriteJgyFolderWorker(this).run();
 	}
 
 	private void performClearCloud() {
-		new Thread(new ClearCloudWorker(this)).start();
+		new ClearCloudWorker(this).run();
 	}
 
 	public void performDownImg() {
-		new Thread(new DownImgWorker(this)).start();
+		new DownImgWorker(this).run();
 	}
 
 	public void performUploadImg() {
-		new Thread(new UploadImgWorker(this)).start();
+		new UploadImgWorker(this).run();
 	}
 
 	public void performDownDatabase(boolean removeAlert) {
 		
 		if(removeAlert){
-			new Thread(new DownDatabase(this)).start();
+			new DownDatabase(this).run();
 			return;
 		}
 		
 		int res = JOptionPane.showConfirmDialog(null, "请确认云端的训练数据库是最新的。要继续执行同步吗？", null,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if (res == JOptionPane.YES_OPTION) {
 			displayLabel.setText("正在执行本地同步……");
-			new Thread(new DownDatabase(this)).start();
+			new DownDatabase(this).run();
 		}else{
 			displayLabel.setText("取消本地同步。");
 		}
 	}
 
 	public void performUploadDb() {
-		new Thread(new UploadDatabaseWorker(this)).start();
+		new UploadDatabaseWorker(this).run();
 	}
 
 	private void performPrice() {
@@ -517,7 +517,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	public void performUploadCloud() {
-		new Thread(new UploadBackupWorker(this)).start();
+		new UploadBackupWorker(this).run();
 	}
 
 
@@ -551,7 +551,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		int res = JOptionPane.showConfirmDialog(null, msg, null,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if (res == JOptionPane.YES_OPTION) {
 			displayLabel.setText("正在执行本地同步……");
-			new Thread(new DownBackupWorker(this,continueDownDb)).start();
+			new DownBackupWorker(this,continueDownDb).run();
 		}else{
 			displayLabel.setText("取消本地同步。");
 		}
@@ -719,7 +719,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		List<String> names = getSelectNames();
 		if (names.size() > 0) {
 			displayLabel.setText("正在执行上传……");
-			new Thread(new UploadXueqiuWorker(names, this,continueUploadCloud)).start();
+			new UploadXueqiuWorker(names, this,continueUploadCloud).run();
 		} else {
 			displayLabel.setText("请选择要上传的板块。");
 		}

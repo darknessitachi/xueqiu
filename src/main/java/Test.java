@@ -1,9 +1,26 @@
 import java.io.IOException;
+import java.util.List;
+
+import util.FileUtil;
 
 
 public class Test {
 		public static void main(String[] args) throws IOException {
 			
-	        System.out.println("2017-03-07_601858_2.png".replaceAll("_2.png", ".png"));
+			String path = "D:/map/Parts";
+			
+			List<String> list = FileUtil.getFullFileNames(path);
+			
+			for(String f:list){
+				
+				
+				String pre = f.substring(0, 4);
+				
+				
+				System.out.println("arcpy.CopyRuntimeGdbToFileGdb_conversion(\"D:/map/Parts/"+f+"\", '"+pre+".gdb')");
+				
+				
+			}
+			
 		}
 }

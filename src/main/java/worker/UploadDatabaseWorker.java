@@ -10,7 +10,7 @@ import util.DateUtil;
 import util.qiniu.QiniuConstants;
 import util.qiniu.QiniuUtil;
 
-public class UploadDatabaseWorker implements Runnable {
+public class UploadDatabaseWorker  {
 
 	private StockFrame frame;
 
@@ -18,7 +18,6 @@ public class UploadDatabaseWorker implements Runnable {
 		this.frame = frame;
 	}
 
-	@Override
 	public void run() {
 		try {
 			String prefix = DateUtil.formatDate(new Date(), DateUtil.yyyy_MM_dd_HH_mm_ss);

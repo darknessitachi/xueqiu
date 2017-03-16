@@ -11,7 +11,7 @@ import util.ProjectUtil;
 import util.qiniu.QiniuConstants;
 import util.qiniu.QiniuUtil;
 
-public class DownDatabase implements Runnable {
+public class DownDatabase {
 
 	private StockFrame frame;
 
@@ -19,7 +19,6 @@ public class DownDatabase implements Runnable {
 		this.frame = frame;
 	}
 
-	@Override
 	public void run() {
 		try {
 			QiniuConstants.downloadDomainURL = QiniuConstants.testDownloadDomainURL;
