@@ -79,11 +79,18 @@ public class WriteJgyFolderWorker  {
 				
 				if(!StringUtil.isEmpty(preDay)){
 					//最后写入大盘的照片
-					FileUtil.copy(folder+"/"+day+"_000SH_0.png", new File(Constants.out_img_path+"/"+preDay+"_SH.png"));
-					FileUtil.copy(folder+"/"+day+"_000CYB_0.png", new File(Constants.out_img_path+"/"+preDay+"_CYB.png"));
-					
-					FileUtil.copy(folder+"/"+day+"_000SH_1.png", new File(Constants.out_img_path+"/"+day+"_SH.png"));
-					FileUtil.copy(folder+"/"+day+"_000CYB_1.png", new File(Constants.out_img_path+"/"+day+"_CYB.png"));
+					if(FileUtil.exists(Constants.out_img_path+"/"+preDay+"_SH.png")  ){
+						FileUtil.copy(folder+"/"+day+"_000SH_0.png", new File(Constants.out_img_path+"/"+preDay+"_SH.png"));
+					}
+					if(FileUtil.exists(Constants.out_img_path+"/"+preDay+"_CYB.png")  ){
+						FileUtil.copy(folder+"/"+day+"_000CYB_0.png", new File(Constants.out_img_path+"/"+preDay+"_CYB.png"));
+					}
+					if(FileUtil.exists(Constants.out_img_path+"/"+day+"_SH.png")  ){
+						FileUtil.copy(folder+"/"+day+"_000SH_1.png", new File(Constants.out_img_path+"/"+day+"_SH.png"));
+					}
+					if(FileUtil.exists(Constants.out_img_path+"/"+day+"_CYB.png")  ){
+						FileUtil.copy(folder+"/"+day+"_000CYB_1.png", new File(Constants.out_img_path+"/"+day+"_CYB.png"));
+					}
 				}
 				
 			}
