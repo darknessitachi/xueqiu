@@ -79,11 +79,11 @@ public class WriteJgyFolderWorker  {
 				
 				if(!StringUtil.isEmpty(preDay)){
 					//最后写入大盘的照片
-					FileUtil.copy(folder+"/"+day+"_SH_0.png", new File(Constants.out_img_path+"/"+preDay+"_SH.png"));
-					FileUtil.copy(folder+"/"+day+"_CYB_0.png", new File(Constants.out_img_path+"/"+preDay+"_CYB.png"));
+					FileUtil.copy(folder+"/"+day+"_SH_0.png", new File(Constants.out_img_path+"/"+preDay+"_000SH.png"));
+					FileUtil.copy(folder+"/"+day+"_CYB_0.png", new File(Constants.out_img_path+"/"+preDay+"_000CYB.png"));
 					
-					FileUtil.copy(folder+"/"+day+"_SH_1.png", new File(Constants.out_img_path+"/"+day+"_SH.png"));
-					FileUtil.copy(folder+"/"+day+"_CYB_1.png", new File(Constants.out_img_path+"/"+day+"_CYB.png"));
+					FileUtil.copy(folder+"/"+day+"_SH_1.png", new File(Constants.out_img_path+"/"+day+"_000SH.png"));
+					FileUtil.copy(folder+"/"+day+"_CYB_1.png", new File(Constants.out_img_path+"/"+day+"_000CYB.png"));
 				}
 				
 			}
