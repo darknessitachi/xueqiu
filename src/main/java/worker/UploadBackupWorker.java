@@ -21,21 +21,17 @@ public class UploadBackupWorker  {
 
 	public void run() {
 		try {
-			
 			long start = new Date().getTime();
-			
 			//如果有压缩文件，先删除
 			String zip_path = frame.installZXGRootPath+"/"+Constants.user_path + ".zip";
 			FileUtil.delete(zip_path);
-			//System.out.println("删除zip文件完成。");
-			
 			//压缩T0002目录
 			ZipUtil.compressFile(frame.installZXGRootPath+"/"+Constants.user_path, frame.installZXGRootPath);
 			
-			QiniuConstants.bucketname = QiniuConstants.testBucketname;
 			//上传压缩后的zip文件到七牛
+			QiniuUtil qn = new QiniuUtil(QiniuConstants.testBucketname, QiniuConstants.testDownloadDomainURL);
 			String subFix = DateUtil.formatDate(new Date(), DateUtil.yyyy_MM_dd_HH_mm_ss);
-			boolean success = QiniuUtil.upload(zip_path , Constants.user_path +"_"+subFix+ ".zip");
+			boolean success = qn.upload(zip_path , Constants.user_path +"_"+subFix+ ".zip");
 			
 			long end = new Date().getTime();
 			if(success){

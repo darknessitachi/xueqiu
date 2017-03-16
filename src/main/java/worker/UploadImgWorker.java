@@ -21,9 +21,9 @@ public class UploadImgWorker  {
 	}
 
 	public void run() {
-		QiniuConstants.bucketname = QiniuConstants.imageBucketname;
 		//先获取云端已有的列表
-		List<String> cloudList = QiniuUtil.fileList(QiniuConstants.imgPrefix);
+		QiniuUtil qn = new QiniuUtil(QiniuConstants.imageBucketname, QiniuConstants.imageDownloadDomainURL);
+		List<String> cloudList = qn.fileList(QiniuConstants.imgPrefix);
 		//获取本地所有文件，遍历，如果不在云端，则上传
 		List<String> localList = FileUtil.getFullFileNames(Constants.out_img_path);
 		List<String> newFileList = new ArrayList<String>();
@@ -37,7 +37,7 @@ public class UploadImgWorker  {
 		
 		for(String fileName:newFileList){
 			try {
-				QiniuUtil.upload(Constants.out_img_path+"/"+fileName, QiniuConstants.imgPrefix+"/"+ fileName);
+				qn.upload(Constants.out_img_path+"/"+fileName, QiniuConstants.imgPrefix+"/"+ fileName);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -53,7 +53,6 @@ public class UploadImgWorker  {
 				return true;
 			}
 		}
-		
 		return false;
 	}
 	

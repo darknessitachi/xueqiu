@@ -24,8 +24,9 @@ public class UploadDatabaseWorker  {
 			String file = Constants.out_path + Constants.db_path + Constants.db_name;
 			
 			String newName = prefix + "_" + Constants.db_name;
-			QiniuConstants.bucketname = QiniuConstants.testBucketname;
-			boolean success = QiniuUtil.upload(file , QiniuConstants.databasePrefix+"/"+newName);
+			
+			QiniuUtil qn = new QiniuUtil(QiniuConstants.testBucketname, QiniuConstants.testDownloadDomainURL);
+			boolean success = qn.upload(file , QiniuConstants.databasePrefix+"/"+newName);
 			
 			if(success){
 				frame.displayLabel.setText("上传database完成。");

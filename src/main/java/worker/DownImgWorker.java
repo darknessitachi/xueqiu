@@ -23,10 +23,11 @@ public class DownImgWorker  {
 	}
 
 	public void run() {
-		QiniuConstants.downloadDomainURL = QiniuConstants.imageDownloadDomainURL;
-		QiniuConstants.bucketname = QiniuConstants.imageBucketname;
+		
+		QiniuUtil qn = new QiniuUtil(QiniuConstants.imageBucketname, QiniuConstants.imageDownloadDomainURL);
+		
 		//先获取云端已有的列表
-		List<String> cloudList = QiniuUtil.fileList(QiniuConstants.imgPrefix);
+		List<String> cloudList = qn.fileList(QiniuConstants.imgPrefix);
 		//获取本地所有文件，遍历，如果不在云端，则上传
 		List<String> localList = FileUtil.getFullFileNames(Constants.out_img_path);
 		List<String> newFileList = new ArrayList<String>();
@@ -40,7 +41,7 @@ public class DownImgWorker  {
 		
 		for(String cloudFile:newFileList){
 			try {
-				QiniuUtil.download(cloudFile, Constants.out_img_path+"/"+cloudFile.substring(4));
+				qn.download(cloudFile, Constants.out_img_path+"/"+cloudFile.substring(4));
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
 			} catch (IOException e) {

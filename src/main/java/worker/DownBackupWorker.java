@@ -30,17 +30,15 @@ public class DownBackupWorker  {
 		//如果有zip文件，先删除。
 		String zip_path = frame.installZXGRootPath+"/"+Constants.user_path + ".zip";
 		FileUtil.delete(zip_path);
-		//System.out.println("删除zip文件完成。");
 		
 		try {
-			QiniuConstants.downloadDomainURL = QiniuConstants.testDownloadDomainURL;
-			QiniuConstants.bucketname = QiniuConstants.testBucketname;
-			
-			List<String> fileList = QiniuUtil.fileList(Constants.user_path);
+			QiniuUtil qn = new QiniuUtil(QiniuConstants.testBucketname, QiniuConstants.testDownloadDomainURL);
+
+			List<String> fileList = qn.fileList(Constants.user_path);
 			TreeSet<String> treeSet = ProjectUtil.getOrderTreeSet(fileList);
 			
 			//下载zip
-			QiniuUtil.download(treeSet.last(), zip_path);
+			qn.download(treeSet.last(), zip_path);
 			//删除文件夹
 			FileUtil.deleteFolder(frame.installZXGRootPath+"/"+Constants.user_path);
 			//解压zip到指定文件夹

@@ -19,23 +19,24 @@ public class ClearCloudWorker {
 	}
 
 	public void run() {
-		QiniuConstants.bucketname = QiniuConstants.testBucketname;
+		
+		QiniuUtil qn = new QiniuUtil(QiniuConstants.testBucketname, QiniuConstants.testDownloadDomainURL);
 		
 		//清理多余数据库
-		List<String> fileList = QiniuUtil.fileList(Constants.db_path);
+		List<String> fileList = qn.fileList(Constants.db_path);
 		TreeSet<String> treeSet = ProjectUtil.getOrderTreeSet(fileList);
-		clearCloud(treeSet,Constants.DB_NUM);
+		clearCloud(treeSet,Constants.DB_NUM,qn);
 		
 		//清理多余备份
-		List<String> backList = QiniuUtil.fileList(Constants.user_path);
+		List<String> backList = qn.fileList(Constants.user_path);
 		TreeSet<String> backSet = ProjectUtil.getOrderTreeSet(backList);
-		clearCloud(backSet,Constants.BACKUP_NUM);
+		clearCloud(backSet,Constants.BACKUP_NUM,qn);
 		
 		System.out.println("清理完成。");
 		frame.displayLabel.setText("清理完成。");
 	}
 	
-	private void clearCloud(TreeSet<String> tree, int keepNum) {
+	private void clearCloud(TreeSet<String> tree, int keepNum, QiniuUtil qn) {
 		int clearNum = tree.size() - keepNum;
 		if(clearNum>0){
 			int i = 0;
@@ -44,10 +45,9 @@ public class ClearCloudWorker {
 				if(i == clearNum){
 	            	break;
 	            }
-	            QiniuUtil.delete(iterator.next());
+				qn.delete(iterator.next());
 	            i++;
 	        }  
 		}
 	}
-	
 }
