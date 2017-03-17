@@ -55,8 +55,8 @@ public class DownBackupWorker  {
 		System.out.println("同步本地完成，总共耗时【"+((end-start)/1000)+"】秒。");
 		frame.displayLabel.setText("同步本地目录完成。");
 		if(togetherDown){
-			frame.performDownDatabase(true);
-			frame.performDownImg();
+			new DownDatabase(frame).run();
+			new DownImgWorker(frame).run();
 		}
 	}
 	

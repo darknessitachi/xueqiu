@@ -467,7 +467,13 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	public void performUploadJgy() {
-		new WriteJgyFolderWorker(this).run();
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				new WriteJgyFolderWorker(_this).run();
+			}
+		}).start();
 	}
 
 	private void performClearCloud() {
@@ -475,31 +481,53 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	public void performDownImg() {
-		new DownImgWorker(this).run();
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				new DownImgWorker(_this).run();
+			}
+		}).start();
 	}
 
 	public void performUploadImg() {
-		new UploadImgWorker(this).run();
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				new UploadImgWorker(_this).run();
+			}
+		}).start();
 	}
 
-	public void performDownDatabase(boolean removeAlert) {
-		
-		if(removeAlert){
-			new DownDatabase(this).run();
-			return;
-		}
-		
-		int res = JOptionPane.showConfirmDialog(null, "请确认云端的训练数据库是最新的。要继续执行同步吗？", null,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-		if (res == JOptionPane.YES_OPTION) {
-			displayLabel.setText("正在执行本地同步……");
-			new DownDatabase(this).run();
-		}else{
-			displayLabel.setText("取消本地同步。");
-		}
+	public void performDownDatabase(final boolean removeAlert) {
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				if(removeAlert){
+					new DownDatabase(_this).run();
+					return;
+				}
+				int res = JOptionPane.showConfirmDialog(null, "请确认云端的训练数据库是最新的。要继续执行同步吗？", null,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (res == JOptionPane.YES_OPTION) {
+					displayLabel.setText("正在执行本地同步……");
+					new DownDatabase(_this).run();
+				}else{
+					displayLabel.setText("取消本地同步。");
+				}
+			}
+		}).start();
 	}
 
 	public void performUploadDb() {
-		new UploadDatabaseWorker(this).run();
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				new UploadDatabaseWorker(_this).run();
+			}
+		}).start();
 	}
 
 	private void performPrice() {
@@ -517,7 +545,13 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	public void performUploadCloud() {
-		new UploadBackupWorker(this).run();
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				new UploadBackupWorker(_this).run();
+			}
+		}).start();
 	}
 
 
@@ -543,19 +577,24 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * 同步雪球的自选股到本地的板块
 	 * @param continueDownDb 
 	 */
-	private void performSyncLocal(boolean continueDownDb) {
-		String msg = "请确认当前是备用机。要继续执行同步吗？";
-		if(continueDownDb){
-			msg = "请确认当前是备用机，并且云端的数据库是最新的吗？";
-		}
-		int res = JOptionPane.showConfirmDialog(null, msg, null,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-		if (res == JOptionPane.YES_OPTION) {
-			displayLabel.setText("正在执行本地同步……");
-			new DownBackupWorker(this,continueDownDb).run();
-		}else{
-			displayLabel.setText("取消本地同步。");
-		}
-
+	private void performSyncLocal(final boolean continueDownDb) {
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String msg = "请确认当前是备用机。要继续执行同步吗？";
+				if(continueDownDb){
+					msg = "请确认当前是备用机，并且云端的数据库是最新的吗？";
+				}
+				int res = JOptionPane.showConfirmDialog(null, msg, null,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (res == JOptionPane.YES_OPTION) {
+					displayLabel.setText("正在执行本地同步……");
+					new DownBackupWorker(_this,continueDownDb).run();
+				}else{
+					displayLabel.setText("取消本地同步。");
+				}
+			}
+		}).start();
 	}
 
 	/**
@@ -703,26 +742,30 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * 
 	 * @param del
 	 */
-	public void performImport(boolean continueUploadCloud) {
-		
-		int count = MiniDbUtil.count(" select * from backup where forecastDay=( select max(day) from envi) ");
-		if(count == 0){
-			showMsgBox("没有备份backup，不能上传。");
-			return;
-		}
-		
-		//先自动导入
-		performAutoChoose();
-		//全选中
-		performSelectAll();
-		// 获取选中的板块
-		List<String> names = getSelectNames();
-		if (names.size() > 0) {
-			displayLabel.setText("正在执行上传……");
-			new UploadXueqiuWorker(names, this,continueUploadCloud).run();
-		} else {
-			displayLabel.setText("请选择要上传的板块。");
-		}
+	public void performImport(final boolean continueUploadCloud) {
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				int count = MiniDbUtil.count(" select * from backup where forecastDay=( select max(day) from envi) ");
+				if(count == 0){
+					showMsgBox("没有备份backup，不能上传。");
+					return;
+				}
+				//先自动导入
+				performAutoChoose();
+				//全选中
+				performSelectAll();
+				// 获取选中的板块
+				List<String> names = getSelectNames();
+				if (names.size() > 0) {
+					displayLabel.setText("正在执行上传……");
+					new UploadXueqiuWorker(names, _this,continueUploadCloud).run();
+				} else {
+					displayLabel.setText("请选择要上传的板块。");
+				}
+			}
+		}).start();
 	}
 
 	private void performSelectAll() {

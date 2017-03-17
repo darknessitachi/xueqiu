@@ -43,10 +43,10 @@ public class UploadXueqiuWorker  {
 		}
 		frame.displayLabel.setText("上传雪球完成，添加【"+num+"】只股票，共【"+oper.countXueqiu(true)+"】只股票。");
 		if(togetherUpload){
-			frame.performUploadCloud();
-			frame.performUploadDb();
-			frame.performUploadImg();
-			frame.performUploadJgy();
+			new UploadBackupWorker(frame).run();
+			new UploadDatabaseWorker(frame).run();
+			new UploadImgWorker(frame).run();
+			new WriteJgyFolderWorker(frame).run();
 		}
 	}
 
