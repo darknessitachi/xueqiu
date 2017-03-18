@@ -30,11 +30,18 @@ public class WriteJgyFolderWorker  {
 		StringBuilder msg = new StringBuilder();
 		for(String day:days){
 			String folder = Constants.jgy_path+"/"+day;
+			String before = Constants.jgy_path+"/"+day+"/before";
+			String all = Constants.jgy_path+"/"+day+"/all";
 			//如果文件夹不存在，则创建
 			if(!FileUtil.exists(folder)){
 				FileUtil.createFolder(folder);
 			}
-				
+			if(!FileUtil.exists(before)){
+				FileUtil.createFolder(before);
+			}
+			if(!FileUtil.exists(all)){
+				FileUtil.createFolder(all);
+			}
 			String preDay = null;
 			
 			String sql = " select r.*,s.code from record r left join stock s on stockName=name where type in ('1','2','3') and day='"+day+"' order by type asc,xh asc,rate desc,createDate desc ";
@@ -55,8 +62,11 @@ public class WriteJgyFolderWorker  {
 				String targetFileName = day+"_"+code.substring(1)+"_0.png";
 				if(FileUtil.exists(Constants.out_img_path+"/"+srcFileName)){
 					//如果目标不存在，则写入
-					if(!FileUtil.exists(folder+"/"+targetFileName)){
-						FileUtil.copy(folder+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
+					if(!FileUtil.exists(all+"/"+targetFileName)){
+						FileUtil.copy(all+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
+					}
+					if(!FileUtil.exists(before+"/"+targetFileName)){
+						FileUtil.copy(before+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
 					}
 				}else{
 					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
@@ -67,8 +77,8 @@ public class WriteJgyFolderWorker  {
 				targetFileName = day+"_"+code.substring(1)+"_1.png";
 				if(FileUtil.exists(Constants.out_img_path+"/"+srcFileName)){
 					//如果目标不存在，则写入
-					if(!FileUtil.exists(folder+"/"+targetFileName)){
-						FileUtil.copy(folder+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
+					if(!FileUtil.exists(all+"/"+targetFileName)){
+						FileUtil.copy(all+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
 					}
 				}else{
 					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
@@ -79,8 +89,8 @@ public class WriteJgyFolderWorker  {
 				targetFileName = day+"_"+code.substring(1)+"_2.png";
 				if(FileUtil.exists(Constants.out_img_path+"/"+srcFileName)){
 					//如果目标不存在，则写入
-					if(!FileUtil.exists(folder+"/"+targetFileName)){
-						FileUtil.copy(folder+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
+					if(!FileUtil.exists(all+"/"+targetFileName)){
+						FileUtil.copy(all+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
 					}
 				}else{
 					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
