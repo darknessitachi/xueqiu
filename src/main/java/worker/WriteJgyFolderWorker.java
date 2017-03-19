@@ -25,6 +25,79 @@ public class WriteJgyFolderWorker  {
 			return;
 		}
 		
+		writeRecord();
+		writeMistake();
+		
+		System.out.println("写入坚果云完成。");
+		frame.displayLabel.setText("写入坚果云完成。");
+	}
+
+	private void writeMistake() {
+		//获取所有天数，从02-17日开始
+		List<String> days = MiniDbUtil.queryForList(" select distinct day from mistake where day>='2017-02-17' ");
+		StringBuilder msg = new StringBuilder();
+		//遍历每一天
+		for(String day:days){
+			
+			//获取dayFolder
+			List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
+			String dayFolder = FileUtil.fileLike(folderList, day);
+			dayFolder = dayFolder==null?day:dayFolder;
+			
+			//绝对路径
+			String folder = Constants.jgy_path+"/"+dayFolder;
+			String mistake = Constants.jgy_path+"/"+dayFolder+"/mistake";
+			
+			//如果文件夹不存在，则创建
+			if(!FileUtil.exists(mistake)){
+				FileUtil.createFolder(mistake);
+			}
+			
+			String sql = " select m.*,s.code from mistake m left join stock s on stockName=name where day='"+day+"' order by xh asc,createDate desc ";
+			List<Map<String,Object>> list = MiniDbUtil.query(sql);
+			String preDay = null;
+			//遍历一天中的数据，写入对应的文件夹
+			for(Map<String,Object> map:list){
+				String code = (String) map.get("code");
+				preDay = (String) map.get("preDay"); 
+				
+				if(StringUtil.isEmpty(code)){
+					msg.append("【"+map.get("stockName")+"】未找到code").append("\n");
+					break;
+				}
+				
+				//导出反弹前的图片
+				String srcFileName = preDay+"_"+code.substring(1)+".png";
+				String targetFileName = day+"_"+code.substring(1)+"_0.png";
+				if(FileUtil.exists(Constants.out_img_path+"/"+srcFileName)){
+					//如果目标不存在，则写入
+					if(!FileUtil.exists(mistake+"/"+targetFileName)){
+						FileUtil.copy(mistake+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
+					}
+				}else{
+					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
+				}
+				
+				//导出反弹后的图片
+				srcFileName = day+"_"+code.substring(1)+".png";
+				targetFileName = day+"_"+code.substring(1)+"_1.png";
+				if(FileUtil.exists(Constants.out_img_path+"/"+srcFileName)){
+					//如果目标不存在，则写入
+					if(!FileUtil.exists(mistake+"/"+targetFileName)){
+						FileUtil.copy(mistake+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
+					}
+				}else{
+					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
+				}
+				
+			}
+			//如果preDay存在，写入大盘到对应的文件夹
+			writeIndex(preDay,day,folder);
+		}
+		System.err.println(msg.toString());
+	}
+
+	private void writeRecord() {
 		//获取所有天数，从02-17日开始
 		List<String> days = MiniDbUtil.queryForList(" select distinct day from record where type in ('1','2','3') and day>='2017-02-17' ");
 		StringBuilder msg = new StringBuilder();
@@ -33,15 +106,13 @@ public class WriteJgyFolderWorker  {
 			//获取dayFolder
 			List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
 			String dayFolder = FileUtil.fileLike(folderList, day);
+			dayFolder = dayFolder==null?day:dayFolder;
 			//绝对路径
 			String folder = Constants.jgy_path+"/"+dayFolder;
 			String before = Constants.jgy_path+"/"+dayFolder+"/before";
 			String all = Constants.jgy_path+"/"+dayFolder+"/all";
 			
 			//如果文件夹不存在，则创建
-			if(!FileUtil.exists(folder)){
-				FileUtil.createFolder(folder);
-			}
 			if(!FileUtil.exists(before)){
 				FileUtil.createFolder(before);
 			}
@@ -103,43 +174,45 @@ public class WriteJgyFolderWorker  {
 				}
 			}
 			//如果preDay存在，写入大盘到对应的文件夹
-			if(!StringUtil.isEmpty(preDay)){
-				//最后写入大盘的照片
-				if(FileUtil.exists(Constants.out_img_path+"/"+preDay+"_SH.png")  ){
-					//如果目标不存在，则写入
-					if(!FileUtil.exists(folder+"/"+day+"_000SH_0.png")){
-						FileUtil.copy(folder+"/"+day+"_000SH_0.png", new File(Constants.out_img_path+"/"+preDay+"_SH.png"));
-					}
-				}
-				if(FileUtil.exists(Constants.out_img_path+"/"+preDay+"_CYB.png")  ){
-					//如果目标不存在，则写入
-					if(!FileUtil.exists(folder+"/"+day+"_000CYB_0.png")){
-						FileUtil.copy(folder+"/"+day+"_000CYB_0.png", new File(Constants.out_img_path+"/"+preDay+"_CYB.png"));
-					}
-				}
-				if(FileUtil.exists(Constants.out_img_path+"/"+day+"_SH.png")  ){
-					//如果目标不存在，则写入
-					if(!FileUtil.exists(folder+"/"+day+"_000SH_1.png")){
-						FileUtil.copy(folder+"/"+day+"_000SH_1.png", new File(Constants.out_img_path+"/"+day+"_SH.png"));
-					}
-				}
-				if(FileUtil.exists(Constants.out_img_path+"/"+day+"_CYB.png")  ){
-					//如果目标不存在，则写入
-					if(!FileUtil.exists(folder+"/"+day+"_000CYB_1.png")){
-						FileUtil.copy(folder+"/"+day+"_000CYB_1.png", new File(Constants.out_img_path+"/"+day+"_CYB.png"));
-					}
-				}
-			}
+			writeIndex(preDay,day,folder);
 			//如果文件夹名发生变化，则对folder进行重命名
 			String afterDayFolder = day+"（"+list.size()+"）";
 			if(!dayFolder.equals(afterDayFolder)){
 				FileUtil.renameDirectory(folder, Constants.jgy_path+"/"+afterDayFolder);
 			}
 		}
-		
 		System.err.println(msg.toString());
-		System.out.println("写入坚果云完成。");
-		frame.displayLabel.setText("写入坚果云完成。");
+		
+	}
+
+	private void writeIndex(String preDay, String day, String folder) {
+		if(!StringUtil.isEmpty(preDay)){
+			//最后写入大盘的照片
+			if(FileUtil.exists(Constants.out_img_path+"/"+preDay+"_SH.png")  ){
+				//如果目标不存在，则写入
+				if(!FileUtil.exists(folder+"/"+day+"_000SH_0.png")){
+					FileUtil.copy(folder+"/"+day+"_000SH_0.png", new File(Constants.out_img_path+"/"+preDay+"_SH.png"));
+				}
+			}
+			if(FileUtil.exists(Constants.out_img_path+"/"+preDay+"_CYB.png")  ){
+				//如果目标不存在，则写入
+				if(!FileUtil.exists(folder+"/"+day+"_000CYB_0.png")){
+					FileUtil.copy(folder+"/"+day+"_000CYB_0.png", new File(Constants.out_img_path+"/"+preDay+"_CYB.png"));
+				}
+			}
+			if(FileUtil.exists(Constants.out_img_path+"/"+day+"_SH.png")  ){
+				//如果目标不存在，则写入
+				if(!FileUtil.exists(folder+"/"+day+"_000SH_1.png")){
+					FileUtil.copy(folder+"/"+day+"_000SH_1.png", new File(Constants.out_img_path+"/"+day+"_SH.png"));
+				}
+			}
+			if(FileUtil.exists(Constants.out_img_path+"/"+day+"_CYB.png")  ){
+				//如果目标不存在，则写入
+				if(!FileUtil.exists(folder+"/"+day+"_000CYB_1.png")){
+					FileUtil.copy(folder+"/"+day+"_000CYB_1.png", new File(Constants.out_img_path+"/"+day+"_CYB.png"));
+				}
+			}
+		}
 	}
 
 	
