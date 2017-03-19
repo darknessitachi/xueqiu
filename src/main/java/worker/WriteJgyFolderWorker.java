@@ -28,10 +28,16 @@ public class WriteJgyFolderWorker  {
 		//获取所有天数，从02-17日开始
 		List<String> days = MiniDbUtil.queryForList(" select distinct day from record where type in ('1','2','3') and day>='2017-02-17' ");
 		StringBuilder msg = new StringBuilder();
+		//遍历每一天
 		for(String day:days){
-			String folder = Constants.jgy_path+"/"+day;
-			String before = Constants.jgy_path+"/"+day+"/before";
-			String all = Constants.jgy_path+"/"+day+"/all";
+			//获取dayFolder
+			List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
+			String dayFolder = FileUtil.fileLike(folderList, day);
+			//绝对路径
+			String folder = Constants.jgy_path+"/"+dayFolder;
+			String before = Constants.jgy_path+"/"+dayFolder+"/before";
+			String all = Constants.jgy_path+"/"+dayFolder+"/all";
+			
 			//如果文件夹不存在，则创建
 			if(!FileUtil.exists(folder)){
 				FileUtil.createFolder(folder);
@@ -47,7 +53,7 @@ public class WriteJgyFolderWorker  {
 			String sql = " select r.*,s.code from record r left join stock s on stockName=name where type in ('1','2','3') and day='"+day+"' order by type asc,xh asc,rate desc,createDate desc ";
 			List<Map<String,Object>> list = MiniDbUtil.query(sql);
 			
-			//遍历一天中的数据
+			//遍历一天中的数据，写入对应的文件夹
 			for(Map<String,Object> map:list){
 				String code = (String) map.get("code");
 				preDay = (String) map.get("preDay"); 
@@ -96,7 +102,7 @@ public class WriteJgyFolderWorker  {
 					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
 				}
 			}
-			
+			//如果preDay存在，写入大盘到对应的文件夹
 			if(!StringUtil.isEmpty(preDay)){
 				//最后写入大盘的照片
 				if(FileUtil.exists(Constants.out_img_path+"/"+preDay+"_SH.png")  ){
@@ -124,8 +130,11 @@ public class WriteJgyFolderWorker  {
 					}
 				}
 			}
-				
-			
+			//如果文件夹名发生变化，则对folder进行重命名
+			String afterDayFolder = day+"（"+list.size()+"）";
+			if(!dayFolder.equals(afterDayFolder)){
+				FileUtil.renameDirectory(folder, Constants.jgy_path+"/"+afterDayFolder);
+			}
 		}
 		
 		System.err.println(msg.toString());
