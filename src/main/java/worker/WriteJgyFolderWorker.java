@@ -5,7 +5,9 @@ import gui.StockFrame;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
+import util.AccessUtil;
 import util.Constants;
 import util.FileUtil;
 import util.MiniDbUtil;
@@ -14,6 +16,7 @@ import util.StringUtil;
 public class WriteJgyFolderWorker  {
 
 	private StockFrame frame;
+	private String ksrq;
 
 	public WriteJgyFolderWorker(StockFrame frame) {
 		this.frame = frame;
@@ -25,6 +28,9 @@ public class WriteJgyFolderWorker  {
 			return;
 		}
 		
+		Properties params = AccessUtil.readParams();
+		ksrq = params.getProperty("jgyKsrq").trim();
+		
 		writeRecord();
 		writeMistake();
 		
@@ -34,7 +40,7 @@ public class WriteJgyFolderWorker  {
 
 	private void writeMistake() {
 		//获取所有天数，从02-17日开始
-		List<String> days = MiniDbUtil.queryForList(" select distinct day from mistake where day>='2017-02-17' ");
+		List<String> days = MiniDbUtil.queryForList(" select distinct day from mistake where day>='"+ksrq+"' ");
 		StringBuilder msg = new StringBuilder();
 		//遍历每一天
 		for(String day:days){
@@ -99,7 +105,7 @@ public class WriteJgyFolderWorker  {
 
 	private void writeRecord() {
 		//获取所有天数，从02-17日开始
-		List<String> days = MiniDbUtil.queryForList(" select distinct day from record where type in ('1','2','3') and day>='2017-02-17' ");
+		List<String> days = MiniDbUtil.queryForList(" select distinct day from record where type in ('1','2','3') and day>='"+ksrq+"' ");
 		StringBuilder msg = new StringBuilder();
 		//遍历每一天
 		for(String day:days){
