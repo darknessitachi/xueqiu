@@ -254,30 +254,34 @@ public class WriteJgyFolderWorker  {
 	}
 
 	private void writeIndex(String preDay, String day, String folder) {
+		
+		String SH_CODE = "000SH";
+		String CYB_CODE = "001CYB";
+		
 		if(!StringUtil.isEmpty(preDay)){
 			//最后写入大盘的照片
 			if(FileUtil.exists(Constants.out_img_path+"/"+preDay+"_SH.png")  ){
 				//如果目标不存在，则写入
-				if(!FileUtil.exists(folder+"/"+day+"_000SH_0.png")){
-					FileUtil.copy(folder+"/"+day+"_000SH_0.png", new File(Constants.out_img_path+"/"+preDay+"_SH.png"));
+				if(!FileUtil.exists(folder+"/"+day+"_"+SH_CODE+"_0.png")){
+					FileUtil.copy(folder+"/"+day+"_"+SH_CODE+"_0.png", new File(Constants.out_img_path+"/"+preDay+"_SH.png"));
 				}
 			}
 			if(FileUtil.exists(Constants.out_img_path+"/"+preDay+"_CYB.png")  ){
 				//如果目标不存在，则写入
-				if(!FileUtil.exists(folder+"/"+day+"_000CYB_0.png")){
-					FileUtil.copy(folder+"/"+day+"_000CYB_0.png", new File(Constants.out_img_path+"/"+preDay+"_CYB.png"));
+				if(!FileUtil.exists(folder+"/"+day+"_"+CYB_CODE+"_0.png")){
+					FileUtil.copy(folder+"/"+day+"_"+CYB_CODE+"_0.png", new File(Constants.out_img_path+"/"+preDay+"_CYB.png"));
 				}
 			}
 			if(FileUtil.exists(Constants.out_img_path+"/"+day+"_SH.png")  ){
 				//如果目标不存在，则写入
-				if(!FileUtil.exists(folder+"/"+day+"_000SH_1.png")){
-					FileUtil.copy(folder+"/"+day+"_000SH_1.png", new File(Constants.out_img_path+"/"+day+"_SH.png"));
+				if(!FileUtil.exists(folder+"/"+day+"_"+SH_CODE+"_1.png")){
+					FileUtil.copy(folder+"/"+day+"_"+SH_CODE+"_1.png", new File(Constants.out_img_path+"/"+day+"_SH.png"));
 				}
 			}
 			if(FileUtil.exists(Constants.out_img_path+"/"+day+"_CYB.png")  ){
 				//如果目标不存在，则写入
-				if(!FileUtil.exists(folder+"/"+day+"_000CYB_1.png")){
-					FileUtil.copy(folder+"/"+day+"_000CYB_1.png", new File(Constants.out_img_path+"/"+day+"_CYB.png"));
+				if(!FileUtil.exists(folder+"/"+day+"_"+CYB_CODE+"_1.png")){
+					FileUtil.copy(folder+"/"+day+"_"+CYB_CODE+"_1.png", new File(Constants.out_img_path+"/"+day+"_CYB.png"));
 				}
 			}
 		}
