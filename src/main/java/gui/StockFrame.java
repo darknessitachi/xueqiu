@@ -449,8 +449,6 @@ public class StockFrame extends JFrame implements ActionListener {
 			performClearCloud();
 		}
 		
-		
-		
 		if (e.getSource() == downLocalItem) {
 			performSyncLocal(false);
 		}
@@ -477,7 +475,13 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	private void performClearCloud() {
-		new ClearCloudWorker(this).run();
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				new ClearCloudWorker(_this).run();
+			}
+		}).start();
 	}
 
 	public void performDownImg() {
