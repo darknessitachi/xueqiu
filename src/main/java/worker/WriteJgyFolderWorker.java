@@ -4,12 +4,9 @@ import gui.StockFrame;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import util.AccessUtil;
 import util.Constants;
@@ -19,15 +16,10 @@ import util.StringUtil;
 
 public class WriteJgyFolderWorker  {
 	
-	public class DayBean{
-		public Set<String> record = new HashSet<String>();
-		public Set<String> mistake = new HashSet<String>();
-	} 
 
 	private StockFrame frame;
 	private String ksrq;
-	private  Map<String,DayBean> dbData;//日期：data
-	private  Map<String,DayBean> fileData;//日期：data
+	private List<String> dbData = new ArrayList<String>();//2017-03-15_all_2017-03-15_600340_0.png
 
 	public WriteJgyFolderWorker(StockFrame frame) {
 		this.frame = frame;
@@ -42,12 +34,8 @@ public class WriteJgyFolderWorker  {
 		Properties params = AccessUtil.readParams();
 		ksrq = params.getProperty("jgyKsrq").trim();
 		
-		dbData = new HashMap<String,DayBean>();
-		
 		writeRecord();
 		writeMistake();
-		
-		initFileData();
 		
 		delete();
 		
@@ -58,55 +46,45 @@ public class WriteJgyFolderWorker  {
 	
 	private void delete() {
 		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
-		//遍历fileData
-		for(String day:fileData.keySet()){
-			String dayFolder = FileUtil.fileLike(folderList, day);
-			//如果dbData的day文件夹为空，则删除文件夹
-			DayBean dbBean = dbData.get(day);
-			if(dbBean == null || (dbBean.record.size()==0 && dbBean.mistake.size()==0)){
-				FileUtil.removeFolder(Constants.jgy_path+"/"+dayFolder);
+		for(String folder : folderList){
+			if(folder.indexOf("-") == 4){
+				String day = folder.substring(0, 10);
+				
+				String allFolder = Constants.jgy_path+"/"+folder+"/all";
+				String beforeFolder = Constants.jgy_path+"/"+folder+"/before";
+				String mistakeFolder = Constants.jgy_path+"/"+folder+"/mistake";
+				//遍历目录，删除没有在数据库中的文件
+				deleteFromFolder(day,"all",allFolder);
+				deleteFromFolder(day,"before",beforeFolder);
+				deleteFromFolder(day,"mistake",mistakeFolder);
+			}
+		}
+		//如果三个目录同时为空，则删除整个目录
+		for(String folder : folderList){
+			if(folder.indexOf("-") == 4){
+				String allFolder = Constants.jgy_path+"/"+folder+"/all";
+				String beforeFolder = Constants.jgy_path+"/"+folder+"/before";
+				String mistakeFolder = Constants.jgy_path+"/"+folder+"/mistake";
+				
+				List<String> allList = FileUtil.getFullFileNames(allFolder);
+				List<String> beforeList = FileUtil.getFullFileNames(beforeFolder);
+				List<String> mistakeList = FileUtil.getFullFileNames(mistakeFolder);
+				
+				if(allList.size() == 0 && beforeList.size() == 0 && mistakeList.size() == 0){
+					FileUtil.deleteFolder(Constants.jgy_path+"/"+folder);
+				}
 			}
 		}
 	}
 
-	private void initFileData() {
-		fileData = new HashMap<String,DayBean>();
-		//获取文件夹
-		List<String> folderList = new ArrayList<String>();
-		List<String> temp = FileUtil.getFullFileNames(Constants.jgy_path);
-		for(String str:temp){
-			if(str.indexOf("-") == 4){
-				folderList.add(str);
-			}
-		}
-		//初始化data
-		for(String folderName:folderList){
-			String day = folderName.substring(0, 10);
-			String beforeFolder = Constants.jgy_path + "/"+folderName+"/before";
-			String mistakeFolder = Constants.jgy_path + "/"+folderName+"/mistake";
-			
-			DayBean bean = fileData.get(day);
-			if(bean == null){
-				bean = new DayBean();
-				fileData.put(day, bean);
-			}
-			
-			//如果before文件存在，遍历里面的文件，填充data
-			if(FileUtil.exists(beforeFolder)){
-				List<String> list = FileUtil.getFullFileNames(beforeFolder);
-				for(String str : list){
-					String code = str.substring(11, 17);
-					bean.record.add(code);
-				}
-			}
-			
-			//如果mistake文件存在，遍历里面的文件，填充data
-			if(FileUtil.exists(mistakeFolder)){
-				List<String> list = FileUtil.getFullFileNames(mistakeFolder);
-				for(String str : list){
-					String code = str.substring(11, 17);
-					bean.mistake.add(code);
-				}
+	private void deleteFromFolder(String day, String folderName, String path) {
+		List<String> list = FileUtil.getFullFileNames(path);
+		for(String fileName:list){
+			String element = day+"_"+folderName+"_"+fileName;
+			//如果该文件，不包含在dbData中，则删除
+			if(!dbData.contains(element)){
+				String filePath = path+"/"+fileName;
+				FileUtil.delete(filePath);
 			}
 		}
 	}
@@ -138,11 +116,6 @@ public class WriteJgyFolderWorker  {
 			String sql = " select r.*,s.code from record r left join stock s on stockName=name where type in ('1','2','3') and day='"+day+"' order by type asc,xh asc,rate desc,createDate desc ";
 			List<Map<String,Object>> list = MiniDbUtil.query(sql);
 			
-			DayBean bean = dbData.get(day);
-			if(bean == null){
-				bean = new DayBean();
-				dbData.put(day, bean);
-			}
 			//遍历一天中的数据，写入对应的文件夹
 			for(Map<String,Object> map:list){
 				String code = (String) map.get("code");
@@ -152,7 +125,6 @@ public class WriteJgyFolderWorker  {
 					msg.append("【"+map.get("stockName")+"】未找到code").append("\n");
 					break;
 				}
-				bean.record.add(code);
 				
 				//导出反弹前的图片
 				String srcFileName = preDay+"_"+code.substring(1)+".png";
@@ -161,9 +133,11 @@ public class WriteJgyFolderWorker  {
 					//如果目标不存在，则写入
 					if(!FileUtil.exists(all+"/"+targetFileName)){
 						FileUtil.copy(all+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
+						dbData.add(day+"_all_"+targetFileName);
 					}
 					if(!FileUtil.exists(before+"/"+targetFileName)){
 						FileUtil.copy(before+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
+						dbData.add(day+"_before_"+targetFileName);
 					}
 				}else{
 					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
@@ -176,6 +150,7 @@ public class WriteJgyFolderWorker  {
 					//如果目标不存在，则写入
 					if(!FileUtil.exists(all+"/"+targetFileName)){
 						FileUtil.copy(all+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
+						dbData.add(day+"_all_"+targetFileName);
 					}
 				}else{
 					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
@@ -188,6 +163,7 @@ public class WriteJgyFolderWorker  {
 					//如果目标不存在，则写入
 					if(!FileUtil.exists(all+"/"+targetFileName)){
 						FileUtil.copy(all+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
+						dbData.add(day+"_all_"+targetFileName);
 					}
 				}else{
 					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
@@ -231,11 +207,6 @@ public class WriteJgyFolderWorker  {
 			String preDay = null;
 			
 			//遍历一天中的数据，写入对应的文件夹
-			DayBean bean = dbData.get(day);
-			if(bean == null){
-				bean = new DayBean();
-				dbData.put(day, bean);
-			}
 			for(Map<String,Object> map:list){
 				String code = (String) map.get("code");
 				preDay = (String) map.get("preDay"); 
@@ -244,7 +215,6 @@ public class WriteJgyFolderWorker  {
 					msg.append("【"+map.get("stockName")+"】未找到code").append("\n");
 					break;
 				}
-				bean.mistake.add(code);
 				
 				//导出反弹前的图片
 				String srcFileName = preDay+"_"+code.substring(1)+".png";
@@ -253,6 +223,7 @@ public class WriteJgyFolderWorker  {
 					//如果目标不存在，则写入
 					if(!FileUtil.exists(mistake+"/"+targetFileName)){
 						FileUtil.copy(mistake+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
+						dbData.add(day+"_mistake_"+targetFileName);
 					}
 				}else{
 					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
@@ -265,6 +236,7 @@ public class WriteJgyFolderWorker  {
 					//如果目标不存在，则写入
 					if(!FileUtil.exists(mistake+"/"+targetFileName)){
 						FileUtil.copy(mistake+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
+						dbData.add(day+"_mistake_"+targetFileName);
 					}
 				}else{
 					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
