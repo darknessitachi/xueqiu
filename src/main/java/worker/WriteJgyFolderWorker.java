@@ -45,9 +45,6 @@ public class WriteJgyFolderWorker  {
 	
 	
 	private void delete() {
-		for(String str:dbData){
-			System.out.println("dbData:"+str);
-		}
 		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
 		for(String folder : folderList){
 			if(folder.indexOf("-") == 4){
