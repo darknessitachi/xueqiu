@@ -54,9 +54,9 @@ public class WriteJgyFolderWorker  {
 				String beforeFolder = Constants.jgy_path+"/"+folder+"/before";
 				String mistakeFolder = Constants.jgy_path+"/"+folder+"/mistake";
 				//遍历目录，删除没有在数据库中的文件
-				deleteFromFolder(day,"all",allFolder);
-				deleteFromFolder(day,"before",beforeFolder);
-				deleteFromFolder(day,"mistake",mistakeFolder);
+				commonDeleteFile(day,"all",allFolder);
+				commonDeleteFile(day,"before",beforeFolder);
+				commonDeleteFile(day,"mistake",mistakeFolder);
 			}
 		}
 		//如果三个目录同时为空，则删除整个目录
@@ -83,7 +83,7 @@ public class WriteJgyFolderWorker  {
 		}
 	}
 
-	private void deleteFromFolder(String day, String folderName, String path) {
+	private void commonDeleteFile(String day, String folderName, String path) {
 		List<String> list = FileUtil.getFullFileNames(path);
 		for(String fileName:list){
 			String element = day+"_"+folderName+"_"+fileName;
