@@ -83,7 +83,6 @@ public class WriteJgyFolderWorker  {
 			String element = day+"_"+folderName+"_"+fileName;
 			//如果该文件，不包含在dbData中，则删除
 			if(!dbData.contains(element)){
-				System.out.println("dbData中不包含【"+element+"】，可以删除");
 				String filePath = path+"/"+fileName;
 				FileUtil.delete(filePath);
 			}
