@@ -70,6 +70,12 @@ public class WriteJgyFolderWorker  {
 				List<String> beforeList = FileUtil.getFullFileNames(beforeFolder);
 				List<String> mistakeList = FileUtil.getFullFileNames(mistakeFolder);
 				
+				if(mistakeList.size() == 0){
+					if(FileUtil.exists(mistakeFolder)){
+						FileUtil.removeFolder(mistakeFolder);
+					}
+				}
+				
 				if(allList.size() == 0 && beforeList.size() == 0 && mistakeList.size() == 0){
 					FileUtil.removeFolder(Constants.jgy_path+"/"+folder);
 				}
