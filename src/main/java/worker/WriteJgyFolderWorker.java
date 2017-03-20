@@ -45,6 +45,9 @@ public class WriteJgyFolderWorker  {
 	
 	
 	private void delete() {
+		for(String str:dbData){
+			System.out.println("dbData:"+str);
+		}
 		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
 		for(String folder : folderList){
 			if(folder.indexOf("-") == 4){
@@ -71,7 +74,7 @@ public class WriteJgyFolderWorker  {
 				List<String> mistakeList = FileUtil.getFullFileNames(mistakeFolder);
 				
 				if(allList.size() == 0 && beforeList.size() == 0 && mistakeList.size() == 0){
-					FileUtil.deleteFolder(Constants.jgy_path+"/"+folder);
+					FileUtil.removeFolder(Constants.jgy_path+"/"+folder);
 				}
 			}
 		}
@@ -83,6 +86,7 @@ public class WriteJgyFolderWorker  {
 			String element = day+"_"+folderName+"_"+fileName;
 			//如果该文件，不包含在dbData中，则删除
 			if(!dbData.contains(element)){
+				System.out.println("dbData中不包含【"+element+"】，可以删除");
 				String filePath = path+"/"+fileName;
 				FileUtil.delete(filePath);
 			}
@@ -103,7 +107,6 @@ public class WriteJgyFolderWorker  {
 			String folder = Constants.jgy_path+"/"+dayFolder;
 			String before = Constants.jgy_path+"/"+dayFolder+"/before";
 			String all = Constants.jgy_path+"/"+dayFolder+"/all";
-			
 			//如果文件夹不存在，则创建
 			if(!FileUtil.exists(before)){
 				FileUtil.createFolder(before);
@@ -133,12 +136,12 @@ public class WriteJgyFolderWorker  {
 					//如果目标不存在，则写入
 					if(!FileUtil.exists(all+"/"+targetFileName)){
 						FileUtil.copy(all+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
-						dbData.add(day+"_all_"+targetFileName);
 					}
 					if(!FileUtil.exists(before+"/"+targetFileName)){
 						FileUtil.copy(before+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
-						dbData.add(day+"_before_"+targetFileName);
 					}
+					dbData.add(day+"_all_"+targetFileName);
+					dbData.add(day+"_before_"+targetFileName);
 				}else{
 					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
 				}
@@ -150,8 +153,8 @@ public class WriteJgyFolderWorker  {
 					//如果目标不存在，则写入
 					if(!FileUtil.exists(all+"/"+targetFileName)){
 						FileUtil.copy(all+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
-						dbData.add(day+"_all_"+targetFileName);
 					}
+					dbData.add(day+"_all_"+targetFileName);
 				}else{
 					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
 				}
@@ -163,8 +166,8 @@ public class WriteJgyFolderWorker  {
 					//如果目标不存在，则写入
 					if(!FileUtil.exists(all+"/"+targetFileName)){
 						FileUtil.copy(all+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
-						dbData.add(day+"_all_"+targetFileName);
 					}
+					dbData.add(day+"_all_"+targetFileName);
 				}else{
 					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
 				}
@@ -223,8 +226,8 @@ public class WriteJgyFolderWorker  {
 					//如果目标不存在，则写入
 					if(!FileUtil.exists(mistake+"/"+targetFileName)){
 						FileUtil.copy(mistake+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
-						dbData.add(day+"_mistake_"+targetFileName);
 					}
+					dbData.add(day+"_mistake_"+targetFileName);
 				}else{
 					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
 				}
@@ -236,20 +239,17 @@ public class WriteJgyFolderWorker  {
 					//如果目标不存在，则写入
 					if(!FileUtil.exists(mistake+"/"+targetFileName)){
 						FileUtil.copy(mistake+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
-						dbData.add(day+"_mistake_"+targetFileName);
 					}
+					dbData.add(day+"_mistake_"+targetFileName);
 				}else{
 					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
 				}
-				
 			}
 			//如果preDay存在，写入大盘到对应的文件夹
 			writeIndex(preDay,day,folder);
 		}
 		System.err.println(msg.toString());
 	}
-
-
 
 	private void writeIndex(String preDay, String day, String folder) {
 		if(!StringUtil.isEmpty(preDay)){
