@@ -177,13 +177,27 @@ public class WriteJgyFolderWorker  {
 			//如果preDay存在，写入大盘到对应的文件夹
 			writeIndex(preDay,day,folder);
 			//如果文件夹名发生变化，则对folder进行重命名
-			String afterDayFolder = day+"（"+list.size()+"）";
-			if(!dayFolder.equals(afterDayFolder)){
-				FileUtil.renameDirectory(folder, Constants.jgy_path+"/"+afterDayFolder);
+			String newDayFolder = day+"（"+list.size()+"）";
+			String oneKuoHaoDayFolder = handleDayFolder(dayFolder);
+			if(!oneKuoHaoDayFolder.equals(newDayFolder)){
+				FileUtil.renameDirectory(folder, Constants.jgy_path+"/"+newDayFolder);
 			}
 		}
 		System.err.println(msg.toString());
-		
+	}
+	
+	/**
+	 * 如果有两个括号，只保留第一个括号
+	 * @param dayFolder
+	 * @return
+	 */
+	private String handleDayFolder(String src) {
+		int count = StringUtil.countKeyword(src, "（");
+		if(count>1){
+			int index = src.lastIndexOf("（");
+			return src.substring(0, index);
+		}
+		return src;
 	}
 
 	private void writeMistake() {
