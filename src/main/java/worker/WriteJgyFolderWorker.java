@@ -298,16 +298,19 @@ public class WriteJgyFolderWorker  {
 				String beforePath = Constants.jgy_path+"/"+folderName+"/before";
 				String mistakePath = Constants.jgy_path+"/"+folderName+"/mistake";
 				
-				String recordCount = "0";
-				String mistakeCount = "-";
+				int recordCount = 0;
+				int mistakeCount = 0;
 				if(FileUtil.exists(beforePath)){
-					recordCount = (new File(beforePath).list().length)+"";
+					recordCount = new File(beforePath).list().length;
 				}
 				if(FileUtil.exists(mistakePath)){
-					mistakeCount = ((new File(mistakePath).list().length)/2)+"";
+					mistakeCount = (new File(mistakePath).list().length)/2;
 				}
 				
-				String newFolderName = day+"（"+recordCount+"）（"+mistakeCount+"）";
+				String newFolderName = day+"（"+recordCount+"）";
+				if(mistakeCount!=0){
+					newFolderName = newFolderName +"（"+mistakeCount+"）";
+				}
 				if(!newFolderName.equals(folderName)){
 					FileUtil.renameDirectory(Constants.jgy_path+"/"+folderName, Constants.jgy_path+"/"+newFolderName);
 				}
