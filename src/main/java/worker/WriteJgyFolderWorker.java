@@ -38,62 +38,15 @@ public class WriteJgyFolderWorker  {
 		writeMistake();
 		
 		delete();
+		renameFolder();
 		
 		System.out.println("写入坚果云完成。");
 		frame.displayLabel.setText("写入坚果云完成。");
 	}
 	
 	
-	private void delete() {
-		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
-		for(String folder : folderList){
-			if(folder.indexOf("-") == 4){
-				String day = folder.substring(0, 10);
-				
-				String allFolder = Constants.jgy_path+"/"+folder+"/all";
-				String beforeFolder = Constants.jgy_path+"/"+folder+"/before";
-				String mistakeFolder = Constants.jgy_path+"/"+folder+"/mistake";
-				//遍历目录，删除没有在数据库中的文件
-				commonDeleteFile(day,"all",allFolder);
-				commonDeleteFile(day,"before",beforeFolder);
-				commonDeleteFile(day,"mistake",mistakeFolder);
-			}
-		}
-		//如果三个目录同时为空，则删除整个目录
-		for(String folder : folderList){
-			if(folder.indexOf("-") == 4){
-				String allFolder = Constants.jgy_path+"/"+folder+"/all";
-				String beforeFolder = Constants.jgy_path+"/"+folder+"/before";
-				String mistakeFolder = Constants.jgy_path+"/"+folder+"/mistake";
-				
-				List<String> allList = FileUtil.getFullFileNames(allFolder);
-				List<String> beforeList = FileUtil.getFullFileNames(beforeFolder);
-				List<String> mistakeList = FileUtil.getFullFileNames(mistakeFolder);
-				
-				if(mistakeList.size() == 0){
-					if(FileUtil.exists(mistakeFolder)){
-						FileUtil.removeFolder(mistakeFolder);
-					}
-				}
-				
-				if(allList.size() == 0 && beforeList.size() == 0 && mistakeList.size() == 0){
-					FileUtil.removeFolder(Constants.jgy_path+"/"+folder);
-				}
-			}
-		}
-	}
+	
 
-	private void commonDeleteFile(String day, String folderName, String path) {
-		List<String> list = FileUtil.getFullFileNames(path);
-		for(String fileName:list){
-			String element = day+"_"+folderName+"_"+fileName;
-			//如果该文件，不包含在dbData中，则删除
-			if(!dbData.contains(element)){
-				String filePath = path+"/"+fileName;
-				FileUtil.delete(filePath);
-			}
-		}
-	}
 
 	private void writeRecord() {
 		//获取所有天数，从02-17日开始
@@ -103,12 +56,12 @@ public class WriteJgyFolderWorker  {
 		for(String day:days){
 			//获取dayFolder
 			List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
-			String dayFolder = FileUtil.fileLike(folderList, day);
-			dayFolder = dayFolder==null?day:dayFolder;
+			String dayFolderName = FileUtil.fileLike(folderList, day);
+			dayFolderName = dayFolderName==null?day:dayFolderName;
 			//绝对路径
-			String folder = Constants.jgy_path+"/"+dayFolder;
-			String before = Constants.jgy_path+"/"+dayFolder+"/before";
-			String all = Constants.jgy_path+"/"+dayFolder+"/all";
+			String dayFolderPath = Constants.jgy_path+"/"+dayFolderName;
+			String before = Constants.jgy_path+"/"+dayFolderName+"/before";
+			String all = Constants.jgy_path+"/"+dayFolderName+"/all";
 			//如果文件夹不存在，则创建
 			if(!FileUtil.exists(before)){
 				FileUtil.createFolder(before);
@@ -175,30 +128,12 @@ public class WriteJgyFolderWorker  {
 				}
 			}
 			//如果preDay存在，写入大盘到对应的文件夹
-			writeIndex(preDay,day,folder);
-			//如果文件夹名发生变化，则对folder进行重命名
-			String newDayFolder = day+"（"+list.size()+"）";
-			String oneKuoHaoDayFolder = handleDayFolder(dayFolder);
-			if(!oneKuoHaoDayFolder.equals(newDayFolder)){
-				FileUtil.renameDirectory(folder, Constants.jgy_path+"/"+newDayFolder);
-			}
+			writeIndex(preDay,day,dayFolderPath);
 		}
 		System.err.println(msg.toString());
 	}
 	
-	/**
-	 * 如果有两个括号，只保留第一个括号
-	 * @param dayFolder
-	 * @return
-	 */
-	private String handleDayFolder(String src) {
-		int count = StringUtil.countKeyword(src, "（");
-		if(count>1){
-			int index = src.lastIndexOf("（");
-			return src.substring(0, index);
-		}
-		return src;
-	}
+	
 
 	private void writeMistake() {
 		//获取所有天数，从02-17日开始
@@ -209,13 +144,12 @@ public class WriteJgyFolderWorker  {
 			
 			//获取dayFolder
 			List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
-			String dayFolder = FileUtil.fileLike(folderList, day);
-			dayFolder = dayFolder==null?day:dayFolder;
+			String dayFolderName = FileUtil.fileLike(folderList, day);
+			dayFolderName = dayFolderName==null?day:dayFolderName;
 			
 			//绝对路径
-			String folder = Constants.jgy_path+"/"+dayFolder;
-			String mistake = Constants.jgy_path+"/"+dayFolder+"/mistake";
-			String before = Constants.jgy_path+"/"+dayFolder+"/before";
+			String dayFolderPath = Constants.jgy_path+"/"+dayFolderName;
+			String mistake = Constants.jgy_path+"/"+dayFolderName+"/mistake";
 			
 			//如果文件夹不存在，则创建
 			if(!FileUtil.exists(mistake)){
@@ -263,16 +197,7 @@ public class WriteJgyFolderWorker  {
 				}
 			}
 			//如果preDay存在，写入大盘到对应的文件夹
-			writeIndex(preDay,day,folder);
-			//如果文件夹名发生变化，则对folder进行重命名
-			int recordCount = new File(before).list().length;
-			String afterDayFolder = day+"（"+recordCount+"）";
-			if(list.size()>0){
-				afterDayFolder = afterDayFolder+"（"+list.size()+"）";
-			}
-			if(!dayFolder.equals(afterDayFolder)){
-				FileUtil.renameDirectory(folder, Constants.jgy_path+"/"+afterDayFolder);
-			}
+			writeIndex(preDay,day,dayFolderPath);
 		}
 		System.err.println(msg.toString());
 	}
@@ -306,6 +231,85 @@ public class WriteJgyFolderWorker  {
 				//如果目标不存在，则写入
 				if(!FileUtil.exists(folder+"/"+day+"_"+CYB_CODE+"_1.png")){
 					FileUtil.copy(folder+"/"+day+"_"+CYB_CODE+"_1.png", new File(Constants.out_img_path+"/"+day+"_CYB.png"));
+				}
+			}
+		}
+	}
+	
+	private void delete() {
+		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
+		for(String folder : folderList){
+			if(folder.indexOf("-") == 4){
+				String day = folder.substring(0, 10);
+				
+				String allFolder = Constants.jgy_path+"/"+folder+"/all";
+				String beforeFolder = Constants.jgy_path+"/"+folder+"/before";
+				String mistakeFolder = Constants.jgy_path+"/"+folder+"/mistake";
+				//遍历目录，删除没有在数据库中的文件
+				commonDeleteFile(day,"all",allFolder);
+				commonDeleteFile(day,"before",beforeFolder);
+				commonDeleteFile(day,"mistake",mistakeFolder);
+			}
+		}
+		//如果三个目录同时为空，则删除整个目录
+		for(String folder : folderList){
+			if(folder.indexOf("-") == 4){
+				String allFolder = Constants.jgy_path+"/"+folder+"/all";
+				String beforeFolder = Constants.jgy_path+"/"+folder+"/before";
+				String mistakeFolder = Constants.jgy_path+"/"+folder+"/mistake";
+				
+				List<String> allList = FileUtil.getFullFileNames(allFolder);
+				List<String> beforeList = FileUtil.getFullFileNames(beforeFolder);
+				List<String> mistakeList = FileUtil.getFullFileNames(mistakeFolder);
+				
+				if(mistakeList.size() == 0){
+					if(FileUtil.exists(mistakeFolder)){
+						FileUtil.removeFolder(mistakeFolder);
+					}
+				}
+				
+				if(allList.size() == 0 && beforeList.size() == 0 && mistakeList.size() == 0){
+					FileUtil.removeFolder(Constants.jgy_path+"/"+folder);
+				}
+			}
+		}
+	}
+
+	private void commonDeleteFile(String day, String folderName, String path) {
+		List<String> list = FileUtil.getFullFileNames(path);
+		for(String fileName:list){
+			String element = day+"_"+folderName+"_"+fileName;
+			//如果该文件，不包含在dbData中，则删除
+			if(!dbData.contains(element)){
+				String filePath = path+"/"+fileName;
+				FileUtil.delete(filePath);
+			}
+		}
+	}
+	
+
+	private void renameFolder() {
+		
+		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
+		for(String folderName : folderList){
+			if(folderName.indexOf("-") == 4){
+				String day = folderName.substring(0, 10);
+				
+				String beforePath = Constants.jgy_path+"/"+folderName+"/before";
+				String mistakePath = Constants.jgy_path+"/"+folderName+"/mistake";
+				
+				int recordCount = 0;
+				int mistakeCount = 0;
+				if(FileUtil.exists(beforePath)){
+					recordCount = new File(beforePath).list().length;
+				}
+				if(FileUtil.exists(mistakePath)){
+					mistakeCount = (new File(mistakePath).list().length)/2;
+				}
+				
+				String newFolderName = day+"（"+recordCount+"）（"+mistakeCount+"）";
+				if(!newFolderName.equals(folderName)){
+					FileUtil.renameDirectory(Constants.jgy_path+"/"+folderName, Constants.jgy_path+"/"+newFolderName);
 				}
 			}
 		}
