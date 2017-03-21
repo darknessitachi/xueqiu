@@ -201,6 +201,7 @@ public class WriteJgyFolderWorker  {
 			//绝对路径
 			String folder = Constants.jgy_path+"/"+dayFolder;
 			String mistake = Constants.jgy_path+"/"+dayFolder+"/mistake";
+			String before = Constants.jgy_path+"/"+dayFolder+"/before";
 			
 			//如果文件夹不存在，则创建
 			if(!FileUtil.exists(mistake)){
@@ -249,6 +250,15 @@ public class WriteJgyFolderWorker  {
 			}
 			//如果preDay存在，写入大盘到对应的文件夹
 			writeIndex(preDay,day,folder);
+			//如果文件夹名发生变化，则对folder进行重命名
+			int recordCount = new File(before).list().length;
+			String afterDayFolder = day+"（"+recordCount+"）";
+			if(list.size()>0){
+				afterDayFolder = afterDayFolder+"（"+list.size()+"）";
+			}
+			if(!dayFolder.equals(afterDayFolder)){
+				FileUtil.renameDirectory(folder, Constants.jgy_path+"/"+afterDayFolder);
+			}
 		}
 		System.err.println(msg.toString());
 	}
