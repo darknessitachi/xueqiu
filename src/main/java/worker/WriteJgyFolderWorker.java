@@ -285,6 +285,7 @@ public class WriteJgyFolderWorker  {
 	
 	private void writeComment() throws ParseException, IOException {
 		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
+		StringBuilder msg = new StringBuilder();
 		for(String folderName : folderList){
 			if(folderName.indexOf("-") == 4){
 				String day = folderName.substring(0, 10);
@@ -300,12 +301,13 @@ public class WriteJgyFolderWorker  {
 				FileUtil.write(Constants.jgy_path+"/"+folderName+"/readme.txt", content);
 				
 				//写入指数
-				writeIndex(MiniDbUtil.getPreDay(day), day, Constants.jgy_path+"/"+folderName);
+				writeIndex(MiniDbUtil.getPreDay(day), day, Constants.jgy_path+"/"+folderName,msg);
 			}
 		}
+		System.err.println(msg.toString());
 	}
 	
-private void writeIndex(String preDay, String day, String folder) {
+	private void writeIndex(String preDay, String day, String folder, StringBuilder msg) {
 		
 		String SH_CODE = "000SH";
 		String CYB_CODE = "001CYB";
@@ -328,12 +330,16 @@ private void writeIndex(String preDay, String day, String folder) {
 			if(!FileUtil.exists(folder+"/"+day+"_1_"+SH_CODE+".png")){
 				FileUtil.copy(folder+"/"+day+"_1_"+SH_CODE+".png", new File(Constants.out_img_path+"/"+day+"_SH.png"));
 			}
+		}else{
+			msg.append("资源【"+Constants.out_img_path+"/"+day+"_SH.png】未找到").append("\n");
 		}
 		if(FileUtil.exists(Constants.out_img_path+"/"+day+"_CYB.png")  ){
 			//如果目标不存在，则写入
 			if(!FileUtil.exists(folder+"/"+day+"_1_"+CYB_CODE+".png")){
 				FileUtil.copy(folder+"/"+day+"_1_"+CYB_CODE+".png", new File(Constants.out_img_path+"/"+day+"_CYB.png"));
 			}
+		}else{
+			msg.append("资源【"+Constants.out_img_path+"/"+day+"_CYB.png】未找到").append("\n");
 		}
 	}
 	
