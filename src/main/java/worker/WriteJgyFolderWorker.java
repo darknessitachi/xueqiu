@@ -3,6 +3,7 @@ package worker;
 import gui.StockFrame;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,13 +41,14 @@ public class WriteJgyFolderWorker  {
 		delete();
 		renameFolder();
 		
+		writeComment();
+		
 		System.out.println("写入坚果云完成。");
 		frame.displayLabel.setText("写入坚果云完成。");
 	}
-	
-	
-	
 
+
+	
 
 	private void writeRecord() {
 		//获取所有天数，从02-17日开始
@@ -313,6 +315,26 @@ public class WriteJgyFolderWorker  {
 				}
 				if(!newFolderName.equals(folderName)){
 					FileUtil.renameDirectory(Constants.jgy_path+"/"+folderName, Constants.jgy_path+"/"+newFolderName);
+				}
+			}
+		}
+	}
+	
+	private void writeComment() {
+		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
+		for(String folderName : folderList){
+			if(folderName.indexOf("-") == 4){
+				String day = folderName.substring(0, 10);
+				
+				int up = MiniDbUtil.count(" select * from record where type in ('1','2','3') and day='"+day+"' and stockType in ( select code from dict where typeCode='DICT_ALL_TYPE' and sub='1') ");
+				int down = MiniDbUtil.count(" select * from record where type in ('1','2','3') and day='"+day+"' and stockType in ( select code from dict where typeCode='DICT_ALL_TYPE' and sub='2') ");
+			
+				String content = "追涨【"+up+"】，阴线反转【"+down+"】";
+				
+				try {
+					FileUtil.write(Constants.jgy_path+"/"+folderName+"/readme.txt", content);
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
 		}
