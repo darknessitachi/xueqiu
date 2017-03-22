@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import util.AccessUtil;
+import util.CollectionUtil;
 import util.Constants;
 import util.FileUtil;
 import util.MiniDbUtil;
@@ -329,7 +330,10 @@ public class WriteJgyFolderWorker  {
 				int up = MiniDbUtil.count(" select * from record where type in ('1','2','3') and day='"+day+"' and stockType in ( select code from dict where typeCode='DICT_ALL_TYPE' and sub='1') ");
 				int down = MiniDbUtil.count(" select * from record where type in ('1','2','3') and day='"+day+"' and stockType in ( select code from dict where typeCode='DICT_ALL_TYPE' and sub='2') ");
 			
-				String content = "追涨【"+up+"】，阴线反转【"+down+"】";
+				List<String> list = MiniDbUtil.queryForList(" select desc from note n,dict d where 1=1 and day='"+day+"' and typeCode='DICT_FEELING_TYPE' and feel=code  order by  n.day desc ,n.xh asc,createDate  ");
+				String feel = CollectionUtil.toLineString(list);
+				
+				String content = "追涨【"+up+"】，阴线反转【"+down+"】\n\n"+feel;
 				
 				try {
 					FileUtil.write(Constants.jgy_path+"/"+folderName+"/readme.txt", content);
