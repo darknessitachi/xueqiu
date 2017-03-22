@@ -35,7 +35,7 @@ public class MiniDbUtil {
 			
 			result = MiniDbUtil.query(sql, stmt);
 			//logger.info(sql.trim());
-			System.out.println(sql.trim());
+			//System.out.println(sql.trim());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
