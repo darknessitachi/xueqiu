@@ -221,11 +221,9 @@ public class WriteJgyFolderWorker  {
 		//如果三个目录同时为空，则删除整个目录
 		for(String folder : folderList){
 			if(folder.indexOf("-") == 4){
-				String allFolder = Constants.jgy_path+"/"+folder+"/all";
 				String beforeFolder = Constants.jgy_path+"/"+folder+"/before";
 				String mistakeFolder = Constants.jgy_path+"/"+folder+"/mistake";
 				
-				List<String> allList = FileUtil.getFullFileNames(allFolder);
 				List<String> beforeList = FileUtil.getFullFileNames(beforeFolder);
 				List<String> mistakeList = FileUtil.getFullFileNames(mistakeFolder);
 				
@@ -235,7 +233,7 @@ public class WriteJgyFolderWorker  {
 					}
 				}
 				
-				if(allList.size() == 0 && beforeList.size() == 0 && mistakeList.size() == 0){
+				if(beforeList.size() == 0 && mistakeList.size() == 0){
 					FileUtil.removeFolder(Constants.jgy_path+"/"+folder);
 				}
 			}
