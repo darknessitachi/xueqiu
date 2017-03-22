@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -355,11 +357,41 @@ public class MiniDbUtil {
 		}
 		return new HashMap<String, Object>();
 	}
-
 	
-
-
 	
+	public static String getPreDay(String curDay) throws ParseException {
+		Date curDate = DateUtil.parse(curDay, DateUtil.yyyyMMdd);
+		for(int i=1;;i++){
+			String newDay = DateUtil.minus(curDate, i);
+			//如果是周末，继续遍历
+			if(DateUtil.isWeekend(newDay, DateUtil.yyyyMMdd)){
+				continue;
+			}
+			//如果是节假日，继续遍历
+			int num = MiniDbUtil.count(" select * from dict where typeCode='DICT_HOLIDAY_TYPE' and code='"+newDay+"' ");
+			if(num>0){
+				continue;
+			}
+			return newDay;
+		}
+	}
+	
+	public static String getNextDay(String curDay) throws ParseException {
+		Date curDate = DateUtil.parse(curDay, DateUtil.yyyyMMdd);
+		for(int i=1;;i++){
+			String newDay = DateUtil.add(curDate, i);
+			//如果是周末，继续遍历
+			if(DateUtil.isWeekend(newDay, DateUtil.yyyyMMdd)){
+				continue;
+			}
+			//如果是节假日，继续遍历
+			int num = MiniDbUtil.count(" select * from dict where typeCode='DICT_HOLIDAY_TYPE' and code='"+newDay+"' ");
+			if(num>0){
+				continue;
+			}
+			return newDay;
+		}
+	}
 
 
 	

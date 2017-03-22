@@ -4,6 +4,7 @@ import gui.StockFrame;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,13 @@ public class WriteJgyFolderWorker  {
 		delete();
 		renameFolder();
 		
-		writeComment();
+		try {
+			writeComment();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		System.out.println("写入坚果云完成。");
 		frame.displayLabel.setText("写入坚果云完成。");
@@ -62,7 +69,6 @@ public class WriteJgyFolderWorker  {
 			String dayFolderName = FileUtil.fileLike(folderList, day);
 			dayFolderName = dayFolderName==null?day:dayFolderName;
 			//绝对路径
-			String dayFolderPath = Constants.jgy_path+"/"+dayFolderName;
 			String before = Constants.jgy_path+"/"+dayFolderName+"/before";
 			String all = Constants.jgy_path+"/"+dayFolderName+"/all";
 			//如果文件夹不存在，则创建
@@ -130,8 +136,6 @@ public class WriteJgyFolderWorker  {
 					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
 				}
 			}
-			//如果preDay存在，写入大盘到对应的文件夹
-			writeIndex(preDay,day,dayFolderPath);
 		}
 		System.err.println(msg.toString());
 	}
@@ -144,16 +148,12 @@ public class WriteJgyFolderWorker  {
 		StringBuilder msg = new StringBuilder();
 		//遍历每一天
 		for(String day:days){
-			
 			//获取dayFolder
 			List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
 			String dayFolderName = FileUtil.fileLike(folderList, day);
 			dayFolderName = dayFolderName==null?day:dayFolderName;
-			
 			//绝对路径
-			String dayFolderPath = Constants.jgy_path+"/"+dayFolderName;
 			String mistake = Constants.jgy_path+"/"+dayFolderName+"/mistake";
-			
 			//如果文件夹不存在，则创建
 			if(!FileUtil.exists(mistake)){
 				FileUtil.createFolder(mistake);
@@ -199,46 +199,10 @@ public class WriteJgyFolderWorker  {
 					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
 				}
 			}
-			//如果preDay存在，写入大盘到对应的文件夹
-			writeIndex(preDay,day,dayFolderPath);
 		}
 		System.err.println(msg.toString());
 	}
 
-	private void writeIndex(String preDay, String day, String folder) {
-		
-		String SH_CODE = "000SH";
-		String CYB_CODE = "001CYB";
-		
-		if(!StringUtil.isEmpty(preDay)){
-			//最后写入大盘的照片
-			if(FileUtil.exists(Constants.out_img_path+"/"+preDay+"_SH.png")  ){
-				//如果目标不存在，则写入
-				if(!FileUtil.exists(folder+"/"+day+"_"+SH_CODE+"_0.png")){
-					FileUtil.copy(folder+"/"+day+"_"+SH_CODE+"_0.png", new File(Constants.out_img_path+"/"+preDay+"_SH.png"));
-				}
-			}
-			if(FileUtil.exists(Constants.out_img_path+"/"+preDay+"_CYB.png")  ){
-				//如果目标不存在，则写入
-				if(!FileUtil.exists(folder+"/"+day+"_"+CYB_CODE+"_0.png")){
-					FileUtil.copy(folder+"/"+day+"_"+CYB_CODE+"_0.png", new File(Constants.out_img_path+"/"+preDay+"_CYB.png"));
-				}
-			}
-			if(FileUtil.exists(Constants.out_img_path+"/"+day+"_SH.png")  ){
-				//如果目标不存在，则写入
-				if(!FileUtil.exists(folder+"/"+day+"_"+SH_CODE+"_1.png")){
-					FileUtil.copy(folder+"/"+day+"_"+SH_CODE+"_1.png", new File(Constants.out_img_path+"/"+day+"_SH.png"));
-				}
-			}
-			if(FileUtil.exists(Constants.out_img_path+"/"+day+"_CYB.png")  ){
-				//如果目标不存在，则写入
-				if(!FileUtil.exists(folder+"/"+day+"_"+CYB_CODE+"_1.png")){
-					FileUtil.copy(folder+"/"+day+"_"+CYB_CODE+"_1.png", new File(Constants.out_img_path+"/"+day+"_CYB.png"));
-				}
-			}
-		}
-	}
-	
 	private void delete() {
 		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
 		for(String folder : folderList){
@@ -321,7 +285,7 @@ public class WriteJgyFolderWorker  {
 		}
 	}
 	
-	private void writeComment() {
+	private void writeComment() throws ParseException, IOException {
 		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
 		for(String folderName : folderList){
 			if(folderName.indexOf("-") == 4){
@@ -333,16 +297,48 @@ public class WriteJgyFolderWorker  {
 				List<String> list = MiniDbUtil.queryForList(" select desc from note n,dict d where 1=1 and day='"+day+"' and typeCode='DICT_FEELING_TYPE' and feel=code  order by  n.day desc ,n.xh asc,createDate  ");
 				String feel = CollectionUtil.toLineString(list);
 				
+				//写入readme.txt
 				String content = "追涨【"+up+"】，阴线反转【"+down+"】\n\n"+feel;
+				FileUtil.write(Constants.jgy_path+"/"+folderName+"/readme.txt", content);
 				
-				try {
-					FileUtil.write(Constants.jgy_path+"/"+folderName+"/readme.txt", content);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				//写入指数
+				writeIndex(MiniDbUtil.getPreDay(day), day, Constants.jgy_path+"/"+folderName);
 			}
 		}
 	}
+	
+private void writeIndex(String preDay, String day, String folder) {
+		
+		String SH_CODE = "000SH";
+		String CYB_CODE = "001CYB";
+		
+		//最后写入大盘的照片
+		if(FileUtil.exists(Constants.out_img_path+"/"+preDay+"_SH.png")  ){
+			//如果目标不存在，则写入
+			if(!FileUtil.exists(folder+"/"+day+"_0_"+SH_CODE+".png")){
+				FileUtil.copy(folder+"/"+day+"_0_"+SH_CODE+".png", new File(Constants.out_img_path+"/"+preDay+"_SH.png"));
+			}
+		}
+		if(FileUtil.exists(Constants.out_img_path+"/"+preDay+"_CYB.png")  ){
+			//如果目标不存在，则写入
+			if(!FileUtil.exists(folder+"/"+day+"_0_"+CYB_CODE+".png")){
+				FileUtil.copy(folder+"/"+day+"_0_"+CYB_CODE+".png", new File(Constants.out_img_path+"/"+preDay+"_CYB.png"));
+			}
+		}
+		if(FileUtil.exists(Constants.out_img_path+"/"+day+"_SH.png")  ){
+			//如果目标不存在，则写入
+			if(!FileUtil.exists(folder+"/"+day+"_1_"+SH_CODE+".png")){
+				FileUtil.copy(folder+"/"+day+"_1_"+SH_CODE+".png", new File(Constants.out_img_path+"/"+day+"_SH.png"));
+			}
+		}
+		if(FileUtil.exists(Constants.out_img_path+"/"+day+"_CYB.png")  ){
+			//如果目标不存在，则写入
+			if(!FileUtil.exists(folder+"/"+day+"_1_"+CYB_CODE+".png")){
+				FileUtil.copy(folder+"/"+day+"_1_"+CYB_CODE+".png", new File(Constants.out_img_path+"/"+day+"_CYB.png"));
+			}
+		}
+	}
+	
 
 	
 }
