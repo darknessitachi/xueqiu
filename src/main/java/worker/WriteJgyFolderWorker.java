@@ -167,9 +167,9 @@ public class WriteJgyFolderWorker  {
 				writePicture(srcFileName,targetFileName,day,nothingPath,NOTHING_FOLDER_NAME);
 				
 				//导出分时图片
-				srcFileName = day+"_"+code.substring(1)+"_T.png";
+				/*srcFileName = day+"_"+code.substring(1)+"_T.png";
 				targetFileName = day+"_"+code.substring(1)+"_2.png";
-				writePicture(srcFileName,targetFileName,day,nothingPath,NOTHING_FOLDER_NAME);
+				writePicture(srcFileName,targetFileName,day,nothingPath,NOTHING_FOLDER_NAME);*/
 			}
 		}
 	}
