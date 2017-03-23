@@ -87,7 +87,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JMenuItem clearItem = new JMenuItem("清理");
 
 	private JButton okBtn = new JButton("统计");
-	private JButton priceBtn = new JButton("价格计算");
+	private JButton priceBtn = new JButton("计算");
 
 	private JButton chooseBtn = new JButton("导入EBK");
 	private JButton autoChooseBtn = new JButton("自动导入");
