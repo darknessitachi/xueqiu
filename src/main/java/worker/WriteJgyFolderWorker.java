@@ -312,7 +312,7 @@ public class WriteJgyFolderWorker  {
 				String feel = CollectionUtil.toLineString(list);
 				
 				//写入readme.txt
-				String content = "追涨【"+up+"】，阴线反转【"+down+"】\n\n"+feel;
+				String content = "追涨【"+up+"】，阴线反转【"+down+"】。\n\n"+feel;
 				FileUtil.write(Constants.jgy_path+"/"+folderName+"/readme.txt", content);
 				
 				//写入指数
