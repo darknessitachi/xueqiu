@@ -62,16 +62,8 @@ public class WriteJgyFolderWorker  {
 		StringBuilder msg = new StringBuilder();
 		//遍历每一天
 		for(String day:days){
-			//获取dayFolder
-			List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
-			String dayFolderName = FileUtil.fileLike(folderList, day);
-			dayFolderName = dayFolderName==null?day:dayFolderName;
-			//绝对路径
-			String all = Constants.jgy_path+"/"+dayFolderName+"/all";
-			//如果文件夹不存在，则创建
-			if(!FileUtil.exists(all)){
-				FileUtil.createFolder(all);
-			}
+			
+			String all = getSecondPath(day,"all");
 			String preDay = null;
 			
 			String sql = " select r.*,s.code from record r left join stock s on stockName=name where type in ('1','2','3') and day='"+day+"' order by type asc,xh asc,rate desc,createDate desc ";
@@ -140,17 +132,8 @@ public class WriteJgyFolderWorker  {
 		StringBuilder msg = new StringBuilder();
 		//遍历每一天
 		for(String day:days){
-			//获取dayFolder
-			List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
-			String dayFolderName = FileUtil.fileLike(folderList, day);
-			dayFolderName = dayFolderName==null?day:dayFolderName;
-			//绝对路径
-			String mistake = Constants.jgy_path+"/"+dayFolderName+"/mistake";
-			//如果文件夹不存在，则创建
-			if(!FileUtil.exists(mistake)){
-				FileUtil.createFolder(mistake);
-			}
 			
+			String mistake = getSecondPath(day,"mistake");
 			String sql = " select m.*,s.code from mistake m left join stock s on stockName=name where day='"+day+"' order by xh asc,createDate desc ";
 			List<Map<String,Object>> list = MiniDbUtil.query(sql);
 			String preDay = null;
@@ -203,21 +186,12 @@ public class WriteJgyFolderWorker  {
 		StringBuilder msg = new StringBuilder();
 		//遍历每一天
 		for(String day:days){
-			//获取dayFolder
-			List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
-			String dayFolderName = FileUtil.fileLike(folderList, day);
-			dayFolderName = dayFolderName==null?day:dayFolderName;
-			//绝对路径
-			String nothing = Constants.jgy_path+"/"+dayFolderName+"/nothing";
-			//如果文件夹不存在，则创建
-			if(!FileUtil.exists(nothing)){
-				FileUtil.createFolder(nothing);
-			}
-			String preDay = null;
+			
+			String nothing = getSecondPath(day,"nothing");
 			
 			String sql = " select r.*,s.code from record r left join stock s on stockName=name where type in ('4') and day='"+day+"' order by type asc,xh asc,rate desc,createDate desc ";
 			List<Map<String,Object>> list = MiniDbUtil.query(sql);
-			
+			String preDay = null;
 			//遍历一天中的数据，写入对应的文件夹
 			for(Map<String,Object> map:list){
 				String code = (String) map.get("code");
@@ -272,6 +246,20 @@ public class WriteJgyFolderWorker  {
 			System.err.println(msg.toString());
 		}
 		
+	}
+
+	private String getSecondPath(String day, String secondFolderName) {
+		//获取dayFolder
+		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
+		String dayFolderName = FileUtil.fileLike(folderList, day);
+		dayFolderName = dayFolderName==null?day:dayFolderName;
+		//绝对路径
+		String nothing = Constants.jgy_path+"/"+dayFolderName+"/"+secondFolderName;
+		//如果文件夹不存在，则创建
+		if(!FileUtil.exists(nothing)){
+			FileUtil.createFolder(nothing);
+		}
+		return nothing;
 	}
 
 	private void delete() {
