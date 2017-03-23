@@ -39,6 +39,7 @@ public class WriteJgyFolderWorker  {
 		
 		writeRecord();
 		writeMistake();
+		writeNothing();
 		
 		delete();
 		
@@ -57,6 +58,81 @@ public class WriteJgyFolderWorker  {
 
 
 	
+
+	private void writeNothing() {
+		//获取所有天数，从02-17日开始
+		List<String> days = MiniDbUtil.queryForList(" select distinct day from record where type in ('4') and day>='"+ksrq+"' ");
+		StringBuilder msg = new StringBuilder();
+		//遍历每一天
+		for(String day:days){
+			//获取dayFolder
+			List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
+			String dayFolderName = FileUtil.fileLike(folderList, day);
+			dayFolderName = dayFolderName==null?day:dayFolderName;
+			//绝对路径
+			String nothing = Constants.jgy_path+"/"+dayFolderName+"/nothing";
+			//如果文件夹不存在，则创建
+			if(!FileUtil.exists(nothing)){
+				FileUtil.createFolder(nothing);
+			}
+			String preDay = null;
+			
+			String sql = " select r.*,s.code from record r left join stock s on stockName=name where type in ('4') and day='"+day+"' order by type asc,xh asc,rate desc,createDate desc ";
+			List<Map<String,Object>> list = MiniDbUtil.query(sql);
+			
+			//遍历一天中的数据，写入对应的文件夹
+			for(Map<String,Object> map:list){
+				String code = (String) map.get("code");
+				preDay = (String) map.get("preDay"); 
+				
+				if(StringUtil.isEmpty(code)){
+					msg.append("【"+map.get("stockName")+"】未找到code").append("\n");
+					break;
+				}
+				
+				//导出反弹前的图片
+				String srcFileName = preDay+"_"+code.substring(1)+".png";
+				String targetFileName = day+"_"+code.substring(1)+"_0.png";
+				if(FileUtil.exists(Constants.out_img_path+"/"+srcFileName)){
+					//如果目标不存在，则写入
+					if(!FileUtil.exists(nothing+"/"+targetFileName)){
+						FileUtil.copy(nothing+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
+					}
+					dbData.add(day+"_nothing_"+targetFileName);
+				}else{
+					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
+				}
+				
+				//导出反弹后的图片
+				srcFileName = day+"_"+code.substring(1)+".png";
+				targetFileName = day+"_"+code.substring(1)+"_1.png";
+				if(FileUtil.exists(Constants.out_img_path+"/"+srcFileName)){
+					//如果目标不存在，则写入
+					if(!FileUtil.exists(nothing+"/"+targetFileName)){
+						FileUtil.copy(nothing+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
+					}
+					dbData.add(day+"_nothing_"+targetFileName);
+				}else{
+					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
+				}
+				
+				//导出分时图片
+				srcFileName = day+"_"+code.substring(1)+"_T.png";
+				targetFileName = day+"_"+code.substring(1)+"_2.png";
+				if(FileUtil.exists(Constants.out_img_path+"/"+srcFileName)){
+					//如果目标不存在，则写入
+					if(!FileUtil.exists(nothing+"/"+targetFileName)){
+						FileUtil.copy(nothing+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
+					}
+					dbData.add(day+"_nothing_"+targetFileName);
+				}else{
+					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
+				}
+			}
+		}
+		System.err.println(msg.toString());
+		
+	}
 
 	private void writeRecord() {
 		//获取所有天数，从02-17日开始
