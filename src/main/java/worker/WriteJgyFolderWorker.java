@@ -25,6 +25,10 @@ public class WriteJgyFolderWorker  {
 	private List<String> dbData = new ArrayList<String>();//2017-03-15_all_2017-03-15_600340_0.png
 	
 	private StringBuilder msg = new StringBuilder(); //存放警告信息
+	
+	private final static String ALL_FOLDER_NAME = "all";
+	private final static String MISTAKE_FOLDER_NAME = "mistake";
+	private final static String NOTHING_FOLDER_NAME = "nothing";
 
 	public WriteJgyFolderWorker(StockFrame frame) {
 		this.frame = frame;
@@ -68,7 +72,7 @@ public class WriteJgyFolderWorker  {
 		//遍历每一天
 		for(String day:days){
 			
-			String allPath = getSecondPath(day,"all");
+			String allPath = getSecondPath(day,ALL_FOLDER_NAME);
 			String preDay = null;
 			
 			String sql = " select r.*,s.code from record r left join stock s on stockName=name where type in ('1','2','3') and day='"+day+"' order by type asc,xh asc,rate desc,createDate desc ";
@@ -87,17 +91,17 @@ public class WriteJgyFolderWorker  {
 				//导出反弹前的图片
 				String srcFileName = preDay+"_"+code.substring(1)+".png";
 				String targetFileName = day+"_"+code.substring(1)+"_0.png";
-				writePicture(srcFileName,targetFileName,day,allPath,"all");
+				writePicture(srcFileName,targetFileName,day,allPath,ALL_FOLDER_NAME);
 				
 				//导出反弹后的图片
 				srcFileName = day+"_"+code.substring(1)+".png";
 				targetFileName = day+"_"+code.substring(1)+"_1.png";
-				writePicture(srcFileName,targetFileName,day,allPath,"all");
+				writePicture(srcFileName,targetFileName,day,allPath,ALL_FOLDER_NAME);
 				
 				//导出分时图片
 				srcFileName = day+"_"+code.substring(1)+"_T.png";
 				targetFileName = day+"_"+code.substring(1)+"_2.png";
-				writePicture(srcFileName,targetFileName,day,allPath,"all");
+				writePicture(srcFileName,targetFileName,day,allPath,ALL_FOLDER_NAME);
 			}
 		}
 	}
@@ -112,7 +116,7 @@ public class WriteJgyFolderWorker  {
 		//遍历每一天
 		for(String day:days){
 			
-			String mistake = getSecondPath(day,"mistake");
+			String mistakePath = getSecondPath(day,MISTAKE_FOLDER_NAME);
 			String sql = " select m.*,s.code from mistake m left join stock s on stockName=name where day='"+day+"' order by xh asc,createDate desc ";
 			List<Map<String,Object>> list = MiniDbUtil.query(sql);
 			String preDay = null;
@@ -130,12 +134,12 @@ public class WriteJgyFolderWorker  {
 				//导出反弹前的图片
 				String srcFileName = preDay+"_"+code.substring(1)+".png";
 				String targetFileName = day+"_"+code.substring(1)+"_0.png";
-				writePicture(srcFileName,targetFileName,day,mistake,"mistake");
+				writePicture(srcFileName,targetFileName,day,mistakePath,MISTAKE_FOLDER_NAME);
 				
 				//导出反弹后的图片
 				srcFileName = day+"_"+code.substring(1)+".png";
 				targetFileName = day+"_"+code.substring(1)+"_1.png";
-				writePicture(srcFileName,targetFileName,day,mistake,"mistake");
+				writePicture(srcFileName,targetFileName,day,mistakePath,MISTAKE_FOLDER_NAME);
 			}
 		}
 	}
@@ -146,7 +150,7 @@ public class WriteJgyFolderWorker  {
 		//遍历每一天
 		for(String day:days){
 			
-			String nothing = getSecondPath(day,"nothing");
+			String nothingPath = getSecondPath(day,NOTHING_FOLDER_NAME);
 			
 			String sql = " select r.*,s.code from record r left join stock s on stockName=name where type in ('4') and day='"+day+"' order by type asc,xh asc,rate desc,createDate desc ";
 			List<Map<String,Object>> list = MiniDbUtil.query(sql);
@@ -164,17 +168,17 @@ public class WriteJgyFolderWorker  {
 				//导出反弹前的图片
 				String srcFileName = preDay+"_"+code.substring(1)+".png";
 				String targetFileName = day+"_"+code.substring(1)+"_0.png";
-				writePicture(srcFileName,targetFileName,day,nothing,"nothing");
+				writePicture(srcFileName,targetFileName,day,nothingPath,NOTHING_FOLDER_NAME);
 				
 				//导出反弹后的图片
 				srcFileName = day+"_"+code.substring(1)+".png";
 				targetFileName = day+"_"+code.substring(1)+"_1.png";
-				writePicture(srcFileName,targetFileName,day,nothing,"nothing");
+				writePicture(srcFileName,targetFileName,day,nothingPath,NOTHING_FOLDER_NAME);
 				
 				//导出分时图片
 				srcFileName = day+"_"+code.substring(1)+"_T.png";
 				targetFileName = day+"_"+code.substring(1)+"_2.png";
-				writePicture(srcFileName,targetFileName,day,nothing,"nothing");
+				writePicture(srcFileName,targetFileName,day,nothingPath,NOTHING_FOLDER_NAME);
 			}
 		}
 	}
@@ -212,22 +216,22 @@ public class WriteJgyFolderWorker  {
 			if(folder.indexOf("-") == 4){
 				String day = folder.substring(0, 10);
 				
-				String allFolder = Constants.jgy_path+"/"+folder+"/all";
-				String mistakeFolder = Constants.jgy_path+"/"+folder+"/mistake";
-				String nothingFolder = Constants.jgy_path+"/"+folder+"/nothing";
+				String allFolder = Constants.jgy_path+"/"+folder+"/"+ALL_FOLDER_NAME;
+				String mistakeFolder = Constants.jgy_path+"/"+folder+"/"+MISTAKE_FOLDER_NAME;
+				String nothingFolder = Constants.jgy_path+"/"+folder+"/"+NOTHING_FOLDER_NAME;
 				
 				//遍历目录，删除没有在数据库中的文件
-				commonDeleteFile(day,"all",allFolder);
-				commonDeleteFile(day,"mistake",mistakeFolder);
-				commonDeleteFile(day,"nothing",nothingFolder);
+				commonDeleteFile(day,ALL_FOLDER_NAME,allFolder);
+				commonDeleteFile(day,MISTAKE_FOLDER_NAME,mistakeFolder);
+				commonDeleteFile(day,NOTHING_FOLDER_NAME,nothingFolder);
 			}
 		}
 		//如果三个目录同时为空，则删除整个目录
 		for(String folder : folderList){
 			if(folder.indexOf("-") == 4){
-				String allFolder = Constants.jgy_path+"/"+folder+"/all";
-				String mistakeFolder = Constants.jgy_path+"/"+folder+"/mistake";
-				String nothingFolder = Constants.jgy_path+"/"+folder+"/nothing";
+				String allFolder = Constants.jgy_path+"/"+folder+"/"+ALL_FOLDER_NAME;
+				String mistakeFolder = Constants.jgy_path+"/"+folder+"/"+MISTAKE_FOLDER_NAME;
+				String nothingFolder = Constants.jgy_path+"/"+folder+"/"+NOTHING_FOLDER_NAME;
 				
 				List<String> allList = FileUtil.getFullFileNames(allFolder);
 				List<String> mistakeList = FileUtil.getFullFileNames(mistakeFolder);
@@ -271,11 +275,12 @@ public class WriteJgyFolderWorker  {
 			if(folderName.indexOf("-") == 4){
 				String day = folderName.substring(0, 10);
 				
-				String allPath = Constants.jgy_path+"/"+folderName+"/all";
-				String mistakePath = Constants.jgy_path+"/"+folderName+"/mistake";
+				String allPath = Constants.jgy_path+"/"+folderName+"/"+ALL_FOLDER_NAME;
+				String mistakePath = Constants.jgy_path+"/"+folderName+"/"+MISTAKE_FOLDER_NAME;
 				
 				int recordCount = 0;
 				int mistakeCount = 0;
+				
 				if(FileUtil.exists(allPath)){
 					recordCount = (new File(allPath).list().length)/3;
 				}
