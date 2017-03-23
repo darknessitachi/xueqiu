@@ -68,7 +68,7 @@ public class WriteJgyFolderWorker  {
 		//遍历每一天
 		for(String day:days){
 			
-			String all = getSecondPath(day,"all");
+			String allPath = getSecondPath(day,"all");
 			String preDay = null;
 			
 			String sql = " select r.*,s.code from record r left join stock s on stockName=name where type in ('1','2','3') and day='"+day+"' order by type asc,xh asc,rate desc,createDate desc ";
@@ -87,45 +87,23 @@ public class WriteJgyFolderWorker  {
 				//导出反弹前的图片
 				String srcFileName = preDay+"_"+code.substring(1)+".png";
 				String targetFileName = day+"_"+code.substring(1)+"_0.png";
-				if(FileUtil.exists(Constants.out_img_path+"/"+srcFileName)){
-					//如果目标不存在，则写入
-					if(!FileUtil.exists(all+"/"+targetFileName)){
-						FileUtil.copy(all+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
-					}
-					dbData.add(day+"_all_"+targetFileName);
-				}else{
-					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
-				}
+				writePicture(srcFileName,targetFileName,day,allPath,"all");
 				
 				//导出反弹后的图片
 				srcFileName = day+"_"+code.substring(1)+".png";
 				targetFileName = day+"_"+code.substring(1)+"_1.png";
-				if(FileUtil.exists(Constants.out_img_path+"/"+srcFileName)){
-					//如果目标不存在，则写入
-					if(!FileUtil.exists(all+"/"+targetFileName)){
-						FileUtil.copy(all+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
-					}
-					dbData.add(day+"_all_"+targetFileName);
-				}else{
-					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
-				}
+				writePicture(srcFileName,targetFileName,day,allPath,"all");
 				
 				//导出分时图片
 				srcFileName = day+"_"+code.substring(1)+"_T.png";
 				targetFileName = day+"_"+code.substring(1)+"_2.png";
-				if(FileUtil.exists(Constants.out_img_path+"/"+srcFileName)){
-					//如果目标不存在，则写入
-					if(!FileUtil.exists(all+"/"+targetFileName)){
-						FileUtil.copy(all+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
-					}
-					dbData.add(day+"_all_"+targetFileName);
-				}else{
-					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
-				}
+				writePicture(srcFileName,targetFileName,day,allPath,"all");
 			}
 		}
 	}
 	
+	
+
 	
 
 	private void writeMistake() {
@@ -152,28 +130,12 @@ public class WriteJgyFolderWorker  {
 				//导出反弹前的图片
 				String srcFileName = preDay+"_"+code.substring(1)+".png";
 				String targetFileName = day+"_"+code.substring(1)+"_0.png";
-				if(FileUtil.exists(Constants.out_img_path+"/"+srcFileName)){
-					//如果目标不存在，则写入
-					if(!FileUtil.exists(mistake+"/"+targetFileName)){
-						FileUtil.copy(mistake+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
-					}
-					dbData.add(day+"_mistake_"+targetFileName);
-				}else{
-					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
-				}
+				writePicture(srcFileName,targetFileName,day,mistake,"mistake");
 				
 				//导出反弹后的图片
 				srcFileName = day+"_"+code.substring(1)+".png";
 				targetFileName = day+"_"+code.substring(1)+"_1.png";
-				if(FileUtil.exists(Constants.out_img_path+"/"+srcFileName)){
-					//如果目标不存在，则写入
-					if(!FileUtil.exists(mistake+"/"+targetFileName)){
-						FileUtil.copy(mistake+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
-					}
-					dbData.add(day+"_mistake_"+targetFileName);
-				}else{
-					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
-				}
+				writePicture(srcFileName,targetFileName,day,mistake,"mistake");
 			}
 		}
 	}
@@ -202,42 +164,31 @@ public class WriteJgyFolderWorker  {
 				//导出反弹前的图片
 				String srcFileName = preDay+"_"+code.substring(1)+".png";
 				String targetFileName = day+"_"+code.substring(1)+"_0.png";
-				if(FileUtil.exists(Constants.out_img_path+"/"+srcFileName)){
-					//如果目标不存在，则写入
-					if(!FileUtil.exists(nothing+"/"+targetFileName)){
-						FileUtil.copy(nothing+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
-					}
-					dbData.add(day+"_nothing_"+targetFileName);
-				}else{
-					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
-				}
+				writePicture(srcFileName,targetFileName,day,nothing,"nothing");
 				
 				//导出反弹后的图片
 				srcFileName = day+"_"+code.substring(1)+".png";
 				targetFileName = day+"_"+code.substring(1)+"_1.png";
-				if(FileUtil.exists(Constants.out_img_path+"/"+srcFileName)){
-					//如果目标不存在，则写入
-					if(!FileUtil.exists(nothing+"/"+targetFileName)){
-						FileUtil.copy(nothing+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
-					}
-					dbData.add(day+"_nothing_"+targetFileName);
-				}else{
-					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
-				}
+				writePicture(srcFileName,targetFileName,day,nothing,"nothing");
 				
 				//导出分时图片
 				srcFileName = day+"_"+code.substring(1)+"_T.png";
 				targetFileName = day+"_"+code.substring(1)+"_2.png";
-				if(FileUtil.exists(Constants.out_img_path+"/"+srcFileName)){
-					//如果目标不存在，则写入
-					if(!FileUtil.exists(nothing+"/"+targetFileName)){
-						FileUtil.copy(nothing+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
-					}
-					dbData.add(day+"_nothing_"+targetFileName);
-				}else{
-					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
-				}
+				writePicture(srcFileName,targetFileName,day,nothing,"nothing");
 			}
+		}
+	}
+	
+	private void writePicture(String srcFileName, String targetFileName,
+			String day, String path, String folderName) {
+		if(FileUtil.exists(Constants.out_img_path+"/"+srcFileName)){
+			//如果目标不存在，则写入
+			if(!FileUtil.exists(path+"/"+targetFileName)){
+				FileUtil.copy(path+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
+			}
+			dbData.add(day+"_"+folderName+"_"+targetFileName);
+		}else{
+			msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
 		}
 	}
 
@@ -247,12 +198,12 @@ public class WriteJgyFolderWorker  {
 		String dayFolderName = FileUtil.fileLike(folderList, day);
 		dayFolderName = dayFolderName==null?day:dayFolderName;
 		//绝对路径
-		String nothing = Constants.jgy_path+"/"+dayFolderName+"/"+secondFolderName;
+		String path = Constants.jgy_path+"/"+dayFolderName+"/"+secondFolderName;
 		//如果文件夹不存在，则创建
-		if(!FileUtil.exists(nothing)){
-			FileUtil.createFolder(nothing);
+		if(!FileUtil.exists(path)){
+			FileUtil.createFolder(path);
 		}
-		return nothing;
+		return path;
 	}
 
 	private void delete() {
