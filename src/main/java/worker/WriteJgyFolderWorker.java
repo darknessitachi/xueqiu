@@ -23,6 +23,8 @@ public class WriteJgyFolderWorker  {
 	private StockFrame frame;
 	private String ksrq;
 	private List<String> dbData = new ArrayList<String>();//2017-03-15_all_2017-03-15_600340_0.png
+	
+	private StringBuilder msg = new StringBuilder(); //存放警告信息
 
 	public WriteJgyFolderWorker(StockFrame frame) {
 		this.frame = frame;
@@ -52,6 +54,10 @@ public class WriteJgyFolderWorker  {
 		}
 		renameFolder();
 		
+		if(msg.toString().length()>0){
+			System.err.println(msg.toString());
+		}
+		
 		System.out.println("写入坚果云完成。");
 		frame.displayLabel.setText("写入坚果云完成。");
 	}
@@ -59,7 +65,6 @@ public class WriteJgyFolderWorker  {
 	private void writeRecord() {
 		//获取所有天数，从02-17日开始
 		List<String> days = MiniDbUtil.queryForList(" select distinct day from record where type in ('1','2','3') and day>='"+ksrq+"' ");
-		StringBuilder msg = new StringBuilder();
 		//遍历每一天
 		for(String day:days){
 			
@@ -119,9 +124,6 @@ public class WriteJgyFolderWorker  {
 				}
 			}
 		}
-		if(msg.toString().length()>0){
-			System.err.println(msg.toString());
-		}
 	}
 	
 	
@@ -129,7 +131,6 @@ public class WriteJgyFolderWorker  {
 	private void writeMistake() {
 		//获取所有天数，从02-17日开始
 		List<String> days = MiniDbUtil.queryForList(" select distinct day from mistake where day>='"+ksrq+"' ");
-		StringBuilder msg = new StringBuilder();
 		//遍历每一天
 		for(String day:days){
 			
@@ -175,15 +176,11 @@ public class WriteJgyFolderWorker  {
 				}
 			}
 		}
-		if(msg.toString().length()>0){
-			System.err.println(msg.toString());
-		}
 	}
 	
 	private void writeNothing() {
 		//获取所有天数，从02-17日开始
 		List<String> days = MiniDbUtil.queryForList(" select distinct day from record where type in ('4') and day>='"+ksrq+"' ");
-		StringBuilder msg = new StringBuilder();
 		//遍历每一天
 		for(String day:days){
 			
@@ -242,10 +239,6 @@ public class WriteJgyFolderWorker  {
 				}
 			}
 		}
-		if(msg.toString().length()>0){
-			System.err.println(msg.toString());
-		}
-		
 	}
 
 	private String getSecondPath(String day, String secondFolderName) {
@@ -352,7 +345,6 @@ public class WriteJgyFolderWorker  {
 	
 	private void writeComment() throws ParseException, IOException {
 		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
-		StringBuilder msg = new StringBuilder();
 		for(String folderName : folderList){
 			if(folderName.indexOf("-") == 4){
 				String day = folderName.substring(0, 10);
@@ -368,15 +360,12 @@ public class WriteJgyFolderWorker  {
 				FileUtil.write(Constants.jgy_path+"/"+folderName+"/readme.txt", content);
 				
 				//写入指数
-				writeIndex(MiniDbUtil.getPreDay(day), day, Constants.jgy_path+"/"+folderName,msg);
+				writeIndex(MiniDbUtil.getPreDay(day), day, Constants.jgy_path+"/"+folderName);
 			}
-		}
-		if(msg.toString().length()>0){
-			System.err.println(msg.toString());
 		}
 	}
 	
-	private void writeIndex(String preDay, String day, String folder, StringBuilder msg) {
+	private void writeIndex(String preDay, String day, String folder) {
 		
 		String before_SH_CODE = "000SH_0";
 		String after_SH_CODE  = "000SH_1";
