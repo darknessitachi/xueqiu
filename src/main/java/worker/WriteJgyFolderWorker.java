@@ -45,7 +45,8 @@ public class WriteJgyFolderWorker  {
 		writeMistake();
 		writeNothing();
 		
-		delete();
+		deleteFile();
+		deleteFolder();
 		
 		try {
 			writeComment();
@@ -99,10 +100,6 @@ public class WriteJgyFolderWorker  {
 			}
 		}
 	}
-	
-	
-
-	
 
 	private void writeMistake() {
 		//获取所有天数，从02-17日开始
@@ -204,7 +201,7 @@ public class WriteJgyFolderWorker  {
 		return path;
 	}
 
-	private void delete() {
+	private void deleteFile() {
 		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
 		for(String folder : folderList){
 			if(folder.indexOf("-") == 4){
@@ -220,6 +217,10 @@ public class WriteJgyFolderWorker  {
 				commonDeleteFile(day,NOTHING_FOLDER_NAME,nothingFolder);
 			}
 		}
+	}
+	
+	private void deleteFolder(){
+		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
 		//如果三个目录同时为空，则删除整个目录
 		for(String folder : folderList){
 			if(folder.indexOf("-") == 4){
@@ -231,6 +232,11 @@ public class WriteJgyFolderWorker  {
 				List<String> mistakeList = FileUtil.getFullFileNames(mistakeFolder);
 				List<String> nothingList = FileUtil.getFullFileNames(nothingFolder);
 				
+				if(allList.size() == 0){
+					if(FileUtil.exists(allFolder)){
+						FileUtil.removeFolder(allFolder);
+					}
+				}
 				if(mistakeList.size() == 0){
 					if(FileUtil.exists(mistakeFolder)){
 						FileUtil.removeFolder(mistakeFolder);
