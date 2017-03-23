@@ -320,7 +320,7 @@ public class WriteJgyFolderWorker  {
 				
 				//如果阴线反转大于追涨，则写入标识文件
 				if(down>up){
-					String markFile = "down-"+day;
+					String markFile = "sh down "+day;
 					FileUtil.write(Constants.jgy_path+"/"+folderName+"/"+markFile, markFile);
 				}
 			}
