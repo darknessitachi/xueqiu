@@ -24,8 +24,6 @@ public class WriteJgyFolderWorker  {
 	private String ksrq;
 	private List<String> dbData = new ArrayList<String>();//2017-03-15_all_2017-03-15_600340_0.png
 	
-	private StringBuilder msg = new StringBuilder(); //存放警告信息
-	
 	private final static String ALL_FOLDER_NAME = "all";
 	private final static String MISTAKE_FOLDER_NAME = "mistake";
 	private final static String NOTHING_FOLDER_NAME = "nothing";
@@ -58,10 +56,6 @@ public class WriteJgyFolderWorker  {
 		}
 		renameFolder();
 		
-		if(msg.toString().length()>0){
-			System.err.println(msg.toString());
-		}
-		
 		System.out.println("写入坚果云完成。");
 		frame.displayLabel.setText("写入坚果云完成。");
 	}
@@ -84,7 +78,7 @@ public class WriteJgyFolderWorker  {
 				preDay = (String) map.get("preDay"); 
 				
 				if(StringUtil.isEmpty(code)){
-					msg.append("【"+map.get("stockName")+"】未找到code").append("\n");
+					System.err.println(StringUtil.getLineInfo()+":【"+map.get("stockName")+"】未找到code");
 					break;
 				}
 				
@@ -127,7 +121,7 @@ public class WriteJgyFolderWorker  {
 				preDay = (String) map.get("preDay"); 
 				
 				if(StringUtil.isEmpty(code)){
-					msg.append("【"+map.get("stockName")+"】未找到code").append("\n");
+					System.err.println(StringUtil.getLineInfo()+":【"+map.get("stockName")+"】未找到code");
 					break;
 				}
 				
@@ -161,7 +155,7 @@ public class WriteJgyFolderWorker  {
 				preDay = (String) map.get("preDay"); 
 				
 				if(StringUtil.isEmpty(code)){
-					msg.append("【"+map.get("stockName")+"】未找到code").append("\n");
+					System.err.println(StringUtil.getLineInfo()+":【"+map.get("stockName")+"】未找到code");
 					break;
 				}
 				
@@ -192,7 +186,7 @@ public class WriteJgyFolderWorker  {
 			}
 			dbData.add(day+"_"+folderName+"_"+targetFileName);
 		}else{
-			msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
+			System.err.println(StringUtil.getLineInfo()+":资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到");
 		}
 	}
 
@@ -348,7 +342,7 @@ public class WriteJgyFolderWorker  {
 				FileUtil.copy(folder+"/"+day+"_"+after_SH_CODE+".png", new File(Constants.out_img_path+"/"+day+"_SH.png"));
 			}
 		}else{
-			msg.append("资源【"+Constants.out_img_path+"/"+day+"_SH.png】未找到").append("\n");
+			System.err.println(StringUtil.getLineInfo()+":资源【"+Constants.out_img_path+"/"+day+"_SH.png】未找到");
 		}
 		if(FileUtil.exists(Constants.out_img_path+"/"+day+"_CYB.png")  ){
 			//如果目标不存在，则写入
@@ -356,7 +350,7 @@ public class WriteJgyFolderWorker  {
 				FileUtil.copy(folder+"/"+day+"_"+after_CYB_CODE+".png", new File(Constants.out_img_path+"/"+day+"_CYB.png"));
 			}
 		}else{
-			msg.append("资源【"+Constants.out_img_path+"/"+day+"_CYB.png】未找到").append("\n");
+			System.err.println(StringUtil.getLineInfo()+":资源【"+Constants.out_img_path+"/"+day+"_CYB.png】未找到");
 		}
 	}
 	
