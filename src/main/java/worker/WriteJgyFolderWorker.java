@@ -69,12 +69,8 @@ public class WriteJgyFolderWorker  {
 			String dayFolderName = FileUtil.fileLike(folderList, day);
 			dayFolderName = dayFolderName==null?day:dayFolderName;
 			//绝对路径
-			String before = Constants.jgy_path+"/"+dayFolderName+"/before";
 			String all = Constants.jgy_path+"/"+dayFolderName+"/all";
 			//如果文件夹不存在，则创建
-			if(!FileUtil.exists(before)){
-				FileUtil.createFolder(before);
-			}
 			if(!FileUtil.exists(all)){
 				FileUtil.createFolder(all);
 			}
@@ -101,11 +97,7 @@ public class WriteJgyFolderWorker  {
 					if(!FileUtil.exists(all+"/"+targetFileName)){
 						FileUtil.copy(all+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
 					}
-					if(!FileUtil.exists(before+"/"+targetFileName)){
-						FileUtil.copy(before+"/"+targetFileName, new File(Constants.out_img_path+"/"+srcFileName));
-					}
 					dbData.add(day+"_all_"+targetFileName);
-					dbData.add(day+"_before_"+targetFileName);
 				}else{
 					msg.append("资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到").append("\n");
 				}
@@ -210,21 +202,19 @@ public class WriteJgyFolderWorker  {
 				String day = folder.substring(0, 10);
 				
 				String allFolder = Constants.jgy_path+"/"+folder+"/all";
-				String beforeFolder = Constants.jgy_path+"/"+folder+"/before";
 				String mistakeFolder = Constants.jgy_path+"/"+folder+"/mistake";
 				//遍历目录，删除没有在数据库中的文件
 				commonDeleteFile(day,"all",allFolder);
-				commonDeleteFile(day,"before",beforeFolder);
 				commonDeleteFile(day,"mistake",mistakeFolder);
 			}
 		}
 		//如果三个目录同时为空，则删除整个目录
 		for(String folder : folderList){
 			if(folder.indexOf("-") == 4){
-				String beforeFolder = Constants.jgy_path+"/"+folder+"/before";
+				String allFolder = Constants.jgy_path+"/"+folder+"/all";
 				String mistakeFolder = Constants.jgy_path+"/"+folder+"/mistake";
 				
-				List<String> beforeList = FileUtil.getFullFileNames(beforeFolder);
+				List<String> allList = FileUtil.getFullFileNames(allFolder);
 				List<String> mistakeList = FileUtil.getFullFileNames(mistakeFolder);
 				
 				if(mistakeList.size() == 0){
@@ -233,7 +223,7 @@ public class WriteJgyFolderWorker  {
 					}
 				}
 				
-				if(beforeList.size() == 0 && mistakeList.size() == 0){
+				if(allList.size() == 0 && mistakeList.size() == 0){
 					FileUtil.removeFolder(Constants.jgy_path+"/"+folder);
 				}
 			}
@@ -260,13 +250,13 @@ public class WriteJgyFolderWorker  {
 			if(folderName.indexOf("-") == 4){
 				String day = folderName.substring(0, 10);
 				
-				String beforePath = Constants.jgy_path+"/"+folderName+"/before";
+				String allPath = Constants.jgy_path+"/"+folderName+"/all";
 				String mistakePath = Constants.jgy_path+"/"+folderName+"/mistake";
 				
 				int recordCount = 0;
 				int mistakeCount = 0;
-				if(FileUtil.exists(beforePath)){
-					recordCount = new File(beforePath).list().length;
+				if(FileUtil.exists(allPath)){
+					recordCount = (new File(allPath).list().length)/3;
 				}
 				if(FileUtil.exists(mistakePath)){
 					mistakeCount = (new File(mistakePath).list().length)/2;
