@@ -1,26 +1,35 @@
-import java.io.IOException;
 import java.util.List;
 
+import util.Constants;
 import util.FileUtil;
+import util.StringUtil;
 
 
 public class Test {
-		public static void main(String[] args) throws IOException {
-			
-			String path = "D:/map/Parts";
-			
-			List<String> list = FileUtil.getFullFileNames(path);
-			
-			for(String f:list){
+	
+	public static void main(String args[]) {
+		//removeFolder();
+		
+	}
+
+	public static void removeFolder() {
+		
+		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
+		for(String folderName : folderList){
+			if(folderName.indexOf("-") == 4){
 				
+				List<String> list = FileUtil.getFullFileNames(Constants.jgy_path+"/"+folderName);
 				
-				String pre = f.substring(0, 4);
+				String file = FileUtil.fileLike(list, "down-");
 				
-				
-				System.out.println("arcpy.CopyRuntimeGdbToFileGdb_conversion(\"D:/map/Parts/"+f+"\", '"+pre+".gdb')");
-				
-				
+				if(!StringUtil.isEmpty(file)){
+					FileUtil.delete(Constants.jgy_path+"/"+folderName+"/"+file);
+				}
 			}
-			
 		}
+		
+	}
+	
+	
+
 }
