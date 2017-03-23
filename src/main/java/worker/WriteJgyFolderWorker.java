@@ -390,34 +390,37 @@ public class WriteJgyFolderWorker  {
 	
 	private void writeIndex(String preDay, String day, String folder, StringBuilder msg) {
 		
-		String SH_CODE = "000SH";
-		String CYB_CODE = "001CYB";
+		String before_SH_CODE = "000SH_0";
+		String after_SH_CODE  = "000SH_1";
+		
+		String before_CYB_CODE = "001CYB_0";
+		String after_CYB_CODE  = "001CYB_1";
 		
 		//最后写入大盘的照片
 		if(FileUtil.exists(Constants.out_img_path+"/"+preDay+"_SH.png")  ){
 			//如果目标不存在，则写入
-			if(!FileUtil.exists(folder+"/"+day+"_0_"+SH_CODE+".png")){
-				FileUtil.copy(folder+"/"+day+"_0_"+SH_CODE+".png", new File(Constants.out_img_path+"/"+preDay+"_SH.png"));
+			if(!FileUtil.exists(folder+"/"+day+"_"+before_SH_CODE+".png")){
+				FileUtil.copy(folder+"/"+day+"_"+before_SH_CODE+".png", new File(Constants.out_img_path+"/"+preDay+"_SH.png"));
 			}
 		}
 		if(FileUtil.exists(Constants.out_img_path+"/"+preDay+"_CYB.png")  ){
 			//如果目标不存在，则写入
-			if(!FileUtil.exists(folder+"/"+day+"_0_"+CYB_CODE+".png")){
-				FileUtil.copy(folder+"/"+day+"_0_"+CYB_CODE+".png", new File(Constants.out_img_path+"/"+preDay+"_CYB.png"));
+			if(!FileUtil.exists(folder+"/"+day+"_"+before_CYB_CODE+".png")){
+				FileUtil.copy(folder+"/"+day+"_"+before_CYB_CODE+".png", new File(Constants.out_img_path+"/"+preDay+"_CYB.png"));
 			}
 		}
 		if(FileUtil.exists(Constants.out_img_path+"/"+day+"_SH.png")  ){
 			//如果目标不存在，则写入
-			if(!FileUtil.exists(folder+"/"+day+"_1_"+SH_CODE+".png")){
-				FileUtil.copy(folder+"/"+day+"_1_"+SH_CODE+".png", new File(Constants.out_img_path+"/"+day+"_SH.png"));
+			if(!FileUtil.exists(folder+"/"+day+"_"+after_SH_CODE+".png")){
+				FileUtil.copy(folder+"/"+day+"_"+after_SH_CODE+".png", new File(Constants.out_img_path+"/"+day+"_SH.png"));
 			}
 		}else{
 			msg.append("资源【"+Constants.out_img_path+"/"+day+"_SH.png】未找到").append("\n");
 		}
 		if(FileUtil.exists(Constants.out_img_path+"/"+day+"_CYB.png")  ){
 			//如果目标不存在，则写入
-			if(!FileUtil.exists(folder+"/"+day+"_1_"+CYB_CODE+".png")){
-				FileUtil.copy(folder+"/"+day+"_1_"+CYB_CODE+".png", new File(Constants.out_img_path+"/"+day+"_CYB.png"));
+			if(!FileUtil.exists(folder+"/"+day+"_"+after_CYB_CODE+".png")){
+				FileUtil.copy(folder+"/"+day+"_"+after_CYB_CODE+".png", new File(Constants.out_img_path+"/"+day+"_CYB.png"));
 			}
 		}else{
 			msg.append("资源【"+Constants.out_img_path+"/"+day+"_CYB.png】未找到").append("\n");
