@@ -127,7 +127,9 @@ public class WriteJgyFolderWorker  {
 				}
 			}
 		}
-		System.err.println(msg.toString());
+		if(msg.toString().length()>0){
+			System.err.println(msg.toString());
+		}
 	}
 	
 	
@@ -190,7 +192,9 @@ public class WriteJgyFolderWorker  {
 				}
 			}
 		}
-		System.err.println(msg.toString());
+		if(msg.toString().length()>0){
+			System.err.println(msg.toString());
+		}
 	}
 	
 	private void writeNothing() {
@@ -264,7 +268,9 @@ public class WriteJgyFolderWorker  {
 				}
 			}
 		}
-		System.err.println(msg.toString());
+		if(msg.toString().length()>0){
+			System.err.println(msg.toString());
+		}
 		
 	}
 
@@ -377,7 +383,9 @@ public class WriteJgyFolderWorker  {
 				writeIndex(MiniDbUtil.getPreDay(day), day, Constants.jgy_path+"/"+folderName,msg);
 			}
 		}
-		System.err.println(msg.toString());
+		if(msg.toString().length()>0){
+			System.err.println(msg.toString());
+		}
 	}
 	
 	private void writeIndex(String preDay, String day, String folder, StringBuilder msg) {
