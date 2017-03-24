@@ -50,7 +50,7 @@ public class CustStringUtil {
 	
 	
 	/**
-	 * 把通达信导出的股票代码，转化成标准的股票代码（sh600234）
+	 * 1600340---->sh600340
 	 * @param code
 	 * @return
 	 */
@@ -66,7 +66,11 @@ public class CustStringUtil {
 			return "sz"+code.substring(1);
 		}
 	}
-	
+	/**
+	 * sh600340---->1600340
+	 * @param code
+	 * @return
+	 */
 	public static String StandardCode2tdxCode(String code) {
 		if(code.toLowerCase().startsWith("sh")){
 			return "1"+code.substring(2);
@@ -75,6 +79,17 @@ public class CustStringUtil {
 		}
 	}
 	
-	
+	/**
+	 * 600340---->1600340
+	 * @param code
+	 * @return
+	 */
+	public static String appendTdxPrefix(String code) {
+		if(code.charAt(0) == '6'){
+			return "1"+code;
+		}else{
+			return "0"+code;
+		}
+	}
 
 }
