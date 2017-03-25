@@ -57,6 +57,9 @@ public class WriteJgyFolderWorker  {
 		}
 		renameFolder();
 		
+		//再次清除空文件夹，防止多余的文件夹
+		deleteFolder();
+		
 		System.out.println("写入坚果云完成。");
 		frame.displayLabel.setText("写入坚果云完成。");
 	}
