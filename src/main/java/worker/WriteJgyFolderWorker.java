@@ -307,29 +307,43 @@ public class WriteJgyFolderWorker  {
 		for(String folderName : folderList){
 			if(folderName.indexOf("-") == 4){
 				String day = folderName.substring(0, 10);
-				
-				int up = MiniDbUtil.count(" select * from record where type in ('1','2','3') and day='"+day+"' and stockType in ( select code from dict where typeCode='DICT_ALL_TYPE' and sub='1') ");
-				int down = MiniDbUtil.count(" select * from record where type in ('1','2','3') and day='"+day+"' and stockType in ( select code from dict where typeCode='DICT_ALL_TYPE' and sub='2') ");
-			
-				List<String> list = MiniDbUtil.queryForList(" select desc from note n,dict d where 1=1 and day='"+day+"' and typeCode='DICT_FEELING_TYPE' and feel=code  order by  n.day desc ,n.xh asc,createDate  ");
-				String feel = CollectionUtil.toLineString(list);
-				
-				//写入readme.txt
-				String content = "追涨【"+up+"】，阴线反转【"+down+"】。\n\n"+feel;
-				FileUtil.write(Constants.jgy_path+"/"+folderName+"/readme.txt", content);
-				
+				//写入readme等文件
+				writeReadme(folderName,day);
 				//写入指数
 				writeIndex(MiniDbUtil.getPreDay(day), day, Constants.jgy_path+"/"+folderName);
-				
-				//如果阴线反转大于追涨，则写入标识文件
-				if(down>up){
-					String markFile = "sh down "+day;
-					FileUtil.write(Constants.jgy_path+"/"+folderName+"/"+markFile, markFile);
-				}
 			}
 		}
 	}
 	
+	private void writeReadme(String folderName, String day) throws IOException {
+		
+		int up = MiniDbUtil.count(" select * from record where type in ('1','2','3') and day='"+day+"' and stockType in ( select code from dict where typeCode='DICT_ALL_TYPE' and sub='1') ");
+		int down = MiniDbUtil.count(" select * from record where type in ('1','2','3') and day='"+day+"' and stockType in ( select code from dict where typeCode='DICT_ALL_TYPE' and sub='2') ");
+	
+		List<String> list = MiniDbUtil.queryForList(" select desc from note n,dict d where 1=1 and day='"+day+"' and typeCode='DICT_FEELING_TYPE' and feel=code  order by  n.day desc ,n.xh asc,createDate  ");
+		String feel = CollectionUtil.toLineString(list);
+		
+		//写入readme.txt
+		String content = "追涨【"+up+"】，阴线反转【"+down+"】。\n\n"+feel;
+		String newCon = content.replaceAll("\n", "");
+		String oldCon = "";
+		String readmePath = Constants.jgy_path+"/"+folderName+"/readme.txt";
+		if(FileUtil.exists(readmePath)){
+			oldCon = FileUtil.read(readmePath);
+		}
+		if(!newCon.equals(oldCon)){
+			FileUtil.write(readmePath, content);
+		}
+		
+		//如果阴线反转大于追涨，则写入标识文件
+		if(down>up){
+			String markFile = "sh down "+day;
+			if(!FileUtil.exists(Constants.jgy_path+"/"+folderName+"/"+markFile)){
+				FileUtil.write(Constants.jgy_path+"/"+folderName+"/"+markFile, "");
+			}
+		}
+	}
+
 	private void writeIndex(String preDay, String day, String folder) {
 		
 		String before_SH_CODE = "000SH_0";
