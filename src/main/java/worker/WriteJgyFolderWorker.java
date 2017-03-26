@@ -325,22 +325,12 @@ public class WriteJgyFolderWorker  {
 		
 		//写入readme.txt
 		String content = "追涨【"+up+"】，阴线反转【"+down+"】。\n\n"+feel;
-		String newCon = content.replaceAll("\n", "");
-		String oldCon = "";
-		String readmePath = Constants.jgy_path+"/"+folderName+"/readme.txt";
-		if(FileUtil.exists(readmePath)){
-			oldCon = FileUtil.read(readmePath);
-		}
-		if(!newCon.equals(oldCon)){
-			FileUtil.write(readmePath, content);
-		}
+		FileUtil.write(Constants.jgy_path+"/"+folderName+"/readme.txt", content);
 		
 		//如果阴线反转大于追涨，则写入标识文件
 		if(down>up){
 			String markFile = "sh down "+day;
-			if(!FileUtil.exists(Constants.jgy_path+"/"+folderName+"/"+markFile)){
-				FileUtil.write(Constants.jgy_path+"/"+folderName+"/"+markFile, "");
-			}
+			FileUtil.write(Constants.jgy_path+"/"+folderName+"/"+markFile, "");
 		}
 	}
 
