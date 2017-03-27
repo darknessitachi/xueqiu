@@ -45,7 +45,8 @@ public class WriteJgyFolderWorker  {
 		writeMistake();
 		writeNothing();
 		
-		writeTrainMistake();
+		writeTrainRecord("0101",MISTAKE_FOLDER_NAME);
+		writeTrainRecord("0102",NOTHING_FOLDER_NAME);
 		
 		deleteFile();
 		deleteFolder();
@@ -66,14 +67,14 @@ public class WriteJgyFolderWorker  {
 		frame.displayLabel.setText("写入坚果云完成。");
 	}
 
-	public void writeTrainMistake() {
+	public void writeTrainRecord(String score, String folderName) {
 		//获取天数，从02-17日开始
-		List<String> days = MiniDbUtil.queryForList(" select distinct day from (select s.forecastDay day,s.preDay,t.* from train t ,suptrain s where t.supid=s.id and day>='"+ksrq+"' and score='0101') ");
+		List<String> days = MiniDbUtil.queryForList(" select distinct day from (select s.forecastDay day,s.preDay,t.* from train t ,suptrain s where t.supid=s.id and day>='"+ksrq+"' and score='"+score+"') ");
 		//遍历每一天
 		for(String day:days){
 			
-			String mistakePath = getSecondPath(day,MISTAKE_FOLDER_NAME);
-			String sql = " select  k.code,s.forecastDay day,s.preDay from train t ,suptrain s left join stock k on t.stockName=k.name where t.supid=s.id and forecastDay='"+day+"' and score='0101'  group by code,day,preDay ";
+			String folderPath = getSecondPath(day,folderName);
+			String sql = " select  k.code,s.forecastDay day,s.preDay from train t ,suptrain s left join stock k on t.stockName=k.name where t.supid=s.id and forecastDay='"+day+"' and score='"+score+"'  group by code,day,preDay ";
 			List<Map<String,Object>> list = MiniDbUtil.query(sql);
 			
 			//遍历一天中的数据，写入对应的文件夹
@@ -89,12 +90,12 @@ public class WriteJgyFolderWorker  {
 				//导出反弹前的图片
 				String srcFileName = preDay+"_"+code.substring(1)+".png";
 				String targetFileName = day+"_"+code.substring(1)+"_0.png";
-				writePicture(srcFileName,targetFileName,day,mistakePath,MISTAKE_FOLDER_NAME);
+				writePicture(srcFileName,targetFileName,day,folderPath,folderName);
 				
 				//导出反弹后的图片
 				srcFileName = day+"_"+code.substring(1)+".png";
 				targetFileName = day+"_"+code.substring(1)+"_1.png";
-				writePicture(srcFileName,targetFileName,day,mistakePath,MISTAKE_FOLDER_NAME);
+				writePicture(srcFileName,targetFileName,day,folderPath,folderName);
 			}
 		}
 	}
