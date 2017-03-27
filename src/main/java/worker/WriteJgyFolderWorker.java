@@ -45,7 +45,7 @@ public class WriteJgyFolderWorker  {
 		writeMistake();
 		writeNothing();
 		
-		//writeTrainMistake();
+		writeTrainMistake();
 		
 		deleteFile();
 		deleteFolder();
@@ -73,14 +73,13 @@ public class WriteJgyFolderWorker  {
 		for(String day:days){
 			
 			String mistakePath = getSecondPath(day,MISTAKE_FOLDER_NAME);
-			String sql = " select k.code,s.forecastDay day,s.preDay,t.* from train t ,suptrain s left join stock k on t.stockName=k.name where t.supid=s.id and day>='"+ksrq+"' and score='0101' ";
+			String sql = " select  k.code,s.forecastDay day,s.preDay from train t ,suptrain s left join stock k on t.stockName=k.name where t.supid=s.id and forecastDay='"+day+"' and score='0101'  group by code,day,preDay ";
 			List<Map<String,Object>> list = MiniDbUtil.query(sql);
-			String preDay = null;
 			
 			//遍历一天中的数据，写入对应的文件夹
 			for(Map<String,Object> map:list){
 				String code = (String) map.get("code");
-				preDay = (String) map.get("preDay"); 
+				String preDay = (String) map.get("preDay"); 
 				
 				if(StringUtil.isEmpty(code)){
 					System.err.println(StringUtil.getLineInfo()+":【"+map.get("stockName")+"】未找到code");
