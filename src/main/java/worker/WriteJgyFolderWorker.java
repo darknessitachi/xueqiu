@@ -45,6 +45,8 @@ public class WriteJgyFolderWorker  {
 		writeMistake();
 		writeNothing();
 		
+		//writeTrainMistake();
+		
 		deleteFile();
 		deleteFolder();
 		
@@ -62,6 +64,40 @@ public class WriteJgyFolderWorker  {
 		
 		System.out.println("写入坚果云完成。");
 		frame.displayLabel.setText("写入坚果云完成。");
+	}
+
+	public void writeTrainMistake() {
+		//获取天数，从02-17日开始
+		List<String> days = MiniDbUtil.queryForList(" select distinct day from (select s.forecastDay day,s.preDay,t.* from train t ,suptrain s where t.supid=s.id and day>='"+ksrq+"' and score='0101') ");
+		//遍历每一天
+		for(String day:days){
+			
+			String mistakePath = getSecondPath(day,MISTAKE_FOLDER_NAME);
+			String sql = " select k.code,s.forecastDay day,s.preDay,t.* from train t ,suptrain s left join stock k on t.stockName=k.name where t.supid=s.id and day>='"+ksrq+"' and score='0101' ";
+			List<Map<String,Object>> list = MiniDbUtil.query(sql);
+			String preDay = null;
+			
+			//遍历一天中的数据，写入对应的文件夹
+			for(Map<String,Object> map:list){
+				String code = (String) map.get("code");
+				preDay = (String) map.get("preDay"); 
+				
+				if(StringUtil.isEmpty(code)){
+					System.err.println(StringUtil.getLineInfo()+":【"+map.get("stockName")+"】未找到code");
+					break;
+				}
+				
+				//导出反弹前的图片
+				String srcFileName = preDay+"_"+code.substring(1)+".png";
+				String targetFileName = day+"_"+code.substring(1)+"_0.png";
+				writePicture(srcFileName,targetFileName,day,mistakePath,MISTAKE_FOLDER_NAME);
+				
+				//导出反弹后的图片
+				srcFileName = day+"_"+code.substring(1)+".png";
+				targetFileName = day+"_"+code.substring(1)+"_1.png";
+				writePicture(srcFileName,targetFileName,day,mistakePath,MISTAKE_FOLDER_NAME);
+			}
+		}
 	}
 
 	private void writeRecord() {
