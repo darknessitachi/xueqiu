@@ -42,11 +42,11 @@ public class WriteJgyFolderWorker  {
 		ksrq = params.getProperty("jgyKsrq").trim();
 		
 		writeRecord();
-		writeMistake();
 		writeNothing();
+		writeMistake();
 		
-		writeTrainRecord("0101",MISTAKE_FOLDER_NAME);
-		writeTrainRecord("0102",NOTHING_FOLDER_NAME);
+		writeTrain("0101",MISTAKE_FOLDER_NAME);
+		writeTrain("0102",NOTHING_FOLDER_NAME);
 		
 		deleteFile();
 		deleteFolder();
@@ -67,7 +67,7 @@ public class WriteJgyFolderWorker  {
 		frame.displayLabel.setText("写入坚果云完成。");
 	}
 
-	public void writeTrainRecord(String score, String folderName) {
+	public void writeTrain(String score, String folderName) {
 		//获取天数，从02-17日开始
 		List<String> days = MiniDbUtil.queryForList(" select distinct day from (select s.forecastDay day,s.preDay,t.* from train t ,suptrain s where t.supid=s.id and day>='"+ksrq+"' and score='"+score+"') ");
 		//遍历每一天
