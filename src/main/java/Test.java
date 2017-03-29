@@ -7,7 +7,7 @@ import util.StringUtil;
 public class Test {
 
 	public static void main(String args[]) {
-		System.out.println("yang\nrui\n18".replaceAll("\n", ""));
+		System.out.println("2017-02-17".substring(1));
 	}
 	
 	

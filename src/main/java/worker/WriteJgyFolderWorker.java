@@ -60,8 +60,11 @@ public class WriteJgyFolderWorker  {
 		}
 		renameFolder();
 		
-		//再次清除空文件夹，防止多余的文件夹
-		deleteFolder();
+		try {
+			incrementToBaiduYun();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		System.out.println("写入坚果云完成。");
 		frame.displayLabel.setText("写入坚果云完成。");
@@ -407,6 +410,42 @@ public class WriteJgyFolderWorker  {
 		}else{
 			System.err.println(StringUtil.getLineInfo()+":资源【"+Constants.out_img_path+"/"+day+"_CYB.png】未找到");
 		}
+	}
+	
+	private void incrementToBaiduYun() throws IOException {
+		if(!FileUtil.exists(Constants.baidu_path)){
+			return;
+		}
+		String baiduPath = Constants.baidu_path+"/"+getMaxVersion();
+		//获取百度云中缺少的文件夹
+		List<String> diff = getNeedFolder(baiduPath); 
+		for(String dayFolder:diff){
+			FileUtil.copyDirectiory(Constants.jgy_path+"/"+dayFolder, baiduPath+"/"+dayFolder);
+			System.out.println("【"+Constants.jgy_path+"/"+dayFolder+"】拷贝到【"+baiduPath+"/"+dayFolder+"】");
+		}
+	}
+
+	private List<String> getNeedFolder(String baiduPath) {
+		List<String> list1 = FileUtil.getFullFileNames(Constants.jgy_path);
+		List<String> list2 = FileUtil.getFullFileNames(baiduPath);
+		
+		List<String> result = CollectionUtil.different(list1, list2);
+		return result;
+	}
+
+	private String getMaxVersion() {
+		List<String> list = FileUtil.getFullFileNames(Constants.baidu_path);
+		int max = 0;
+		for(String str:list){
+			if(str.startsWith("version")){
+				String s = str.replace("version", "");
+				int num = Integer.parseInt(s);
+				if(num>max){
+					max = num;
+				}
+			}
+		}
+		return "version"+max;
 	}
 	
 
