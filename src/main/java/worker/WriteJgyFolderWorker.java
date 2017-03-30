@@ -414,6 +414,7 @@ public class WriteJgyFolderWorker  {
 	
 	private void incrementToBaiduYun() throws IOException {
 		if(!FileUtil.exists(Constants.baidu_path)){
+			System.out.println("未找到目录【"+Constants.baidu_path+"】");
 			return;
 		}
 		String baiduPath = Constants.baidu_path+"/"+getMaxVersion();
