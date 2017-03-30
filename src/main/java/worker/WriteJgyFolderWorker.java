@@ -417,12 +417,13 @@ public class WriteJgyFolderWorker  {
 			System.out.println("未找到目录【"+Constants.baidu_path+"】");
 			return;
 		}
+		System.out.println("开始增量写入百度云");
 		String baiduPath = Constants.baidu_path+"/"+getMaxVersion();
 		//获取百度云中缺少的文件夹
 		List<String> diff = getNeedFolder(baiduPath); 
 		for(String dayFolder:diff){
 			FileUtil.copyDirectiory(Constants.jgy_path+"/"+dayFolder, baiduPath+"/"+dayFolder);
-			System.out.println("【"+Constants.jgy_path+"/"+dayFolder+"】拷贝到【"+baiduPath+"/"+dayFolder+"】");
+			System.out.println("【"+Constants.jgy_path+"/"+dayFolder+"】------拷贝到------【"+baiduPath+"/"+dayFolder+"】");
 		}
 	}
 

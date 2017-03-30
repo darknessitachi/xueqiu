@@ -17,7 +17,7 @@ public class Constants {
 	public static final String db_name = "test.db";
 	
 	public static final String jgy_path         	 =  "d:/我的坚果云";
-	public static final String baidu_path         	 =  "d:/我的百度云";
+	public static final String baidu_path         	 =  "d:/00-我的百度云";
 	public static final String out_path         	 =  "d:/xueqiu/";
 	public static final String out_result_path   	 =  "d:/xueqiu/result";
 	public static final String out_config_path  	 =  "d:/xueqiu/config";
