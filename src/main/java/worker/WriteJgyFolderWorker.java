@@ -33,6 +33,7 @@ public class WriteJgyFolderWorker  {
 	}
 
 	public void run() {
+		
 		if(!FileUtil.exists(Constants.jgy_path)){
 			System.out.println("文件夹【"+Constants.jgy_path+"】不存在");
 			return;
@@ -41,27 +42,26 @@ public class WriteJgyFolderWorker  {
 		Properties params = AccessUtil.readParams();
 		ksrq = params.getProperty("jgyKsrq").trim();
 		
-		writeRecord();
-		writeNothing();
-		writeMistake();
-		
-		writeTrain("0101",MISTAKE_FOLDER_NAME);
-		writeTrain("0102",NOTHING_FOLDER_NAME);
-		
-		deleteFile();
-		deleteFolder();
-		
 		try {
+			
+			writeRecord();
+			writeNothing();
+			writeMistake();
+			writeTrain("0101",MISTAKE_FOLDER_NAME);
+			writeTrain("0102",NOTHING_FOLDER_NAME);
+			
+			deleteFile();
+			deleteFolder();
+			//写入备注
 			writeComment();
+			//文件夹重命名
+			renameFolder();
+			
+			//增量拷贝到百度
+			incrementToBaiduYun();
+			
 		} catch (ParseException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		renameFolder();
-		
-		try {
-			incrementToBaiduYun();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
