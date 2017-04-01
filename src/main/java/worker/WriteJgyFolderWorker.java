@@ -51,8 +51,7 @@ public class WriteJgyFolderWorker  {
 			writeTrain("0101",MISTAKE_FOLDER_NAME);
 			writeTrain("0102",NOTHING_FOLDER_NAME);
 			
-			deleteFile();
-			deleteFolder();
+			deleteFileAndFolder();
 			//写入备注
 			writeComment();
 			writeRoot();
@@ -277,7 +276,7 @@ public class WriteJgyFolderWorker  {
 		return path;
 	}
 
-	private void deleteFile() {
+	private void deleteFileAndFolder() {
 		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
 		for(String folder : folderList){
 			if(folder.indexOf("-") == 4){
@@ -293,6 +292,8 @@ public class WriteJgyFolderWorker  {
 				commonDeleteFile(day,NOTHING_FOLDER_NAME,nothingFolder);
 			}
 		}
+		
+		deleteFolder();
 	}
 	
 	private void deleteFolder(){
