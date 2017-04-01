@@ -15,6 +15,7 @@ import util.CollectionUtil;
 import util.Constants;
 import util.FileUtil;
 import util.MiniDbUtil;
+import util.MiniExcelTemplate;
 import util.StringUtil;
 
 public class WriteJgyFolderWorker  {
@@ -54,6 +55,7 @@ public class WriteJgyFolderWorker  {
 			deleteFolder();
 			//写入备注
 			writeComment();
+			writeRoot();
 			//文件夹重命名
 			renameFolder();
 			
@@ -68,6 +70,38 @@ public class WriteJgyFolderWorker  {
 		
 		System.out.println("写入坚果云完成。");
 		frame.displayLabel.setText("写入坚果云完成。");
+	}
+
+	private void writeRoot() {
+		List<Map<String,Object>> list = MiniDbUtil.query(" select * from result where 1=1  and  day>='"+ksrq+"'  order by  day desc   ");
+		List<List<Object>> data1 = new ArrayList<List<Object>>();
+		for(Map<String,Object> map:list){
+			int up = (int) map.get("upCount");
+			int down = (int) map.get("downCount");
+			int all = (int) map.get("aCount");
+			String fg = (all!=0 && down>=up)?"主阴线反转":"";
+			
+			List<Object> row = new ArrayList<Object>();
+			row.add(map.get("day"));
+			row.add("（"+up+"）（"+down+"）");
+			row.add(all);
+			row.add(fg);
+			data1.add(row);
+		}
+		
+		List<List<List<Object>>> allSheetData = new ArrayList<List<List<Object>>>();
+    	allSheetData.add(data1);
+    	
+    	List<String> sheetList = new ArrayList<String>();
+    	sheetList.add("统计");
+    	
+    	String[] titleArr = {"日期","追涨与阴线反转","反弹合计","风格"};
+		List<String> title = java.util.Arrays.asList(titleArr);
+		
+		//导出
+		MiniExcelTemplate temp = new MiniExcelTemplate();
+    	temp.createExcel(sheetList,title,allSheetData,new int[]{5000,8000,5000,5000});
+    	temp.export(Constants.jgy_path+"/stat.xls");
 	}
 
 	public void writeTrain(String score, String folderName) {
@@ -346,10 +380,11 @@ public class WriteJgyFolderWorker  {
 		for(String folderName : folderList){
 			if(folderName.indexOf("-") == 4){
 				String day = folderName.substring(0, 10);
-				//写入readme等文件
+				
 				writeReadme(folderName,day);
-				//写入指数
+				
 				writeIndex(MiniDbUtil.getPreDay(day), day, Constants.jgy_path+"/"+folderName);
+				
 			}
 		}
 	}
@@ -365,12 +400,6 @@ public class WriteJgyFolderWorker  {
 		//写入readme.txt
 		String content = "追涨【"+up+"】，阴线反转【"+down+"】。\n\n"+feel;
 		FileUtil.write(Constants.jgy_path+"/"+folderName+"/readme.txt", content);
-		
-		//如果阴线反转大于追涨，则写入标识文件
-		if(down>up){
-			String markFile = "sh down "+day;
-			FileUtil.write(Constants.jgy_path+"/"+folderName+"/"+markFile, "");
-		}
 	}
 
 	private void writeIndex(String preDay, String day, String folder) {
