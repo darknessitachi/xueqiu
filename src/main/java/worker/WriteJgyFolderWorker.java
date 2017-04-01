@@ -460,8 +460,15 @@ public class WriteJgyFolderWorker  {
 	private List<String> getNeedFolder(String baiduPath) {
 		List<String> list1 = FileUtil.getFullFileNames(Constants.jgy_path);
 		List<String> list2 = FileUtil.getFullFileNames(baiduPath);
+		List<String> list = CollectionUtil.different(list1, list2);
 		
-		List<String> result = CollectionUtil.different(list1, list2);
+		List<String> result = new ArrayList<String>();
+		for(String str:list){
+			if(str.indexOf("-") == 4){
+				result.add(str);
+			}
+		}
+		
 		return result;
 	}
 
