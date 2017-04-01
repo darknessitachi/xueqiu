@@ -455,6 +455,9 @@ public class WriteJgyFolderWorker  {
 			FileUtil.copyDirectiory(Constants.jgy_path+"/"+dayFolder, baiduPath+"/"+dayFolder);
 			System.out.println("【"+Constants.jgy_path+"/"+dayFolder+"】------拷贝到------【"+baiduPath+"/"+dayFolder+"】");
 		}
+		
+		//增量拷贝stat.xls
+		FileUtil.copy(baiduPath+"/"+StringUtil.getMaxNextFileName(baiduPath, "stat")+".xls", new File(Constants.jgy_path+"/stat.xls"));
 	}
 
 	private List<String> getNeedFolder(String baiduPath) {
