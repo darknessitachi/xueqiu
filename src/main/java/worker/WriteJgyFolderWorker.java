@@ -448,7 +448,7 @@ public class WriteJgyFolderWorker  {
 			return;
 		}
 		System.out.println("开始增量写入百度云");
-		String baiduPath = Constants.baidu_path+"/"+getMaxVersion();
+		String baiduPath = Constants.baidu_path+"/"+StringUtil.getMaxFolderName(Constants.baidu_path,"version");
 		//获取百度云中缺少的文件夹
 		List<String> diff = getNeedFolder(baiduPath); 
 		for(String dayFolder:diff){
@@ -465,21 +465,4 @@ public class WriteJgyFolderWorker  {
 		return result;
 	}
 
-	private String getMaxVersion() {
-		List<String> list = FileUtil.getFullFileNames(Constants.baidu_path);
-		int max = 0;
-		for(String str:list){
-			if(str.startsWith("version")){
-				String s = str.replace("version", "");
-				int num = Integer.parseInt(s);
-				if(num>max){
-					max = num;
-				}
-			}
-		}
-		return "version"+max;
-	}
-	
-
-	
 }
