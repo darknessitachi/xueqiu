@@ -101,6 +101,7 @@ public class WriteJgyFolderWorker  {
 		
 		//导出
 		MiniExcelTemplate temp = new MiniExcelTemplate();
+		temp.setImgCol(4);
     	temp.createExcel(sheetList,title,allSheetData,new int[]{5000,8000,5000,5000,5000});
     	temp.export(Constants.jgy_path+"/stat.xls");
 	}

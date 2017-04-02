@@ -7,7 +7,7 @@ import util.StringUtil;
 public class Test {
 
 	public static void main(String args[]) {
-		System.out.println("2017-02-17".substring(1));
+		System.out.println("1".indexOf("."));
 	}
 	
 	
