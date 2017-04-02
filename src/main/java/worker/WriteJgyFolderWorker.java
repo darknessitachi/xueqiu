@@ -79,12 +79,14 @@ public class WriteJgyFolderWorker  {
 			int down = (int) map.get("downCount");
 			int all = (int) map.get("aCount");
 			String fg = (all!=0 && down>=up)?"主阴线反转":"";
+			String xj = ""+map.get("score");
 			
 			List<Object> row = new ArrayList<Object>();
 			row.add(map.get("day"));
 			row.add("（"+up+"）（"+down+"）");
 			row.add(all);
 			row.add(fg);
+			row.add(xj);
 			data1.add(row);
 		}
 		
@@ -94,12 +96,12 @@ public class WriteJgyFolderWorker  {
     	List<String> sheetList = new ArrayList<String>();
     	sheetList.add("统计");
     	
-    	String[] titleArr = {"日期","追涨与阴线反转","反弹合计","风格"};
+    	String[] titleArr = {"日期","追涨与阴线反转","反弹合计","风格","星级"};
 		List<String> title = java.util.Arrays.asList(titleArr);
 		
 		//导出
 		MiniExcelTemplate temp = new MiniExcelTemplate();
-    	temp.createExcel(sheetList,title,allSheetData,new int[]{5000,8000,5000,5000});
+    	temp.createExcel(sheetList,title,allSheetData,new int[]{5000,8000,5000,5000,5000});
     	temp.export(Constants.jgy_path+"/stat.xls");
 	}
 
