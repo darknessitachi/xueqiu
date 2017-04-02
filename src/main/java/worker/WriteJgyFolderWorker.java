@@ -16,7 +16,6 @@ import util.Constants;
 import util.FileUtil;
 import util.MiniDbUtil;
 import util.MiniExcelTemplate;
-import util.ProjectUtil;
 import util.StringUtil;
 
 public class WriteJgyFolderWorker  {
@@ -105,7 +104,7 @@ public class WriteJgyFolderWorker  {
 		//导出
 		MiniExcelTemplate excel = new MiniExcelTemplate();
 		excel.setImgCol(5);
-		excel.setImgFolderPath(ProjectUtil.getProjectPath() +"/img");
+		excel.setImgFolderPath(Constants.out_config_path +"/img");
     	excel.createExcel(sheetList,title,allSheetData,new int[]{5000,8000,5000,5000,5000,5000});
     	excel.export(Constants.jgy_path+"/stat.xls");
 	}
