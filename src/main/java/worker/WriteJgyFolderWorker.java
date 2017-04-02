@@ -16,6 +16,7 @@ import util.Constants;
 import util.FileUtil;
 import util.MiniDbUtil;
 import util.MiniExcelTemplate;
+import util.ProjectUtil;
 import util.StringUtil;
 
 public class WriteJgyFolderWorker  {
@@ -100,10 +101,11 @@ public class WriteJgyFolderWorker  {
 		List<String> title = java.util.Arrays.asList(titleArr);
 		
 		//导出
-		MiniExcelTemplate temp = new MiniExcelTemplate();
-		temp.setImgCol(4);
-    	temp.createExcel(sheetList,title,allSheetData,new int[]{5000,8000,5000,5000,5000});
-    	temp.export(Constants.jgy_path+"/stat.xls");
+		MiniExcelTemplate excel = new MiniExcelTemplate();
+		excel.setImgCol(4);
+		excel.setImgFolderPath(ProjectUtil.getProjectPath() +"/img");
+    	excel.createExcel(sheetList,title,allSheetData,new int[]{5000,8000,5000,5000,5000});
+    	excel.export(Constants.jgy_path+"/stat.xls");
 	}
 
 	public void writeTrain(String score, String folderName) {
