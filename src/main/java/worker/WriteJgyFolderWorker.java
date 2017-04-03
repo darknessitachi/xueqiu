@@ -67,7 +67,7 @@ public class WriteJgyFolderWorker  {
 			e.printStackTrace();
 		}
 		
-		System.out.println("写入坚果云完成。");
+		System.out.println("写入云盘完成。");
 		frame.displayLabel.setText("写入坚果云完成。");
 	}
 
