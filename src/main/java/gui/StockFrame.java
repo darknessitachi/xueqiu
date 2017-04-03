@@ -769,7 +769,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				int count = MiniDbUtil.count(" select * from backup where forecastDay=( select max(day) from envi) ");
+				
+				String forecastDay = StringUtil.getForecastDay();
+				
+				int count = MiniDbUtil.count(" select * from backup where forecastDay='"+forecastDay+"' ");
 				if(count == 0){
 					showMsgBox("没有备份backup，不能上传。");
 					return;
