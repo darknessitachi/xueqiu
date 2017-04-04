@@ -77,6 +77,7 @@ public class WriteJgyFolderWorker  {
 		for(Map<String,Object> map:list){
 			int up = (int) map.get("upCount");
 			int down = (int) map.get("downCount");
+			int bCount = (int) map.get("bCount");
 			double avg =  new Double(map.get("avg")+"");
 			int all = (int) map.get("aCount");
 			String fg = (all!=0 && down>=up)?"主阴线反转":"";
@@ -85,6 +86,7 @@ public class WriteJgyFolderWorker  {
 			List<Object> row = new ArrayList<Object>();
 			row.add(map.get("day"));
 			row.add("（"+up+"）（"+down+"）");
+			row.add(bCount);
 			row.add(avg);
 			row.add(all);
 			row.add(fg);
@@ -98,14 +100,14 @@ public class WriteJgyFolderWorker  {
     	List<String> sheetList = new ArrayList<String>();
     	sheetList.add("统计");
     	
-    	String[] titleArr = {"日期","追涨与阴线反转","平均比率","反弹合计","风格","星级"};
+    	String[] titleArr = {"日期","追涨与阴线反转","当天最佳","平均比率","反弹合计","风格","星级"};
 		List<String> title = java.util.Arrays.asList(titleArr);
 		
 		//导出
 		MiniExcelTemplate excel = new MiniExcelTemplate();
-		excel.setImgCol(5);
+		excel.setImgCol(6);
 		excel.setImgFolderPath(Constants.out_config_path +"/img");
-    	excel.createExcel(sheetList,title,allSheetData,new int[]{5000,8000,5000,5000,5000,5000});
+    	excel.createExcel(sheetList,title,allSheetData,new int[]{5000,8000,5000,5000,5000,5000,5000});
     	excel.export(Constants.jgy_path+"/stat.xls");
 	}
 
