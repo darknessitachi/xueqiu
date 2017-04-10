@@ -296,7 +296,13 @@ public class StockFrame extends JFrame implements ActionListener {
 
 		jp3.add(jp3_btn, BorderLayout.NORTH);
 		jp3.add(jp3_content, BorderLayout.CENTER);
-		jp3.setVisible(false);
+		
+		String showBelowPanel = (String) params.get("showBelowPanel");
+		if (!StringUtil.isEmpty(showBelowPanel) && showBelowPanel.equals("true")) {
+			jp3.setVisible(true);
+		}else{
+			jp3.setVisible(false);
+		}
 	}
 
 	private ScrollPane get_jp3_content() {
@@ -304,11 +310,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp3_content_temp.setLayout(new BorderLayout());
 
 		initContentJPanel(jp_custom, this.customContent, "自选", "custom");
-		String hide = (String) params.get("hideOtherPanel");
-		if (StringUtil.isEmpty(hide) || hide.equals("false")) {
+		String showOtherPanel = (String) params.get("showOtherPanel");
+		if (!StringUtil.isEmpty(showOtherPanel) && showOtherPanel.equals("true")) {
 			initContentJPanel(jp_concept, this.conceptContent, "概念", "concept");
-			initContentJPanel(jp_industry, this.industryContent, "行业",
-					"industry");
+			initContentJPanel(jp_industry, this.industryContent, "行业","industry");
 		}
 
 		jp3_content_temp.add(jp_custom, BorderLayout.NORTH);
