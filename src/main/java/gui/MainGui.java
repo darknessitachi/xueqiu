@@ -8,7 +8,7 @@ public class MainGui {
 
 	public static void main(String[] args) throws ClassNotFoundException {
 		ProjectUtil.validate();
-		new StockFrame("stock");
+		new StockFrame("train tools");
 	}
 
 }
