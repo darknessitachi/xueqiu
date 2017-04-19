@@ -42,6 +42,7 @@ public class UploadXueqiuWorker  {
 			e.printStackTrace();
 		}
 		frame.displayLabel.setText("上传雪球完成，添加【"+num+"】只股票，共【"+oper.countXueqiu(true)+"】只股票。");
+		System.out.println("******************（1）上传雪球完成******************");
 		if(togetherUpload){
 			new UploadBackupWorker(frame).run();
 			new UploadDatabaseWorker(frame).run();

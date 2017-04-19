@@ -62,13 +62,15 @@ public class WriteJgyFolderWorker  {
 			//增量拷贝到百度
 			incrementToBaiduYun();
 			
+			
+			
 		} catch (ParseException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		System.out.println("写入云盘完成。");
+		System.out.println("******************（5）写入文件夹完成******************");
 		frame.displayLabel.setText("写入坚果云完成。");
 	}
 

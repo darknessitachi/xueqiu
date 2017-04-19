@@ -35,7 +35,7 @@ public class UploadBackupWorker  {
 			
 			long end = new Date().getTime();
 			if(success){
-				System.out.println("上传备份完成，总共耗时【"+((end-start)/1000)+"】秒。");
+				System.out.println("******************（2）上传备份完成，总共耗时【"+((end-start)/1000)+"】秒******************");
 				frame.displayLabel.setText("上传七牛完成。");
 			}
 		} catch (IOException e) {

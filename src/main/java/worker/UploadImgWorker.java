@@ -42,8 +42,7 @@ public class UploadImgWorker  {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("图片上传完成。");
-		
+		System.out.println("******************（4）图片上传完成******************");
 	}
 
 	private boolean exsit(List<String> list, String fileName) {

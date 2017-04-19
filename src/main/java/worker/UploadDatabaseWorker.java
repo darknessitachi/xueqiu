@@ -30,6 +30,7 @@ public class UploadDatabaseWorker  {
 			
 			if(success){
 				frame.displayLabel.setText("上传database完成。");
+				System.out.println("******************（3）上传数据库完成******************");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
