@@ -44,6 +44,7 @@ public class WriteJgyFolderWorker  {
 		ksrq = params.getProperty("jgyKsrq").trim();
 		
 		try {
+			checkRepeatFolder();
 			
 			writeRecord();
 			writeNothing();
@@ -69,6 +70,16 @@ public class WriteJgyFolderWorker  {
 		
 		System.out.println("写入云盘完成。");
 		frame.displayLabel.setText("写入坚果云完成。");
+	}
+
+	private void checkRepeatFolder() {
+		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
+		for(String day:folderList){
+			if(day.length() == 10){
+				FileUtil.deleteFolder(Constants.jgy_path+"/"+day);
+				System.out.println("删除重复文件夹【"+day+"】");
+			}
+		}
 	}
 
 	private void writeRoot() {
