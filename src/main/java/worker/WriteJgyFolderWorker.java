@@ -59,11 +59,6 @@ public class WriteJgyFolderWorker  {
 			//文件夹重命名
 			renameFolder();
 			
-			//增量拷贝到百度
-			incrementToBaiduYun();
-			
-			
-			
 		} catch (ParseException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -463,37 +458,4 @@ public class WriteJgyFolderWorker  {
 		}
 	}
 	
-	private void incrementToBaiduYun() throws IOException {
-		if(!FileUtil.exists(Constants.baidu_path)){
-			System.out.println("未找到目录【"+Constants.baidu_path+"】");
-			return;
-		}
-		System.out.println("开始增量写入百度云");
-		String baiduPath = Constants.baidu_path+"/"+StringUtil.getMaxFolderName(Constants.baidu_path,"version");
-		//获取百度云中缺少的文件夹
-		List<String> diff = getNeedFolder(baiduPath); 
-		for(String dayFolder:diff){
-			FileUtil.copyDirectiory(Constants.jgy_path+"/"+dayFolder, baiduPath+"/"+dayFolder);
-			System.out.println("【"+Constants.jgy_path+"/"+dayFolder+"】------拷贝到------【"+baiduPath+"/"+dayFolder+"】");
-		}
-		
-		//增量拷贝stat.xls
-		FileUtil.copy(baiduPath+"/"+StringUtil.getMaxNextFileName(baiduPath, "stat")+".xls", new File(Constants.jgy_path+"/stat.xls"));
-	}
-
-	private List<String> getNeedFolder(String baiduPath) {
-		List<String> list1 = FileUtil.getFullFileNames(Constants.jgy_path);
-		List<String> list2 = FileUtil.getFullFileNames(baiduPath);
-		List<String> list = CollectionUtil.different(list1, list2);
-		
-		List<String> result = new ArrayList<String>();
-		for(String str:list){
-			if(str.indexOf("-") == 4){
-				result.add(str);
-			}
-		}
-		
-		return result;
-	}
-
 }

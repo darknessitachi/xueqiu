@@ -38,7 +38,6 @@ import util.MiniDbUtil;
 import util.ProjectUtil;
 import util.StringUtil;
 import worker.ClearCloudWorker;
-import worker.CopyBaiduWorker;
 import worker.DownBackupWorker;
 import worker.DownDatabase;
 import worker.DownImgWorker;
@@ -86,7 +85,6 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JMenuItem downBothItem = new JMenuItem("一键下载");
 	
 	private JMenuItem clearItem = new JMenuItem("清理");
-	private JMenuItem copyBaiduItem = new JMenuItem("拷贝百度云");
 
 	private JButton okBtn = new JButton("统计");
 	private JButton priceBtn = new JButton("计算");
@@ -179,7 +177,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		uploadImgItem.addActionListener(this);
 		downImgItem.addActionListener(this);
 		clearItem.addActionListener(this);
-		copyBaiduItem.addActionListener(this);
 		downLocalItem.addActionListener(this);
 		downDatabaseItem.addActionListener(this);
 		downBothItem.addActionListener(this);
@@ -223,7 +220,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		menuDown.add(downBothItem);
 		
 		JMenu clear = new JMenu("操作");
-		clear.add(copyBaiduItem);
 		clear.add(clearItem);
 		
 		menuBar.add(menu);
@@ -458,10 +454,6 @@ public class StockFrame extends JFrame implements ActionListener {
 			performClearCloud();
 		}
 		
-		if (e.getSource() == copyBaiduItem) {
-			performCopyBaidu();
-		}
-		
 		if (e.getSource() == downLocalItem) {
 			performSyncLocal(false);
 		}
@@ -475,16 +467,6 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == priceBtn) {
 			performPrice();
 		}
-	}
-
-	private void performCopyBaidu() {
-		final StockFrame _this = this;
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				new CopyBaiduWorker(_this).run();
-			}
-		}).start();
 	}
 
 	public void performUploadJgy() {
