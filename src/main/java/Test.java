@@ -2,8 +2,12 @@
 public class Test {
 
 	public static void main(String args[]) {
-		System.out.println("2017-03-13（7）（3）".length());
+		String weekPath = "2017第3周";
+		String weekStr = weekPath.replaceAll("第", "-");
+		weekStr = weekStr.replaceAll("周", "");
+		System.out.println(weekStr);
 	}
+	
 	
 	
 

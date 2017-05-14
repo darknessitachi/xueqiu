@@ -44,6 +44,7 @@ public class WriteJgyFolderWorker  {
 		Properties params = AccessUtil.readParams();
 		ksrq = params.getProperty("jgyKsrq").trim();
 		
+		try {
 			//checkRepeatFolder();
 			
 			writeRecord();
@@ -54,45 +55,54 @@ public class WriteJgyFolderWorker  {
 			
 			deleteFileAndFolder();
 			//写入备注
-			//writeComment();
-			//writeRoot();
+			writeDayComment();
+			writeWeekComment();
 			//文件夹重命名
 			renameFolder();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 			
 		
 		System.out.println("******************（5）写入文件夹完成******************");
 		frame.displayLabel.setText("写入坚果云完成。");
 	}
 
-	private void checkRepeatFolder() {
+	private void writeWeekComment() {
+		
 		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
-		for(String day:folderList){
-			if(day.length() == 10){
-				FileUtil.deleteFolder(Constants.jgy_path+"/"+day);
-				System.out.println("删除重复文件夹【"+day+"】");
+		for(String week : folderList){
+			String sub = week.substring(0, 4);
+			if(StringUtil.isNumeric(sub)){
+				String weekPath = Constants.jgy_path + "/"+week;
+				
+				String weekStr = week.replaceAll("第", "-");
+				weekStr = weekStr.replaceAll("周", "");
+				
+				
+				writeWeekStar(weekPath,weekStr);
+				
+				
+				
+				
+				
+				
 			}
 		}
+		
 	}
 
-	private void writeRoot() {
-		List<Map<String,Object>> list = MiniDbUtil.query(" select * from result where 1=1  and  day>='"+ksrq+"'  order by  day desc   ");
+	private void writeWeekStar(String weekPath, String weekStr) {
+		List<Map<String,Object>> list = MiniDbUtil.query(" select * from result where 1=1  and  week='"+weekStr+"'  order by  day desc   ");
 		List<List<Object>> data1 = new ArrayList<List<Object>>();
 		for(Map<String,Object> map:list){
-			int up = (int) map.get("upCount");
-			int down = (int) map.get("downCount");
-			int bCount = (int) map.get("bCount");
-			double avg =  new Double(map.get("avg")+"");
-			int all = (int) map.get("aCount");
-			String fg = (all!=0 && down>=up)?"主阴线反转":"";
 			String xj = ""+map.get("score");
-			
 			List<Object> row = new ArrayList<Object>();
 			row.add(map.get("day"));
-			row.add("（"+up+"）（"+down+"）");
-			row.add(bCount);
-			row.add(avg);
-			row.add(all);
-			row.add(fg);
 			row.add(xj);
 			data1.add(row);
 		}
@@ -103,16 +113,28 @@ public class WriteJgyFolderWorker  {
     	List<String> sheetList = new ArrayList<String>();
     	sheetList.add("统计");
     	
-    	String[] titleArr = {"日期","追涨与阴线反转","当天最佳","平均比率","反弹合计","风格","星级"};
+    	String[] titleArr = {"日期","星级"};
 		List<String> title = java.util.Arrays.asList(titleArr);
 		
 		//导出
 		MiniExcelTemplate excel = new MiniExcelTemplate();
-		excel.setImgCol(6);
+		excel.setImgCol(1);
 		excel.setImgFolderPath(Constants.out_config_path +"/img");
-    	excel.createExcel(sheetList,title,allSheetData,new int[]{5000,8000,5000,5000,5000,5000,5000});
-    	excel.export(Constants.jgy_path+"/stat.xls");
+    	excel.createExcel(sheetList,title,allSheetData,new int[]{5000,5000});
+    	excel.export(weekPath+"/week.xls");
+		
 	}
+
+/*	private void checkRepeatFolder() {
+		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
+		for(String day:folderList){
+			if(day.length() == 10){
+				FileUtil.deleteFolder(Constants.jgy_path+"/"+day);
+				System.out.println("删除重复文件夹【"+day+"】");
+			}
+		}
+	}*/
+
 
 	public void writeTrain(String score, String folderName) {
 		//获取天数，从02-17日开始
@@ -297,9 +319,6 @@ public class WriteJgyFolderWorker  {
 				String weekPath = Constants.jgy_path + "/"+week;
 				List<String> subList = FileUtil.getFullFileNames(weekPath);
 				for(String folder : subList){
-					
-					
-					
 					if(folder.indexOf("-") == 4){
 						String day = folder.substring(0, 10);
 						String allFolder = weekPath+"/"+folder+"/"+ALL_FOLDER_NAME;
@@ -310,9 +329,6 @@ public class WriteJgyFolderWorker  {
 						commonDeleteFile(day,MISTAKE_FOLDER_NAME,mistakeFolder);
 						commonDeleteFile(day,NOTHING_FOLDER_NAME,nothingFolder);
 					}
-					
-					
-					
 				}
 			}
 		}
@@ -413,21 +429,25 @@ public class WriteJgyFolderWorker  {
 		}
 	}
 	
-	private void writeComment() throws ParseException, IOException {
+	private void writeDayComment() throws ParseException, IOException {
 		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
-		for(String folderName : folderList){
-			if(folderName.indexOf("-") == 4){
-				String day = folderName.substring(0, 10);
-				
-				writeReadme(folderName,day);
-				
-				writeIndex(MiniDbUtil.getPreDay(day), day, Constants.jgy_path+"/"+folderName);
-				
+		for(String week : folderList){
+			String sub = week.substring(0, 4);
+			if(StringUtil.isNumeric(sub)){
+				String weekPath = Constants.jgy_path + "/"+week;
+				List<String> subList = FileUtil.getFullFileNames(weekPath);
+				for(String folderName : subList){
+					if(folderName.indexOf("-") == 4){
+						String day = folderName.substring(0, 10);
+						writeReadme(weekPath+"/"+folderName,day);
+						writeIndex(MiniDbUtil.getPreDay(day), day, weekPath+"/"+folderName);
+					}
+				}
 			}
 		}
 	}
 	
-	private void writeReadme(String folderName, String day) throws IOException {
+	private void writeReadme(String folderPath, String day) throws IOException {
 		
 		int up = MiniDbUtil.count(" select * from record where type in ('1','2','3') and day='"+day+"' and stockType in ( select code from dict where typeCode='DICT_ALL_TYPE' and sub='1') ");
 		int down = MiniDbUtil.count(" select * from record where type in ('1','2','3') and day='"+day+"' and stockType in ( select code from dict where typeCode='DICT_ALL_TYPE' and sub='2') ");
@@ -437,7 +457,7 @@ public class WriteJgyFolderWorker  {
 		
 		//写入readme.txt
 		String content = "追涨【"+up+"】，阴线反转【"+down+"】。\n\n"+feel;
-		FileUtil.write(Constants.jgy_path+"/"+folderName+"/readme.txt", content);
+		FileUtil.write(folderPath+"/readme.txt", content);
 	}
 
 	private void writeIndex(String preDay, String day, String folder) {
