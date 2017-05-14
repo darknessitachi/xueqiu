@@ -13,6 +13,7 @@ import java.util.Properties;
 import util.AccessUtil;
 import util.CollectionUtil;
 import util.Constants;
+import util.DateUtil;
 import util.FileUtil;
 import util.MiniDbUtil;
 import util.MiniExcelTemplate;
@@ -43,8 +44,7 @@ public class WriteJgyFolderWorker  {
 		Properties params = AccessUtil.readParams();
 		ksrq = params.getProperty("jgyKsrq").trim();
 		
-		try {
-			checkRepeatFolder();
+			//checkRepeatFolder();
 			
 			writeRecord();
 			writeNothing();
@@ -54,16 +54,11 @@ public class WriteJgyFolderWorker  {
 			
 			deleteFileAndFolder();
 			//写入备注
-			writeComment();
-			writeRoot();
+			//writeComment();
+			//writeRoot();
 			//文件夹重命名
 			renameFolder();
 			
-		} catch (ParseException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		
 		System.out.println("******************（5）写入文件夹完成******************");
 		frame.displayLabel.setText("写入坚果云完成。");
@@ -278,13 +273,15 @@ public class WriteJgyFolderWorker  {
 		}
 	}
 
-	private String getSecondPath(String day, String secondFolderName) {
+	private String getSecondPath(String day, String typeFolder) {
+		String week = day.substring(0, 4)+"第"+DateUtil.getWeekNumber(day)+"周";
+		String weekPath = Constants.jgy_path+"/"+week;
 		//获取dayFolder
-		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
+		List<String> folderList = FileUtil.getFullFileNames(weekPath);
 		String dayFolderName = FileUtil.fileLike(folderList, day);
 		dayFolderName = dayFolderName==null?day:dayFolderName;
 		//绝对路径
-		String path = Constants.jgy_path+"/"+dayFolderName+"/"+secondFolderName;
+		String path = weekPath+"/"+dayFolderName+"/"+typeFolder;
 		//如果文件夹不存在，则创建
 		if(!FileUtil.exists(path)){
 			FileUtil.createFolder(path);
@@ -294,58 +291,76 @@ public class WriteJgyFolderWorker  {
 
 	private void deleteFileAndFolder() {
 		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
-		for(String folder : folderList){
-			if(folder.indexOf("-") == 4){
-				String day = folder.substring(0, 10);
-				
-				String allFolder = Constants.jgy_path+"/"+folder+"/"+ALL_FOLDER_NAME;
-				String mistakeFolder = Constants.jgy_path+"/"+folder+"/"+MISTAKE_FOLDER_NAME;
-				String nothingFolder = Constants.jgy_path+"/"+folder+"/"+NOTHING_FOLDER_NAME;
-				
-				//遍历目录，删除没有在数据库中的文件
-				commonDeleteFile(day,ALL_FOLDER_NAME,allFolder);
-				commonDeleteFile(day,MISTAKE_FOLDER_NAME,mistakeFolder);
-				commonDeleteFile(day,NOTHING_FOLDER_NAME,nothingFolder);
+		for(String week : folderList){
+			String sub = week.substring(0, 4);
+			if(StringUtil.isNumeric(sub)){
+				String weekPath = Constants.jgy_path + "/"+week;
+				List<String> subList = FileUtil.getFullFileNames(weekPath);
+				for(String folder : subList){
+					
+					
+					
+					if(folder.indexOf("-") == 4){
+						String day = folder.substring(0, 10);
+						String allFolder = weekPath+"/"+folder+"/"+ALL_FOLDER_NAME;
+						String mistakeFolder = weekPath+"/"+folder+"/"+MISTAKE_FOLDER_NAME;
+						String nothingFolder = weekPath+"/"+folder+"/"+NOTHING_FOLDER_NAME;
+						//遍历目录，删除没有在数据库中的文件
+						commonDeleteFile(day,ALL_FOLDER_NAME,allFolder);
+						commonDeleteFile(day,MISTAKE_FOLDER_NAME,mistakeFolder);
+						commonDeleteFile(day,NOTHING_FOLDER_NAME,nothingFolder);
+					}
+					
+					
+					
+				}
 			}
 		}
-		
 		deleteFolder();
 	}
 	
 	private void deleteFolder(){
 		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
-		//如果三个目录同时为空，则删除整个目录
-		for(String folder : folderList){
-			if(folder.indexOf("-") == 4){
-				String allFolder = Constants.jgy_path+"/"+folder+"/"+ALL_FOLDER_NAME;
-				String mistakeFolder = Constants.jgy_path+"/"+folder+"/"+MISTAKE_FOLDER_NAME;
-				String nothingFolder = Constants.jgy_path+"/"+folder+"/"+NOTHING_FOLDER_NAME;
-				
-				List<String> allList = FileUtil.getFullFileNames(allFolder);
-				List<String> mistakeList = FileUtil.getFullFileNames(mistakeFolder);
-				List<String> nothingList = FileUtil.getFullFileNames(nothingFolder);
-				
-				if(allList.size() == 0){
-					if(FileUtil.exists(allFolder)){
-						FileUtil.removeFolder(allFolder);
+		for(String week : folderList){
+			String sub = week.substring(0, 4);
+			if(StringUtil.isNumeric(sub)){
+				String weekPath = Constants.jgy_path + "/"+week;
+				List<String> subList = FileUtil.getFullFileNames(weekPath);
+				for(String folder : subList){
+					
+					if(folder.indexOf("-") == 4){
+						String allFolder = weekPath+"/"+folder+"/"+ALL_FOLDER_NAME;
+						String mistakeFolder = weekPath+"/"+folder+"/"+MISTAKE_FOLDER_NAME;
+						String nothingFolder = weekPath+"/"+folder+"/"+NOTHING_FOLDER_NAME;
+						
+						List<String> allList = FileUtil.getFullFileNames(allFolder);
+						List<String> mistakeList = FileUtil.getFullFileNames(mistakeFolder);
+						List<String> nothingList = FileUtil.getFullFileNames(nothingFolder);
+						
+						if(allList.size() == 0){
+							if(FileUtil.exists(allFolder)){
+								FileUtil.removeFolder(allFolder);
+							}
+						}
+						if(mistakeList.size() == 0){
+							if(FileUtil.exists(mistakeFolder)){
+								FileUtil.removeFolder(mistakeFolder);
+							}
+						}
+						if(nothingList.size() == 0){
+							if(FileUtil.exists(nothingFolder)){
+								FileUtil.removeFolder(nothingFolder);
+							}
+						}
+						
+						if(allList.size() == 0 && mistakeList.size() == 0){
+							FileUtil.removeFolder(weekPath+"/"+folder);
+						}
 					}
-				}
-				if(mistakeList.size() == 0){
-					if(FileUtil.exists(mistakeFolder)){
-						FileUtil.removeFolder(mistakeFolder);
-					}
-				}
-				if(nothingList.size() == 0){
-					if(FileUtil.exists(nothingFolder)){
-						FileUtil.removeFolder(nothingFolder);
-					}
-				}
-				
-				if(allList.size() == 0 && mistakeList.size() == 0){
-					FileUtil.removeFolder(Constants.jgy_path+"/"+folder);
 				}
 			}
 		}
+		
 	}
 
 	private void commonDeleteFile(String day, String folderName, String path) {
@@ -362,31 +377,37 @@ public class WriteJgyFolderWorker  {
 	
 
 	private void renameFolder() {
-		
 		List<String> folderList = FileUtil.getFullFileNames(Constants.jgy_path);
-		for(String folderName : folderList){
-			if(folderName.indexOf("-") == 4){
-				String day = folderName.substring(0, 10);
-				
-				String allPath = Constants.jgy_path+"/"+folderName+"/"+ALL_FOLDER_NAME;
-				String mistakePath = Constants.jgy_path+"/"+folderName+"/"+MISTAKE_FOLDER_NAME;
-				
-				int recordCount = 0;
-				int mistakeCount = 0;
-				
-				if(FileUtil.exists(allPath)){
-					recordCount = (new File(allPath).list().length)/3;
-				}
-				if(FileUtil.exists(mistakePath)){
-					mistakeCount = (new File(mistakePath).list().length)/2;
-				}
-				
-				String newFolderName = day+"（"+recordCount+"）";
-				if(mistakeCount!=0){
-					newFolderName = newFolderName +"（"+mistakeCount+"）";
-				}
-				if(!newFolderName.equals(folderName)){
-					FileUtil.renameDirectory(Constants.jgy_path+"/"+folderName, Constants.jgy_path+"/"+newFolderName);
+		for(String week : folderList){
+			String sub = week.substring(0, 4);
+			if(StringUtil.isNumeric(sub)){
+				String weekPath = Constants.jgy_path + "/"+week;
+				List<String> subList = FileUtil.getFullFileNames(weekPath);
+				for(String folderName : subList){
+					if(folderName.indexOf("-") == 4){
+						String day = folderName.substring(0, 10);
+						
+						String allPath = weekPath+"/"+folderName+"/"+ALL_FOLDER_NAME;
+						String mistakePath = weekPath+"/"+folderName+"/"+MISTAKE_FOLDER_NAME;
+						
+						int recordCount = 0;
+						int mistakeCount = 0;
+						
+						if(FileUtil.exists(allPath)){
+							recordCount = (new File(allPath).list().length)/3;
+						}
+						if(FileUtil.exists(mistakePath)){
+							mistakeCount = (new File(mistakePath).list().length)/2;
+						}
+						
+						String newFolderName = day+"（"+recordCount+"）";
+						if(mistakeCount!=0){
+							newFolderName = newFolderName +"（"+mistakeCount+"）";
+						}
+						if(!newFolderName.equals(folderName)){
+							FileUtil.renameDirectory(weekPath+"/"+folderName, weekPath+"/"+newFolderName);
+						}
+					}
 				}
 			}
 		}
