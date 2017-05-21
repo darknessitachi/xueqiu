@@ -291,7 +291,7 @@ public class WriteJgyFolderWorker  {
 			}
 			dbData.add(day+"_"+folderName+"_"+targetFileName);
 		}else{
-			System.err.println(StringUtil.getLineInfo()+":资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到");
+			System.err.println(StringUtil.getLineInfo()+":资源【"+Constants.out_img_path+"/"+srcFileName+"】未找到。folderName【"+folderName+"】");
 		}
 	}
 
