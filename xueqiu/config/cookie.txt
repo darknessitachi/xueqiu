@@ -1,1 +1,1 @@
-s=7y11rhrhaw;u=9631865301;xq_a_token=238fa79a8799250c2947592f2be1435dc61a4665;xq_is_login=1;xq_r_token=c3b6af5058201bfbe5c7dc1d61213d4a81dfce12;xq_token_expire=Thu%20Nov%2024%202016%2023%3A08%3A06%20GMT%2B0800%20(CST);xqat=238fa79a8799250c2947592f2be1435dc61a4665;
+aliyungf_tc=AQAAACp12G4W3AgAA1XNbwQ7OoTm/jwd;s=5r1vhkbli4;u=9631865301;xq_a_token=4ffd7184215461b5b0ba4277a6d35d93ca087ff0;xq_is_login=1;xq_r_token=28e56a72594c3d8672b86fa473a1bdb805fc6316;xq_token_expire=Mon%20Apr%2003%202017%2016%3A38%3A22%20GMT%2B0800%20(CST);

@@ -16,18 +16,25 @@ public class Constants {
 	public static final String folder_name = "xueqiu";
 	public static final String db_name = "test.db";
 	
+	public static final String jgy_path         	 =  "d:/我的坚果云";
+	public static final String baidu_path         	 =  "d:/00-我的百度云";
 	public static final String out_path         	 =  "d:/xueqiu/";
 	public static final String out_result_path   	 =  "d:/xueqiu/result";
 	public static final String out_config_path  	 =  "d:/xueqiu/config";
+	public static final String out_img_path   		 =  "d:/xueqiu/image";
+	public static final String out_img_result   	 =  "d:/xueqiu/resultIMG";
+	public static final String out_ebk_result   	 =  "d:/xueqiu/resultEBK";
+	
 	public static final String out_datafile_path     =  "d:/xueqiu/dataFile";
 	public static final String out_custom_path       =  "d:/xueqiu/code/custom";
 	public static final String out_concept_path      =  "d:/xueqiu/code/concept";
 	public static final String out_industry_path     =  "d:/xueqiu/code/industry";
 	
 	public static final String zxg_path =  "T0002/blocknew";
-	
 	public static final String user_path =  "T0002";
 	
+	public static final int DB_NUM =  100;
+	public static final int BACKUP_NUM =  10;
 	
 	public static final String referer_prefix = "http://xueqiu.com/S/";
 	public static final String inter_url = "http://hq.sinajs.cn/list=";

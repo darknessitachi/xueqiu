@@ -34,23 +34,28 @@ import util.AccessUtil;
 import util.Constants;
 import util.CustNumberUtil;
 import util.FileUtil;
+import util.MiniDbUtil;
 import util.ProjectUtil;
 import util.StringUtil;
+import worker.ClearCloudWorker;
+import worker.DownBackupWorker;
 import worker.DownDatabase;
+import worker.DownImgWorker;
 import worker.LoginWorker;
 import worker.StatisWorker;
-import worker.SyncLocalWorker;
-import worker.UploadCloudWorker;
-import worker.UploadDbWorker;
+import worker.UploadBackupWorker;
+import worker.UploadDatabaseWorker;
+import worker.UploadImgWorker;
 import worker.UploadXueqiuWorker;
+import worker.WriteJgyFolderWorker;
 import bean.Req.ReqHead;
 
 public class StockFrame extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private int window_width = 700;
-	private int scroll_height = 370;
+	private int window_width = 460;
+	private int scroll_height = 50;
 	private int window_height = scroll_height + 260;;
 
 	private static final int GridLayoutColumn = 4;
@@ -67,16 +72,22 @@ public class StockFrame extends JFrame implements ActionListener {
 
 	private JMenuItem loginItem = new JMenuItem("登录");
 	
+	private JMenuItem uploadDbItem = new JMenuItem("上传数据库");
+	private JMenuItem uploadImgItem = new JMenuItem("上传图片");
+	private JMenuItem uploadCloudItem = new JMenuItem("上传备份");
 	private JMenuItem uploadXqItem = new JMenuItem("上传雪球");
-	private JMenuItem uploadCloudItem = new JMenuItem("上传七牛");
-	private JMenuItem uploadDbItem = new JMenuItem("上传训练数据库");
-	private JMenuItem uploadBothItem = new JMenuItem("同时上传");
+	private JMenuItem uploadJgyItem = new JMenuItem("写入坚果云");
+	private JMenuItem uploadBothItem = new JMenuItem("一键上传");
+	
+	private JMenuItem downDatabaseItem = new JMenuItem("下载数据库");
+	private JMenuItem downImgItem = new JMenuItem("下载图片");
 	private JMenuItem downLocalItem = new JMenuItem("下载备份");
-	private JMenuItem downDatabaseItem = new JMenuItem("下载训练数据库");
-	private JMenuItem downBothItem = new JMenuItem("同时下载");
+	private JMenuItem downBothItem = new JMenuItem("一键下载");
+	
+	private JMenuItem clearItem = new JMenuItem("清理");
 
 	private JButton okBtn = new JButton("统计");
-	private JButton priceBtn = new JButton("价格计算");
+	private JButton priceBtn = new JButton("计算");
 
 	private JButton chooseBtn = new JButton("导入EBK");
 	private JButton autoChooseBtn = new JButton("自动导入");
@@ -86,7 +97,7 @@ public class StockFrame extends JFrame implements ActionListener {
 	private JComboBox<String> dayCombo = new JComboBox<String>();
 	private JTextField price = new JTextField(8);
 	
-	public JTextField displayLabel = new JTextField(45);
+	public JTextField displayLabel = new JTextField(30);
 
 	public String installZXGPath = null;
 	public String installZXGRootPath = null;
@@ -127,7 +138,7 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 
 		installZXG_FileList = FileUtil.getFullFileNames(installZXGPath);
-		boolean originalFileExist = validateFileCount(installZXG_FileList);
+		boolean originalFileExist = ProjectUtil.validateFileCount(installZXG_FileList);
 		if (!originalFileExist) {
 			showMsgBox("本地证券软件目录下ZXG、A1、A2、A3的文件个数不对。");
 		}
@@ -159,9 +170,13 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 		loginItem.addActionListener(this);
 		uploadXqItem.addActionListener(this);
+		uploadJgyItem.addActionListener(this);
 		uploadCloudItem.addActionListener(this);
 		uploadDbItem.addActionListener(this);
 		uploadBothItem.addActionListener(this);
+		uploadImgItem.addActionListener(this);
+		downImgItem.addActionListener(this);
+		clearItem.addActionListener(this);
 		downLocalItem.addActionListener(this);
 		downDatabaseItem.addActionListener(this);
 		downBothItem.addActionListener(this);
@@ -173,7 +188,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		deleteBtn.addActionListener(this);
 		priceBtn.addActionListener(this);
 	}
-
+	/**
+	 * 会阻塞程序的执行，直到点击确定按钮
+	 * @param msg
+	 */
 	private void showMsgBox(String msg) {
 		JOptionPane.showMessageDialog(null, msg);
 	}
@@ -187,20 +205,27 @@ public class StockFrame extends JFrame implements ActionListener {
 		
 		JMenu menuUp = new JMenu("上传");
 		menuUp.add(uploadDbItem);
+		menuUp.add(uploadImgItem);
 		menuUp.add(uploadCloudItem);
 		menuUp.add(uploadXqItem);
+		menuUp.add(uploadJgyItem);
 		menuUp.addSeparator();
 		menuUp.add(uploadBothItem);
 		
 		JMenu menuDown = new JMenu("下载");
 		menuDown.add(downDatabaseItem);
+		menuDown.add(downImgItem);
 		menuDown.add(downLocalItem);
-		menuUp.addSeparator();
+		menuDown.addSeparator();
 		menuDown.add(downBothItem);
+		
+		JMenu clear = new JMenu("操作");
+		clear.add(clearItem);
 		
 		menuBar.add(menu);
 		menuBar.add(menuUp);
 		menuBar.add(menuDown);
+		menuBar.add(clear);
 		this.setJMenuBar(menuBar);
 		
 	}
@@ -267,6 +292,13 @@ public class StockFrame extends JFrame implements ActionListener {
 
 		jp3.add(jp3_btn, BorderLayout.NORTH);
 		jp3.add(jp3_content, BorderLayout.CENTER);
+		
+		String showBelowPanel = (String) params.get("showBelowPanel");
+		if (!StringUtil.isEmpty(showBelowPanel) && showBelowPanel.equals("true")) {
+			jp3.setVisible(true);
+		}else{
+			jp3.setVisible(false);
+		}
 	}
 
 	private ScrollPane get_jp3_content() {
@@ -274,11 +306,10 @@ public class StockFrame extends JFrame implements ActionListener {
 		jp3_content_temp.setLayout(new BorderLayout());
 
 		initContentJPanel(jp_custom, this.customContent, "自选", "custom");
-		String hide = (String) params.get("hideOtherPanel");
-		if (StringUtil.isEmpty(hide) || hide.equals("false")) {
+		String showOtherPanel = (String) params.get("showOtherPanel");
+		if (!StringUtil.isEmpty(showOtherPanel) && showOtherPanel.equals("true")) {
 			initContentJPanel(jp_concept, this.conceptContent, "概念", "concept");
-			initContentJPanel(jp_industry, this.industryContent, "行业",
-					"industry");
+			initContentJPanel(jp_industry, this.industryContent, "行业","industry");
 		}
 
 		jp3_content_temp.add(jp_custom, BorderLayout.NORTH);
@@ -395,11 +426,13 @@ public class StockFrame extends JFrame implements ActionListener {
 			performLogin();
 		}
 		
-		
-		
 		if (e.getSource() == uploadXqItem) {
 			performImport(false);
 		}
+		if (e.getSource() == uploadJgyItem) {
+			performUploadJgy();
+		}
+		
 		if (e.getSource() == uploadCloudItem) {
 			performUploadCloud();
 		}
@@ -410,6 +443,17 @@ public class StockFrame extends JFrame implements ActionListener {
 		if (e.getSource() == uploadBothItem) {
 			performImport(true);
 		}
+		if (e.getSource() == uploadImgItem) {
+			performUploadImg();
+		}
+		if (e.getSource() == downImgItem) {
+			performDownImg();
+		}
+		
+		if (e.getSource() == clearItem) {
+			performClearCloud();
+		}
+		
 		if (e.getSource() == downLocalItem) {
 			performSyncLocal(false);
 		}
@@ -425,24 +469,74 @@ public class StockFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	public void performDownDatabase(boolean removeAlert) {
-		
-		if(removeAlert){
-			new Thread(new DownDatabase(this)).start();
-			return;
-		}
-		
-		int res = JOptionPane.showConfirmDialog(null, "请确认云端的训练数据库是最新的。要继续执行同步吗？", null,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-		if (res == JOptionPane.YES_OPTION) {
-			displayLabel.setText("正在执行本地同步……");
-			new Thread(new DownDatabase(this)).start();
-		}else{
-			displayLabel.setText("取消本地同步。");
-		}
+	public void performUploadJgy() {
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				new WriteJgyFolderWorker(_this).run();
+			}
+		}).start();
+	}
+
+	private void performClearCloud() {
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				new ClearCloudWorker(_this).run();
+			}
+		}).start();
+	}
+
+	public void performDownImg() {
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				new DownImgWorker(_this).run();
+			}
+		}).start();
+	}
+
+	public void performUploadImg() {
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				new UploadImgWorker(_this).run();
+			}
+		}).start();
+	}
+
+	public void performDownDatabase(final boolean removeAlert) {
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				if(removeAlert){
+					new DownDatabase(_this).run();
+					return;
+				}
+				int res = JOptionPane.showConfirmDialog(null, "请确认云端的训练数据库是最新的。要继续执行同步吗？", null,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (res == JOptionPane.YES_OPTION) {
+					displayLabel.setText("正在执行本地同步……");
+					new DownDatabase(_this).run();
+				}else{
+					displayLabel.setText("取消本地同步。");
+				}
+			}
+		}).start();
 	}
 
 	public void performUploadDb() {
-		new Thread(new UploadDbWorker(this)).start();
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				new UploadDatabaseWorker(_this).run();
+			}
+		}).start();
 	}
 
 	private void performPrice() {
@@ -460,7 +554,13 @@ public class StockFrame extends JFrame implements ActionListener {
 	}
 
 	public void performUploadCloud() {
-		new Thread(new UploadCloudWorker(this)).start();
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				new UploadBackupWorker(_this).run();
+			}
+		}).start();
 	}
 
 
@@ -486,19 +586,24 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * 同步雪球的自选股到本地的板块
 	 * @param continueDownDb 
 	 */
-	private void performSyncLocal(boolean continueDownDb) {
-		String msg = "请确认当前是备用机。要继续执行同步吗？";
-		if(continueDownDb){
-			msg = "请确认当前是备用机，并且云端的数据库是最新的吗？";
-		}
-		int res = JOptionPane.showConfirmDialog(null, msg, null,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-		if (res == JOptionPane.YES_OPTION) {
-			displayLabel.setText("正在执行本地同步……");
-			new Thread(new SyncLocalWorker(this,continueDownDb)).start();
-		}else{
-			displayLabel.setText("取消本地同步。");
-		}
-
+	private void performSyncLocal(final boolean continueDownDb) {
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String msg = "请确认当前是备用机。要继续执行同步吗？";
+				if(continueDownDb){
+					msg = "请确认当前是备用机，并且云端的数据库是最新的吗？";
+				}
+				int res = JOptionPane.showConfirmDialog(null, msg, null,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (res == JOptionPane.YES_OPTION) {
+					displayLabel.setText("正在执行本地同步……");
+					new DownBackupWorker(_this,continueDownDb).run();
+				}else{
+					displayLabel.setText("取消本地同步。");
+				}
+			}
+		}).start();
 	}
 
 	/**
@@ -537,22 +642,7 @@ public class StockFrame extends JFrame implements ActionListener {
 				installZXGPath + "/" + A3_NAME));
 	}
 
-	private boolean validateFileCount(List<String> list) {
-
-		boolean result = true;
-
-		int count = 0;
-		for (String fileName : list) {
-			if (fileName.equalsIgnoreCase("ZXG.blk") || fileName.startsWith("A1") || fileName.startsWith("A2") || fileName.startsWith("A3")  ) {
-				count++;
-			}
-		}
-
-		if (count != 4) {
-			result = false;
-		}
-		return result;
-	}
+	
 
 	private void performLogin() {
 		String username = params.getProperty("username");
@@ -661,19 +751,33 @@ public class StockFrame extends JFrame implements ActionListener {
 	 * 
 	 * @param del
 	 */
-	public void performImport(boolean continueUploadCloud) {
-		//先自动导入
-		performAutoChoose();
-		//全选中
-		performSelectAll();
-		// 获取选中的板块
-		List<String> names = getSelectNames();
-		if (names.size() > 0) {
-			displayLabel.setText("正在执行上传……");
-			new Thread(new UploadXueqiuWorker(names, this,continueUploadCloud)).start();
-		} else {
-			displayLabel.setText("请选择要上传的板块。");
-		}
+	public void performImport(final boolean continueUploadCloud) {
+		final StockFrame _this = this;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				
+				String forecastDay = StringUtil.getForecastDay();
+				
+				int count = MiniDbUtil.count(" select * from backup where forecastDay='"+forecastDay+"' ");
+				if(count == 0){
+					showMsgBox("没有备份backup，不能上传。");
+					return;
+				}
+				//先自动导入
+				performAutoChoose();
+				//全选中
+				performSelectAll();
+				// 获取选中的板块
+				List<String> names = getSelectNames();
+				if (names.size() > 0) {
+					displayLabel.setText("正在执行上传……");
+					new UploadXueqiuWorker(names, _this,continueUploadCloud).run();
+				} else {
+					displayLabel.setText("请选择要上传的板块。");
+				}
+			}
+		}).start();
 	}
 
 	private void performSelectAll() {

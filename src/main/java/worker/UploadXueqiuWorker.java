@@ -7,18 +7,18 @@ import java.util.List;
 
 import util.XueqiuUtil;
 
-public class UploadXueqiuWorker implements Runnable {
+public class UploadXueqiuWorker  {
 
 	private List<String> names;
 	private StockFrame frame;
-	private boolean continueUploadCloud;
+	private boolean togetherUpload;
 
 	public UploadXueqiuWorker(List<String> names,StockFrame frame, boolean continueUploadCloud) {
 		this.names = names;
 		this.frame = frame;
-		this.continueUploadCloud = continueUploadCloud;
+		this.togetherUpload = continueUploadCloud;
 	}
-	@Override
+	
 	public void run() {
 		int num = 0;
 		XueqiuUtil oper = new XueqiuUtil();
@@ -42,9 +42,12 @@ public class UploadXueqiuWorker implements Runnable {
 			e.printStackTrace();
 		}
 		frame.displayLabel.setText("上传雪球完成，添加【"+num+"】只股票，共【"+oper.countXueqiu(true)+"】只股票。");
-		if(continueUploadCloud){
-			frame.performUploadCloud();
-			frame.performUploadDb();
+		System.out.println("******************（1）上传雪球完成******************");
+		if(togetherUpload){
+			new UploadBackupWorker(frame).run();
+			new UploadDatabaseWorker(frame).run();
+			new UploadImgWorker(frame).run();
+			new WriteJgyFolderWorker(frame).run();
 		}
 	}
 

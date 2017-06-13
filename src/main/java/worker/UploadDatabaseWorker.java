@@ -10,15 +10,14 @@ import util.DateUtil;
 import util.qiniu.QiniuConstants;
 import util.qiniu.QiniuUtil;
 
-public class UploadDbWorker implements Runnable {
+public class UploadDatabaseWorker  {
 
 	private StockFrame frame;
 
-	public UploadDbWorker(StockFrame frame) {
+	public UploadDatabaseWorker(StockFrame frame) {
 		this.frame = frame;
 	}
 
-	@Override
 	public void run() {
 		try {
 			String prefix = DateUtil.formatDate(new Date(), DateUtil.yyyy_MM_dd_HH_mm_ss);
@@ -26,11 +25,12 @@ public class UploadDbWorker implements Runnable {
 			
 			String newName = prefix + "_" + Constants.db_name;
 			
-			boolean success = QiniuUtil.upload(file , QiniuConstants.database+"/"+newName);
+			QiniuUtil qn = new QiniuUtil(QiniuConstants.testBucketname, QiniuConstants.testDownloadDomainURL);
+			boolean success = qn.upload(file , QiniuConstants.databasePrefix+"/"+newName);
 			
 			if(success){
-				System.out.println("上传database完成。");
 				frame.displayLabel.setText("上传database完成。");
+				System.out.println("******************（3）上传数据库完成******************");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
